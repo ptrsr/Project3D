@@ -78,6 +78,7 @@ void SpotScene::_initializeScene()
 
 	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
 	spotLight->setBehaviour(new DirectionalLight());
+	spotLight->rotate(90, glm::vec3(1, 0, 0));
 	spotLight->setParent(spotRotor);
 	_world->add(spotLight);
 

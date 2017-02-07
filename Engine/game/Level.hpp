@@ -22,16 +22,16 @@ class Level : public GameObject
 {
 	
 public:
+	Level();
 	Level(int xTiles, int yTiles, World * world);
-	
+	glm::vec3 getPositionOfTile(int xTile, int zTile);
 
 private:
 	World * _world;
 	int **_boardArray;
 	int _xTileCount;
-	int _yTileCount;
-	Mesh * _cubeMesh;
+	int _zTileCount;
 	void initializeLevel();
-
+	Mesh * _cubeMesh;
 };
 #endif

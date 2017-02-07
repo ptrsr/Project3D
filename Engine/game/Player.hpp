@@ -7,7 +7,7 @@
 class Player : public GameObject
 {
 public:
-	Player(PlayerId playerId, std::string name,int xTile, int yTile, Level level);
+	Player(PlayerId playerId, std::string name, int xTile, int yTile, Level * level);
 
 
 };
