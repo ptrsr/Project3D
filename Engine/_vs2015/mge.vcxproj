@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\network\Client.hpp" />
+    <ClInclude Include="..\network\Packet.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
