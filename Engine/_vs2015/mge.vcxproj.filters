@@ -223,6 +223,9 @@
     <ClInclude Include="..\network\Server.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\Packet.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">

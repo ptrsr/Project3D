@@ -1,10 +1,9 @@
 #include <iostream>
 
-#include "mge/core/AbstractGame.hpp"
-#include "mge/scenes/LightScene.hpp"
-#include "mge/scenes/TerrainScene.hpp"
-#include "mge/scenes/UnityScene.hpp"
-#include "mge/scenes/SpotScene.hpp"
+#include "../network/Server.hpp"
+
+using namespace std;
+
 /**
  * Main entry point for the Micro Engine.
 
@@ -22,9 +21,12 @@
  */
 int main()
 {
-    std::cout << "Starting Game" << std::endl;
+    cout << "Starting Game" << endl;
 
+	Server* server = new Server(56789, 4);
+	server->StartServer();
 
+	cout << "Closing Game" << endl;
 
     return 0;
 }
