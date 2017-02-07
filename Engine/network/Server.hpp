@@ -15,6 +15,7 @@ public:
 	~Server();
 
 	int StartServer();
+	int StopServer();
 
 private:
 	SOCKET _sock; //Socket we will use

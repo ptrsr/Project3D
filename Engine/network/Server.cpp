@@ -116,3 +116,12 @@ int Server::Receive(char* buf, int len, int client)
 	}
 	return dataLen;
 }
+
+int Server::StopServer()
+{
+	cout << "Stopping server.." << endl;
+	closesocket(_sock); //Close our socket
+	WSACleanup(); //Clean up everything
+	cout << "Server stopped" << endl;
+	return 1;
+}
