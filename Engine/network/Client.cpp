@@ -33,7 +33,7 @@ int Client::Connect(char* IP, int port)
 
 	cout << "Assigned socket info" << endl;
 
-	cout << "Attempting to connect.." << endl;
+	cout << "Connecting to " << IP << ":" << port << endl;
 	int connection = connect(_sock, (struct sockaddr*)&_iSock, sizeof(_iSock)); //Connect to the server given the info from out socket and size of our socket
 	if (connection != 0)
 	{

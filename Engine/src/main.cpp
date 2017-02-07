@@ -24,7 +24,7 @@ int main()
     cout << "Starting Game" << endl;
 
 	Client* client = new Client();
-	client->Connect("127.0.0.1", 56789);
+	client->Connect("127.0.0.1", 8888);
 
 	cout << "Closing Game" << endl;
 	cin.get();
