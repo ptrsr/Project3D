@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\network\Server.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\network\Server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
