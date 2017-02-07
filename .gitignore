@@ -252,3 +252,4 @@ paket-files/
 *.tlog
 
 Engine/_vs2015/**/
+Engine/_vs2015/mge.vcxproj.user
