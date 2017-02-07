@@ -1,10 +1,9 @@
 #include <iostream>
 
-#include "mge/core/AbstractGame.hpp"
-#include "mge/scenes/LightScene.hpp"
-#include "mge/scenes/TerrainScene.hpp"
-#include "mge/scenes/UnityScene.hpp"
-#include "mge/scenes/SpotScene.hpp"
+#include "../network/Client.hpp"
+
+using namespace std;
+
 /**
  * Main entry point for the Micro Engine.
 
@@ -22,9 +21,13 @@
  */
 int main()
 {
-    std::cout << "Starting Game" << std::endl;
+    cout << "Starting Game" << endl;
 
+	Client* client = new Client();
+	client->Connect("127.0.0.1", 56789);
 
+	cout << "Closing Game" << endl;
+	cin.get();
 
     return 0;
 }
