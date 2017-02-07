@@ -23,7 +23,7 @@ int main()
 {
     cout << "Starting Game" << endl;
 
-	Server* server = new Server(56789, 4);
+	Server* server = new Server(8888, 4);
 	server->StartServer();
 
 	cout << "Closing Game" << endl;
