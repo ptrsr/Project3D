@@ -27,6 +27,7 @@ using namespace std;
 #include "mge/behaviours/DirectionalLight.hpp"
 #include "mge/behaviours/PointLight.hpp"
 #include "mge/behaviours/SpotLight.hpp"
+#include "../game/Level.hpp"
 
 #include "mge/util/DebugHud.hpp"
 
@@ -58,13 +59,15 @@ void SpotScene::_initializeScene()
     _world->add(camera);
     _world->setMainCamera(camera);
 
+	Level * level = new Level(9, 9, _world);
+
     ///PLANE
-    GameObject* plane = new GameObject ("plane", glm::vec3(0,0,0));
+ /*   GameObject* plane = new GameObject ("plane", glm::vec3(0,0,0));
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	plane->setMesh(planeMesh);
     plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1,0,1)));
     _world->add(plane);
-
+	*/
 	///SPOT LIGHT
 
 	GameObject* spotRotor = new GameObject("rotor");
@@ -73,17 +76,16 @@ void SpotScene::_initializeScene()
 
 	glm::vec3 spotColor = glm::vec3(1);
 
-	GameObject* spotLight = new GameObject("spotLight", glm::vec3(0, 1.3f, -1));
-	spotLight->setMesh(Mesh::load(config::MGE_MODEL_PATH + "cone.obj", 0.005f));
-	spotLight->setMaterial(new ColorMaterial(glm::vec3(1, 1, 1)));
-	spotLight->setBehaviour(new SpotLight(glm::vec3(1,0,0), glm::vec3(0, 0.3f, 0), glm::vec3(0,0,1), 0.1f, 0.2f, 0.3f, 2.0f, 1.0f));
-	spotLight->setMaterial(new ColorMaterial(spotColor));
-	spotLight->rotate(glm::pi<float>() * 0.45f, glm::vec3(1, 0, 0));
+	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
+	spotLight->setBehaviour(new DirectionalLight());
 	spotLight->setParent(spotRotor);
+	_world->add(spotLight);
 
-	///CAMERA
-	GameObject* empty = new GameObject("empty", glm::vec3(0, 1, 0));
-	camera->setBehaviour(new OrbitBehaviour(empty, 3));
+	////CAMERA
+	GameObject* empty = new GameObject("empty", glm::vec3(5, 0, 5));
+	camera->setBehaviour(new OrbitBehaviour(empty, 10));
+
+
 }
 
 void SpotScene::_render() {

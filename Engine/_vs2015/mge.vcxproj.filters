@@ -38,6 +38,9 @@
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{af195ac6-8395-4446-98c0-d54117a3071b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{53268f6e-5baf-464a-88d0-c711df038eb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -216,6 +219,12 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\core\Message.hpp">
       <Filter>MGE Source files\mge\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Player.hpp">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Level.hpp">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +416,12 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
       <Filter>MGE Source files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\Player.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\Level.cpp">
+      <Filter>game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

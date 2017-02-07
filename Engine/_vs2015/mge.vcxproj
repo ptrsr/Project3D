@@ -166,6 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\Level.hpp" />
+    <ClInclude Include="..\game\Player.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
@@ -227,6 +229,8 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\game\Level.cpp" />
+    <ClCompile Include="..\game\Player.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
