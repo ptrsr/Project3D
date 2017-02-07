@@ -20,6 +20,7 @@ GLint LitMaterial::_uModelMatrix = 0;
 GLint LitMaterial::_uModelColor = 0;
 GLint LitMaterial::_uShininess = 0;
 GLint LitMaterial::_uCameraPos = 0;
+GLint LitMaterial::_uTexture = 0;
 
 //vertex attributes
 GLint LitMaterial::_aVertex = 0;
@@ -30,20 +31,32 @@ LitMaterial::LitMaterial(Lit pLit, glm::vec3 pModelColor, float pShininess, std:
 	: _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
 {
 	_lit = pLit;
-	
 	std::string shaderName;
 
-	if (pLit == Lit::vertex)
+	switch (pLit)
+	{
+	case Lit::vertex:
 		shaderName = "litVertex";
-	else if (pLit == Lit::fragment)
+		break;
+
+	case Lit::fragment:
 		shaderName = "litFragment";
-	else
+		break;
+
+	case Lit::splat:
 		shaderName = "terrain";
+		break;
+	}
 
 	_lazyInitializeShader(shaderName);
 }
 
-LitMaterial::~LitMaterial() {}
+LitMaterial::LitMaterial(Texture* pTexture, float pShininess, std::vector<AbstractLight*>* pLights)
+	:  _shininess(pShininess), _lights(pLights), _texture(pTexture)
+{
+	_lit = Lit::texture;
+	_lazyInitializeShader("litTexture");
+}
 
 void LitMaterial::_lazyInitializeShader(std::string shaderName) 
 {
@@ -61,6 +74,7 @@ void LitMaterial::_lazyInitializeShader(std::string shaderName)
 
 		//fragment uniforms
 		_uModelColor = _shader->getUniformLocation("modelColor");
+		_uTexture	 = _shader->getUniformLocation("dTexture");
 		_uShininess  = _shader->getUniformLocation("shininess");
 		_uCameraPos  = _shader->getUniformLocation("cameraPos");
 
@@ -81,7 +95,15 @@ void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::
 	glUniformMatrix4fv(_uModelMatrix, 1, GL_FALSE, glm::value_ptr(pModelMatrix));
 
 	//fragment uniforms
-	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
+
+	if (_lit == Lit::texture)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _texture->getId());
+		glUniform1i(_uTexture, 0);
+	} else
+		glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
+
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);
 
@@ -152,3 +174,5 @@ void LitMaterial::addLights()
 	}
 	glUniform3fv(_shader->getUniformLocation("lightCount"), 1, glm::value_ptr(glm::vec3(dLights, pLights, sLights)));
 }
+
+LitMaterial::~LitMaterial() { }

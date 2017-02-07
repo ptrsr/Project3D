@@ -24,7 +24,7 @@ int main()
 {
     std::cout << "Starting Game" << std::endl;
 
-    AbstractGame* game = new LightScene();
+    AbstractGame* game = new UnityScene();
     game->initialize();
     game->run();
 

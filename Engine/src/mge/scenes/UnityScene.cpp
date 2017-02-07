@@ -62,9 +62,17 @@ void UnityScene::_initializeScene()
 
 	LuaParser* luaParser = new LuaParser("main.lua");
 
-	GameObject* empty = new GameObject("Empty");
-	_world->add(empty);
-	camera->setBehaviour(new OrbitBehaviour(empty, 400));
+	GameObject* center = new GameObject("center");
+	GameObject* holder = new GameObject("holder");
+	GameObject* light = new GameObject("light");
+
+	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
+
+	light->setBehaviour(new DirectionalLight());
+	light->setParent(holder);
+
+	_world->add(center);
+	_world->add(holder);
 }
 
 void UnityScene::_render() {

@@ -10,14 +10,16 @@ class OrbitBehaviour : public AbstractBehaviour
 		sf::Vector2f _pitchRange = sf::Vector2f(-90.0f, 90.0f);
 		float _yawRotSpeed = 1.0f;
 
-		OrbitBehaviour(GameObject * pTarget, float pDistance);
+		OrbitBehaviour(GameObject * pTarget, float pDistance, sf::Mouse::Button pButton = sf::Mouse::Button::Left);
 
 		virtual void update(float pStep);
 
-		virtual void message(send::Message message) override { std::cout << "THIS WORKS FINE THO" << std::endl; };
+		virtual void message(send::Message message) override {  };
 
 	private:
 		GameObject * _target;
+
+		sf::Mouse::Button _button;
 
 		sf::Vector2i _lastMousePos = sf::Vector2i();
 		sf::Vector2f _currentMousePos = sf::Vector2f();

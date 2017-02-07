@@ -169,6 +169,7 @@
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractLight.hpp" />
     <ClInclude Include="..\src\mge\behaviours\DirectionalLight.hpp" />
@@ -229,6 +230,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
+    <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractLight.cpp" />
     <ClCompile Include="..\src\mge\behaviours\DirectionalLight.cpp" />
@@ -292,6 +294,7 @@
     <ClCompile Include="..\src\mge\behaviours\OrbitBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\assets\mge\lua scripts\main.lua" />
     <None Include="..\assets\mge\shaders\color.fs" />
     <None Include="..\assets\mge\shaders\color.vs" />
     <None Include="..\assets\mge\shaders\litFragment.fs" />
@@ -305,6 +308,7 @@
     <None Include="..\assets\mge\shaders\texture.vs" />
     <None Include="..\assets\mge\shaders\wobble.vs" />
     <None Include="..\src\mge\core\lua\Makefile" />
+    <None Include="release_static_exe\GameObject.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
