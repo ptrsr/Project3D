@@ -38,6 +38,9 @@
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{af195ac6-8395-4446-98c0-d54117a3071b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{80c90e02-5fe9-40a5-8508-7ca59160f6dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -216,6 +219,9 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\core\Message.hpp">
       <Filter>MGE Source files\mge\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\Client.hpp">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +413,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
       <Filter>MGE Source files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\Client.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
