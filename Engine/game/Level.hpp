@@ -23,14 +23,14 @@ class Level : public GameObject
 	
 public:
 	Level();
-	Level(int xTiles, int yTiles, World * world);
-	glm::vec3 getPositionOfTile(int xTile, int zTile);
-
+	Level(World * world);
+	GameObject* getObject(int xTile, int zTile);
 private:
 	World * _world;
-	int **_boardArray;
-	int _xTileCount;
-	int _zTileCount;
+	int _xTileCount = 9;
+	int _zTileCount = 9;
+
+	GameObject* _boardArray[9][9];
 	void initializeLevel();
 	Mesh * _cubeMesh;
 };

@@ -3,11 +3,9 @@
 
 Level::Level() {}
 
-Level::Level(int xTiles, int yTiles, World * world) :GameObject("level")
+Level::Level(World * world) :GameObject("level")
 {
 	_world = world;
-	_xTileCount = xTiles;
-	_zTileCount = yTiles;
 
 	_cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 	initializeLevel();
@@ -17,26 +15,18 @@ Level::Level(int xTiles, int yTiles, World * world) :GameObject("level")
 
 void Level::initializeLevel() {
 
-	_boardArray = new int*[_xTileCount]; // dynamic array (size 10) of pointers to int
-
-	for (int i = 0; i < _xTileCount; ++i) {
-		_boardArray[i] = new int[_zTileCount];
-		// each i-th pointer is now pointing to dynamic array (size 10) of actual int values
-	}
-
 	for (int i = 0; i <= _xTileCount; i++) {
 		for (int j = 0; j <= _zTileCount; j++) {
 
-
 			std::string cubeName = "Cube: Row: " + to_string(i);
 			cubeName += " Column: " + to_string(j);
-
 
 			GameObject * cube = new GameObject(cubeName, glm::vec3(i, 0, j));
 			cube->scale(glm::vec3(0.4f, 1,0.4f));
 			LitMaterial * litMaterial = new LitMaterial(LitMaterial::Lit::fragment);
 			cube->setMesh(_cubeMesh);
 			cube->setMaterial(litMaterial);
+			_boardArray[i][j] = cube;
 			_world->add(cube);
 
 
@@ -48,13 +38,9 @@ void Level::initializeLevel() {
 			cout << cubeName << posString <<endl;
 		}
 	}
-	getPositionOfTile(1, 2);
 }
 
-glm::vec3 Level::getPositionOfTile(int xTile, int zTile) {
-
-	glm::vec3 position = glm::vec3(_boardArray[xTile][0], 0, _boardArray[0][zTile]);
-	cout << "Tile on: " << xTile << "Row and " << zTile << "Column" << endl;
-	return position;
-
+GameObject* Level::getObject(int xTile,int zTile) {
+	GameObject* gObj = _boardArray[xTile][zTile];
+	return gObj;
 }

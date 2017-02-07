@@ -59,7 +59,7 @@ void SpotScene::_initializeScene()
     _world->add(camera);
     _world->setMainCamera(camera);
 
-	Level * level = new Level(9, 9, _world);
+	Level * level = new Level(_world);
 
     ///PLANE
  /*   GameObject* plane = new GameObject ("plane", glm::vec3(0,0,0));
