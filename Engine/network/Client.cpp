@@ -1,7 +1,9 @@
 #include "../network/Client.hpp"
 
 #include <thread>
+
 #include "../network/NetworkCommand.hpp"
+#include "../network/DataPacket.hpp"
 
 Client::Client()
 {
@@ -45,7 +47,13 @@ int Client::Connect(char* IP, int port)
 	}
 
 	if (WaitResponse())
+	{
+		GameObject* x = new GameObject();
+		DataPacket data = { 1, 5, *x };
+		Send((char*)&data, sizeof(DataPacket));
+		printf("%s %s %s", data.xGrid, data.zGrid, data.gridObj);
 		return 0;
+	}
 	else
 		return 1;
 }
@@ -88,7 +96,7 @@ void Client::ReceiveData()
 
 int Client::Send(char* buf, int len)
 {
-	int dataLen = send(_sock, buf, len, 0); //Send a char buf with a length and flag 0 to the server
+	int dataLen = _WINSOCKAPI_::send(_sock, buf, len, 0); //Send a char buf with a length and flag 0 to the server
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to send data" << endl;
@@ -100,7 +108,7 @@ int Client::Send(char* buf, int len)
 
 int Client::Receive(char* buf, int len)
 {
-	int dataLen = recv(_sock, buf, len, 0); //Receive a char buf with a length and flag 0 from the server
+	int dataLen = _WINSOCKAPI_::recv(_sock, buf, len, 0); //Receive a char buf with a length and flag 0 from the server
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data" << endl;

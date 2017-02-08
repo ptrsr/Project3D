@@ -55,7 +55,7 @@ class GameObject
 		AbstractBehaviour* getBehaviour() const;
 
 		virtual void update(float pStep);
-		virtual void message(send::Message);
+		virtual void message(sendMsg::Message);
 
         //child management
 
@@ -86,8 +86,8 @@ class GameObject
 		virtual void _innerRemove (GameObject* pChild);
 
     private:
-        GameObject(const GameObject&);
-        GameObject& operator=(const GameObject&);
+        //GameObject(const GameObject&);
+		//GameObject& operator=(const GameObject&);
 };
 
 #endif // GAMEOBJECT_H

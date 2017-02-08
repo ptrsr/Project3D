@@ -223,10 +223,10 @@
     <ClInclude Include="..\network\Client.hpp">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\Packet.hpp">
+    <ClInclude Include="..\network\NetworkCommand.hpp">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\NetworkCommand.hpp">
+    <ClInclude Include="..\network\DataPacket.hpp">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
