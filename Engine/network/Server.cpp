@@ -124,6 +124,12 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
+			GameObject o;
+			if (Receive(reinterpret_cast<char*>(&o), sizeof(o), i) == 1)
+				continue;
+
+			cout << o.getName() << endl;
+			/*
 			//Expect to receive DataPacket
 			DataPacket data;
 			//Attempt to receive DataPacket from all clients
@@ -132,7 +138,7 @@ void Server::HandleClients()
 
 			GameObject* obj = reinterpret_cast<GameObject*>(&data.gridObj);
 
-			cout << data.xGrid << " " << data.zGrid << " " << obj << endl;
+			cout << data.xGrid << " " << data.zGrid << " " << obj << endl;*/
 		}
 	}
 }
