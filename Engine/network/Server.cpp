@@ -125,9 +125,9 @@ void Server::HandleClients()
 				continue;
 
 			char data[sizeof(GameObject)];
-			if (Receive(data, sizeof(data), i) == 1)
+			if (Receive(data, sizeof(GameObject), i) == 1)
 				continue;
-			GameObject* o = reinterpret_cast<GameObject*>(&data);
+			GameObject* o = reinterpret_cast<GameObject*>(data);
 			cout << o->getName() << endl;
 			/*
 			//Expect to receive DataPacket
