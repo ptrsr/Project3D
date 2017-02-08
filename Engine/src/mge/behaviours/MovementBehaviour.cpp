@@ -15,42 +15,28 @@ MovementBehaviour::~MovementBehaviour()
 void MovementBehaviour::update(float pStep)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
 		dir = up;
-		trans = glm::vec3(0, 0, 1);
-	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
 		dir = down;
-		trans = glm::vec3(0, 0, -1);
-	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
 		dir = right;
-		trans = glm::vec3(1, 0, 0);
-	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
 		dir = left;
-		trans = glm::vec3(-1, 0, 0);
-	}
 
 	curTime += pStep;
-
-	glm::mat4 mat = glm::mat4();
-	glm::mat4 mat2 = glm::mat4();
 
 	if (curTime < moveTime)
 	{
 		float angle = (glm::pi<float>() / 2.f) * ((pStep + deltaTime) / moveTime);
+		player->rotate(angle, axis);
 
-		mat2 = glm::translate(mat2, trans * ((pStep + deltaTime) / moveTime));
-		mat = glm::rotate(mat, angle, axis);
+		glm::vec3 height = glm::vec3(0, std::sin((curTime * (totalTime / moveTime)) * glm::pi<float>() * 2), 0) / 5.f;
 
-		player->setTransform(player->getTransform() * mat * mat2);
+		glm::mat4 tMat = glm::translate(glm::mat4(), (trans * ((pStep + deltaTime) / moveTime) + height));
+		player->setTransform(tMat * player->getTransform());
 
 		deltaTime = 0;
 	}
@@ -74,18 +60,22 @@ void MovementBehaviour::SetDirection()
 	{
 	case up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
+		trans = glm::vec3(0, 0, 1);
 		break;
 
 	case down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
+		trans = glm::vec3(0, 0, -1);
 		break;
 
 	case left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
+		trans = glm::vec3(1, 0, 0);
 		break;
 
 	case right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
+		trans = glm::vec3(-1, 0, 0);
 		break;
 	}
 
