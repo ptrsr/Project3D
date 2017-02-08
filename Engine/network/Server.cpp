@@ -127,10 +127,10 @@ void Server::HandleClients()
 			//Expect to receive DataPacket
 			DataPacket data;
 			//Attempt to receive DataPacket from all clients
-			if (Receive((char*)&data, sizeof(data), i) == 1)
+			if (Receive(reinterpret_cast<char*>(&data), sizeof(data), i) == 1)
 				continue;
 
-			printf("%s xGrid, %s zGrid", data.xGrid, data.zGrid);
+			cout << data.xGrid << " " << data.zGrid << " " << data.gridObj << endl;
 		}
 	}
 }
