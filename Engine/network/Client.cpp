@@ -50,14 +50,14 @@ int Client::Connect(char* IP, int port)
 	{
 		DataPacket data;
 		data.xGrid = 1;
-		data.xGrid = 5;
-		Send((char*)&data, sizeof(data));
-		printf("%s %s", data.xGrid, data.zGrid);
-		return 0;
+		data.zGrid = 5;
+		Send(reinterpret_cast<char*>(&data), sizeof(data));
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
 		receiveData.join();
+
+		return 0;
 	}
 	else
 		return 1;
