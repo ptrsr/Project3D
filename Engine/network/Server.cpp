@@ -125,15 +125,12 @@ void Server::HandleClients()
 				continue;
 
 			//Expect to receive DataPacket
-			char buf[sizeof(DataPacket)];
+			DataPacket data;
 			//Attempt to receive DataPacket from all clients
-			if (Receive(buf, sizeof(DataPacket), i) == 1)
+			if (Receive((char*)&data, sizeof(data), i) == 1)
 				continue;
 
-			//Construct DataPacket
-			DataPacket* data = reinterpret_cast<DataPacket*>(buf);
-
-			printf("%s xGrid, %s zGrid, %s gridObj", data->xGrid, data->zGrid, data->gridObj);
+			printf("%s xGrid, %s zGrid", data.xGrid, data.zGrid);
 		}
 	}
 }
