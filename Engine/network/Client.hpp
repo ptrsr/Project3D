@@ -21,6 +21,7 @@ private:
 	WSADATA _data; //This is to save our socket version
 	bool _connected = false;
 
+	bool WaitResponse();
 	void ReceiveData();
 
 	int Send(char* buf, int len);

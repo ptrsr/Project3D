@@ -26,6 +26,8 @@ int main()
 	Client* client = new Client();
 	client->Connect("127.0.0.1", 8888);
 
+	delete client;
+
 	cout << "Closing Game" << endl;
 	cin.get();
 

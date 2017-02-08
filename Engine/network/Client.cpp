@@ -44,6 +44,14 @@ int Client::Connect(char* IP, int port)
 		return 0;
 	}
 
+	if (WaitResponse())
+		return 0;
+	else
+		return 1;
+}
+
+bool Client::WaitResponse()
+{
 	NetWorkCommand netCode;
 	if (Receive((PCHAR)&netCode, sizeof(netCode)) != 1)
 	{
@@ -55,19 +63,19 @@ int Client::Connect(char* IP, int port)
 			break;
 		case SERVER_FULL:
 			cout << "ERROR: Server is full" << endl;
-			break;
+			return false;
 		}
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
 		receiveData.join();
+		return true;
 	}
 	else
 	{
 		cout << "ERROR: Failed to connect to server" << endl;
+		return false;
 	}
-
-	return 1;
 }
 
 void Client::ReceiveData()
