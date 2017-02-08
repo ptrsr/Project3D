@@ -124,11 +124,11 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			GameObject o;
-			if (Receive(reinterpret_cast<char*>(&o), sizeof(o), i) == 1)
+			char data[sizeof(GameObject)];
+			if (Receive(data, sizeof(data), i) == 1)
 				continue;
-
-			cout << o.getName() << endl;
+			GameObject* o = reinterpret_cast<GameObject*>(&data);
+			cout << o->getName() << endl;
 			/*
 			//Expect to receive DataPacket
 			DataPacket data;
