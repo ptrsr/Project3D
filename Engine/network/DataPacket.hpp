@@ -5,5 +5,5 @@ struct DataPacket
 {
 	int xGrid;
 	int zGrid;
-	Client gridObj;
+	//GameObject gridObj;
 };
