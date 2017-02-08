@@ -5,6 +5,12 @@
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
 	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
+
+	DataPacket x;
+	x.xGrid = 0;
+	x.zGrid = 1;
+	GameObject* obj = new GameObject("Test", glm::vec3(0, 0, 0));
+	x.gridObj = reinterpret_cast<char*>(&obj);
 }
 
 Server::~Server()
@@ -130,7 +136,9 @@ void Server::HandleClients()
 			if (Receive(reinterpret_cast<char*>(&data), sizeof(data), i) == 1)
 				continue;
 
-			cout << data.xGrid << " " << data.zGrid << " " << data.gridObj << endl;
+			GameObject* obj = reinterpret_cast<GameObject*>(&data.gridObj);
+
+			cout << data.xGrid << " " << data.zGrid << " " << obj << endl;
 		}
 	}
 }
