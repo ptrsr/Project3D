@@ -130,7 +130,7 @@ int setTexture(lua_State* lua)
 
 		if (texture)
 		{
-			obj->setMaterial(new LitMaterial(texture, 1));
+			obj->setMaterial(new LitMaterial(texture, 10));
 			return 0;
 		}
 	}

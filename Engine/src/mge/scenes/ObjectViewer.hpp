@@ -1,17 +1,17 @@
-#ifndef UNITYSCENE_H
-#define UNITYSCENE_H
+#ifndef OBJECTVIEWER_H
+#define OBJECTVIEWER_H
 
 #include <mge/core/AbstractGame.hpp>
 
 class DebugHud;
 
-class UnityScene: public AbstractGame
+class ObjectViewer: public AbstractGame
 {
     //PUBLIC FUNCTIONS
 
 	public:
-		UnityScene();
-		virtual ~UnityScene();
+		ObjectViewer();
+		virtual ~ObjectViewer();
 
         virtual void initialize();
 
@@ -26,8 +26,8 @@ class UnityScene: public AbstractGame
 
         void _updateHud();
 
-        UnityScene(const UnityScene&);
-        UnityScene& operator=(const UnityScene&);
+        ObjectViewer(const ObjectViewer&);
+        ObjectViewer& operator=(const ObjectViewer&);
 };
 
 #endif // TERRAINSCENE_H

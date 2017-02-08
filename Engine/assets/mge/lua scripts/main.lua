@@ -1,4 +1,4 @@
-require 'GameObject' 
+require  'GameObject' 
 
 -- PARAMETERS:
 	--name			STRING

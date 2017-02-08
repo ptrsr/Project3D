@@ -81,6 +81,7 @@ void LitMaterial::_lazyInitializeShader(std::string shaderName)
 		//vertex attributes
 		_aVertex = _shader->getAttribLocation("vertex");
 		_aNormal = _shader->getAttribLocation("normal");
+		_aUV	 = _shader->getAttribLocation("uv");
 	}
 }
 
@@ -108,7 +109,10 @@ void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::
 	glUniform1f(_uShininess, _shininess);
 
 	//vertex attributes
-	pMesh->streamToOpenGL(_aVertex, _aNormal, -1);
+	if (_lit == Lit::texture)
+		pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
+	else
+		pMesh->streamToOpenGL(_aVertex, _aNormal, -1);
 
 	//pMesh->drawDebugInfo(pModelMatrix, pViewMatrix, pProjectionMatrix);
 }

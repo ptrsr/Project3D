@@ -223,7 +223,7 @@
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\SpotScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
-    <ClInclude Include="..\src\mge\scenes\UnityScene.hpp" />
+    <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
@@ -289,7 +289,7 @@
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />
-    <ClCompile Include="..\src\mge\scenes\UnityScene.cpp" />
+    <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />
     <ClCompile Include="..\src\mge\behaviours\OrbitBehaviour.cpp" />
   </ItemGroup>

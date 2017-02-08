@@ -33,15 +33,15 @@ using namespace std;
 #include "mge/util/DebugHud.hpp"
 
 #include "mge/config.hpp"
-#include "mge/scenes/UnityScene.hpp"
+#include "mge/scenes/ObjectViewer.hpp"
 
 
 //construct the game class into _window, _renderer and hud (other parts are initialized by build)
-UnityScene::UnityScene():AbstractGame (),_hud(0)
+ObjectViewer::ObjectViewer():AbstractGame (),_hud(0)
 {
 }
 
-void UnityScene::initialize() {
+void ObjectViewer::initialize() {
     //setup the core part
     AbstractGame::initialize();
 
@@ -52,7 +52,7 @@ void UnityScene::initialize() {
 }
 
 //build the game _world
-void UnityScene::_initializeScene()
+void ObjectViewer::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
 
@@ -68,19 +68,19 @@ void UnityScene::_initializeScene()
 
 	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
-	light->setBehaviour(new DirectionalLight());
+	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
 	_world->add(center);
 	_world->add(holder);
 }
 
-void UnityScene::_render() {
+void ObjectViewer::_render() {
     AbstractGame::_render();
     _updateHud();
 }
 
-void UnityScene::_updateHud() {
+void ObjectViewer::_updateHud() {
     string debugInfo = "";
     debugInfo += string ("FPS:") + std::to_string((int)_fps)+"\n";
 
@@ -88,7 +88,7 @@ void UnityScene::_updateHud() {
     _hud->draw();
 }
 
-UnityScene::~UnityScene()
+ObjectViewer::~ObjectViewer()
 {
 	//dtor
 }
