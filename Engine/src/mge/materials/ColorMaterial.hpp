@@ -19,6 +19,7 @@ class ColorMaterial : public AbstractMaterial
 
         //in rgb values
         void setDiffuseColor (glm::vec3 pDiffuseColor);
+		virtual glm::vec3 getColor();
 
     private:
         //all the static properties are shared between instances of ColorMaterial

@@ -24,7 +24,7 @@ int main()
 {
     std::cout << "Starting Game" << std::endl;
 
-    AbstractGame* game = new ObjectViewer();
+    AbstractGame* game = new SpotScene();
     game->initialize();
     game->run();
 

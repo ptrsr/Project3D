@@ -30,6 +30,11 @@ TerrainMaterial::TerrainMaterial(std::string pHeight, std::string pDifR, std::st
 
 TerrainMaterial::~TerrainMaterial() {}
 
+
+glm::vec3 TerrainMaterial::getColor() {
+	return glm::vec3(0,0,0);
+}
+
 void TerrainMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
 {
 	_shader->use();
