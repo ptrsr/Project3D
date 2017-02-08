@@ -14,7 +14,7 @@ public:
 	static std::string func;
     
 	virtual void update(float pStep);
-	void message(send::Message) { };
+	void message(sendMsg::Message) { };
 
 private:
     lua_State * lua;

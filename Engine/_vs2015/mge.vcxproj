@@ -166,8 +166,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\network\DataPacket.hpp" />
     <ClInclude Include="..\network\NetworkCommand.hpp" />
-    <ClInclude Include="..\network\Packet.hpp" />
+    <ClInclude Include="..\network\Serializer.hpp" />
     <ClInclude Include="..\network\Server.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\network\Serializer.cpp" />
     <ClCompile Include="..\network\Server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />

@@ -223,10 +223,13 @@
     <ClInclude Include="..\network\Server.hpp">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\Packet.hpp">
+    <ClInclude Include="..\network\NetworkCommand.hpp">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\NetworkCommand.hpp">
+    <ClInclude Include="..\network\DataPacket.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\Serializer.hpp">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -421,6 +424,9 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\network\Server.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\Serializer.cpp">
       <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>

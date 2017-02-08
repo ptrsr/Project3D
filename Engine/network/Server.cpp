@@ -1,6 +1,5 @@
 #include "../network/Server.hpp"
 
-#include "../network/Packet.hpp"
 #include "../network/NetworkCommand.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
@@ -125,7 +124,16 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			
+			//Expect to receive DataPacket
+			char buf[sizeof(DataPacket)];
+			//Attempt to receive DataPacket from all clients
+			if (Receive(buf, sizeof(DataPacket), i) == 1)
+				continue;
+
+			//Construct DataPacket
+			DataPacket* data = reinterpret_cast<DataPacket*>(buf);
+
+			printf("%s xGrid, %s zGrid, %s gridObj", data->xGrid, data->zGrid, data->gridObj);
 		}
 	}
 }
@@ -135,7 +143,7 @@ void Server::HandleClients()
 //
 int Server::Send(char* buf, int len, SOCKET client)
 {
-	int dataLen = send(client, buf, len, 0); //Sends a char buffer to the client with a length and flag 0
+	int dataLen = _WINSOCKAPI_::send(client, buf, len, 0); //Sends a char buffer to the client with a length and flag 0
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to send data" << endl;
@@ -146,10 +154,10 @@ int Server::Send(char* buf, int len, SOCKET client)
 
 int Server::Send(char* buf, int len, int clientId)
 {
-	int dataLen = send(_sockClient[clientId], buf, len, 0); //Sends a char buffer to the client with a length and flag 0
+	int dataLen = _WINSOCKAPI_::send(_sockClient[clientId], buf, len, 0); //Sends a char buffer to the client with a length and flag 0
 	if (dataLen < 0)
 	{
-		cout << "ERROR: Failed to send data" << endl;
+		cout << "ERROR: Failed to send data to client " << clientId << endl;
 		return 1;
 	}
 	return dataLen;
@@ -160,7 +168,7 @@ int Server::Send(char* buf, int len, int clientId)
 //
 int Server::Receive(char* buf, int len, SOCKET client)
 {
-	int dataLen = recv(client, buf, len, 0); //Receive a char buffer from the client with a length and flag 0
+	int dataLen = _WINSOCKAPI_::recv(client, buf, len, 0); //Receive a char buffer from the client with a length and flag 0
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data" << endl;
@@ -171,10 +179,10 @@ int Server::Receive(char* buf, int len, SOCKET client)
 
 int Server::Receive(char* buf, int len, int clientId)
 {
-	int dataLen = recv(_sockClient[clientId], buf, len, 0); //Receive a char buffer from the client with a length and flag 0
+	int dataLen = _WINSOCKAPI_::recv(_sockClient[clientId], buf, len, 0); //Receive a char buffer from the client with a length and flag 0
 	if (dataLen < 0)
 	{
-		cout << "ERROR: Failed to receive data" << endl;
+		cout << "ERROR: Failed to receive data from client " << clientId << endl;
 		return 1;
 	}
 	return dataLen;

@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <thread>
 
+#include "../network/DataPacket.hpp"
+
 using namespace std;
 
 class Server
@@ -28,6 +30,8 @@ private:
 	int _port; //The port our server will run on
 	int _maxClients = 4; //Max amount of clients we will accept
 	bool _running = false;
+
+	//GameObject grid[9][9];
 
 	void AcceptClients();
 	void HandleClients();

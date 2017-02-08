@@ -14,7 +14,7 @@ class RotatingBehaviour : public AbstractBehaviour
 		virtual ~RotatingBehaviour();
 
 		virtual void update(float pStep);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
 
 		glm::vec3 _axis;
 };
