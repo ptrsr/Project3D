@@ -94,7 +94,7 @@ void Server::AcceptClients()
 			//Notify the client the connection has been accepted
 			netCode = CONNECTION_ACCEPTED;
 
-			if (Send((char*)netCode, sizeof(netCode), _clients - 1) != 1)
+			if (Send((char*)&netCode, sizeof(netCode), client) != 1)
 			{
 				cout << "Client has succesfully connected" << endl;
 				_sockClient[_clients] = client; //Save the socket
@@ -110,7 +110,7 @@ void Server::AcceptClients()
 			//Notify the client the server is full
 			netCode = SERVER_FULL;
 
-			Send((char*)netCode, sizeof(netCode), client);
+			Send((char*)&netCode, sizeof(netCode), client);
 			CloseConnection(client);
 		}
 	}

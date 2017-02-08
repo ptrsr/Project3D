@@ -20,7 +20,7 @@ public:
 
 private:
 	SOCKET _sock; //Socket we will use
-	SOCKET _sockClient[100]; //Sockets to send/receive clients
+	SOCKET _sockClient[4]; //Sockets to send/receive clients
 	SOCKADDR_IN _iSock; //Contains info about us
 	SOCKADDR_IN _iSockClient; //Contains info about the client
 	WSADATA _data; //Save our socket version
