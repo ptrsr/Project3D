@@ -3,7 +3,7 @@
 #include "mge/core/AbstractGame.hpp"
 #include "mge/scenes/LightScene.hpp"
 #include "mge/scenes/TerrainScene.hpp"
-#include "mge/scenes/UnityScene.hpp"
+#include "mge/scenes/ObjectViewer.hpp"
 #include "mge/scenes/SpotScene.hpp"
 /**
  * Main entry point for the Micro Engine.
@@ -24,7 +24,7 @@ int main()
 {
     std::cout << "Starting Game" << std::endl;
 
-    AbstractGame* game = new LightScene();
+    AbstractGame* game = new ObjectViewer();
     game->initialize();
     game->run();
 

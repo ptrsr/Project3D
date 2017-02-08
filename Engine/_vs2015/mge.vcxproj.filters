@@ -38,6 +38,9 @@
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{af195ac6-8395-4446-98c0-d54117a3071b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\Lua code">
+      <UniqueIdentifier>{be4f6e72-f783-438c-a98e-ec50f3df3539}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -208,14 +211,17 @@
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\scenes\UnityScene.hpp">
-      <Filter>MGE Source files\scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\scenes\SpotScene.hpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mge\core\Message.hpp">
       <Filter>MGE Source files\mge\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp">
+      <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -402,10 +408,13 @@
     <ClCompile Include="..\src\mge\core\lua\lzio.c">
       <Filter>MGE Source files\mge\core\lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\scenes\UnityScene.cpp">
+    <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
+    <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -448,6 +457,12 @@
     </None>
     <None Include="..\assets\mge\shaders\wobble.vs">
       <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="release_static_exe\GameObject.lua">
+      <Filter>assets\Lua code</Filter>
+    </None>
+    <None Include="..\assets\mge\lua scripts\main.lua">
+      <Filter>assets\Lua code</Filter>
     </None>
   </ItemGroup>
 </Project>

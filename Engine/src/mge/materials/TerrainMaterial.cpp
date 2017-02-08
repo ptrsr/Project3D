@@ -1,7 +1,6 @@
 #include <glm.hpp>
 
 #include "mge/materials/TerrainMaterial.hpp"
-#include "mge/core/Texture.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/core/GameObject.hpp"
 #include "mge/config.hpp"
