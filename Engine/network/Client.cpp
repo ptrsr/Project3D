@@ -52,7 +52,7 @@ int Client::Connect(char* IP, int port)
 		data.xGrid = 1;
 		data.zGrid = 5;
 		GameObject* obj = new GameObject("Test", glm::vec3(0, 0, 0));
-		data.gridObj = reinterpret_cast<char*>(&obj);
+		data.gridObj = reinterpret_cast<char>(&*obj);
 		Send(reinterpret_cast<char*>(&data), sizeof(data));
 
 		//Start a thread for handling data
