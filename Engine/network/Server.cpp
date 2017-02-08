@@ -1,10 +1,11 @@
 #include "../network/Server.hpp"
 
 #include "../network/Packet.hpp"
+#include "../network/NetworkCommand.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
-
+	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
 }
 
 Server::~Server()
@@ -39,7 +40,8 @@ int Server::StartServer()
 	cout << "Applied socket info" << endl;
 
 	cout << "Binding socket.." << endl;
-	err = bind(_sock, (LPSOCKADDR)&_iSock, sizeof(_iSock)); //Bind the socket, giving it's info and size
+	err = _WINSOCKAPI_::bind(_sock, (LPSOCKADDR)&_iSock, sizeof(_iSock)); //Bind the socket, giving it's info and size
+	
 	if (err != 0)
 	{
 		cout << "ERROR: Socket binding failed" << endl;
@@ -57,47 +59,81 @@ int Server::StartServer()
 	cout << "Socket listening succesful" << endl;
 
 	cout << "Server succesfully started" << endl;
+	_running = true;
 
-	return AcceptClients();
+	//Start threads for accepting and handling clients
+	thread acceptClients(&Server::AcceptClients, this);
+	thread handleClients(&Server::HandleClients, this);
+	//Join threads
+	acceptClients.join();
+	handleClients.join();
 }
 
-int Server::AcceptClients()
+void Server::AcceptClients()
 {
-	while (_clients < _maxClients)
+	NetWorkCommand netCode; //Connection code
+
+	while (_running)
 	{
-		for (int i = 0; i < 4; i++) //Accept up to 4 clients at once
+		cout << "Waiting for clients.." << endl;
+		int clientInfoSize = sizeof(_iSockClient);
+		SOCKET client = accept(_sock, (sockaddr*)&_iSockClient, &clientInfoSize); //Accept clients, getting their socket info and socket info size
+
+		if (client == INVALID_SOCKET)
 		{
-			if (_clients < _maxClients)
+			cout << "ERROR: Client invalid socket" << endl;
+			continue;
+		}
+
+		cout << "A client has joined the server(IP: " << inet_ntoa(*(struct in_addr*)&_iSock.sin_addr.s_addr) << ")" << endl;
+
+		if (_clients < _maxClients)
+		{
+			//Notify the client the connection has been accepted
+			netCode = CONNECTION_ACCEPTED;
+
+			if (Send((char*)netCode, sizeof(netCode), _clients - 1) != 1)
 			{
-				cout << "Waiting for clients.." << endl;
-				int clientInfoSize = sizeof(_iSockClient);
-				_sockClient[_clients] = accept(_sock, (sockaddr*)&_iSockClient, &clientInfoSize); //Accept clients, getting their socket info and socket info size
-				if (_sockClient[_clients] == INVALID_SOCKET)
-				{
-					cout << "ERROR: Client invalid socket" << endl;
-					return 0;
-				}
-				cout << "A client has joined the server(IP: " << _iSock.sin_addr.s_addr << ")" << endl;
-				_clients++;
-				Sleep(1000); //Wait a bit before searching again
+				cout << "Client has succesfully connected" << endl;
+				_sockClient[_clients] = client; //Save the socket
+				_clients++; //Update connected clients
 			}
 			else
 			{
-				cout << "Completed searching for clients" << endl;
-
-				//Launch game here
-
-				break;
+				cout << "Client failed to connect" << endl;
 			}
 		}
-	}
+		else
+		{
+			//Notify the client the server is full
+			netCode = SERVER_FULL;
 
-	return 1;
+			Send((char*)netCode, sizeof(netCode), client);
+			CloseConnection(client);
+		}
+	}
 }
 
-int Server::Send(char* buf, int len, int client)
+void Server::HandleClients()
 {
-	int dataLen = send(_sockClient[client], buf, len, 0); //Sends a char buffer to the client with a length and flag 0
+	while (_running)
+	{
+		for (int i = 0; i < _maxClients; i++)
+		{
+			if (_sockClient[i] == 0)
+				continue;
+
+			
+		}
+	}
+}
+
+//
+//Send
+//
+int Server::Send(char* buf, int len, SOCKET client)
+{
+	int dataLen = send(client, buf, len, 0); //Sends a char buffer to the client with a length and flag 0
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to send data" << endl;
@@ -106,9 +142,23 @@ int Server::Send(char* buf, int len, int client)
 	return dataLen;
 }
 
-int Server::Receive(char* buf, int len, int client)
+int Server::Send(char* buf, int len, int clientId)
 {
-	int dataLen = recv(_sockClient[client], buf, len, 0); //Receive a char buffer from the client with a length and flag 0
+	int dataLen = send(_sockClient[clientId], buf, len, 0); //Sends a char buffer to the client with a length and flag 0
+	if (dataLen < 0)
+	{
+		cout << "ERROR: Failed to send data" << endl;
+		return 1;
+	}
+	return dataLen;
+}
+
+//
+//Receive
+//
+int Server::Receive(char* buf, int len, SOCKET client)
+{
+	int dataLen = recv(client, buf, len, 0); //Receive a char buffer from the client with a length and flag 0
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data" << endl;
@@ -117,6 +167,33 @@ int Server::Receive(char* buf, int len, int client)
 	return dataLen;
 }
 
+int Server::Receive(char* buf, int len, int clientId)
+{
+	int dataLen = recv(_sockClient[clientId], buf, len, 0); //Receive a char buffer from the client with a length and flag 0
+	if (dataLen < 0)
+	{
+		cout << "ERROR: Failed to receive data" << endl;
+		return 1;
+	}
+	return dataLen;
+}
+
+//
+//Close Connection
+//
+void Server::CloseConnection(SOCKET client)
+{
+	closesocket(client); //Closes a client's connection
+}
+
+void Server::CloseConnection(int clientId)
+{
+	closesocket(_sockClient[clientId]);
+}
+
+//
+//Stop Server
+//
 int Server::StopServer()
 {
 	cout << "Stopping server.." << endl;

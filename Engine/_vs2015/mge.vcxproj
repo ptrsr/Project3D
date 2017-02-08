@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\network\NetworkCommand.hpp" />
     <ClInclude Include="..\network\Packet.hpp" />
     <ClInclude Include="..\network\Server.hpp" />
     <ClInclude Include="..\src\glm.hpp" />

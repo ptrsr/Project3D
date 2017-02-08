@@ -26,7 +26,10 @@ int main()
 	Server* server = new Server(8888, 4);
 	server->StartServer();
 
+	delete server;
+
 	cout << "Closing Game" << endl;
+	cin.get();
 
     return 0;
 }
