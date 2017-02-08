@@ -67,6 +67,8 @@ int Server::StartServer()
 	//Join threads
 	acceptClients.join();
 	handleClients.join();
+
+	return 0;
 }
 
 void Server::AcceptClients()
