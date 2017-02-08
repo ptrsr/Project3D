@@ -1,5 +1,8 @@
 #include "../network/Client.hpp"
 
+#include <thread>
+#include "../network/NetworkCommand.hpp"
+
 Client::Client()
 {
 
@@ -41,8 +44,38 @@ int Client::Connect(char* IP, int port)
 		return 0;
 	}
 
-	cout << "Succesfully connected" << endl;
+	NetWorkCommand netCode;
+	if (Receive((PCHAR)&netCode, sizeof(netCode)) != 1)
+	{
+		switch (netCode)
+		{
+		case CONNECTION_ACCEPTED:
+			cout << "Succesfully connected" << endl;
+			_connected = true;
+			break;
+		case SERVER_FULL:
+			cout << "ERROR: Server is full" << endl;
+			break;
+		}
+
+		//Start a thread for handling data
+		thread receiveData(&Client::ReceiveData, this);
+		receiveData.join();
+	}
+	else
+	{
+		cout << "ERROR: Failed to connect to server" << endl;
+	}
+
 	return 1;
+}
+
+void Client::ReceiveData()
+{
+	while (_connected)
+	{
+		
+	}
 }
 
 int Client::Send(char* buf, int len)
@@ -72,6 +105,7 @@ int Client::Receive(char* buf, int len)
 int Client::Disconnect()
 {
 	cout << "Disconnecting.." << endl;
+	_connected = false; //Stop the data loop
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
 	cout << "Disconnected" << endl;
