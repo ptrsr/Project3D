@@ -48,10 +48,11 @@ int Client::Connect(char* IP, int port)
 
 	if (WaitResponse())
 	{
-		//GameObject* x = new GameObject("Empty", glm::vec3(0, 0, 0));
-		DataPacket data = { 1, 5 };
+		DataPacket data;
+		data.xGrid = 1;
+		data.xGrid = 5;
 		Send((char*)&data, sizeof(data));
-		printf("%s %s %s", data.xGrid, data.zGrid);
+		printf("%s %s", data.xGrid, data.zGrid);
 		return 0;
 
 		//Start a thread for handling data
