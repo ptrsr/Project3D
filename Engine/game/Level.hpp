@@ -23,10 +23,8 @@ class Level : public GameObject
 	
 public:
 	Level();
-	Level(World * world);
 	GameObject* getObject(int xTile, int zTile);
 private:
-	World * _world;
 	int _xTileCount = 9;
 	int _zTileCount = 9;
 	GameObject * _player;

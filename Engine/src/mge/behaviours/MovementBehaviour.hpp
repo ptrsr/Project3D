@@ -4,23 +4,47 @@
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
 
-/**
- * Simply rotates the object around its origin
- */
+
 class MovementBehaviour : public AbstractBehaviour
 {
 	public:
-		MovementBehaviour();
+		MovementBehaviour(GameObject* pPlayer);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
 		void message(send::Message) { };
 	private:
-		glm::vec3 _axis = glm::vec3(0,1,0);
-		bool _left;
-		bool _right;
-		bool _forward;
-		bool _backward;
+
+		void SetDirection();
+
+		enum Direction
+		{
+			up,
+			down,
+			left,
+			right
+		};
+		
+		GameObject* player;
+
+		//set
+		float totalTime = 1;
+		float waitPerc = 0.2f;
+		float jumpHeight = 0.4f;
+
+		//updated
+		glm::vec3 axis = glm::vec3(1,0,0);
+		glm::vec3 trans = glm::vec3(1, 0, 0);
+
+		glm::mat4 worldMat;
+
+		bool moving = true;
+
+		float moveTime = totalTime;
+		float curTime = moveTime;
+		float deltaTime = 0;
+		float distance = 1;
+		Direction dir = up;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

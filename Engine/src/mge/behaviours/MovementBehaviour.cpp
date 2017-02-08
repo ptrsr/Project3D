@@ -1,13 +1,10 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/core/GameObject.hpp"
 #include <SFML/Window/Keyboard.hpp>
-MovementBehaviour::MovementBehaviour()
+
+MovementBehaviour::MovementBehaviour(GameObject* pPlayer) : player(pPlayer)
 {
-	_left = false;
-	_right = false;
-	_forward = true;
-	_backward = false;
-	
+	moveTime = totalTime - totalTime * waitPerc;
 }
 
 MovementBehaviour::~MovementBehaviour()
@@ -17,61 +14,80 @@ MovementBehaviour::~MovementBehaviour()
 
 void MovementBehaviour::update(float pStep)
 {
-	float moveSpeed = 1; //default if no keys
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		_forward = true;
-		_left = false;
-		_right = false;
-		_backward = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		_forward = false;
-		_left = false;
-		_right = false;
-		_backward = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		_forward = false;
-		_left = false;
-		_right = true;
-		_backward = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		_forward = false;
-		_left = false;
-		_right = true;
-		_backward = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		dir = up;
+		trans = glm::vec3(0, 0, 1);
 	}
 	
-
-	if (_forward) {
-		_owner->translate(glm::vec3(0.0f, 0.0f, moveSpeed * pStep));
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		dir = down;
+		trans = glm::vec3(0, 0, -1);
 	}
-	else if (_backward) {
-		_owner->translate(glm::vec3(0.0f, 0.0f, -moveSpeed * pStep));
-	}
-	else if (_right) {
-		_owner->translate(glm::vec3(moveSpeed * pStep, 0.0f, 0.0f));
-	}
-	else if (_left) {
-		_owner->translate(glm::vec3(-moveSpeed * pStep, 0.0f, 0.0f));
-	}
-
-	//we can also translate directly, basically we take the z axis from the matrix
-	//which is normalized and multiply it by moveSpeed*step, than we add it to the
-	//translation component
-	//glm::mat4 transform = _owner->getTransform();
-	//transform[3] += transform[2] * moveSpeed*pStep;
-	//_owner->setTransform(transform);
-
-	//rotate the object in its own local space
-
-	//NOTE:
-	//The reason the above happens in the local space of the object and not in the world space
-	//is that we use the _owner->translate / rotate shortcuts which in turn call glm::rotate / glm::translate
-	//The methods multiply the current transform with the translation/rotation matrix from left to right
-	//meaning everything happens in local space.6
 	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		dir = right;
+		trans = glm::vec3(1, 0, 0);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		dir = left;
+		trans = glm::vec3(-1, 0, 0);
+	}
+
+	curTime += pStep;
+
+	glm::mat4 mat = glm::mat4();
+	glm::mat4 mat2 = glm::mat4();
+
+	if (curTime < moveTime)
+	{
+		float angle = (glm::pi<float>() / 2.f) * ((pStep + deltaTime) / moveTime);
+
+		mat2 = glm::translate(mat2, trans * ((pStep + deltaTime) / moveTime));
+		mat = glm::rotate(mat, angle, axis);
+
+		player->setTransform(player->getTransform() * mat * mat2);
+
+		deltaTime = 0;
+	}
+
+	if (curTime >= totalTime)
+	{
+		curTime -= totalTime;
+		deltaTime = curTime;
+		
+		SetDirection();
+	}
+		
+}
+
+void MovementBehaviour::SetDirection()
+{
+	worldMat = player->getWorldTransform();
+	glm::vec4 temp;
+
+	switch (dir)
+	{
+	case up:
+		temp = glm::vec4(1, 0, 0, 1) * worldMat;
+		break;
+
+	case down:
+		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
+		break;
+
+	case left:
+		temp = glm::vec4(0, 0, -1, 1) * worldMat;
+		break;
+
+	case right:
+		temp = glm::vec4(0, 0, 1, 1) * worldMat;
+		break;
+	}
+
+	axis = glm::round(glm::normalize(glm::vec3(temp.x, temp.y, temp.z)));
 }
