@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "../game/Level.hpp"
-
+#include "mge/behaviours/MovementBehaviour.hpp"
 class Player : public GameObject
 {
 public:

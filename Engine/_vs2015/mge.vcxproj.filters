@@ -226,6 +226,9 @@
     <ClInclude Include="..\game\Level.hpp">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -422,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="..\game\Level.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

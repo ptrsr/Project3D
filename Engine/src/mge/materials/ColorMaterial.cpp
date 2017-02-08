@@ -47,6 +47,10 @@ void ColorMaterial::setDiffuseColor(glm::vec3 pDiffuseColor) {
     _diffuseColor = pDiffuseColor;
 }
 
+glm::vec3 ColorMaterial::getColor() {
+	return _diffuseColor;
+}
+
 void ColorMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) {
     _shader->use();
 

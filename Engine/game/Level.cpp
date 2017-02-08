@@ -1,6 +1,5 @@
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
-
 Level::Level() {}
 
 Level::Level(World * world) :GameObject("level")
@@ -10,7 +9,9 @@ Level::Level(World * world) :GameObject("level")
 	_cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 	initializeLevel();
 	std::string name = "Player1";
-	Player * player = new Player(PlayerId::Player1, name, 0, 0,this);
+
+	_player = new Player(PlayerId::Player1, name, 0, 0,this);
+	
 }
 
 void Level::initializeLevel() {

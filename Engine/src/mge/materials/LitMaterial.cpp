@@ -70,6 +70,10 @@ void LitMaterial::_lazyInitializeShader(std::string shaderName)
 	}
 }
 
+glm::vec3 LitMaterial::getColor() {
+	return _modelColor;
+}
+
 void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
 {
 	_shader->use();

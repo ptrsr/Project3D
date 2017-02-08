@@ -29,6 +29,7 @@ private:
 	World * _world;
 	int _xTileCount = 9;
 	int _zTileCount = 9;
+	GameObject * _player;
 
 	GameObject* _boardArray[9][9];
 	void initializeLevel();

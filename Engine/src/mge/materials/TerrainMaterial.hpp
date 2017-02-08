@@ -13,6 +13,7 @@ class TerrainMaterial : public LitMaterial
         virtual ~TerrainMaterial ();
 
         virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
+		virtual glm::vec3 getColor();
 
 		void enableWater(bool enabled = true, int waterTexture = 4, glm::vec2 wavePoint = glm::vec2(0.5f), float shininess = 400.0f);
 
