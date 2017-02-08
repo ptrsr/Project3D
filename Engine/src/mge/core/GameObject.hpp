@@ -86,8 +86,8 @@ class GameObject
 		virtual void _innerRemove (GameObject* pChild);
 
     private:
-        //GameObject(const GameObject&);
-		//GameObject& operator=(const GameObject&);
+        GameObject(const GameObject&);
+		GameObject& operator=(const GameObject&);
 };
 
 #endif // GAMEOBJECT_H
