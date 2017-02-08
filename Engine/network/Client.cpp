@@ -48,11 +48,16 @@ int Client::Connect(char* IP, int port)
 
 	if (WaitResponse())
 	{
-		GameObject* x = new GameObject();
-		DataPacket data = { 1, 5, *x };
-		Send((char*)&data, sizeof(DataPacket));
+		GameObject* x = new GameObject("Empty", glm::vec3(0, 0, 0));
+		DataPacket data = { 1, 5, Client() };
+		char* d = reinterpret_cast<char*>(&data);
+		Send(d, sizeof(data));
 		printf("%s %s %s", data.xGrid, data.zGrid, data.gridObj);
 		return 0;
+
+		//Start a thread for handling data
+		thread receiveData(&Client::ReceiveData, this);
+		receiveData.join();
 	}
 	else
 		return 1;
@@ -74,9 +79,6 @@ bool Client::WaitResponse()
 			return false;
 		}
 
-		//Start a thread for handling data
-		thread receiveData(&Client::ReceiveData, this);
-		receiveData.join();
 		return true;
 	}
 	else
