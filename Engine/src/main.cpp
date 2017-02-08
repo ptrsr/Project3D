@@ -5,6 +5,8 @@
 #include "mge/scenes/TerrainScene.hpp"
 #include "mge/scenes/ObjectViewer.hpp"
 #include "mge/scenes/SpotScene.hpp"
+
+#include "mge/scenes/MenuScene.hpp"
 /**
  * Main entry point for the Micro Engine.
 
@@ -24,7 +26,7 @@ int main()
 {
     std::cout << "Starting Game" << std::endl;
 
-    AbstractGame* game = new SpotScene();
+    AbstractGame* game = new MenuScene();
     game->initialize();
     game->run();
 

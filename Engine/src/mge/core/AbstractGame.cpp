@@ -6,6 +6,8 @@ using namespace std;
 #include "mge/core/Renderer.hpp"
 #include "mge/core/World.hpp"
 
+#include "mge/util/InputHandler.h"
+
 AbstractGame::AbstractGame():_window(NULL),_renderer(NULL),_world(NULL), _fps(0)
 {
     //ctor
@@ -93,6 +95,7 @@ void AbstractGame::run()
 
 
 	while (_window->isOpen()) {
+
 		timeSinceLastUpdate += updateClock.restart();
 
 		if (timeSinceLastUpdate > timePerFrame)
@@ -103,14 +106,15 @@ void AbstractGame::run()
                 timeSinceLastUpdate -= timePerFrame;
                 _update(timePerFrame.asSeconds());
 		    }
-
+			if (InputHandler::GetKeyDown(sf::Keyboard::B)) {
+				cout << "B works" << endl;
+			}
             _render();
             _window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();
             if (timeSinceLastRender != 0) _fps = 1.0f/timeSinceLastRender;
 		}
-
 		_processEvents();
     }
 }
@@ -138,11 +142,11 @@ void AbstractGame::_processEvents()
             case sf::Event::Closed:
                 exit = true;
                 break;
-            case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::Escape) {
-                    exit = true;
-                }
-                break;
+            //case sf::Event::KeyPressed:
+            //    if (event.key.code == sf::Keyboard::Escape) {
+            //        exit = true;
+            //    }
+            //    break;
             case sf::Event::Resized:
                 //would be better to move this to the renderer
                 //this version implements nonconstrained match viewport scaling

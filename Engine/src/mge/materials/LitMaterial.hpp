@@ -28,6 +28,7 @@ public:
 
 	virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 	virtual glm::vec3 getColor();
+	virtual void setColor(glm::vec3 newColor);
 
 protected:
 	static void _lazyInitializeShader(std::string shaderName);

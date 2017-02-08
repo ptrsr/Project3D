@@ -41,6 +41,9 @@
     <Filter Include="game">
       <UniqueIdentifier>{53268f6e-5baf-464a-88d0-c711df038eb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MGE Source files\scenes\menuStates">
+      <UniqueIdentifier>{1ba4f96f-545b-44c3-93c7-64cef9bb6340}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -211,9 +214,6 @@
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\scenes\UnityScene.hpp">
-      <Filter>MGE Source files\scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\scenes\SpotScene.hpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
@@ -228,6 +228,20 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
+    <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
+    <ClInclude Include="..\src\mge\scenes\MenuScene.hpp">
+      <Filter>MGE Source files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\util\InputHandler.h">
+      <Filter>MGE Source files\mge\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -414,9 +428,6 @@
     <ClCompile Include="..\src\mge\core\lua\lzio.c">
       <Filter>MGE Source files\mge\core\lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\scenes\UnityScene.cpp">
-      <Filter>MGE Source files\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
@@ -428,6 +439,24 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\MenuScene.cpp">
+      <Filter>MGE Source files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\util\InputHandler.cpp">
+      <Filter>MGE Source files\mge\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,5 +499,7 @@
     <None Include="..\assets\mge\shaders\wobble.vs">
       <Filter>assets\shaders</Filter>
     </None>
+    <None Include="..\assets\mge\lua scripts\main.lua" />
+    <None Include="release_static_exe\GameObject.lua" />
   </ItemGroup>
 </Project>
