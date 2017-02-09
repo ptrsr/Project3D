@@ -432,12 +432,6 @@
     <ClCompile Include="..\network\Server.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\network\Data.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\network\PlayerData.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\mge\core\lua\Makefile">

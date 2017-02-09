@@ -1,14 +1,12 @@
 #pragma once
 
-class Data
+struct Data
 {
-public:
-	Data();
-	virtual ~Data();
+	int empty;
 
 	template<class Archive>
-	void serialize(Archive& archive)
+	void serialize(Archive& ar)
 	{
-		archive();
+		ar(empty);
 	}
 };

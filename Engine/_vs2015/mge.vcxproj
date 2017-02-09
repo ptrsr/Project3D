@@ -237,8 +237,6 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\network\Data.cpp" />
-    <ClCompile Include="..\network\PlayerData.cpp" />
     <ClCompile Include="..\network\Server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />

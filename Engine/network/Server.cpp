@@ -1,5 +1,8 @@
 #include "../network/Server.hpp"
 
+#include <sstream>
+#include <cereal/archives/binary.hpp>
+
 #include "../network/NetworkCommand.hpp"
 #include "../network/Data.hpp"
 #include "../network/PlayerData.hpp"
@@ -129,17 +132,24 @@ void Server::HandleClients()
 		{
 			if (_sockClient[i] == 0)
 				continue;
-			
-			char data[sizeof(PlayerData)];
-			if (Receive(data, sizeof(PlayerData), i) == 1)
-				continue;
-			
-			PlayerData* d = reinterpret_cast<PlayerData*>(data);
 
-			PlayerData* pData = dynamic_cast<PlayerData*>(d);
+			char* data;
+			if (Receive(data, sizeof(Data), i) == 1)
+				continue;
+
+			istringstream is(reinterpret_cast<char const*>(data));
+
+			Data* d;
+			{
+				cereal::BinaryInputArchive ar(is);
+
+				ar(*d);
+			}
+			
+			PlayerData* pData = reinterpret_cast<PlayerData*>(d);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
-			t->setTransform(pData->Transform);
+			t->setTransform(pData->transform);
 
 			cout << t->getLocalPosition() << endl;
 		}
