@@ -2,7 +2,13 @@
 
 #include <glm.hpp>
 
-struct PlayerData
+#include "../network/Data.hpp"
+
+class PlayerData : public Data
 {
-	glm::mat4 transform;
+public:
+	PlayerData(glm::mat4 transform);
+	virtual ~PlayerData();
+
+	glm::mat4 Transform;
 };
