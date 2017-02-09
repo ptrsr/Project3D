@@ -4,17 +4,13 @@
 
 #include "../network/Data.hpp"
 
-class PlayerData : public Data
+struct PlayerData : public Data
 {
-public:
-	PlayerData(glm::mat4 transform);
-	~PlayerData();
-
-	glm::mat4 Transform;
+	glm::mat4 transform;
 
 	template<class Archive>
-	void serialize(Archive& archive)
+	void serialize(Archive& ar)
 	{
-		archive(Transform);
+		ar(cereal::base_class<Data>(this), transform);
 	}
 };

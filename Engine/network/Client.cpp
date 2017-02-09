@@ -1,6 +1,8 @@
 #include "../network/Client.hpp"
 
 #include <thread>
+#include <sstream>
+#include <cereal/archives/binary.hpp>
 
 #include "../network/NetworkCommand.hpp"
 #include "../network/PlayerData.hpp"
@@ -53,10 +55,23 @@ int Client::Connect(char* IP, int port)
 	if (WaitResponse())
 	{
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
-		
-		Data data = PlayerData(obj->getTransform());
 
-		Send((char*)(&data), sizeof(Data));
+
+		std::stringstream ss;
+		{
+			cereal::BinaryOutputArchive ar(ss);
+
+			PlayerData pData;
+			pData.transform = obj->getTransform();
+
+			Data data = pData;
+
+			ar(data);
+		}
+
+		string sData = ss.str();
+
+		Send((char*)sData.c_str(), sizeof(Data));
 
 		cout << obj->getLocalPosition() << endl;
 

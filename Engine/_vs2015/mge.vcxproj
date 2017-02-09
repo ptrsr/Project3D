@@ -234,8 +234,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\network\Client.cpp" />
-    <ClCompile Include="..\network\Data.cpp" />
-    <ClCompile Include="..\network\PlayerData.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
