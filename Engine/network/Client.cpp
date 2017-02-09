@@ -3,6 +3,11 @@
 #include <thread>
 
 #include "../network/NetworkCommand.hpp"
+#include "../network/PlayerData.hpp"
+#include "../network/TileData.hpp"
+#include "../network/ScoreData.hpp"
+
+#include "mge/core/GameObject.hpp"
 
 Client::Client()
 {
@@ -47,13 +52,14 @@ int Client::Connect(char* IP, int port)
 
 	if (WaitResponse())
 	{
-		DataPacket data;
-		data.xGrid = 1;
-		data.zGrid = 5;
-		GameObject* obj = new GameObject("Test", glm::vec3(0, 0, 0));
-		GameObject o = *obj;
-		data.gridObj = o;
-		Send(reinterpret_cast<char*>(&data), sizeof(DataPacket));
+		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
+		
+		PlayerData data;
+		data.transform = obj->getTransform();
+
+		Send(reinterpret_cast<char*>(&data), sizeof(PlayerData));
+
+		cout << obj->getLocalPosition() << endl;
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
