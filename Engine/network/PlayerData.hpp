@@ -11,4 +11,10 @@ public:
 	~PlayerData();
 
 	glm::mat4 Transform;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(Transform);
+	}
 };
