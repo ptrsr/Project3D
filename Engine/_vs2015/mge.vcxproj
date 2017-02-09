@@ -167,8 +167,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\network\Client.hpp" />
-    <ClInclude Include="..\network\DataPacket.hpp" />
     <ClInclude Include="..\network\NetworkCommand.hpp" />
+    <ClInclude Include="..\network\PlayerData.hpp" />
+    <ClInclude Include="..\network\ScoreData.hpp" />
+    <ClInclude Include="..\network\TileData.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />

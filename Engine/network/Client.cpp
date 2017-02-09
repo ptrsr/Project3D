@@ -3,7 +3,6 @@
 #include <thread>
 
 #include "../network/NetworkCommand.hpp"
-#include "../network/DataPacket.hpp"
 
 Client::Client()
 {

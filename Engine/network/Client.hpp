@@ -13,7 +13,7 @@ public:
 	Client();
 	~Client();
 
-	int Connect(char *IP, int port);
+	int Connect(char* IP, int port);
 	int Disconnect();
 private:
 	SOCKET _sock; //Our socket we will use to connect to the server
