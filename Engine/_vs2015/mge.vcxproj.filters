@@ -226,7 +226,13 @@
     <ClInclude Include="..\network\NetworkCommand.hpp">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\DataPacket.hpp">
+    <ClInclude Include="..\network\PlayerData.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\ScoreData.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TileData.hpp">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
