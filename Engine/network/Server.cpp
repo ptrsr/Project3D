@@ -144,8 +144,8 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			char data[sizeof(Data)];
-			if (Receive(data, sizeof(Data), i) == 1)
+			char data[4];
+			if (Receive(data, 4, i) == 1)
 			{
 				cout << "No data" << endl;
 				continue;
