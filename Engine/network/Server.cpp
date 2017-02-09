@@ -15,6 +15,9 @@ Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
 	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
 
+	GameObject* o = new GameObject("o", glm::vec3(5, 1, 2));
+	PlayerData pd;
+	pd.transform = o->getTransform();
 	/*
 	GameObject* o = new GameObject("o", glm::vec3(5, 1, 7));
 	PlayerData* pd = new PlayerData(); //Instantiate
@@ -142,23 +145,27 @@ void Server::HandleClients()
 				continue;
 
 			char data[sizeof(Data)];
-			cout << sizeof(data) << endl;
 			if (Receive(data, sizeof(Data), i) == 1)
+			{
+				cout << "No data" << endl;
 				continue;
+			}
+
+
 
 			istringstream is(reinterpret_cast<char const*>(data));
 
-			Data d;
+			Data* d = new Data();
 			{
 				cereal::BinaryInputArchive ar(is);
 
-				ar(d);
+				ar(*d);
 			}
 			
-			PlayerData* pData = dynamic_cast<PlayerData*>(&d);
+			PlayerData* pData = dynamic_cast<PlayerData*>(d);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
-			t->setTransform(pData->transform);
+			//t->setTransform(pData->transform);
 
 			cout << t->getLocalPosition() << endl;
 		}
@@ -206,7 +213,7 @@ int Server::Receive(char* buf, int len, SOCKET client)
 
 int Server::Receive(char* buf, int len, int clientId)
 {
-	int dataLen = _WINSOCKAPI_::recv(_sockClient[clientId], buf, len, 0); //Receive a char buffer from the client with a length and flag 0
+	int dataLen = _WINSOCKAPI_::recv(_sockClient[clientId], buf, len, 0); //Receive data through a char buffer from the client with a length and flag 0
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data from client " << clientId << endl;
