@@ -56,7 +56,6 @@ int Client::Connect(char* IP, int port)
 	{
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
-
 		std::stringstream ss;
 		{
 			cereal::BinaryOutputArchive ar(ss);
