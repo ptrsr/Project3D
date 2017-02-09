@@ -130,11 +130,14 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 			
-			Data* data;
-			if (Receive((char*)&data, sizeof(Data), i) == 1)
+			//Data data;
+			char data[sizeof(Data)];
+			if (Receive(data, sizeof(Data), i) == 1)
 				continue;
 
-			PlayerData* pData = dynamic_cast<PlayerData*>(data);
+			Data* d = reinterpret_cast<Data*>(data);
+
+			PlayerData* pData = dynamic_cast<PlayerData*>(d);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
 			t->setTransform(pData->Transform);
