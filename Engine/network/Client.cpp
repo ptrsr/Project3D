@@ -54,9 +54,9 @@ int Client::Connect(char* IP, int port)
 	{
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 		
-		PlayerData data(obj->getTransform());
+		Data data = PlayerData(obj->getTransform());
 
-		Send((char*)(&data), sizeof(PlayerData));
+		Send((char*)(&data), sizeof(Data));
 
 		cout << obj->getLocalPosition() << endl;
 
