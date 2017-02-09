@@ -130,11 +130,10 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 			
-			//Data data;
 			char data[sizeof(PlayerData)];
 			if (Receive(data, sizeof(PlayerData), i) == 1)
 				continue;
-
+			
 			PlayerData* d = reinterpret_cast<PlayerData*>(data);
 
 			PlayerData* pData = dynamic_cast<PlayerData*>(d);
