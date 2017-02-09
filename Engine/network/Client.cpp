@@ -70,7 +70,7 @@ int Client::Connect(char* IP, int port)
 
 		string sData = ss.str();
 		cout << "Sending " << sizeof(sData) << " bytes" << endl;
-		Send((char*)sizeof(sData).c_str(), 4); //Send message length
+		Send((char*)to_string(sizeof(sData)).c_str(), 4); //Send message length
 		Sleep(1000);
 		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message
 
