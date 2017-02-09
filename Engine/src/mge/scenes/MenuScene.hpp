@@ -26,9 +26,17 @@ class MenuScene : public AbstractGame
 
 	private:
 		DebugHud* _hud;
-		AbstactState * _currentState;
+		AbstactState * _startState;
+		AbstactState * _joinState;
+		AbstactState * _creditsState;
+		AbstactState* _newState = nullptr;
+		int _currentState = -1;
+		int _nextState = -1;
+		bool _cameraStateChanged = false;
         void _updateHud();
 		void _changeState(int result);
+		void _changeCameraState(AbstactState* state);
+		void _deleteScene();
 
 		MenuScene(const MenuScene&);
 		MenuScene& operator=(const MenuScene&);

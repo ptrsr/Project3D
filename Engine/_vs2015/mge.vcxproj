@@ -226,6 +226,8 @@
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\MenuScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp" />
     <ClInclude Include="..\src\mge\scenes\SpotScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
@@ -299,6 +301,8 @@
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\MenuScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp" />
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />

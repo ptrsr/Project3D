@@ -16,9 +16,11 @@ class AbstactState : AbstractGame
 		virtual void _initializeScene() = 0;
 		virtual void Update() = 0;
 		virtual int CheckSelection() = 0;
-		
+		virtual GameObject* getPlane() = 0;
+		virtual void deleteScene() = 0;
 
-
+protected:
+		bool _inAnotherState = false;
 		AbstactState(const AbstactState&);
 		AbstactState& operator=(const AbstactState&);
 };

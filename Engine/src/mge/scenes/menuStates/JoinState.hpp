@@ -1,5 +1,5 @@
-#ifndef STARTSTATE_H
-#define STARTSTATE_H
+#ifndef JOINSTATE_H
+#define JOINSTATE_H
 
 #include <mge/core/AbstractGame.hpp>
 
@@ -7,13 +7,13 @@
 #include "mge/scenes/menuStates/AbstactState.hpp"
 class DebugHud;
 
-class StartState : public AbstactState
+class JoinState : public AbstactState
 {
     //PUBLIC FUNCTIONS
 
 	public:
-		StartState();
-		virtual ~StartState();
+		JoinState();
+		virtual ~JoinState();
 
 		virtual void _initializeScene();
 		virtual void Update();
@@ -22,7 +22,7 @@ class StartState : public AbstactState
 		virtual void deleteScene();
 
 	private:
-		GameObject* _selectableObjs[4];
+		GameObject* _selectableObjs[2];
 		GameObject* _plane;
 		int _counter = 0;
 		void _updateColor();
@@ -32,8 +32,8 @@ class StartState : public AbstactState
 		int _delay = 15;
 		int _delayCounter = 0;
 
-		StartState(const StartState&);
-		StartState& operator=(const StartState&);
+		JoinState(const JoinState&);
+		JoinState& operator=(const JoinState&);
 };
 
 #endif // LIGHTSCENE_H

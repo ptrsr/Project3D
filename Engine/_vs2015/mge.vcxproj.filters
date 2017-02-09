@@ -243,6 +243,12 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -456,6 +462,12 @@
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
   </ItemGroup>
