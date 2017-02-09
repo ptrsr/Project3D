@@ -69,7 +69,8 @@ int Client::Connect(char* IP, int port)
 		}
 
 		string sData = ss.str();
-		Send((char*)to_string(sizeof(sData)).c_str(), 4); //Send message length
+		cout << "Sending " << sizeof(sData) << " bytes" << endl;
+		Send((char*)sizeof(sData).c_str(), 4); //Send message length
 		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message
 
 		cout << obj->getLocalPosition() << endl;
