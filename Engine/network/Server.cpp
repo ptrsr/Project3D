@@ -144,12 +144,51 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			char data[256];
+			char data[4]; //UINT is 4 bytes
 			if (Receive(data, 4, i) == 1) //Receive message length
 				continue;
 			int msgSize = atoi(data);
 			cout << msgSize << endl;
 
+			char pckData[256]; //Receive actual message
+			if (Receive(pckData, msgSize, i) == 1)
+				continue;
+
+			//Make a loop to receive the next couple bytes (example is set to 28 bytes)
+
+
+			//
+			//C# Example
+			//
+			//public static void SendMessage(NetworkStream stream, byte[] message)
+			//{
+			//	stream.Write(BitConverter.GetBytes(message.Length), 0, 4); //send message with message length
+			//	stream.Write(message, 0, message.Length); //send actual message
+			//}
+
+			//public static byte[] ReceiveMessage(NetworkStream stream)
+			//{
+			//	int byteCountToRead = BitConverter.ToInt32(ReadBytes(stream, 4), 0); //read the length
+			//	return ReadBytes(stream, byteCountToRead); //read the message
+			//}
+
+			//private static byte[] ReadBytes(NetworkStream stream, int bytes)
+			//{
+			//	byte[] buffer = new byte[bytes];
+			//	int bytesRead = 0;
+			//	int totalBytesRead = 0;
+
+			//	try
+			//	{
+			//		while (totalBytesRead != bytes && (bytesRead = stream.Read(buffer, totalBytesRead, bytes - totalBytesRead)) > 0) //keep reading until all bytes are received
+			//		{
+			//			totalBytesRead += bytesRead;
+			//		}
+			//	}
+			//	catch { }
+
+			//	return (totalBytesRead == bytes) ? buffer : null;
+			//}
 
 			istringstream is(reinterpret_cast<char const*>(data));
 
