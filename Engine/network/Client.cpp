@@ -70,7 +70,7 @@ int Client::Connect(char* IP, int port)
 
 		string sData = ss.str();
 
-		Send((char*)sData.c_str(), sizeof(Data));
+		Send((char*)sData.c_str(), sizeof(sData));
 
 		cout << obj->getLocalPosition() << endl;
 
