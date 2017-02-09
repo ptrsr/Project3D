@@ -142,6 +142,7 @@ void Server::HandleClients()
 				continue;
 
 			char data[sizeof(Data)];
+			cout << sizeof(data) << endl;
 			if (Receive(data, sizeof(Data), i) == 1)
 				continue;
 
