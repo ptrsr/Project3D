@@ -144,13 +144,11 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			char data[4];
-			if (Receive(data, 4, i) == 1)
-			{
-				cout << "No data" << endl;
+			char data[256];
+			if (Receive(data, 4, i) == 1) //Receive message length
 				continue;
-			}
-
+			int msgSize = atoi(data);
+			cout << msgSize << endl;
 
 
 			istringstream is(reinterpret_cast<char const*>(data));
