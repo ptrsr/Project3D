@@ -154,7 +154,7 @@ void Server::HandleClients()
 				ar(*d);
 			}
 			
-			//PlayerData pData = static_cast<PlayerData>(d);
+			PlayerData* pData = dynamic_cast<PlayerData*>(d);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
 			//t->setTransform(pData.transform);
