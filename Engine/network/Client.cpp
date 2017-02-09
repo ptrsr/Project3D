@@ -57,7 +57,7 @@ int Client::Connect(char* IP, int port)
 		PlayerData data;
 		data.transform = obj->getTransform();
 
-		Send(reinterpret_cast<char*>(&data), sizeof(PlayerData));
+		Send((char*)(&data), sizeof(PlayerData));
 
 		cout << obj->getLocalPosition() << endl;
 
