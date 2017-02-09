@@ -141,14 +141,15 @@ void JoinState::_clearObjectColor() {
 }
 
 void JoinState::deleteScene() {
-}
-
-JoinState::~JoinState()
-{
 	World::remove(_plane);
 	World::remove(_selectableObjs[0]);
 	World::remove(_selectableObjs[1]);
 	delete _plane;
 	delete _selectableObjs[0];
 	delete _selectableObjs[1];
+}
+
+JoinState::~JoinState()
+{
+
 }

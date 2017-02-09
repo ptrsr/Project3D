@@ -108,15 +108,16 @@ GameObject* CreditsState::getPlane() {
 }
 
 void CreditsState::deleteScene() {
-}
-
-CreditsState::~CreditsState()
-{
 	World::remove(_plane);
 	World::remove(_selectableObj);
 	World::remove(_writingStone);
 	delete _plane;
 	delete _selectableObj;
 	delete _writingStone;
+}
+
+CreditsState::~CreditsState()
+{
+	
 	//dtor
 }
