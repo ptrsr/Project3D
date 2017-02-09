@@ -8,7 +8,7 @@ class PlayerData : public Data
 {
 public:
 	PlayerData(glm::mat4 transform);
-	virtual ~PlayerData();
+	~PlayerData();
 
 	glm::mat4 Transform;
 };
