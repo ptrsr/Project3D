@@ -131,11 +131,11 @@ void Server::HandleClients()
 				continue;
 			
 			//Data data;
-			char data[sizeof(Data)];
-			if (Receive(data, sizeof(Data), i) == 1)
+			char data[sizeof(PlayerData)];
+			if (Receive(data, sizeof(PlayerData), i) == 1)
 				continue;
 
-			Data* d = reinterpret_cast<Data*>(data);
+			PlayerData* d = reinterpret_cast<PlayerData*>(data);
 
 			PlayerData* pData = dynamic_cast<PlayerData*>(d);
 
