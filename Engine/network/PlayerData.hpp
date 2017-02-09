@@ -5,5 +5,4 @@
 struct PlayerData
 {
 	glm::mat4 transform;
-	int paintedTiles[];
 };

@@ -1,6 +1,11 @@
 #include "../network/Server.hpp"
 
 #include "../network/NetworkCommand.hpp"
+#include "../network/PlayerData.hpp"
+#include "../network/TileData.hpp"
+#include "../network/ScoreData.hpp"
+
+#include "mge/core/GameObject.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
@@ -123,23 +128,27 @@ void Server::HandleClients()
 		{
 			if (_sockClient[i] == 0)
 				continue;
-
-			//char data[sizeof(GameObject)];
-			//if (Receive(data, sizeof(GameObject), i) == 1)
-			//	continue;
-			//GameObject* o = reinterpret_cast<GameObject*>(data);
-			//cout << o->getName() << endl;
 			
-			//Expect to receive DataPacket
-			//DataPacket data;
-			char data[sizeof(DataPacket)];
-			//Attempt to receive DataPacket from all clients
-			if (Receive(data, sizeof(DataPacket), i) == 1)
+			PlayerData d;
+			if (Receive((char*)&d, sizeof(PlayerData), i) == 1)
 				continue;
 
-			DataPacket* packet = reinterpret_cast<DataPacket*>(data);
+			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
+			t->setTransform(d.transform);
 
-			cout << packet->xGrid << " " << packet->zGrid << " " << packet->gridObj << endl;
+			cout << t->getLocalPosition() << endl;
+			/*
+			//Expect to receive DataPacket
+			//DataPacket data;
+			char data[sizeof(PlayerData)];
+			//Attempt to receive DataPacket from all clients
+			if (Receive(data, sizeof(PlayerData), i) == 1)
+				continue;
+
+			PlayerData* packet = reinterpret_cast<PlayerData*>(data);
+			GameObject* temp = new GameObject("tmp", glm::vec3(0, 0, 0));
+			temp->setTransform(packet->transform);
+			cout << temp->getLocalPosition() << endl;*/
 		}
 	}
 }
