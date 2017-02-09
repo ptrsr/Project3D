@@ -4,12 +4,13 @@
 
 #include "../network/Data.hpp"
 
-struct PlayerData : public Data
+class PlayerData : public Data
 {
+public:
 	glm::mat4 transform;
 
-	PlayerData() : transform(glm::mat4(0)) { }
-	explicit PlayerData(glm::mat4 pTransform) : transform(pTransform) { }
+	PlayerData() { }
+	PlayerData(glm::mat4 pTransform) : transform(pTransform) { }
 
 	template<class Archive>
 	void serialize(Archive& ar)

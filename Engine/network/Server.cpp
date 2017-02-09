@@ -14,6 +14,14 @@
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
 	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
+
+	/*
+	GameObject* o = new GameObject("o", glm::vec3(5, 1, 7));
+	PlayerData* pd = new PlayerData(); //Instantiate
+	pd->transform = o->getTransform(); //Assign value
+	Data* d = pd; //Cast to Data
+	PlayerData* ppd = dynamic_cast<PlayerData*>(d); //Cast to Derived
+	*/
 }
 
 Server::~Server()
@@ -139,11 +147,11 @@ void Server::HandleClients()
 
 			istringstream is(reinterpret_cast<char const*>(data));
 
-			Data d;
+			Data* d = new Data();
 			{
 				cereal::BinaryInputArchive ar(is);
 
-				ar(d);
+				ar(*d);
 			}
 			
 			//PlayerData pData = static_cast<PlayerData>(d);
