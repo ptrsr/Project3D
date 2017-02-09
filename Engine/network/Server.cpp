@@ -148,17 +148,17 @@ void Server::HandleClients()
 
 			istringstream is(reinterpret_cast<char const*>(data));
 
-			Data* d = new Data();
+			Data d;
 			{
 				cereal::BinaryInputArchive ar(is);
 
-				ar(*d);
+				ar(d);
 			}
 			
-			PlayerData* pData = dynamic_cast<PlayerData*>(d);
+			PlayerData* pData = dynamic_cast<PlayerData*>(&d);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
-			//t->setTransform(pData.transform);
+			t->setTransform(pData->transform);
 
 			cout << t->getLocalPosition() << endl;
 		}
