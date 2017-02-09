@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <GL/glew.h>
 #include <string>
+#include <glm.hpp>
+
 using namespace std;
 
 class World;
@@ -26,7 +28,7 @@ class AbstractGame
         virtual ~AbstractGame();
 
         //creates a window, initializes glew, a renderer and a world instance
-        virtual void initialize();
+        virtual void initialize(int windowWidth = 1280, int windowHeight = 720);
         //run the actual process of updating all objects, rendering them and processing events
         virtual void run();
 
@@ -35,7 +37,7 @@ class AbstractGame
         //methods above delegate behaviour to the methods below so that you can override it in a subclass
 
         //initialize sfml rendering context
-        virtual void _initializeWindow();
+        virtual void _initializeWindow(int windowWidth, int windowHeight);
         //print info about the current driver version etc
         virtual void _printVersionInfo();
         //initialize the extension wrangler
@@ -61,6 +63,8 @@ class AbstractGame
 		float _fps;                 //stores the real fps
 
     private:
+		glm::vec2 _windowSize;
+
         AbstractGame(const AbstractGame&);
         AbstractGame& operator=(const AbstractGame&);
 

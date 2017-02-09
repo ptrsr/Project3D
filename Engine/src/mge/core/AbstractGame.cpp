@@ -19,9 +19,9 @@ AbstractGame::~AbstractGame()
     delete _world;
 }
 
-void AbstractGame::initialize() {
+void AbstractGame::initialize(int windowWidth, int windowHeight) {
     cout << "Initializing engine..." << endl << endl;
-    _initializeWindow();
+    _initializeWindow(windowWidth, windowHeight);
     _printVersionInfo();
     _initializeGlew();
     _initializeRenderer();
@@ -32,9 +32,10 @@ void AbstractGame::initialize() {
 
 ///SETUP
 
-void AbstractGame::_initializeWindow() {
+void AbstractGame::_initializeWindow(int windowWidth, int windowHeight) {
 	cout << "Initializing window..." << endl;
-	_window = new sf::RenderWindow( sf::VideoMode(1280,720), "My Game!", sf::Style::Default, sf::ContextSettings(24,8,0,3,3));
+	_window = new sf::RenderWindow( sf::VideoMode(windowWidth, windowHeight), "My Game!", sf::Style::Default, sf::ContextSettings(24,8,0,3,3));
+	_windowSize = glm::vec2(windowWidth, windowHeight);
 	//_window->setVerticalSyncEnabled(true);
     cout << "Window initialized." << endl << endl;
 }

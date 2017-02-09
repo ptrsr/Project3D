@@ -45,9 +45,9 @@ void SpotScene::initialize() {
     AbstractGame::initialize();
 
     //setup the custom part
-	cout << "Initializing HUD" << endl;
-	_hud = new DebugHud(_window);
-	cout << "HUD initialized." << endl << endl;
+	//cout << "Initializing HUD" << endl;
+	//_hud = new DebugHud(_window);
+	//cout << "HUD initialized." << endl << endl;
 }
 
 //build the game _world
@@ -63,7 +63,7 @@ void SpotScene::_initializeScene()
 	_world->add(spotLight);
 
 	////CAMERA
-	Camera* camera = new Camera("camera", glm::vec3(0, 0, 0));
+	Camera* camera = new Camera();
 	_world->add(camera);
 	_world->setMainCamera(camera);
 
@@ -75,7 +75,7 @@ void SpotScene::_initializeScene()
 
 void SpotScene::_render() {
     AbstractGame::_render();
-    _updateHud();
+    //_updateHud();
 }
 
 void SpotScene::_updateHud() {

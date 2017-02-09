@@ -8,14 +8,17 @@
 class MovementBehaviour : public AbstractBehaviour
 {
 	public:
-		MovementBehaviour(GameObject* pPlayer);
+		MovementBehaviour(GameObject* pPlayer, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
 		void message(send::Message) { };
 	private:
 
-		void SetDirection();
+		void setDirection();
+		
+		void roll(float pStep);
+		void move(float pPhase, float pTime);
 
 		enum Direction
 		{
@@ -41,9 +44,11 @@ class MovementBehaviour : public AbstractBehaviour
 		bool moving = true;
 
 		float moveTime = totalTime;
-		float curTime = moveTime;
+		float curTime = 0;
 		float deltaTime = 0;
+		float missed = 0;
 		float distance = 1;
+		float lastHeight = 0;
 		Direction dir = up;
 };
 

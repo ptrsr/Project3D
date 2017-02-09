@@ -2,9 +2,13 @@
 #include "mge/core/GameObject.hpp"
 #include <SFML/Window/Keyboard.hpp>
 
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer) : player(pPlayer)
+#include <algorithm>
+
+MovementBehaviour::MovementBehaviour(GameObject* pPlayer, float pJumpHeight, float pTime, float pWait) : 
+	player(pPlayer), jumpHeight(pJumpHeight), totalTime(pTime)
 {
-	moveTime = totalTime - totalTime * waitPerc;
+	waitPerc = std::max(0.f, std::min(pWait, 1.f));
+	moveTime -= totalTime * waitPerc;
 }
 
 MovementBehaviour::~MovementBehaviour()
@@ -30,15 +34,17 @@ void MovementBehaviour::update(float pStep)
 
 	if (curTime < moveTime)
 	{
-		float angle = (glm::pi<float>() / 2.f) * ((pStep + deltaTime) / moveTime);
-		player->rotate(angle, axis);
-
-		glm::vec3 height = glm::vec3(0, std::sin((curTime * (totalTime / moveTime)) * glm::pi<float>() * 2), 0) / 5.f;
-
-		glm::mat4 tMat = glm::translate(glm::mat4(), (trans * ((pStep + deltaTime) / moveTime) + height));
-		player->setTransform(tMat * player->getTransform());
+		roll(((pStep + deltaTime) / moveTime));
+		move(curTime, pStep);
 
 		deltaTime = 0;
+		missed = 1 - (curTime / moveTime);
+	}
+	else if (missed != 0)
+	{
+		roll(missed);
+		move(moveTime, pStep);
+		missed = 0;
 	}
 
 	if (curTime >= totalTime)
@@ -46,12 +52,31 @@ void MovementBehaviour::update(float pStep)
 		curTime -= totalTime;
 		deltaTime = curTime;
 		
-		SetDirection();
+		setDirection();
 	}
 		
 }
 
-void MovementBehaviour::SetDirection()
+void MovementBehaviour::roll(float pStep)
+{
+	float angle = (glm::pi<float>() / 2.f) * pStep;
+	player->rotate(angle, axis);
+}
+
+void MovementBehaviour::move(float pTime, float pStep)
+{
+	float phase = (pTime / moveTime);
+
+	float height = std::sin(phase * glm::pi<float>()) * jumpHeight;
+	float difference = height - lastHeight;
+	lastHeight = height;
+
+	glm::mat4 tMat = glm::translate(glm::mat4(), (pStep * (distance / moveTime) * trans + glm::vec3(0, difference, 0)));
+	//glm::mat4 tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0) );
+	player->setTransform(tMat * player->getTransform());
+}
+
+void MovementBehaviour::setDirection()
 {
 	worldMat = player->getWorldTransform();
 	glm::vec4 temp;

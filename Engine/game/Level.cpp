@@ -5,7 +5,6 @@ Level::Level() :GameObject("level")
 {
 	_cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 	initializeLevel();
-	std::string name = "Player1";
 
 	_player = new Player(PlayerId::Player1);
 	
@@ -18,8 +17,7 @@ void Level::initializeLevel()
 	for (int i = 0; i <= _xTileCount; i++) {
 		for (int j = 0; j <= _zTileCount; j++) {
 
-			std::string cubeName = "Cube: Row: " + to_string(i);
-			cubeName += " Column: " + to_string(j);
+			std::string cubeName = "plane: " + to_string(i) + " " + to_string(j);
 
 			glm::vec3 color;
 
@@ -33,7 +31,7 @@ void Level::initializeLevel()
 
 			plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, color));
 
-			_boardArray[i][j] = plane;
+			//_boardArray[i][j] = plane;
 			World::add(plane);
 
 

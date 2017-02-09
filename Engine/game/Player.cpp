@@ -6,7 +6,7 @@ Player::Player(PlayerId playerId) : GameObject("temp")
 
 
 	//Setting the color of the cube below the player
-	this->setBehaviour(new MovementBehaviour(this));
+	this->setBehaviour(new MovementBehaviour(this, 2.0f, 0.6f, 0.3f));
 
 	this->scale(glm::vec3(0.3f, 0.3f, 0.3f));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj"));
