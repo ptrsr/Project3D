@@ -1,6 +1,7 @@
 #include "../network/Server.hpp"
 
 #include "../network/NetworkCommand.hpp"
+#include "../network/Data.hpp"
 #include "../network/PlayerData.hpp"
 #include "../network/TileData.hpp"
 #include "../network/ScoreData.hpp"
@@ -129,26 +130,16 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 			
-			PlayerData d;
-			if (Receive((char*)&d, sizeof(PlayerData), i) == 1)
+			Data* data;
+			if (Receive((char*)&data, sizeof(Data), i) == 1)
 				continue;
+
+			PlayerData* pData = dynamic_cast<PlayerData*>(data);
 
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
-			t->setTransform(d.transform);
+			t->setTransform(pData->Transform);
 
 			cout << t->getLocalPosition() << endl;
-			/*
-			//Expect to receive DataPacket
-			//DataPacket data;
-			char data[sizeof(PlayerData)];
-			//Attempt to receive DataPacket from all clients
-			if (Receive(data, sizeof(PlayerData), i) == 1)
-				continue;
-
-			PlayerData* packet = reinterpret_cast<PlayerData*>(data);
-			GameObject* temp = new GameObject("tmp", glm::vec3(0, 0, 0));
-			temp->setTransform(packet->transform);
-			cout << temp->getLocalPosition() << endl;*/
 		}
 	}
 }

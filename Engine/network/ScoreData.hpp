@@ -1,6 +1,8 @@
 #pragma once
 
-struct ScoreData
+#include "../network/Data.hpp"
+
+struct ScoreData : public Data
 {
 	int score;
 };

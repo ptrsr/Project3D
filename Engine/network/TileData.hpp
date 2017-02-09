@@ -2,7 +2,9 @@
 
 #include <glm.hpp>
 
-struct TileData
+#include "../network/Data.hpp"
+
+struct TileData : public Data
 {
 	int xGrid;
 	int zGrid;

@@ -235,6 +235,9 @@
     <ClInclude Include="..\network\TileData.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\Data.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -427,6 +430,12 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\network\Server.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\Data.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\PlayerData.cpp">
       <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
