@@ -2,8 +2,6 @@
 
 #include <glm.hpp>
 
-#include "../network/DataType.hpp"
-
 struct TestData
 {
 	int t;
