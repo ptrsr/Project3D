@@ -173,8 +173,31 @@ void Server::HandlePacket(DataType type, char* buf)
 	switch (type)
 	{
 	case DataType::TESTDATA:
-		TestData* testData = reinterpret_cast<TestData*>(buf);
-		cout << testData->t << " " << testData->r << " " << testData->g << " " << testData->b << " " << testData->a << endl;
+		{
+			TestData* testData = reinterpret_cast<TestData*>(buf);
+			cout << testData->t << " " << testData->r << " " << testData->g << " " << testData->b << " " << testData->a << endl;
+		}
+		break;
+	case DataType::PLAYERDATA:
+		{
+			PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
+			switch (playerData->direction)
+			{
+			case Direction::up:
+				cout << "up" << endl;
+				break;
+			case Direction::down:
+				cout << "down" << endl;
+				break;
+			case Direction::left:
+				cout << "left" << endl;
+				break;
+			case Direction::right:
+				cout << "right" << endl;
+				break;
+			}
+		}
+		break;
 	}
 }
 

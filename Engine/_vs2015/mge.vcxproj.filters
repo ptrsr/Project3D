@@ -41,6 +41,9 @@
     <Filter Include="Network">
       <UniqueIdentifier>{4dab285b-03b1-416b-aa51-c7f7efc3d786}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{55b02cc7-09b7-4e1e-9125-c19a797d4446}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -246,6 +249,9 @@
     </ClInclude>
     <ClInclude Include="..\network\PacketHelper.hpp">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Direction.hpp">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
