@@ -32,15 +32,15 @@ using namespace std;
 #include "mge/util/DebugHud.hpp"
 
 #include "mge/config.hpp"
-#include "mge/scenes/SpotScene.hpp"
+#include "mge/scenes/LevelScene.hpp"
 
 
 //construct the game class into _window, _renderer and hud (other parts are initialized by build)
-SpotScene::SpotScene():AbstractGame (),_hud(0)
+LevelScene::LevelScene():AbstractGame (),_hud(0)
 {
 }
 
-void SpotScene::initialize() {
+void LevelScene::initialize() {
     //setup the core part
     AbstractGame::initialize();
 
@@ -51,11 +51,11 @@ void SpotScene::initialize() {
 }
 
 //build the game _world
-void SpotScene::_initializeScene()
+void LevelScene::_initializeScene()
 {
     _renderer->setClearColor(0,0,0);
 
-	Level* level = new Level(glm::vec2(9,9));
+	_level = new Level(glm::vec2(9,9));
 
 	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
 	spotLight->setBehaviour(new DirectionalLight());
@@ -73,12 +73,12 @@ void SpotScene::_initializeScene()
 
 }
 
-void SpotScene::_render() {
+void LevelScene::_render() {
     AbstractGame::_render();
     //_updateHud();
 }
 
-void SpotScene::_updateHud() {
+void LevelScene::_updateHud() {
     string debugInfo = "";
     debugInfo += string ("FPS:") + std::to_string((int)_fps)+"\n";
 
@@ -86,7 +86,11 @@ void SpotScene::_updateHud() {
 //    _hud->draw();
 }
 
-SpotScene::~SpotScene()
+LevelScene::~LevelScene()
 {
-	//dtor
+	std::cout << "no" << std::endl;
+
+	delete _level;
+
+
 }

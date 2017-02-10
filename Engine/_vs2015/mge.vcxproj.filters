@@ -211,9 +211,6 @@
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\scenes\SpotScene.hpp">
-      <Filter>MGE Source files\scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\core\Message.hpp">
       <Filter>MGE Source files\mge\core</Filter>
     </ClInclude>
@@ -230,6 +227,15 @@
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\game\Tile.hpp">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Board.hpp">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Enums.hpp">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\LevelScene.hpp">
+      <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +422,6 @@
     <ClCompile Include="..\src\mge\core\lua\lzio.c">
       <Filter>MGE Source files\mge\core\lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\scenes\SpotScene.cpp">
-      <Filter>MGE Source files\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="..\game\Player.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -436,6 +439,12 @@
     </ClCompile>
     <ClCompile Include="..\game\Tile.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\Board.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\LevelScene.cpp">
+      <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

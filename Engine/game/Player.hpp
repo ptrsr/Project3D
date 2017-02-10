@@ -6,10 +6,12 @@
 #include "mge/core/GameObject.hpp"
 #include "Tile.hpp"
 
+#include "Enums.hpp"
+
 class Player : public GameObject
 {
 public:
-	Player(Tile::Id playerId, Tile* boardArray[9][9]);
+	Player(Id playerId, glm::vec2 boardPos);
 
 
 };

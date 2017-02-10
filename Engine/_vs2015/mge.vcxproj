@@ -166,6 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\Board.hpp" />
+    <ClInclude Include="..\game\Enums.hpp" />
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
     <ClInclude Include="..\game\Tile.hpp" />
@@ -225,13 +227,14 @@
     <ClInclude Include="..\src\mge\materials\TextureMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\WobbleMaterial.hpp" />
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp" />
-    <ClInclude Include="..\src\mge\scenes\SpotScene.hpp" />
+    <ClInclude Include="..\src\mge\scenes\LevelScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\game\Board.cpp" />
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
     <ClCompile Include="..\game\Tile.cpp" />
@@ -295,7 +298,7 @@
     <ClCompile Include="..\src\mge\materials\TextureMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\WobbleMaterial.cpp" />
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp" />
-    <ClCompile Include="..\src\mge\scenes\SpotScene.cpp" />
+    <ClCompile Include="..\src\mge\scenes\LevelScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />
