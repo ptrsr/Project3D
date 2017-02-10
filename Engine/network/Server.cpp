@@ -130,6 +130,15 @@ void Server::HandleClients()
 			pair<DataType, char*> data = PacketHelper::Receive(_sockClient[i]);
 			HandlePacket(data.first, data.second);
 
+			pair<DataType, char*> data2 = PacketHelper::Receive(_sockClient[i]);
+			HandlePacket(data.first, data.second);
+
+			pair<DataType, char*> data3 = PacketHelper::Receive(_sockClient[i]);
+			HandlePacket(data.first, data.second);
+
+			pair<DataType, char*> data4 = PacketHelper::Receive(_sockClient[i]);
+			HandlePacket(data.first, data.second);
+
 			//Make a loop to receive the next couple bytes
 
 			//
