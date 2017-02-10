@@ -95,7 +95,7 @@ int Client::Connect(char* IP, int port)
 
 		cout << sizeof(td) << endl;
 		Send((char*)&td, sizeof(td)); //Send actual data
-		td.to_string();
+		cout << td.r << td.g << td.b << td.a << endl;
 
 		//cout << obj->getLocalPosition() << endl;
 
