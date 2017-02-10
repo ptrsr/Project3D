@@ -2,7 +2,7 @@
 
 int PacketHelper::Send(DataType dataType, char* data, SOCKET client)
 {
-	//Send DataType and it's size
+	//Send DataType
 	SendData((char*)&dataType, sizeof(DataType), client);
 	//Send the actual data
 	SendData(data, SizeOfData(&dataType), client);
