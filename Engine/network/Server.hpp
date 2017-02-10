@@ -33,7 +33,7 @@ private:
 
 	void AcceptClients();
 	void HandleClients();
-	void HandlePacket(DataType* type, char* buf);
+	void HandlePacket(DataType type, char* buf);
 
 	int Send(char* buf, int len, SOCKET client);
 	int Send(char* buf, int len, int clientId);

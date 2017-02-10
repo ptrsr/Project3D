@@ -127,39 +127,8 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			pair<DataType*, char*> data = PacketHelper::Receive(_sockClient[i]);
+			pair<DataType, char*> data = PacketHelper::Receive(_sockClient[i]);
 			HandlePacket(data.first, data.second);
-
-			/*
-			//Receive classifier size
-			char data[4]; //UINT is 4 bytes
-			Receive(data, 4, i); //Receive message length
-			int msgSize = atoi(data);
-			cout << msgSize << endl;
-
-			//Receive actaul classifier
-			char pckData[256]; //Receive actual message
-			Receive(pckData, msgSize, i);
-			DataType* type = reinterpret_cast<DataType*>(pckData);
-			if (*type == DataType::TESTDATA)
-			cout << "TESTDATA" << endl;
-
-			//Receive TestData size
-			char msg2[4];
-			Receive(msg2, 4, i);
-			int msg2Size = atoi(msg2);
-			cout << msg2Size << endl;
-
-			//Receive actual TestData
-			char pck2Data[256];
-			Receive(pck2Data, msg2Size, i);
-			
-			switch (*type)
-			{
-			case DataType::TESTDATA:
-				TestData* tData = reinterpret_cast<TestData*>(pck2Data);
-				cout << tData->r << tData->g << tData->b << tData->a << endl;
-			}*/
 
 			//Make a loop to receive the next couple bytes
 
@@ -199,9 +168,9 @@ void Server::HandleClients()
 	}
 }
 
-void Server::HandlePacket(DataType* type, char* buf)
+void Server::HandlePacket(DataType type, char* buf)
 {
-	switch (*type)
+	switch (type)
 	{
 	case DataType::TESTDATA:
 		TestData* testData = reinterpret_cast<TestData*>(buf);

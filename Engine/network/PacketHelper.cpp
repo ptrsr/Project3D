@@ -1,23 +1,30 @@
 #include "../network/PacketHelper.hpp"
 
-int PacketHelper::Send(char* buf, int len, SOCKET client)
+int PacketHelper::Send(char* dataType, char* data, int dataLen, SOCKET client)
 {
+	//Send DataType and it's size
+	SendData(dataType, sizeof(DataType), client);
+	//Send the actual data
+	SendData(data, dataLen, client);
+
 	return 0;
 }
 
-pair<DataType*, char*> PacketHelper::Receive(SOCKET client)
+pair<DataType, char*> PacketHelper::Receive(SOCKET client)
 {
-	//Receive classifier
-	char data1[4]; //Buffer
-	ReceiveData(data1, 4, client);
+	//Buffer
+	char dataType[4];
+	//Receive DataType
+	ReceiveData(dataType, 4, client);
 
-	DataType* type = reinterpret_cast<DataType*>(data1);
+	DataType* type = reinterpret_cast<DataType*>(dataType);
 
-	//Receive actual TestData
-	char data2[256];
-	ReceiveData(data2, SizeOfData(type), client);
+	//Buffer
+	char classData[256];
+	//Receive actual data
+	ReceiveData(classData, SizeOfData(type), client);
 
-	return make_pair(type, data2);
+	return make_pair(*type, classData);
 }
 
 int PacketHelper::SizeOfData(DataType* type)
