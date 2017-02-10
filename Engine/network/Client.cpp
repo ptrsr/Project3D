@@ -78,11 +78,11 @@ int Client::Connect(char* IP, int port)
 
 		DataType dt = DataType::TESTDATA;
 
-		GameObject* o = new GameObject("o", glm::vec3(5, 1, 3));
 		TestData td;
-		td.r = o->getLocalPosition().x;
-		td.g = o->getLocalPosition().y;
-		td.b = o->getLocalPosition().z;
+		td.r = 0.15f;
+		td.g = 0.30f;
+		td.b = 0.60f;
+		td.a = 0.075f;
 
 		cout << sizeof(DataType) << endl;
 		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
@@ -90,13 +90,14 @@ int Client::Connect(char* IP, int port)
 		cout << sizeof(dt) << endl;
 		Send((char*)&dt, sizeof(dt)); //Send classifier
 
-		cout << sizeof(TestData) << endl;
-		Send((char*)to_string(sizeof(TestData)).c_str(), sizeof(TestData)); //Send data size
+		cout << sizeof(td) << endl;
+		Send((char*)to_string(sizeof(td)).c_str(), sizeof(td)); //Send data size
 
 		cout << sizeof(td) << endl;
 		Send((char*)&td, sizeof(td)); //Send actual data
+		td.to_string();
 
-		cout << obj->getLocalPosition() << endl;
+		//cout << obj->getLocalPosition() << endl;
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
