@@ -76,27 +76,27 @@ int Client::Connect(char* IP, int port)
 		Sleep(1000);
 		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message*/
 
-		DataType dt = DataType::TESTDATA;
+		DataType dataType = DataType::TESTDATA;
 
-		TestData td;
-		td.t = 512;
-		td.r = 0.15f;
-		td.g = 0.30f;
-		td.b = 0.60f;
-		td.a = 0.075f;
+		TestData testData;
+		testData.t = 512;
+		testData.r = 0.15f;
+		testData.g = 0.30f;
+		testData.b = 0.60f;
+		testData.a = 0.075f;
 		/*
 		cout << sizeof(DataType) << endl;
 		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
 
-		cout << sizeof(dt) << endl;
-		Send((char*)&dt, sizeof(dt)); //Send classifier*/
+		cout << sizeof(dataType) << endl;
+		Send((char*)&dataType, sizeof(dataType)); //Send classifier
 
-		cout << sizeof(td) << endl;
-		Send((char*)to_string(sizeof(td)).c_str(), sizeof(td)); //Send data size
+		cout << sizeof(testData) << endl;
+		Send((char*)to_string(sizeof(testData)).c_str(), sizeof(testData)); //Send data size*/
 
-		cout << sizeof(td) << endl;
-		Send((char*)&td, sizeof(td)); //Send actual data
-		cout << td.r << td.g << td.b << td.a << endl;
+		cout << sizeof(testData) << endl;
+		Send((char*)&testData, sizeof(testData)); //Send actual data
+		cout << testData.r << testData.g << testData.b << testData.a << endl;
 
 		//cout << obj->getLocalPosition() << endl;
 
