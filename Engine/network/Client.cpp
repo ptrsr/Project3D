@@ -76,15 +76,20 @@ int Client::Connect(char* IP, int port)
 		Sleep(1000);
 		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message*/
 
+		DataType dt = DataType::TESTDATA;
+
 		TestData td;
 		td.aVector = glm::vec3(1, 2, 3);
 
 		cout << sizeof(DataType) << endl;
-		Send((char*)sizeof(DataType), sizeof(DataType)); //Send classifier size
-		cout << sizeof(DataType::TESTDATA) << endl;
-		Send((char*)DataType::TESTDATA, sizeof(DataType)); //Send classifier
+		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
+
+		cout << sizeof(dt) << endl;
+		Send((char*)&dt, sizeof(dt)); //Send classifier
+
 		cout << sizeof(td) << endl;
 		Send((char*)sizeof(td), sizeof(td)); //Send data size
+
 		cout << sizeof(td) << endl;
 		Send((char*)&td, sizeof(td)); //Send actual data
 
