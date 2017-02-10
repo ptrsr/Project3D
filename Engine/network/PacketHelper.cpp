@@ -19,9 +19,7 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 
 	DataType* type = reinterpret_cast<DataType*>(dataType);
 
-	//Buffer
-	//char classData[256];
-	//Receive actual data
+	//Receive actual data using the buffer
 	ReceiveData(buffer, SizeOfData(type), client);
 
 	return make_pair(*type, buffer);
