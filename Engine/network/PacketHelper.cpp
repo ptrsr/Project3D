@@ -10,7 +10,7 @@ int PacketHelper::Send(char* dataType, char* data, int dataLen, SOCKET client)
 	return 0;
 }
 
-pair<DataType*, char*> PacketHelper::Receive(SOCKET client)
+pair<DataType, char*> PacketHelper::Receive(SOCKET client)
 {
 	//Buffer
 	char dataType[4];
@@ -24,7 +24,7 @@ pair<DataType*, char*> PacketHelper::Receive(SOCKET client)
 	//Receive actual data
 	ReceiveData(classData, SizeOfData(type), client);
 
-	return make_pair(type, classData);
+	return make_pair(*type, classData);
 }
 
 int PacketHelper::SizeOfData(DataType* type)

@@ -54,25 +54,7 @@ int Client::Connect(char* IP, int port)
 	{
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
-		/*std::stringstream ss;
-		{
-			cereal::BinaryOutputArchive ar(ss);
-
-			PlayerData pData;
-			pData.transform = obj->getTransform();
-
-			Data data = pData;
-
-			ar(data);
-		}
-
-		string sData = ss.str();
-		cout << "Sending " << sizeof(sData) << " bytes" << endl;
-		Send((char*)to_string(sizeof(sData)).c_str(), 4); //Send message length
-		Sleep(1000);
-		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message*/
-
-		DataType dataType = DataType::TESTDATA;
+		DataType dataType = DataType::PLAYERDATA;
 
 		TestData testData;
 		testData.t = 512;
@@ -81,7 +63,10 @@ int Client::Connect(char* IP, int port)
 		testData.b = 0.60f;
 		testData.a = 0.075f;
 
-		PacketHelper::Send((char*)&dataType, (char*)&testData, sizeof(testData), _sock);
+		PlayerData playerData;
+		playerData.transform = obj->getTransform();
+
+		PacketHelper::Send((char*)&dataType, (char*)&playerData, sizeof(playerData), _sock);
 
 		/*
 		cout << sizeof(dataType) << endl;
