@@ -6,6 +6,7 @@
 
 struct TestData
 {
+	int t;
 	float r;
 	float g;
 	float b;

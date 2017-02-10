@@ -79,6 +79,7 @@ int Client::Connect(char* IP, int port)
 		DataType dt = DataType::TESTDATA;
 
 		TestData td;
+		td.t = 512;
 		td.r = 0.15f;
 		td.g = 0.30f;
 		td.b = 0.60f;
