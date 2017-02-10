@@ -83,12 +83,12 @@ int Client::Connect(char* IP, int port)
 		td.g = 0.30f;
 		td.b = 0.60f;
 		td.a = 0.075f;
-
+		/*
 		cout << sizeof(DataType) << endl;
 		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
 
 		cout << sizeof(dt) << endl;
-		Send((char*)&dt, sizeof(dt)); //Send classifier
+		Send((char*)&dt, sizeof(dt)); //Send classifier*/
 
 		cout << sizeof(td) << endl;
 		Send((char*)to_string(sizeof(td)).c_str(), sizeof(td)); //Send data size
