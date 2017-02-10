@@ -55,6 +55,7 @@ int Client::Connect(char* IP, int port)
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
 		DataType dataType = DataType::PLAYERDATA;
+		DataType dataType2 = DataType::TESTDATA;
 
 		TestData testData;
 		testData.t = 512;
@@ -72,20 +73,11 @@ int Client::Connect(char* IP, int port)
 		PlayerData playerData4;
 		playerData.direction = Direction::right;
 
+		PacketHelper::Send(dataType2, (char*)&testData, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData2, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData3, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData4, _sock);
-
-		/*
-		cout << sizeof(dataType) << endl;
-		Send((char*)&dataType, sizeof(dataType)); //Send classifier
-
-		cout << sizeof(testData) << endl;
-		Send((char*)&testData, sizeof(testData)); //Send actual data
-		cout << testData.r << testData.g << testData.b << testData.a << endl;*/
-
-		//cout << obj->getLocalPosition() << endl;
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
