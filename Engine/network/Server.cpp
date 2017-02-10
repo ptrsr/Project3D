@@ -173,7 +173,7 @@ void Server::HandleClients()
 			{
 			case DataType::TESTDATA:
 				TestData* tData = reinterpret_cast<TestData*>(pck2Data);
-				cout << tData->aVector << endl;
+				tData->to_string();
 			}
 
 			//Make a loop to receive the next couple bytes (example is set to 28 bytes)
