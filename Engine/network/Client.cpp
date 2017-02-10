@@ -73,9 +73,9 @@ int Client::Connect(char* IP, int port)
 		playerData.direction = Direction::right;
 
 		PacketHelper::Send((char*)&dataType, (char*)&playerData, sizeof(playerData), _sock);
-		PacketHelper::Send((char*)&dataType, (char*)&playerData2, sizeof(playerData), _sock);
-		PacketHelper::Send((char*)&dataType, (char*)&playerData3, sizeof(playerData), _sock);
-		PacketHelper::Send((char*)&dataType, (char*)&playerData4, sizeof(playerData), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData2, sizeof(playerData2), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData3, sizeof(playerData3), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData4, sizeof(playerData4), _sock);
 
 		/*
 		cout << sizeof(dataType) << endl;
