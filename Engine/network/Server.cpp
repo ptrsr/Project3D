@@ -4,10 +4,12 @@
 #include <cereal/archives/binary.hpp>
 
 #include "../network/NetworkCommand.hpp"
+#include "../network/DataType.hpp"
 #include "../network/Data.hpp"
 #include "../network/PlayerData.hpp"
 #include "../network/TileData.hpp"
 #include "../network/ScoreData.hpp"
+#include "../network/TestData.hpp"
 
 #include "mge/core/GameObject.hpp"
 
@@ -144,15 +146,33 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
+			//Receive classifier size
 			char data[4]; //UINT is 4 bytes
-			if (Receive(data, 4, i) == 1) //Receive message length
-				continue;
+			Receive(data, 4, i); //Receive message length
 			int msgSize = atoi(data);
 			cout << msgSize << endl;
 
+			//Receive actaul classifier
 			char pckData[256]; //Receive actual message
-			if (Receive(pckData, msgSize, i) == 1)
-				continue;
+			Receive(pckData, msgSize, i);
+			DataType* type = reinterpret_cast<DataType*>(pckData);
+
+			//Receive TestData size
+			char msg2[4];
+			Receive(msg2, 4, i);
+			int msg2Size = atoi(data);
+			cout << msg2Size << endl;
+
+			//Receive actual TestData
+			char pck2Data[256];
+			Receive(pck2Data, msg2Size, i);
+
+			switch (*type)
+			{
+			case DataType::TESTDATA:
+				TestData* tData = reinterpret_cast<TestData*>(pck2Data);
+				cout << tData->aVector << endl;
+			}
 
 			//Make a loop to receive the next couple bytes (example is set to 28 bytes)
 
