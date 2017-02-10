@@ -1,11 +1,11 @@
 #include "../network/PacketHelper.hpp"
 
-int PacketHelper::Send(char* dataType, char* data, int dataLen, SOCKET client)
+int PacketHelper::Send(DataType dataType, char* data, SOCKET client)
 {
 	//Send DataType and it's size
-	SendData(dataType, sizeof(DataType), client);
+	SendData((char*)&dataType, sizeof(DataType), client);
 	//Send the actual data
-	SendData(data, dataLen, client);
+	SendData(data, SizeOfData(&dataType), client);
 
 	return 0;
 }
@@ -33,6 +33,8 @@ int PacketHelper::SizeOfData(DataType* type)
 	{
 	case DataType::TESTDATA:
 		return sizeof(TestData);
+	case DataType::PLAYERDATA:
+		return sizeof(PlayerData);
 	}
 }
 

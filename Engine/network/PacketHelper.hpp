@@ -15,7 +15,7 @@ using namespace std;
 class PacketHelper
 {
 public:
-	static int Send(char* dataType, char* data, int dataLen, SOCKET client);
+	static int Send(DataType dataType, char* data, SOCKET client);
 	static pair<DataType, char*> Receive(SOCKET client);
 private:
 	static int SendData(char* buf, int len, SOCKET client);
