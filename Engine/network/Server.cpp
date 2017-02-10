@@ -146,7 +146,6 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			/*
 			//Receive classifier size
 			char data[4]; //UINT is 4 bytes
 			Receive(data, 4, i); //Receive message length
@@ -158,7 +157,7 @@ void Server::HandleClients()
 			Receive(pckData, msgSize, i);
 			DataType* type = reinterpret_cast<DataType*>(pckData);
 			if (*type == DataType::TESTDATA)
-			cout << "TESTDATA" << endl;*/
+			cout << "TESTDATA" << endl;
 
 			//Receive TestData size
 			char msg2[4];
@@ -168,10 +167,9 @@ void Server::HandleClients()
 
 			//Receive actual TestData
 			char pck2Data[256];
-			TestData ttData;
-			Receive((char*)&ttData, msg2Size, i);
-			DataType type = DataType::TESTDATA;
-			switch (type)
+			Receive(pck2Data, msg2Size, i);
+
+			switch (*type)
 			{
 			case DataType::TESTDATA:
 				TestData* tData = reinterpret_cast<TestData*>(pck2Data);
