@@ -1,32 +1,13 @@
 #include "../network/Server.hpp"
 
-#include <sstream>
-#include <cereal/archives/binary.hpp>
-
+#include "../network/PacketHelper.hpp"
 #include "../network/NetworkCommand.hpp"
-#include "../network/DataType.hpp"
-#include "../network/Data.hpp"
-#include "../network/PlayerData.hpp"
-#include "../network/TileData.hpp"
-#include "../network/ScoreData.hpp"
-#include "../network/TestData.hpp"
 
 #include "mge/core/GameObject.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
 	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
-
-	GameObject* o = new GameObject("o", glm::vec3(5, 1, 2));
-	PlayerData pd;
-	pd.transform = o->getTransform();
-	/*
-	GameObject* o = new GameObject("o", glm::vec3(5, 1, 7));
-	PlayerData* pd = new PlayerData(); //Instantiate
-	pd->transform = o->getTransform(); //Assign value
-	Data* d = pd; //Cast to Data
-	PlayerData* ppd = dynamic_cast<PlayerData*>(d); //Cast to Derived
-	*/
 }
 
 Server::~Server()
@@ -146,6 +127,10 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
+			pair<DataType*, char*> data = PacketHelper::Receive(_sockClient[i]);
+			HandlePacket(data.first, data.second);
+
+			/*
 			//Receive classifier size
 			char data[4]; //UINT is 4 bytes
 			Receive(data, 4, i); //Receive message length
@@ -168,16 +153,15 @@ void Server::HandleClients()
 			//Receive actual TestData
 			char pck2Data[256];
 			Receive(pck2Data, msg2Size, i);
-
+			
 			switch (*type)
 			{
 			case DataType::TESTDATA:
 				TestData* tData = reinterpret_cast<TestData*>(pck2Data);
 				cout << tData->r << tData->g << tData->b << tData->a << endl;
-			}
+			}*/
 
-			//Make a loop to receive the next couple bytes (example is set to 28 bytes)
-
+			//Make a loop to receive the next couple bytes
 
 			//
 			//C# Example
@@ -211,24 +195,17 @@ void Server::HandleClients()
 
 			//	return (totalBytesRead == bytes) ? buffer : null;
 			//}
-
-			/*
-			istringstream is(reinterpret_cast<char const*>(data));
-
-			Data* d = new Data();
-			{
-				cereal::BinaryInputArchive ar(is);
-
-				ar(*d);
-			}
-			
-			PlayerData* pData = dynamic_cast<PlayerData*>(d);
-
-			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
-			//t->setTransform(pData->transform);
-
-			cout << t->getLocalPosition() << endl;*/
 		}
+	}
+}
+
+void Server::HandlePacket(DataType* type, char* buf)
+{
+	switch (*type)
+	{
+	case DataType::TESTDATA:
+		TestData* testData = reinterpret_cast<TestData*>(buf);
+		cout << testData->t << " " << testData->r << " " << testData->g << " " << testData->b << " " << testData->a << endl;
 	}
 }
 

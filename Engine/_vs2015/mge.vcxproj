@@ -173,6 +173,7 @@
     <ClInclude Include="..\network\Data.hpp" />
     <ClInclude Include="..\network\DataType.hpp" />
     <ClInclude Include="..\network\NetworkCommand.hpp" />
+    <ClInclude Include="..\network\PacketHelper.hpp" />
     <ClInclude Include="..\network\PlayerData.hpp" />
     <ClInclude Include="..\network\ScoreData.hpp" />
     <ClInclude Include="..\network\Server.hpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\network\PacketHelper.cpp" />
     <ClCompile Include="..\network\Server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
