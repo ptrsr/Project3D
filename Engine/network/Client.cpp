@@ -4,12 +4,8 @@
 #include <sstream>
 #include <cereal/archives/binary.hpp>
 
+#include "../network/PacketHelper.hpp"
 #include "../network/NetworkCommand.hpp"
-#include "../network/DataType.hpp"
-#include "../network/PlayerData.hpp"
-#include "../network/TileData.hpp"
-#include "../network/ScoreData.hpp"
-#include "../network/TestData.hpp"
 
 #include "mge/core/GameObject.hpp"
 
@@ -84,19 +80,16 @@ int Client::Connect(char* IP, int port)
 		testData.g = 0.30f;
 		testData.b = 0.60f;
 		testData.a = 0.075f;
-		/*
-		cout << sizeof(DataType) << endl;
-		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
 
+		PacketHelper::Send((char*)&dataType, (char*)&testData, sizeof(testData), _sock);
+
+		/*
 		cout << sizeof(dataType) << endl;
 		Send((char*)&dataType, sizeof(dataType)); //Send classifier
 
 		cout << sizeof(testData) << endl;
-		Send((char*)to_string(sizeof(testData)).c_str(), sizeof(testData)); //Send data size*/
-
-		cout << sizeof(testData) << endl;
 		Send((char*)&testData, sizeof(testData)); //Send actual data
-		cout << testData.r << testData.g << testData.b << testData.a << endl;
+		cout << testData.r << testData.g << testData.b << testData.a << endl;*/
 
 		//cout << obj->getLocalPosition() << endl;
 
@@ -113,7 +106,7 @@ int Client::Connect(char* IP, int port)
 bool Client::WaitResponse()
 {
 	NetWorkCommand netCode;
-	if (Receive((PCHAR)&netCode, sizeof(netCode)) != 1)
+	if (Receive((char*)&netCode, sizeof(netCode)) != 1)
 	{
 		switch (netCode)
 		{

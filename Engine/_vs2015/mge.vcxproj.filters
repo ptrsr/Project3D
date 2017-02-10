@@ -244,6 +244,9 @@
     <ClInclude Include="..\network\DataType.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\PacketHelper.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -436,6 +439,9 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\network\Client.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\PacketHelper.cpp">
       <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>

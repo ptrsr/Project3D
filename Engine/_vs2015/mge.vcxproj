@@ -170,6 +170,7 @@
     <ClInclude Include="..\network\Data.hpp" />
     <ClInclude Include="..\network\DataType.hpp" />
     <ClInclude Include="..\network\NetworkCommand.hpp" />
+    <ClInclude Include="..\network\PacketHelper.hpp" />
     <ClInclude Include="..\network\PlayerData.hpp" />
     <ClInclude Include="..\network\ScoreData.hpp" />
     <ClInclude Include="..\network\TestData.hpp" />
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\network\Client.cpp" />
+    <ClCompile Include="..\network\PacketHelper.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
