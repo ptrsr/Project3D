@@ -80,7 +80,9 @@ int Client::Connect(char* IP, int port)
 
 		GameObject* o = new GameObject("o", glm::vec3(5, 1, 3));
 		TestData td;
-		td.aVector = o->getLocalPosition();
+		td.r = o->getLocalPosition().x;
+		td.g = o->getLocalPosition().y;
+		td.b = o->getLocalPosition().z;
 
 		cout << sizeof(DataType) << endl;
 		Send((char*)to_string(sizeof(DataType)).c_str(), sizeof(DataType)); //Send classifier size
