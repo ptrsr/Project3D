@@ -5,9 +5,11 @@
 #include <cereal/archives/binary.hpp>
 
 #include "../network/NetworkCommand.hpp"
+#include "../network/DataType.hpp"
 #include "../network/PlayerData.hpp"
 #include "../network/TileData.hpp"
 #include "../network/ScoreData.hpp"
+#include "../network/TestData.hpp"
 
 #include "mge/core/GameObject.hpp"
 
@@ -56,7 +58,7 @@ int Client::Connect(char* IP, int port)
 	{
 		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
-		std::stringstream ss;
+		/*std::stringstream ss;
 		{
 			cereal::BinaryOutputArchive ar(ss);
 
@@ -72,7 +74,15 @@ int Client::Connect(char* IP, int port)
 		cout << "Sending " << sizeof(sData) << " bytes" << endl;
 		Send((char*)to_string(sizeof(sData)).c_str(), 4); //Send message length
 		Sleep(1000);
-		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message
+		Send((char*)sData.c_str(), sizeof(sData)); //Send actual message*/
+
+		TestData td;
+		td.aVector = glm::vec3(1, 2, 3);
+
+		Send((char*)sizeof(DataType), sizeof(DataType)); //Send classifier size
+		Send((char*)DataType::TESTDATA, sizeof(DataType)); //Send classifier
+		Send((char*)sizeof(td), sizeof(td)); //Send data size
+		Send((char*)&td, sizeof(td)); //Send actual data
 
 		cout << obj->getLocalPosition() << endl;
 
