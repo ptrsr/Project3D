@@ -238,6 +238,12 @@
     <ClInclude Include="..\network\Data.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\DataType.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TestData.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">

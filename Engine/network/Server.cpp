@@ -160,7 +160,8 @@ void Server::HandleClients()
 
 			//Receive TestData size
 			char msg2[4];
-			int msg2Size = Receive(msg2, 4, i);
+			Receive(msg2, 4, i);
+			int msg2Size = atoi(msg2);
 			cout << msg2Size << endl;
 
 			//Receive actual TestData
@@ -210,6 +211,7 @@ void Server::HandleClients()
 			//	return (totalBytesRead == bytes) ? buffer : null;
 			//}
 
+			/*
 			istringstream is(reinterpret_cast<char const*>(data));
 
 			Data* d = new Data();
@@ -224,7 +226,7 @@ void Server::HandleClients()
 			GameObject* t = new GameObject("t", glm::vec3(0, 0, 0));
 			//t->setTransform(pData->transform);
 
-			cout << t->getLocalPosition() << endl;
+			cout << t->getLocalPosition() << endl;*/
 		}
 	}
 }
