@@ -45,9 +45,9 @@ void SpotScene::initialize() {
     AbstractGame::initialize();
 
     //setup the custom part
-	cout << "Initializing HUD" << endl;
-	_hud = new DebugHud(_window);
-	cout << "HUD initialized." << endl << endl;
+	//cout << "Initializing HUD" << endl;
+	//_hud = new DebugHud(_window);
+	//cout << "HUD initialized." << endl << endl;
 }
 
 //build the game _world
@@ -55,34 +55,18 @@ void SpotScene::_initializeScene()
 {
     _renderer->setClearColor(0,0,0);
 
-    Camera* camera = new Camera ("camera", glm::vec3(0,0,0));
-    _world->add(camera);
-    _world->setMainCamera(camera);
-
-	Level * level = new Level(_world);
-
-    ///PLANE
- /*   GameObject* plane = new GameObject ("plane", glm::vec3(0,0,0));
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
-	plane->setMesh(planeMesh);
-    plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1,0,1)));
-    _world->add(plane);
-	*/
-	///SPOT LIGHT
-
-	GameObject* spotRotor = new GameObject("rotor");
-	spotRotor->setBehaviour(new RotatingBehaviour(glm::normalize(glm::vec3(1,1,0))));
-	_world->add(spotRotor);
-
-	glm::vec3 spotColor = glm::vec3(1);
+	Level* level = new Level(glm::vec2(9,9));
 
 	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
 	spotLight->setBehaviour(new DirectionalLight());
 	spotLight->rotate(90, glm::vec3(1, 0, 0));
-	spotLight->setParent(spotRotor);
 	_world->add(spotLight);
 
 	////CAMERA
+	Camera* camera = new Camera();
+	_world->add(camera);
+	_world->setMainCamera(camera);
+
 	GameObject* empty = new GameObject("empty", glm::vec3(5, 0, 5));
 	camera->setBehaviour(new OrbitBehaviour(empty, 10));
 
@@ -91,7 +75,7 @@ void SpotScene::_initializeScene()
 
 void SpotScene::_render() {
     AbstractGame::_render();
-    _updateHud();
+    //_updateHud();
 }
 
 void SpotScene::_updateHud() {
@@ -99,7 +83,7 @@ void SpotScene::_updateHud() {
     debugInfo += string ("FPS:") + std::to_string((int)_fps)+"\n";
 
     _hud->setDebugInfo(debugInfo);
-    _hud->draw();
+//    _hud->draw();
 }
 
 SpotScene::~SpotScene()

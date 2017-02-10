@@ -249,6 +249,10 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\Tile.hpp" />
+    <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -469,6 +473,12 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\Tile.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

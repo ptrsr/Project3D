@@ -56,7 +56,7 @@ void ObjectViewer::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
 
-	Camera* camera = new Camera("camera", glm::vec3(0, 0, 0));
+	Camera* camera = new Camera();
 	_world->add(camera);
 	_world->setMainCamera(camera);
 

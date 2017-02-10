@@ -32,8 +32,8 @@ void DebugHud::_createDebugHud() {
 }
 
 void DebugHud::setDebugInfo(std::string pInfo) {
-    _debugText.setString(pInfo);
-	_debugText.setPosition(10, 10);
+ //   _debugText.setString(pInfo);
+	//_debugText.setPosition(10, 10);
 }
 
 void DebugHud::draw()

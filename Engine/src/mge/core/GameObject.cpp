@@ -158,9 +158,9 @@ void GameObject::scale(glm::vec3 pScale)
 	setTransform(glm::scale(_transform, pScale));
 }
 
-void GameObject::rotate(float pAngle, glm::vec3 pAxis)
+void GameObject::rotate(float pRadianAngle, glm::vec3 pAxis)
 {
-	setTransform(glm::rotate(_transform, pAngle, pAxis));
+	setTransform(glm::rotate(_transform, pRadianAngle, pAxis));
 }
 
 //all game objects are updated in a backward loop, first the behaviour is updated, then all children are updated

@@ -23,6 +23,8 @@ using namespace std;
 #include "mge/behaviours/LookAt.hpp"
 #include "mge/behaviours/OrbitBehaviour.hpp"
 
+#include "mge/behaviours/CameraBehaviour.hpp"
+
 #include "mge/behaviours/DirectionalLight.hpp"
 #include "mge/behaviours/PointLight.hpp"
 #include "mge/behaviours/SpotLight.hpp"
@@ -57,7 +59,8 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera ("camera", glm::vec3(0,2,3));
+    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(0,1,17));
+	camera->rotate(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
 
@@ -72,11 +75,11 @@ void MenuScene::_initializeScene()
 	_creditsState->_initializeScene();
 
 
+	_level = new Level(glm::vec2(9, 9));
+
 	_currentState = -1;
 
 
-	GameObject* empty = new GameObject("empty", glm::vec3(0, 0, 0));
-	camera->setBehaviour(new LookAt(_startState->getPlane()));
 	
 }
 
@@ -90,26 +93,35 @@ void MenuScene::_render() {
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_startState);
-				_cameraStateChanged = true;
 			}
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
-		case 0:
+		case 2:
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_joinState);
-				_cameraStateChanged = true;
+					cout << "camera state changed" << endl;
 			}
-			if (_currentState != 0) _cameraStateChanged = false;
+			if (_currentState != 2) _cameraStateChanged = false;
 			break;
 
-		case 2:
+		case 3:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+				_currentState = -1;
+			}
+			if (!_cameraStateChanged) {
+				cout << "camera state changed" << endl;
+				_changeCameraState(_level);
+			}
+			if (_currentState != 3) _cameraStateChanged = false;
+			break;
+
+		case 1:
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_creditsState);
-				_cameraStateChanged = true;
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
 			break;
@@ -125,19 +137,27 @@ void MenuScene::_deleteScene() {
 
 
 void MenuScene::_changeCameraState(AbstactState* state) {
-		GameObject* plane = state->getPlane();
+		GameObject* plane = new GameObject("empty",state->getPlane()->getLocalPosition());
+		plane->translate(glm::vec3(0, 2, -5));
+		plane->rotate(135, glm::vec3(0, 1, 0));
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
-			camera->setBehaviour(new LookAt(plane));
+			camera->setBehaviour(new CameraBehaviour(plane));
 			_cameraStateChanged = true;
 		}
 }
+void MenuScene::_changeCameraState(Level* level) {
+		GameObject* empty = new GameObject("empty", glm::vec3(4, 6, -4));
+		empty->rotate(135, glm::vec3(0, 1, 0));
+
+		empty->rotate(-45, glm::vec3(1, 0, 0));
+		Camera * camera = _world->getMainCamera();
+		camera->setBehaviour(new CameraBehaviour(empty));
+
+		_cameraStateChanged = true;
+}
 
 void MenuScene::_updateHud() {
-    string debugInfo = "";
-    debugInfo += string ("FPS:") + std::to_string((int)_fps)+"\n";
-    _hud->setDebugInfo(debugInfo);
-    _hud->draw();
 }
 MenuScene::~MenuScene()
 {

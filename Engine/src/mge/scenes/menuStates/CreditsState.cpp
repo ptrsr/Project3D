@@ -45,28 +45,20 @@ void CreditsState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-
-	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
-	spotLight->setBehaviour(new DirectionalLight());
-	spotLight->rotate(90, glm::vec3(1, 0, 0));
-	World::add(spotLight);
-
-
-	_plane = new GameObject("plane", glm::vec3(2.5f, 0, 1));
+	_plane = new GameObject("plane", glm::vec3(-2.5f, 0, 19));
 	_plane->setMesh(planeMesh);
 	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 	_plane->rotate(-75, glm::vec3(0, 1, 0));
 	World::add(_plane);
 
-
-	_writingStone = new GameObject("writingStone", glm::vec3(2.5f, 0.2f, 1.5f));
+	_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
 	_writingStone->rotate(-75, glm::vec3(0, 1, 0));
-	_writingStone->scale(glm::vec3(0.2f, 0.5f, 0.5f));
+	_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
 	_writingStone->setMesh(cubeMesh);
 	_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 	World::add(_writingStone);
 
-	_selectableObj = new GameObject("rock1", glm::vec3(2.0f, 0.2f, 0.5f));
+	_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
 	_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
 	_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
 	_selectableObj->setMesh(cubeMesh);
@@ -101,7 +93,7 @@ int CreditsState::CheckSelection() {
 		return -1;
 	}
 	
-	else return 2;
+	else return 1;
 }
 GameObject* CreditsState::getPlane() {
 	return _plane;

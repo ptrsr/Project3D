@@ -45,29 +45,21 @@ void JoinState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-
-	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
-	spotLight->setBehaviour(new DirectionalLight());
-	spotLight->rotate(90, glm::vec3(1, 0, 0));
-	World::add(spotLight);
-
-
-	_plane = new GameObject("plane", glm::vec3(-2.5f, 0, 1));
+	_plane = new GameObject("plane", glm::vec3(2.5f, 0, 19));
 	_plane->setMesh(planeMesh);
 	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 	_plane->rotate(75, glm::vec3(0, 1, 0));
 	World::add(_plane);
 
 
-	GameObject* writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 1.5f));
+	GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));
 	writingStone->rotate(75, glm::vec3(0, 1, 0));
 	writingStone->scale(glm::vec3(0.2f, 0.2f, 0.5f));
 	writingStone->setMesh(cubeMesh);
 	writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 	World::add(writingStone);
 	_selectableObjs[1] = writingStone;
-
-	GameObject* rock = new GameObject("rock1", glm::vec3(-2.0f, 0.2f, 0.5f));
+	GameObject* rock = new GameObject("rock1", glm::vec3(2.5f, 0.2f, 19.5f));
 	rock->rotate(75, glm::vec3(0, 1, 0));
 	rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
 	rock->setMesh(cubeMesh);
@@ -91,7 +83,7 @@ int JoinState::CheckSelection() {
 
 		 return -1;
 	}
-	else return 0;
+	else return 2;
 }
 
 //Gets the object to use as the LookAt object of the camera
@@ -102,7 +94,7 @@ GameObject* JoinState::getPlane() {
 //Clears and updates the color of the object you are currently on(applies some delay for keyDown like behaviour)
 void JoinState::_updateColor() {
 	if (_inAnotherState) return;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter--;
 		if (_counter < 0) _counter = 1;
@@ -112,7 +104,7 @@ void JoinState::_updateColor() {
 		GameObject* gObj = _selectableObjs[_counter];
 		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter++;
 		if (_counter > 1) _counter = 0;
@@ -141,15 +133,15 @@ void JoinState::_clearObjectColor() {
 }
 
 void JoinState::deleteScene() {
+}
+
+JoinState::~JoinState()
+{
+
 	World::remove(_plane);
 	World::remove(_selectableObjs[0]);
 	World::remove(_selectableObjs[1]);
 	delete _plane;
 	delete _selectableObjs[0];
 	delete _selectableObjs[1];
-}
-
-JoinState::~JoinState()
-{
-
 }

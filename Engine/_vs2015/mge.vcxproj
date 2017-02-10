@@ -168,12 +168,14 @@
   <ItemGroup>
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
+    <ClInclude Include="..\game\Tile.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractLight.hpp" />
+    <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\DirectionalLight.hpp" />
     <ClInclude Include="..\src\mge\behaviours\KeysBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\LookAt.hpp" />
@@ -239,11 +241,13 @@
   <ItemGroup>
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
+    <ClCompile Include="..\game\Tile.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractLight.cpp" />
+    <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\DirectionalLight.cpp" />
     <ClCompile Include="..\src\mge\behaviours\KeysBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\LookAt.cpp" />

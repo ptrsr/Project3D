@@ -51,13 +51,13 @@ void StartState::_initializeScene()
 	World::add(spotLight);
 
 
-	_plane = new GameObject("plane", glm::vec3(0, 0, 0));
+	_plane = new GameObject("plane", glm::vec3(0, 0, 20));
 	_plane->setMesh(planeMesh);
 	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 	World::add(_plane);
 
 	for (int i = 0; i < 4; i++) {
-		GameObject* rock = new GameObject("rock1", glm::vec3((i * 0.5f) - 0.75f, 0.2f, 0));
+		GameObject* rock = new GameObject("rock1", glm::vec3((i * 0.5f) - 0.75f, 0.2f, 20));
 		rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
 		rock->setMesh(cubeMesh);
 		rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
@@ -89,7 +89,7 @@ int StartState::CheckSelection() {
 
 void StartState::_updateColor() {
 	if (_inAnotherState) return;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter--;
 		if (_counter < 0) _counter = 3;
@@ -99,7 +99,7 @@ void StartState::_updateColor() {
 		GameObject* gObj = _selectableObjs[_counter];
 		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter++;
 		if (_counter > 3) _counter = 0;
