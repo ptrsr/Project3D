@@ -87,8 +87,8 @@ int Client::Connect(char* IP, int port)
 		cout << sizeof(dt) << endl;
 		Send((char*)&dt, sizeof(dt)); //Send classifier
 
-		cout << sizeof(td) << endl;
-		Send((char*)to_string(sizeof(td)).c_str(), sizeof(td)); //Send data size
+		cout << sizeof(TestData) << endl;
+		Send((char*)to_string(sizeof(TestData)).c_str(), sizeof(TestData)); //Send data size
 
 		cout << sizeof(td) << endl;
 		Send((char*)&td, sizeof(td)); //Send actual data
