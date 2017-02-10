@@ -253,3 +253,4 @@ paket-files/
 
 Engine/_vs2015/**/
 Engine/_vs2015/mge.vcxproj.user
+Engine/_vs2015/ThirdPerson.sln
