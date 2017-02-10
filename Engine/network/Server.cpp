@@ -148,7 +148,8 @@ void Server::HandleClients()
 
 			//Receive classifier size
 			char data[4]; //UINT is 4 bytes
-			int msgSize = Receive(data, 4, i); //Receive message length
+			Receive(data, 4, i); //Receive message length
+			int msgSize = atoi(data);
 			cout << msgSize << endl;
 
 			//Receive actaul classifier
