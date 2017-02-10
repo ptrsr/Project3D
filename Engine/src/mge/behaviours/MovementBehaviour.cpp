@@ -4,9 +4,11 @@
 
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer, float pJumpHeight, float pTime, float pWait) : 
-	player(pPlayer), jumpHeight(pJumpHeight), totalTime(pTime)
+
+MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Tile* pBoardArray[9][9], float pJumpHeight, float pTime, float pWait) :
+	 player(pPlayer), jumpHeight(pJumpHeight), totalTime(pTime)
 {
+	//boardArray = pBoardArray;
 	waitPerc = std::max(0.f, std::min(pWait, 1.f));
 	moveTime -= totalTime * waitPerc;
 }
@@ -18,52 +20,50 @@ MovementBehaviour::~MovementBehaviour()
 
 void MovementBehaviour::update(float pStep)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		dir = up;
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		dir = down;
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		dir = right;
+	checkKeys(); //set desired direction, doesn't update current direction yet
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		dir = left;
+	curTime += pStep; //total time into the animation
 
-	curTime += pStep;
-
-	if (curTime < moveTime)
+	if (curTime < moveTime) //are we moving?
 	{
-		roll(((pStep + deltaTime) / moveTime));
-		move(curTime, pStep);
+		roll(((pStep + deltaTime) / moveTime)); //roll
+		move(curTime, pStep + deltaTime); //move
 
-		deltaTime = 0;
-		missed = 1 - (curTime / moveTime);
+		deltaTime = 0; //we don't have time which we have to catch up
+		lastMoveTime = curTime; //save the last time we moved
 	}
-	else if (missed != 0)
+	else if (lastMoveTime != 0) //the move time is over, but did we forgot the last bit?
 	{
-		roll(missed);
-		move(moveTime, pStep);
-		missed = 0;
-	}
-
-	if (curTime >= totalTime)
-	{
-		curTime -= totalTime;
-		deltaTime = curTime;
+		roll(1 - lastMoveTime / moveTime); //roll the last bit
+		move(moveTime, moveTime - lastMoveTime); //move the last bit
+		lastMoveTime = 0; //we are done with the move
+	
 		
-		setDirection();
+	}
+
+	if (curTime >= totalTime) //is the animation done?
+	{
+		curTime -= totalTime; //we don't set it to 0 because we are already into the other animation
+		deltaTime = curTime; //time we have to catch up next animation
+		
+		cDir = dDir; //set the current direction to the desired one
+
+		if (cDir != none) //do we have a direction?
+			setDirection();
 	}
 		
 }
 
-void MovementBehaviour::roll(float pStep)
+//if step is 1, we rotate 90 degrees
+void MovementBehaviour::roll(float pStep) 
 {
 	float angle = (glm::pi<float>() / 2.f) * pStep;
 	player->rotate(angle, axis);
 }
 
-void MovementBehaviour::move(float pTime, float pStep)
+//pTime is for the height (phase of sinus wave)
+//if Pstep is 1, move to next position
+void MovementBehaviour::move(float pTime, float pStep) 
 {
 	float phase = (pTime / moveTime);
 
@@ -71,17 +71,23 @@ void MovementBehaviour::move(float pTime, float pStep)
 	float difference = height - lastHeight;
 	lastHeight = height;
 
-	glm::mat4 tMat = glm::translate(glm::mat4(), (pStep * (distance / moveTime) * trans + glm::vec3(0, difference, 0)));
-	//glm::mat4 tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0) );
+	glm::mat4 tMat;
+
+	if (cDir == none)
+		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
+	else
+		tMat = glm::translate(glm::mat4(), (pStep * (distance / moveTime) * trans + glm::vec3(0, difference, 0)));
+
 	player->setTransform(tMat * player->getTransform());
 }
 
+//sets the axis and translation direction
 void MovementBehaviour::setDirection()
 {
 	worldMat = player->getWorldTransform();
 	glm::vec4 temp;
 
-	switch (dir)
+	switch (cDir) //world to local axis
 	{
 	case up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
@@ -104,5 +110,20 @@ void MovementBehaviour::setDirection()
 		break;
 	}
 
-	axis = glm::round(glm::normalize(glm::vec3(temp.x, temp.y, temp.z)));
+	axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
+}
+
+void MovementBehaviour::checkKeys()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		dDir = up;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		dDir = down;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		dDir = right;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		dDir = left;
 }

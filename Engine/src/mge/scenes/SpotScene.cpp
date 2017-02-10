@@ -55,7 +55,7 @@ void SpotScene::_initializeScene()
 {
     _renderer->setClearColor(0,0,0);
 
-	Level* level = new Level();
+	Level* level = new Level(glm::vec2(9,9));
 
 	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
 	spotLight->setBehaviour(new DirectionalLight());

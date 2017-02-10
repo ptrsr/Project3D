@@ -3,25 +3,28 @@
 
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
-
+#include "../game/Tile.hpp"
 
 class MovementBehaviour : public AbstractBehaviour
 {
 	public:
-		MovementBehaviour(GameObject* pPlayer, float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(GameObject* pPlayer, Tile* boardArray[9][9], float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
 		void message(send::Message) { };
 	private:
 
+		void checkKeys();
 		void setDirection();
 		
 		void roll(float pStep);
 		void move(float pPhase, float pTime);
 
+
 		enum Direction
 		{
+			none,
 			up,
 			down,
 			left,
@@ -31,6 +34,8 @@ class MovementBehaviour : public AbstractBehaviour
 		GameObject* player;
 
 		//set
+		Tile* boardArray[9][9];
+
 		float totalTime = 1;
 		float waitPerc = 0.2f;
 		float jumpHeight = 0.4f;
@@ -46,10 +51,11 @@ class MovementBehaviour : public AbstractBehaviour
 		float moveTime = totalTime;
 		float curTime = 0;
 		float deltaTime = 0;
-		float missed = 0;
+		float lastMoveTime = 0;
 		float distance = 1;
 		float lastHeight = 0;
-		Direction dir = up;
+		Direction cDir = none;
+		Direction dDir = none;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

@@ -7,7 +7,7 @@ using namespace std;
 Camera::Camera(glm::vec2 windowSize, std::string pName, glm::vec3 pPosition )
 :	GameObject(pName, pPosition)
 {
-	_projection = glm::perspective(glm::radians(60.0f), windowSize.x / windowSize.y, 0.1f, 1000.0f);
+	_projection = glm::perspective(glm::radians(40.0f), windowSize.x / windowSize.y, 0.1f, 1000.0f);
 }
 
 Camera::~Camera()

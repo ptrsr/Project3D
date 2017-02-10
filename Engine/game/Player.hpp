@@ -2,12 +2,14 @@
 #define PLAYER_H
 
 #include <iostream>
-#include "../game/Level.hpp"
 #include "mge/behaviours/MovementBehaviour.hpp"
+#include "mge/core/GameObject.hpp"
+#include "Tile.hpp"
+
 class Player : public GameObject
 {
 public:
-	Player(PlayerId playerId);
+	Player(Tile::Id playerId, Tile* boardArray[9][9]);
 
 
 };

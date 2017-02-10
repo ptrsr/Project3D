@@ -1,12 +1,16 @@
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
+#include "Tile.hpp"
 
-Level::Level() :GameObject("level")
+Level::Level(glm::vec2 pSize) :GameObject("level")
 {
+	_size = pSize;
+	//_boardArray = new 
+
 	_cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 	initializeLevel();
 
-	_player = new Player(PlayerId::Player1);
+	_player = new Player(Tile::p1, _boardArray);
 	
 }
 
@@ -14,10 +18,8 @@ void Level::initializeLevel()
 {
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 
-	for (int i = 0; i <= _xTileCount; i++) {
-		for (int j = 0; j <= _zTileCount; j++) {
-
-			std::string cubeName = "plane: " + to_string(i) + " " + to_string(j);
+	for (int i = 0; i <= _size.x; i++) {
+		for (int j = 0; j <= _size.y; j++) {
 
 			glm::vec3 color;
 
@@ -26,16 +28,10 @@ void Level::initializeLevel()
 			else
 				color = glm::vec3(0.4f);
 
-			GameObject * plane = new GameObject(cubeName, glm::vec3(i, 0, j));
-			plane->setMesh(planeMesh);
+			Tile * tile = new Tile(glm::vec3(i, 0, j), planeMesh);
+			tile->_material->setColor(color);
 
-			plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, color));
-
-			//_boardArray[i][j] = plane;
-			World::add(plane);
-
-
-			glm::vec3 pos = plane->getLocalPosition();
+			_boardArray[j][i] = tile;
 		}
 	}
 }
@@ -43,4 +39,20 @@ void Level::initializeLevel()
 GameObject* Level::getObject(int xTile,int zTile) {
 	GameObject* gObj = _boardArray[xTile][zTile];
 	return gObj;
+}
+
+Level::~Level()
+{
+	for (int i = 0; i <= _size.x; i++) {
+		for (int j = 0; j <= _size.y; j++) {
+
+			Tile* tile = _boardArray[j][i];
+
+			World::remove(tile);
+			delete tile;
+		}
+	}
+
+	World::remove(_player);
+	delete _player;
 }

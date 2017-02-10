@@ -89,6 +89,10 @@ glm::vec3 LitMaterial::getColor() {
 	return _modelColor;
 }
 
+void LitMaterial::setColor(glm::vec3 pColor) {
+	_modelColor = pColor;
+}
+
 void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
 {
 	_shader->use();
