@@ -88,8 +88,8 @@ int JoinState::CheckSelection() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
 		_inAnotherState = true;
 		_isKeyPress = true;
-		if (_counter = 1) return 0;
-		return -1;
+
+		 return -1;
 	}
 	else return 0;
 }
