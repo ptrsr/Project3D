@@ -127,7 +127,8 @@ void Server::HandleClients()
 			if (_sockClient[i] == 0)
 				continue;
 
-			pair<DataType, char*> data = PacketHelper::Receive(_sockClient[i]);
+			char buffer[256];
+			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClient[i]);
 			HandlePacket(data.first, data.second);
 
 			//pair<DataType, char*> data2 = PacketHelper::Receive(_sockClient[i]);
@@ -182,10 +183,14 @@ void Server::HandlePacket(DataType type, char* buf)
 	switch (type)
 	{
 	case DataType::TESTDATA:
-		{
-			TestData* testData = reinterpret_cast<TestData*>(buf);
-			cout << testData->t << " " << testData->r << " " << testData->g << " " << testData->b << " " << testData->a << endl;
-		}
+		
+			TestData testData = *reinterpret_cast<TestData*>(buf);
+			cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+			cout << "Next" << endl;
+			cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+			cout << "Next" << endl;
+			cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+		
 		break;
 	case DataType::PLAYERDATA:
 		{

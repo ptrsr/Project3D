@@ -10,7 +10,7 @@ int PacketHelper::Send(DataType dataType, char* data, SOCKET client)
 	return 0;
 }
 
-pair<DataType, char*> PacketHelper::Receive(SOCKET client)
+pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 {
 	//Buffer
 	char dataType[4];
@@ -20,11 +20,11 @@ pair<DataType, char*> PacketHelper::Receive(SOCKET client)
 	DataType* type = reinterpret_cast<DataType*>(dataType);
 
 	//Buffer
-	char classData[256];
+	//char classData[256];
 	//Receive actual data
-	ReceiveData(classData, SizeOfData(type), client);
+	ReceiveData(buffer, SizeOfData(type), client);
 
-	return make_pair(*type, classData);
+	return make_pair(*type, buffer);
 }
 
 int PacketHelper::SizeOfData(DataType* type)
@@ -35,6 +35,9 @@ int PacketHelper::SizeOfData(DataType* type)
 		return sizeof(TestData);
 	case DataType::PLAYERDATA:
 		return sizeof(PlayerData);
+	default:
+		cout << "ERROR: Could not match a DataType" << endl;
+		break;
 	}
 }
 

@@ -16,7 +16,7 @@ class PacketHelper
 {
 public:
 	static int Send(DataType dataType, char* data, SOCKET client);
-	static pair<DataType, char*> Receive(SOCKET client);
+	static pair<DataType, char*> Receive(char* buffer, SOCKET client);
 private:
 	static int SendData(char* buf, int len, SOCKET client);
 	static int ReceiveData(char* buf, int len, SOCKET client);
