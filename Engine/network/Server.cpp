@@ -148,8 +148,7 @@ void Server::HandleClients()
 
 			//Receive classifier size
 			char data[4]; //UINT is 4 bytes
-			Receive(data, 4, i); //Receive message length
-			int msgSize = atoi(data);
+			int msgSize = Receive(data, 4, i); //Receive message length
 			cout << msgSize << endl;
 
 			//Receive actaul classifier
@@ -161,8 +160,7 @@ void Server::HandleClients()
 
 			//Receive TestData size
 			char msg2[4];
-			Receive(msg2, 4, i);
-			int msg2Size = atoi(data);
+			int msg2Size = Receive(msg2, 4, i);
 			cout << msg2Size << endl;
 
 			//Receive actual TestData
@@ -240,7 +238,7 @@ int Server::Send(char* buf, int len, SOCKET client)
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to send data" << endl;
-		return 1;
+		return -1;
 	}
 	return dataLen;
 }
@@ -251,7 +249,7 @@ int Server::Send(char* buf, int len, int clientId)
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to send data to client " << clientId << endl;
-		return 1;
+		return -1;
 	}
 	return dataLen;
 }
@@ -265,7 +263,7 @@ int Server::Receive(char* buf, int len, SOCKET client)
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data" << endl;
-		return 1;
+		return -1;
 	}
 	return dataLen;
 }
@@ -276,7 +274,7 @@ int Server::Receive(char* buf, int len, int clientId)
 	if (dataLen < 0)
 	{
 		cout << "ERROR: Failed to receive data from client " << clientId << endl;
-		return 1;
+		return -1;
 	}
 	return dataLen;
 }
