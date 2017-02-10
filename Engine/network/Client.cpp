@@ -79,9 +79,13 @@ int Client::Connect(char* IP, int port)
 		TestData td;
 		td.aVector = glm::vec3(1, 2, 3);
 
+		cout << sizeof(DataType) << endl;
 		Send((char*)sizeof(DataType), sizeof(DataType)); //Send classifier size
+		cout << sizeof(DataType::TESTDATA) << endl;
 		Send((char*)DataType::TESTDATA, sizeof(DataType)); //Send classifier
+		cout << sizeof(td) << endl;
 		Send((char*)sizeof(td), sizeof(td)); //Send data size
+		cout << sizeof(td) << endl;
 		Send((char*)&td, sizeof(td)); //Send actual data
 
 		cout << obj->getLocalPosition() << endl;
