@@ -156,6 +156,8 @@ void Server::HandleClients()
 			char pckData[256]; //Receive actual message
 			Receive(pckData, msgSize, i);
 			DataType* type = reinterpret_cast<DataType*>(pckData);
+			if (*type == DataType::TESTDATA)
+			cout << "TESTDATA" << endl;
 
 			//Receive TestData size
 			char msg2[4];
