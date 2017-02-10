@@ -168,7 +168,8 @@ void Server::HandleClients()
 
 			//Receive actual TestData
 			char pck2Data[256];
-			Receive(pck2Data, msg2Size, i);
+			TestData ttData;
+			Receive((char*)&ttData, msg2Size, i);
 			DataType type = DataType::TESTDATA;
 			switch (type)
 			{
