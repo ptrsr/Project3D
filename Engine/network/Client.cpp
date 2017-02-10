@@ -74,10 +74,10 @@ int Client::Connect(char* IP, int port)
 		playerData.direction = Direction::right;
 
 		PacketHelper::Send(dataType2, (char*)&testData, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData, _sock);
+		/*PacketHelper::Send(dataType, (char*)&playerData, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData2, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData3, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData4, _sock);
+		PacketHelper::Send(dataType, (char*)&playerData4, _sock);*/
 
 		//Start a thread for handling data
 		thread receiveData(&Client::ReceiveData, this);
