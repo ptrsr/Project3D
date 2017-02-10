@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\Direction.hpp" />
     <ClInclude Include="..\network\Client.hpp" />
     <ClInclude Include="..\network\Data.hpp" />
     <ClInclude Include="..\network\DataType.hpp" />

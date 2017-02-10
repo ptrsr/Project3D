@@ -64,9 +64,18 @@ int Client::Connect(char* IP, int port)
 		testData.a = 0.075f;
 
 		PlayerData playerData;
-		playerData.transform = obj->getTransform();
+		playerData.direction = Direction::up;
+		PlayerData playerData2;
+		playerData.direction = Direction::down;
+		PlayerData playerData3;
+		playerData.direction = Direction::left;
+		PlayerData playerData4;
+		playerData.direction = Direction::right;
 
 		PacketHelper::Send((char*)&dataType, (char*)&playerData, sizeof(playerData), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData2, sizeof(playerData), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData3, sizeof(playerData), _sock);
+		PacketHelper::Send((char*)&dataType, (char*)&playerData4, sizeof(playerData), _sock);
 
 		/*
 		cout << sizeof(dataType) << endl;
