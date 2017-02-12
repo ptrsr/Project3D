@@ -8,8 +8,7 @@ Board* Board::_board;
 
 Board::Board()
 {
-	//initializeBoard();
-	
+	initializeBoard();
 }
 
 Board* Board::get()
@@ -27,8 +26,6 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 	if (boardPos.x < 0 || boardPos.y < 0 || boardPos.x > board->_size.x || boardPos.y > board->_size.y)
 		return;
 
-	std::cout << "WORKS" << std::endl;
-
 	Tile* tile = board->_boardArray[(int)boardPos.x][(int)boardPos.y];
 
 	if (tile)
@@ -39,8 +36,8 @@ void Board::initializeBoard()
 {
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 
-	for (int i = 0; i <= _size.x; i++) {
-		for (int j = 0; j <= _size.y; j++) {
+	for (int i = 0; i < _size.x; i++) {
+		for (int j = 0; j < _size.y; j++) {
 
 			glm::vec3 color;
 
@@ -59,15 +56,7 @@ void Board::initializeBoard()
 
 Board::~Board()
 {
-	//for (int i = 0; i <= _size.x; i++) {
-	//	for (int j = 0; j <= _size.y; j++) {
-
-	//		Tile* tile = _boardArray[i][j];
-
-	//		if (tile)
-	//			delete tile;
-	//	}
-	//}
-
-	std::cout << "deleted" << std::endl;
+	for (int i = 0; i < _size.x; i++)
+		for (int j = 0; j < _size.y; j++)
+				delete _boardArray[i][j];
 }

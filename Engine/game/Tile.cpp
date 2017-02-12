@@ -10,7 +10,6 @@ Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
 	this->setMesh(pMesh);
 
 	World::add(this);
-
 }
 
 void Tile::SetOwner(Id pPlayer)
