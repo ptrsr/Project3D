@@ -23,7 +23,7 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 {
 	Board* board = get();
 
-	if (boardPos.x < 0 || boardPos.y < 0 || boardPos.x > board->_size.x || boardPos.y > board->_size.y)
+	if (Board::outOfBounds(boardPos))
 		return;
 
 	Tile* tile = board->_boardArray[(int)boardPos.x][(int)boardPos.y];
@@ -46,12 +46,22 @@ void Board::initializeBoard()
 			else
 				color = glm::vec3(0.4f);
 
-			Tile * tile = new Tile(glm::vec3(i, 0, j), planeMesh);
+			Tile * tile = new Tile(glm::vec3(j, 0, i), planeMesh);
 			tile->_material->setColor(color);
 
 			_boardArray[j][i] = tile;
 		}
 	}
+}
+
+bool Board::outOfBounds(glm::vec2 pos)
+{
+	Board* board = Board::get();
+
+	if (pos.x < 0 || pos.y < 0 || pos.x > board->_size.x || pos.y > board->_size.y)
+		return true;
+
+	return false;
 }
 
 Board::~Board()

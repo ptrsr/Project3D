@@ -53,6 +53,8 @@ class MovementBehaviour : public AbstractBehaviour
 
 		Direction _cDir = none;
 		Direction _dDir = none;
+
+		bool _canceled = false;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

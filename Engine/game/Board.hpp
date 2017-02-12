@@ -8,6 +8,7 @@ class Board
 	
 public:
 	static Board* get();
+	static bool outOfBounds(glm::vec2);
 
 	static void setOwner(glm::vec2 boardPos, Id player);
 

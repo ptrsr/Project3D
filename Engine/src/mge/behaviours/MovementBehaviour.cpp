@@ -18,6 +18,14 @@ void MovementBehaviour::update(float pStep)
 
 	if (_curTime < _moveTime) //are we moving?
 	{
+		float cancelTime;
+
+		if (_canceled && _curTime > (cancelTime = _moveTime / 2.f))
+		{
+			float step = (cancelTime - _lastMoveTime) - _curTime - cancelTime;
+			_axis = -_axis;
+		}
+
 		roll(((pStep + _deltaTime) / _moveTime)); //roll
 		move(_curTime, pStep + _deltaTime); //move
 
@@ -30,7 +38,7 @@ void MovementBehaviour::update(float pStep)
 		move(_moveTime, _moveTime - _lastMoveTime); //move the last bit
 		_lastMoveTime = 0; //we are done with the move
 	
-		_boardPos += glm::vec2(_trans.z, _trans.x);
+		_boardPos += glm::vec2(_trans.x, _trans.z);
 
 		Board::setOwner(_boardPos, _id);
 	}
@@ -105,6 +113,9 @@ void MovementBehaviour::setDirection()
 	}
 
 	_axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
+
+	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
+		_canceled = true;
 }
 
 void MovementBehaviour::checkKeys()
