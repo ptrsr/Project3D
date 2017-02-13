@@ -23,7 +23,6 @@ private:
 	WSADATA _data; //This is to save our socket version
 	bool _connected = false;
 
-	bool WaitResponse();
 	void ReceiveData();
 	void HandlePacket(DataType type, char* buf);
 };

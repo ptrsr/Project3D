@@ -29,6 +29,8 @@ int PacketHelper::SizeOfData(DataType* type)
 {
 	switch (*type)
 	{
+	case DataType::NETWORKCMD:
+		return sizeof(NetWorkCommand);
 	case DataType::TESTDATA:
 		return sizeof(TestData);
 	case DataType::PLAYERDATA:

@@ -5,7 +5,6 @@
 #include <cereal/archives/binary.hpp>
 
 #include "../network/PacketHelper.hpp"
-#include "../network/NetworkCommand.hpp"
 
 #include "mge/core/GameObject.hpp"
 
@@ -50,50 +49,57 @@ int Client::Connect(char* IP, int port)
 		return 0;
 	}
 
-	if (WaitResponse())
-	{
-		GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
+	GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
-		DataType dataType = DataType::PLAYERDATA;
-		DataType dataType2 = DataType::TESTDATA;
+	DataType dataType = DataType::PLAYERDATA;
+	DataType dataType2 = DataType::TESTDATA;
 
-		TestData testData;
-		testData.t = 512;
-		testData.r = 0.15f;
-		testData.g = 0.30f;
-		testData.b = 0.60f;
-		testData.a = 0.075f;
+	//Start a thread for handling data
+	thread receiveData(&Client::ReceiveData, this);
+	receiveData.join();
 
-		PlayerData playerData;
-		playerData.direction = Direction::up;
-		PlayerData playerData2;
-		playerData2.direction = Direction::down;
-		PlayerData playerData3;
-		playerData3.direction = Direction::left;
-		PlayerData playerData4;
-		playerData4.direction = Direction::right;
+	TestData testData;
+	testData.t = 512;
+	testData.r = 0.15f;
+	testData.g = 0.30f;
+	testData.b = 0.60f;
+	testData.a = 0.075f;
 
-		PacketHelper::Send(dataType2, (char*)&testData, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData2, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData3, _sock);
-		PacketHelper::Send(dataType, (char*)&playerData4, _sock);
+	PlayerData playerData;
+	playerData.direction = Direction::up;
+	PlayerData playerData2;
+	playerData2.direction = Direction::down;
+	PlayerData playerData3;
+	playerData3.direction = Direction::left;
+	PlayerData playerData4;
+	playerData4.direction = Direction::right;
 
-		//Start a thread for handling data
-		thread receiveData(&Client::ReceiveData, this);
-		receiveData.join();
+	PacketHelper::Send(dataType2, (char*)&testData, _sock);
+	PacketHelper::Send(dataType, (char*)&playerData, _sock);
+	PacketHelper::Send(dataType, (char*)&playerData2, _sock);
+	PacketHelper::Send(dataType, (char*)&playerData3, _sock);
+	PacketHelper::Send(dataType, (char*)&playerData4, _sock);
 
-		return 0;
-	}
-	else
-		return 1;
+	return 0;
 }
 
-bool Client::WaitResponse()
+void Client::ReceiveData()
 {
-	NetWorkCommand netCode;
-	if (PacketHelper::Receive((char*)&netCode, sizeof(netCode)))
+	while (_connected)
 	{
+		char buf[50];
+		pair<DataType, char*> data = PacketHelper::Receive(buf, _sock);
+		HandlePacket(data.first, data.second);
+	}
+}
+
+void Client::HandlePacket(DataType type, char* buf)
+{
+	switch (type)
+	{
+	case DataType::NETWORKCMD:
+	{
+		NetWorkCommand netCode = *reinterpret_cast<NetWorkCommand*>(buf);
 		switch (netCode)
 		{
 		case CONNECTION_ACCEPTED:
@@ -102,40 +108,19 @@ bool Client::WaitResponse()
 			break;
 		case SERVER_FULL:
 			cout << "ERROR: Server is full" << endl;
-			return false;
+			Disconnect();
+			break;
 		}
-
-		return true;
 	}
-	else
-	{
-		cout << "ERROR: Failed to connect to server" << endl;
-		return false;
-	}
-}
-
-void Client::ReceiveData()
-{
-	while (_connected)
-	{
-		char buf[50];
-		DataType packet = PacketHelper::Receive(buf, _sock);
-		HandlePacket(
-	}
-}
-
-void Client::HandlePacket(DataType type, char* buf)
-{
-	switch (type)
-	{
+		break;
 	case DataType::TESTDATA:
 		TestData testData = *reinterpret_cast<TestData*>(buf);
 		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
 		break;
 	case DataType::PLAYERDATA:
 	{
-		PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
-		switch (playerData->direction)
+		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
+		switch (playerData.direction)
 		{
 		case Direction::up:
 			cout << "up" << endl;

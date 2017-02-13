@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include "../network/NetworkCommand.hpp"
 #include "../network/DataType.hpp"
 
 #include "../network/Data.hpp"
