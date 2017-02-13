@@ -9,4 +9,5 @@ struct TestData
 	float g;
 	float b;
 	float a;
+	char input[256];
 };

@@ -140,6 +140,7 @@ void Server::HandlePacket(DataType type, char* buf)
 	case DataType::TESTDATA:
 		TestData testData = *reinterpret_cast<TestData*>(buf);
 		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+		cout << testData.input << endl;
 		break;
 	case DataType::PLAYERDATA:
 		{
