@@ -72,6 +72,7 @@ int Client::Connect(char* IP, int port)
 	testData2.r = 0;
 	testData2.g = 0;
 	testData2.b = 0;
+	testData2.a = 0;
 	string input2 = "Here is another string";
 	strcpy(testData2.input, input2.c_str());
 
