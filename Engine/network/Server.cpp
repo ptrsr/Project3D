@@ -6,7 +6,7 @@
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
-	memset(_sockClient, 0, sizeof(_sockClient)); //Set all values to 0
+
 }
 
 Server::~Server()
@@ -30,8 +30,7 @@ int Server::StartServer()
 	if (_sock == INVALID_SOCKET)
 	{
 		cout << "ERROR: Invalid socket" << endl;
-		Sleep(4000);
-		exit(0);
+		WSACleanup();
 		return 0;
 	}
 
@@ -50,15 +49,17 @@ int Server::StartServer()
 	if (err != 0)
 	{
 		cout << "ERROR: Socket binding failed" << endl;
+		StopServer();
 		return 0;
 	}
 	cout << "Socket binding succesful" << endl;
 
 	cout << "Listening to socket.." << endl;
-	err = listen(_sock, 4); //Listen to our socket with a client limit of 4
+	err = listen(_sock, _maxClients); //Listen to our socket with a client limit of 3
 	if (err == SOCKET_ERROR)
 	{
 		cout << "ERROR: Socket listening error" << endl;
+		StopServer();
 		return 0;
 	}
 	cout << "Socket listening succesful" << endl;
@@ -95,7 +96,7 @@ void Server::AcceptClients()
 
 		cout << "A client has joined the server(IP: " << inet_ntoa(*(struct in_addr*)&_iSock.sin_addr.s_addr) << ")" << endl;
 
-		if (_clients < _maxClients)
+		if (_connectedClients < _maxClients)
 		{
 			//Notify the client the connection has been accepted
 			netCode = CONNECTION_ACCEPTED;
@@ -103,13 +104,9 @@ void Server::AcceptClients()
 			if (PacketHelper::Send(DataType::NETWORKCMD, (char*)&netCode, client) != 1)
 			{
 				cout << "Client has succesfully connected" << endl;
-				_sockClient[_clients] = client; //Save the socket
+				_sockClients.push_back(client); //Save the socket
 
-				//Start a thread for the client
-				//thread handleClients(&Server::HandleClients, this, _clients);
-				//handleClients.join();
-
-				_clients++; //Update connected clients
+				_connectedClients++; //Update connected clients
 			}
 			else
 			{
@@ -133,14 +130,20 @@ void Server::HandleClients()
 {
 	while (_running)
 	{
-		for (int i = 0; i < _maxClients; i++)
+		//Check data from each client
+		for (int i = 0; i < _sockClients.size(); i++)
 		{
-			//Check if there is any clients in the list
-			if (_sockClient[i] == 0)
+			//Check if the client is still connected
+			if (!PacketHelper::Connected(_sockClients[i]))
+			{
+				cout << "Client id: " << i << endl;
+				CloseConnection(i);
 				continue;
-			
+			}
+
+			//Attempt to receive data
 			char buffer[256];
-			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClient[i]);
+			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClients[i]);
 			HandlePacket(data.first, data.second);
 		}
 	}
@@ -178,7 +181,7 @@ void Server::HandlePacket(DataType type, char* buf)
 	}
 }
 
-void Server::NotifyClients(DataType type, char*)
+void Server::NotifyClients(DataType type, char*, int fromClientId)
 {
 
 }
@@ -193,7 +196,9 @@ void Server::CloseConnection(SOCKET client)
 
 void Server::CloseConnection(int clientId)
 {
-	closesocket(_sockClient[clientId]);
+	closesocket(_sockClients[clientId]); //Closes a client's connection
+	_sockClients.erase(_sockClients.begin() + clientId); //Removes the client from the list
+	_connectedClients--; //Update current connected clients
 }
 
 //

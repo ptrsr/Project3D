@@ -25,6 +25,21 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 	return make_pair(type, buffer);
 }
 
+bool PacketHelper::Connected(SOCKET client)
+{
+	char buf;
+	int err = recv(client, &buf, 1, MSG_PEEK);
+	if (err == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSAEWOULDBLOCK)
+		{
+			cout << "ERROR: Lost connection" << endl;
+			return false;
+		}
+	}
+	return true;
+}
+
 int PacketHelper::SizeOfData(DataType type)
 {
 	switch (type)
