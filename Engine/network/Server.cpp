@@ -125,7 +125,7 @@ void Server::HandleClients()
 		{
 			if (_sockClient[i] == 0)
 				continue;
-
+			
 			char buffer[256];
 			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClient[i]);
 			HandlePacket(data.first, data.second);
