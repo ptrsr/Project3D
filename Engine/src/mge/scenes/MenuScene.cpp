@@ -60,7 +60,7 @@ void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
     Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(0,1,17));
-	camera->rotate(180, glm::vec3(0, 1, 0));
+	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
 
@@ -137,9 +137,10 @@ void MenuScene::_deleteScene() {
 
 
 void MenuScene::_changeCameraState(AbstactState* state) {
-		GameObject* plane = new GameObject("empty",state->getPlane()->getLocalPosition());
-		plane->translate(glm::vec3(0, 2, -5));
-		plane->rotate(135, glm::vec3(0, 1, 0));
+		GameObject* plane = new GameObject("empty",glm::vec3(0,0,0));
+		plane->setTransform(state->getPlane()->getTransform());
+
+		plane->translate(glm::vec3(0,2,5));
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
 			camera->setBehaviour(new CameraBehaviour(plane));
@@ -148,9 +149,9 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 }
 void MenuScene::_changeCameraState(Level* level) {
 		GameObject* empty = new GameObject("empty", glm::vec3(4, 6, -4));
-		empty->rotate(135, glm::vec3(0, 1, 0));
+		empty->rotateDegrees(180, glm::vec3(0, 1, 0));
 
-		empty->rotate(-45, glm::vec3(1, 0, 0));
+		empty->rotateDegrees(-45, glm::vec3(1, 0, 0));
 		Camera * camera = _world->getMainCamera();
 		camera->setBehaviour(new CameraBehaviour(empty));
 

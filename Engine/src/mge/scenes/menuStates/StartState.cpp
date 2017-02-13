@@ -54,6 +54,7 @@ void StartState::_initializeScene()
 	_plane = new GameObject("plane", glm::vec3(0, 0, 20));
 	_plane->setMesh(planeMesh);
 	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
+	_plane->rotateDegrees(180, glm::vec3(0, 1, 0));
 	World::add(_plane);
 
 	for (int i = 0; i < 4; i++) {

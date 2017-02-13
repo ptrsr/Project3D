@@ -162,6 +162,11 @@ void GameObject::rotate(float pRadianAngle, glm::vec3 pAxis)
 {
 	setTransform(glm::rotate(_transform, pRadianAngle, pAxis));
 }
+void GameObject::rotateDegrees(float pDegreeAngle, glm::vec3 pAxis) {
+
+	float radians = glm::radians(pDegreeAngle);
+	setTransform(glm::rotate(_transform, radians, pAxis));
+}
 
 //all game objects are updated in a backward loop, first the behaviour is updated, then all children are updated
 void GameObject::update(float pStep)

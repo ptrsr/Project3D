@@ -48,7 +48,7 @@ void CreditsState::_initializeScene()
 	_plane = new GameObject("plane", glm::vec3(-2.5f, 0, 19));
 	_plane->setMesh(planeMesh);
 	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	_plane->rotate(-75, glm::vec3(0, 1, 0));
+	_plane->rotate(-255, glm::vec3(0, 1, 0));
 	World::add(_plane);
 
 	_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));

@@ -42,6 +42,7 @@ class GameObject
         //change local position, rotation, scaling
 		void translate(glm::vec3 pTranslation);
 		void rotate(float pRadianAngle, glm::vec3 pAxis);
+		void rotateDegrees(float pDegreeAngle, glm::vec3 pAxis);
 		void scale(glm::vec3 pScale);
 
         //mesh and material should be shared as much as possible
