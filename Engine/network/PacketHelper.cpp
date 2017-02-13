@@ -36,7 +36,7 @@ int PacketHelper::SizeOfData(DataType type)
 	case DataType::PLAYERDATA:
 		return sizeof(PlayerData);
 	default:
-		cout << "ERROR: Could not match a DataType" << endl;
+		//cout << "ERROR: Could not match a DataType" << endl;
 		break;
 	}
 }
@@ -57,7 +57,7 @@ int PacketHelper::ReceiveData(char* buf, int len, SOCKET client)
 	int dataLen = _WINSOCKAPI_::recv(client, buf, len, 0); //Receive a char buffer from the client with a length and flag 0
 	if (dataLen < 0)
 	{
-		cout << "ERROR: Failed to receive data" << endl;
+		//cout << "ERROR: Failed to receive data" << endl;
 		return -1;
 	}
 	return dataLen;

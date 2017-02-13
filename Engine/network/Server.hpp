@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include <Windows.h>
-//#include <stdio.h>
 #include <thread>
 
 #include "../network/DataType.hpp"

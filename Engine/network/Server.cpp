@@ -23,6 +23,10 @@ int Server::StartServer()
 	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize socket and set version to 2.2
 	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type to IPv4, TCP protocol
 
+	//Enable non-blocking
+	u_long nonBlocking = 1;
+	ioctlsocket(_sock, FIONBIO, &nonBlocking);
+
 	if (_sock == INVALID_SOCKET)
 	{
 		cout << "ERROR: Invalid socket" << endl;
@@ -62,7 +66,7 @@ int Server::StartServer()
 	cout << "Server succesfully started" << endl;
 	_running = true;
 
-	//Start threads for accepting and handling clients
+	//Start threads for accepting clients
 	thread acceptClients(&Server::AcceptClients, this);
 	thread handleClients(&Server::HandleClients, this);
 	//Join threads
@@ -76,15 +80,16 @@ void Server::AcceptClients()
 {
 	NetWorkCommand netCode; //Connection code
 
+	cout << "Waiting for clients.." << endl;
+
 	while (_running)
 	{
-		cout << "Waiting for clients.." << endl;
 		int clientInfoSize = sizeof(_iSockClient);
 		SOCKET client = accept(_sock, (sockaddr*)&_iSockClient, &clientInfoSize); //Accept clients, getting their socket info and socket info size
 
 		if (client == INVALID_SOCKET)
 		{
-			cout << "ERROR: Client invalid socket" << endl;
+			//cout << "ERROR: Client invalid socket" << endl;
 			continue;
 		}
 
@@ -99,6 +104,11 @@ void Server::AcceptClients()
 			{
 				cout << "Client has succesfully connected" << endl;
 				_sockClient[_clients] = client; //Save the socket
+
+				//Start a thread for the client
+				//thread handleClients(&Server::HandleClients, this, _clients);
+				//handleClients.join();
+
 				_clients++; //Update connected clients
 			}
 			else
@@ -108,6 +118,8 @@ void Server::AcceptClients()
 		}
 		else
 		{
+			cout << "Connection declined, server is full" << endl;
+
 			//Notify the client the server is full
 			netCode = SERVER_FULL;
 
@@ -123,6 +135,7 @@ void Server::HandleClients()
 	{
 		for (int i = 0; i < _maxClients; i++)
 		{
+			//Check if there is any clients in the list
 			if (_sockClient[i] == 0)
 				continue;
 			
