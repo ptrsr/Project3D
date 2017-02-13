@@ -49,6 +49,8 @@ int Client::Connect(char* IP, int port)
 		return 0;
 	}
 
+	_connected = true;
+
 	GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
 	DataType dataType = DataType::PLAYERDATA;
@@ -56,7 +58,6 @@ int Client::Connect(char* IP, int port)
 
 	//Start a thread for handling data
 	thread receiveData(&Client::ReceiveData, this);
-	receiveData.join();
 
 	TestData testData;
 	testData.t = 512;
@@ -79,6 +80,8 @@ int Client::Connect(char* IP, int port)
 	PacketHelper::Send(dataType, (char*)&playerData2, _sock);
 	PacketHelper::Send(dataType, (char*)&playerData3, _sock);
 	PacketHelper::Send(dataType, (char*)&playerData4, _sock);
+
+	receiveData.join();
 
 	return 0;
 }
@@ -104,7 +107,6 @@ void Client::HandlePacket(DataType type, char* buf)
 		{
 		case CONNECTION_ACCEPTED:
 			cout << "Succesfully connected" << endl;
-			_connected = true;
 			break;
 		case SERVER_FULL:
 			cout << "ERROR: Server is full" << endl;
