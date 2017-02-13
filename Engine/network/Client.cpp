@@ -50,11 +50,14 @@ int Client::Connect(char* IP, int port)
 		return 0;
 	}
 
+	_connected = true;
+
+	//Receive server NetCMD
+	ReceiveResponse();
+
 	//Enable non-blocking
 	u_long nonBlocking = 1;
 	ioctlsocket(_sock, FIONBIO, &nonBlocking);
-
-	_connected = true;
 
 	GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
@@ -63,6 +66,12 @@ int Client::Connect(char* IP, int port)
 
 	//Start a thread for handling data
 	thread receiveData(&Client::ReceiveData, this);
+
+	if (!_connected)
+	{
+		receiveData.join();
+		return 0;
+	}
 
 	TestData testData;
 	testData.t = 512;
@@ -103,6 +112,13 @@ int Client::Connect(char* IP, int port)
 	return 0;
 }
 
+void Client::ReceiveResponse()
+{
+	char buffer[10];
+	pair<DataType, char*> data = PacketHelper::Receive(buffer, _sock);
+	HandlePacket(data.first, data.second);
+}
+
 void Client::ReceiveData()
 {
 	while (_connected)
@@ -117,17 +133,6 @@ void Client::ReceiveData()
 		char buf[256];
 		pair<DataType, char*> data = PacketHelper::Receive(buf, _sock);
 		HandlePacket(data.first, data.second);
-
-		//int nError = WSAGetLastError();
-		//if (nError != WSAEWOULDBLOCK&&nError != 0)
-		//{
-		//	std::cout << "Winsock error code: " << nError << "\r\n";
-		//	std::cout << "Server disconnected!\r\n";
-
-		//	Disconnect();
-
-		//	break;
-		//}
 	}
 }
 
