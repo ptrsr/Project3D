@@ -164,6 +164,11 @@ void Server::HandlePacket(DataType type, char* buf)
 	}
 }
 
+void Server::NotifyClients(DataType type, char*)
+{
+
+}
+
 //
 //Close Connection
 //
