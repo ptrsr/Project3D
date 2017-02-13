@@ -175,6 +175,7 @@
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractLight.hpp" />
+    <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\DirectionalLight.hpp" />
     <ClInclude Include="..\src\mge\behaviours\KeysBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\LookAt.hpp" />
@@ -225,11 +226,17 @@
     <ClInclude Include="..\src\mge\materials\TextureMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\WobbleMaterial.hpp" />
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp" />
+    <ClInclude Include="..\src\mge\scenes\MenuScene.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp" />
     <ClInclude Include="..\src\mge\scenes\SpotScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.hpp" />
+    <ClInclude Include="..\src\mge\util\InputHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game\Level.cpp" />
@@ -240,6 +247,7 @@
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractLight.cpp" />
+    <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\DirectionalLight.cpp" />
     <ClCompile Include="..\src\mge\behaviours\KeysBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\LookAt.cpp" />
@@ -295,11 +303,17 @@
     <ClCompile Include="..\src\mge\materials\TextureMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\WobbleMaterial.cpp" />
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp" />
+    <ClCompile Include="..\src\mge\scenes\MenuScene.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp" />
     <ClCompile Include="..\src\mge\scenes\SpotScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />
     <ClCompile Include="..\src\mge\behaviours\OrbitBehaviour.cpp" />
+    <ClCompile Include="..\src\mge\util\InputHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\mge\lua scripts\main.lua" />

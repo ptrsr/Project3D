@@ -43,8 +43,8 @@ ColorMaterial::~ColorMaterial()
     //dtor
 }
 
-void ColorMaterial::setDiffuseColor(glm::vec3 pDiffuseColor) {
-    _diffuseColor = pDiffuseColor;
+void ColorMaterial::setColor(glm::vec3 newColor) {
+    _diffuseColor = newColor;
 }
 
 glm::vec3 ColorMaterial::getColor() {

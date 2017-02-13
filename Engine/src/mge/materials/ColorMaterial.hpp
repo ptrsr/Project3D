@@ -18,8 +18,8 @@ class ColorMaterial : public AbstractMaterial
         virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
         //in rgb values
-        void setDiffuseColor (glm::vec3 pDiffuseColor);
 		virtual glm::vec3 getColor();
+		virtual void setColor(glm::vec3 newColor);
 
     private:
         //all the static properties are shared between instances of ColorMaterial

@@ -41,6 +41,9 @@
     <Filter Include="game">
       <UniqueIdentifier>{53268f6e-5baf-464a-88d0-c711df038eb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MGE Source files\scenes\menuStates">
+      <UniqueIdentifier>{1ba4f96f-545b-44c3-93c7-64cef9bb6340}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -228,8 +231,27 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
-    <ClInclude Include="..\game\Tile.hpp">
-      <Filter>game</Filter>
+    <ClInclude Include="..\src\mge\scenes\MenuScene.hpp">
+      <Filter>MGE Source files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\util\InputHandler.h">
+      <Filter>MGE Source files\mge\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Tile.hpp" />
+    <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -434,8 +456,29 @@
     <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp">
       <Filter>MGE Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\MenuScene.cpp">
+      <Filter>MGE Source files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\util\InputHandler.cpp">
+      <Filter>MGE Source files\mge\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
     <ClCompile Include="..\game\Tile.cpp">
-      <Filter>game</Filter>
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
