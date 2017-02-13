@@ -130,6 +130,10 @@ void Server::HandleClients()
 {
 	while (_running)
 	{
+		//Check if there are any clients
+		if (_sockClients.size() == 0)
+			continue;
+
 		//Check data from each client
 		for (int i = 0; i < _sockClients.size(); i++)
 		{
