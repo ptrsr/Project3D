@@ -64,6 +64,8 @@ int Client::Connect(char* IP, int port)
 	testData.g = 0.30f;
 	testData.b = 0.60f;
 	testData.a = 0.075f;
+	string input = "Testing a very long message to see if it receives correctly on the other side";
+	strcpy(testData.input, input.c_str());
 
 	PlayerData playerData;
 	playerData.direction = Direction::up;
