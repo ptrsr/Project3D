@@ -67,11 +67,11 @@ int Client::Connect(char* IP, int port)
 		PlayerData playerData;
 		playerData.direction = Direction::up;
 		PlayerData playerData2;
-		playerData.direction = Direction::down;
+		playerData2.direction = Direction::down;
 		PlayerData playerData3;
-		playerData.direction = Direction::left;
+		playerData3.direction = Direction::left;
 		PlayerData playerData4;
-		playerData.direction = Direction::right;
+		playerData4.direction = Direction::right;
 
 		PacketHelper::Send(dataType2, (char*)&testData, _sock);
 		PacketHelper::Send(dataType, (char*)&playerData, _sock);
