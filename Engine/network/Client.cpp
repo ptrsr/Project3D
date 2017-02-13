@@ -2,7 +2,6 @@
 
 #include <thread>
 #include <sstream>
-#include <cereal/archives/binary.hpp>
 
 #include "../network/PacketHelper.hpp"
 
