@@ -27,6 +27,7 @@ int Client::Connect(char* IP, int port)
 	if (_sock == INVALID_SOCKET)
 	{
 		cout << "ERROR: Invalid socket" << endl;
+		WSACleanup();
 		return 1;
 	}
 
@@ -45,8 +46,13 @@ int Client::Connect(char* IP, int port)
 	if (connection != 0)
 	{
 		cout << "ERROR: Failed to connect" << endl;
+		Disconnect();
 		return 0;
 	}
+
+	//Enable non-blocking
+	u_long nonBlocking = 1;
+	ioctlsocket(_sock, FIONBIO, &nonBlocking);
 
 	_connected = true;
 
@@ -101,9 +107,27 @@ void Client::ReceiveData()
 {
 	while (_connected)
 	{
+		//Check if we are still connected
+		if (!PacketHelper::Connected(_sock))
+		{
+			Disconnect();
+			break;
+		}
+
 		char buf[256];
 		pair<DataType, char*> data = PacketHelper::Receive(buf, _sock);
 		HandlePacket(data.first, data.second);
+
+		//int nError = WSAGetLastError();
+		//if (nError != WSAEWOULDBLOCK&&nError != 0)
+		//{
+		//	std::cout << "Winsock error code: " << nError << "\r\n";
+		//	std::cout << "Server disconnected!\r\n";
+
+		//	Disconnect();
+
+		//	break;
+		//}
 	}
 }
 
@@ -155,10 +179,10 @@ void Client::HandlePacket(DataType type, char* buf)
 
 int Client::Disconnect()
 {
-	cout << "Disconnecting.." << endl;
+	cout << "Closing socket.." << endl;
 	_connected = false; //Stop the data loop
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
-	cout << "Disconnected" << endl;
+	cout << "Socked closed" << endl;
 	return 1;
 }
