@@ -21,5 +21,5 @@ public:
 private:
 	static int SendData(char* buf, int len, SOCKET client);
 	static int ReceiveData(char* buf, int len, SOCKET client);
-	static int SizeOfData(DataType* type);
+	static int SizeOfData(DataType type);
 };

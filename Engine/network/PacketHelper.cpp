@@ -5,7 +5,7 @@ int PacketHelper::Send(DataType dataType, char* data, SOCKET client)
 	//Send DataType
 	SendData((char*)&dataType, sizeof(DataType), client);
 	//Send the actual data
-	SendData(data, SizeOfData(&dataType), client);
+	SendData(data, SizeOfData(dataType), client);
 
 	return 0;
 }
@@ -17,17 +17,17 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 	//Receive DataType
 	ReceiveData(dataType, 4, client);
 
-	DataType* type = reinterpret_cast<DataType*>(dataType);
+	DataType type = *reinterpret_cast<DataType*>(dataType);
 
 	//Receive actual data using the buffer
 	ReceiveData(buffer, SizeOfData(type), client);
 
-	return make_pair(*type, buffer);
+	return make_pair(type, buffer);
 }
 
-int PacketHelper::SizeOfData(DataType* type)
+int PacketHelper::SizeOfData(DataType type)
 {
-	switch (*type)
+	switch (type)
 	{
 	case DataType::NETWORKCMD:
 		return sizeof(NetWorkCommand);
