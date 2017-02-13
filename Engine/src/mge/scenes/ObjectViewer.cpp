@@ -71,6 +71,10 @@ void ObjectViewer::_initializeScene()
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
+
+	GameObject* empty = new GameObject("empty",glm::vec3(0,0,0));
+	camera->setBehaviour(new OrbitBehaviour(empty, 5));
+
 	_world->add(center);
 	_world->add(holder);
 }
@@ -80,12 +84,12 @@ void ObjectViewer::_render() {
     _updateHud();
 }
 
-void ObjectViewer::_updateHud() {
+void ObjectViewer::_updateHud() {/*
     string debugInfo = "";
     debugInfo += string ("FPS:") + std::to_string((int)_fps)+"\n";
 
     _hud->setDebugInfo(debugInfo);
-    _hud->draw();
+    _hud->draw();*/
 }
 
 ObjectViewer::~ObjectViewer()
