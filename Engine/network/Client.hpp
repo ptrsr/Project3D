@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "../network/DataType.hpp"
+
 using namespace std;
 
 class Client
@@ -23,7 +25,5 @@ private:
 
 	bool WaitResponse();
 	void ReceiveData();
-
-	int Send(char* buf, int len);
-	int Receive(char* buf, int len);
+	void HandlePacket(DataType type, char* buf);
 };

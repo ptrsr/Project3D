@@ -92,7 +92,7 @@ int Client::Connect(char* IP, int port)
 bool Client::WaitResponse()
 {
 	NetWorkCommand netCode;
-	if (Receive((char*)&netCode, sizeof(netCode)) != 1)
+	if (PacketHelper::Receive((char*)&netCode, sizeof(netCode)))
 	{
 		switch (netCode)
 		{
@@ -118,32 +118,41 @@ void Client::ReceiveData()
 {
 	while (_connected)
 	{
-		
+		char buf[50];
+		DataType packet = PacketHelper::Receive(buf, _sock);
+		HandlePacket(
 	}
 }
 
-int Client::Send(char* buf, int len)
+void Client::HandlePacket(DataType type, char* buf)
 {
-	int dataLen = _WINSOCKAPI_::send(_sock, buf, len, 0); //Send a char buf with a length and flag 0 to the server
-	if (dataLen < 0)
+	switch (type)
 	{
-		cout << "ERROR: Failed to send data" << endl;
-		return 1;
-	}
-
-	return dataLen;
-}
-
-int Client::Receive(char* buf, int len)
-{
-	int dataLen = _WINSOCKAPI_::recv(_sock, buf, len, 0); //Receive a char buf with a length and flag 0 from the server
-	if (dataLen < 0)
+	case DataType::TESTDATA:
+		TestData testData = *reinterpret_cast<TestData*>(buf);
+		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+		break;
+	case DataType::PLAYERDATA:
 	{
-		cout << "ERROR: Failed to receive data" << endl;
-		return 1;
+		PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
+		switch (playerData->direction)
+		{
+		case Direction::up:
+			cout << "up" << endl;
+			break;
+		case Direction::down:
+			cout << "down" << endl;
+			break;
+		case Direction::left:
+			cout << "left" << endl;
+			break;
+		case Direction::right:
+			cout << "right" << endl;
+			break;
+		}
 	}
-
-	return dataLen;
+	break;
+	}
 }
 
 int Client::Disconnect()
