@@ -95,7 +95,7 @@ void Server::AcceptClients()
 			//Notify the client the connection has been accepted
 			netCode = CONNECTION_ACCEPTED;
 
-			if (PacketHelper::Send(netCode, (char*)&netCode, client) != 1)
+			if (PacketHelper::Send(DataType::NETWORKCMD, (char*)&netCode, client) != 1)
 			{
 				cout << "Client has succesfully connected" << endl;
 				_sockClient[_clients] = client; //Save the socket
@@ -111,7 +111,7 @@ void Server::AcceptClients()
 			//Notify the client the server is full
 			netCode = SERVER_FULL;
 
-			Send((char*)&netCode, sizeof(netCode), client);
+			PacketHelper::Send(DataType::NETWORKCMD, (char*)&netCode, client);
 			CloseConnection(client);
 		}
 	}
