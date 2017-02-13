@@ -67,6 +67,10 @@ int Client::Connect(char* IP, int port)
 	string input = "Testing a very long message to see if it receives correctly on the other side";
 	strcpy(testData.input, input.c_str());
 
+	TestData testData2;
+	string input2 = "Here is another string";
+	strcpy(testData2.input, input2.c_str());
+
 	PlayerData playerData;
 	playerData.direction = Direction::up;
 	PlayerData playerData2;
@@ -77,6 +81,7 @@ int Client::Connect(char* IP, int port)
 	playerData4.direction = Direction::right;
 
 	PacketHelper::Send(dataType2, (char*)&testData, _sock);
+	PacketHelper::Send(dataType2, (char*)&testData2, _sock);
 	PacketHelper::Send(dataType, (char*)&playerData, _sock);
 	PacketHelper::Send(dataType, (char*)&playerData2, _sock);
 	PacketHelper::Send(dataType, (char*)&playerData3, _sock);
