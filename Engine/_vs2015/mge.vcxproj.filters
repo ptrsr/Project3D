@@ -491,6 +491,5 @@
     <None Include="..\assets\mge\shaders\wobble.vs">
       <Filter>assets\shaders</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>
