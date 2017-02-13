@@ -2,6 +2,7 @@
 
 enum DataType
 {
+	NETWORKCMD,
 	TESTDATA,
 	PLAYERDATA
 };

@@ -35,11 +35,6 @@ private:
 	void HandleClients();
 	void HandlePacket(DataType type, char* buf);
 
-	int Send(char* buf, int len, SOCKET client);
-	int Send(char* buf, int len, int clientId);
-	int Receive(char* buf, int len, SOCKET client);
-	int Receive(char* buf, int len, int clientId);
-
 	void CloseConnection(SOCKET client);
 	void CloseConnection(int clientId);
 };

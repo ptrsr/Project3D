@@ -1,7 +1,6 @@
 #include "../network/Server.hpp"
 
 #include "../network/PacketHelper.hpp"
-#include "../network/NetworkCommand.hpp"
 
 #include "mge/core/GameObject.hpp"
 
@@ -96,7 +95,7 @@ void Server::AcceptClients()
 			//Notify the client the connection has been accepted
 			netCode = CONNECTION_ACCEPTED;
 
-			if (Send((char*)&netCode, sizeof(netCode), client) != 1)
+			if (PacketHelper::Send(netCode, (char*)&netCode, client) != 1)
 			{
 				cout << "Client has succesfully connected" << endl;
 				_sockClient[_clients] = client; //Save the socket
@@ -163,56 +162,6 @@ void Server::HandlePacket(DataType type, char* buf)
 		}
 		break;
 	}
-}
-
-//
-//Send
-//
-int Server::Send(char* buf, int len, SOCKET client)
-{
-	int dataLen = _WINSOCKAPI_::send(client, buf, len, 0); //Sends a char buffer to the client with a length and flag 0
-	if (dataLen < 0)
-	{
-		cout << "ERROR: Failed to send data" << endl;
-		return -1;
-	}
-	return dataLen;
-}
-
-int Server::Send(char* buf, int len, int clientId)
-{
-	int dataLen = _WINSOCKAPI_::send(_sockClient[clientId], buf, len, 0); //Sends a char buffer to the client with a length and flag 0
-	if (dataLen < 0)
-	{
-		cout << "ERROR: Failed to send data to client " << clientId << endl;
-		return -1;
-	}
-	return dataLen;
-}
-
-//
-//Receive
-//
-int Server::Receive(char* buf, int len, SOCKET client)
-{
-	int dataLen = _WINSOCKAPI_::recv(client, buf, len, 0); //Receive a char buffer from the client with a length and flag 0
-	if (dataLen < 0)
-	{
-		cout << "ERROR: Failed to receive data" << endl;
-		return -1;
-	}
-	return dataLen;
-}
-
-int Server::Receive(char* buf, int len, int clientId)
-{
-	int dataLen = _WINSOCKAPI_::recv(_sockClient[clientId], buf, len, 0); //Receive data through a char buffer from the client with a length and flag 0
-	if (dataLen < 0)
-	{
-		cout << "ERROR: Failed to receive data from client " << clientId << endl;
-		return -1;
-	}
-	return dataLen;
 }
 
 //
