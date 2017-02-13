@@ -130,50 +130,6 @@ void Server::HandleClients()
 			char buffer[50];
 			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClient[i]);
 			HandlePacket(data.first, data.second);
-
-			//pair<DataType, char*> data2 = PacketHelper::Receive(_sockClient[i]);
-			//HandlePacket(data.first, data.second);
-
-			//pair<DataType, char*> data3 = PacketHelper::Receive(_sockClient[i]);
-			//HandlePacket(data.first, data.second);
-
-			//pair<DataType, char*> data4 = PacketHelper::Receive(_sockClient[i]);
-			//HandlePacket(data.first, data.second);
-
-			//Make a loop to receive the next couple bytes
-
-			//
-			//C# Example
-			//
-			//public static void SendMessage(NetworkStream stream, byte[] message)
-			//{
-			//	stream.Write(BitConverter.GetBytes(message.Length), 0, 4); //send message with message length
-			//	stream.Write(message, 0, message.Length); //send actual message
-			//}
-
-			//public static byte[] ReceiveMessage(NetworkStream stream)
-			//{
-			//	int byteCountToRead = BitConverter.ToInt32(ReadBytes(stream, 4), 0); //read the length
-			//	return ReadBytes(stream, byteCountToRead); //read the message
-			//}
-
-			//private static byte[] ReadBytes(NetworkStream stream, int bytes)
-			//{
-			//	byte[] buffer = new byte[bytes];
-			//	int bytesRead = 0;
-			//	int totalBytesRead = 0;
-
-			//	try
-			//	{
-			//		while (totalBytesRead != bytes && (bytesRead = stream.Read(buffer, totalBytesRead, bytes - totalBytesRead)) > 0) //keep reading until all bytes are received
-			//		{
-			//			totalBytesRead += bytesRead;
-			//		}
-			//	}
-			//	catch { }
-
-			//	return (totalBytesRead == bytes) ? buffer : null;
-			//}
 		}
 	}
 }
