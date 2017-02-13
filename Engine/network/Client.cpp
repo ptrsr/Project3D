@@ -21,8 +21,8 @@ int Client::Connect(char* IP, int port)
 {
 	cout << "Setting up client.." << endl;
 	cout << "Creating socket.." << endl;
-	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize our socket on version 2.2 and saveit to data
-	_sock = socket(AF_INET, SOCK_STREAM, 0); //Set socket type IPv4 and set stream, protocol 0 = UDP
+	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize our socket on version 2.2 and save it to data
+	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type IPv4 and set stream, TCP protocol
 
 	if (_sock == INVALID_SOCKET)
 	{
