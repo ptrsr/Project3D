@@ -21,7 +21,7 @@ int Server::StartServer()
 
 	cout << "Creating socket.." << endl;
 	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize socket and set version to 2.2
-	_sock = socket(AF_INET, SOCK_STREAM, 0); //Set socket type to IPv4
+	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type to IPv4, TCP protocol
 
 	if (_sock == INVALID_SOCKET)
 	{
