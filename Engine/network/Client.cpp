@@ -91,7 +91,7 @@ void Client::ReceiveData()
 {
 	while (_connected)
 	{
-		char buf[50];
+		char buf[256];
 		pair<DataType, char*> data = PacketHelper::Receive(buf, _sock);
 		HandlePacket(data.first, data.second);
 	}
