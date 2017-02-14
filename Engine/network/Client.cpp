@@ -55,10 +55,6 @@ int Client::Connect(char* IP, int port)
 	//Receive server NetCMD
 	ReceiveResponse();
 
-	//Enable non-blocking
-	u_long nonBlocking = 1;
-	ioctlsocket(_sock, FIONBIO, &nonBlocking);
-
 	GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
 	DataType dataType = DataType::PLAYERDATA;
