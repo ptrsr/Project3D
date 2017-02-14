@@ -50,8 +50,9 @@ int Server::StartServer()
 	}
 	cout << "Socket binding succesful" << endl;
 
+	//Time-out struct
 	timeval tv;
-	tv.tv_sec = 60000; //Time-out in mili-seconds
+	tv.tv_sec = _timeOut;
 
 	//Apply time-out to socket
 	setsockopt(_sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, sizeof(tv));

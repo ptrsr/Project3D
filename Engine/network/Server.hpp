@@ -31,6 +31,7 @@ private:
 	int _port; //The port our server will run on
 	int _maxClients = 3; //Max amount of clients we will accept : 3, because we count as 1 as well : limit of players = 4
 	bool _running = false; //Indication if the server is running
+	int _timeOut = 10000; //Time-out in mili-seconds
 
 	void AcceptClients(); //Attempts to accept incoming clients
 	void HandleClients(SOCKET client); //Receives data from all clients
