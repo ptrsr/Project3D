@@ -24,6 +24,13 @@ int Client::Connect(char* IP, int port)
 	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize our socket on version 2.2 and save it to data
 	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type IPv4 and set stream, TCP protocol
 
+	timeval tv;
+	tv.tv_sec = 5000; //Time-out in mili-seconds
+
+	//Apply time-out to socket
+	setsockopt(_sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, sizeof(tv));
+	setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(tv));
+
 	if (_sock == INVALID_SOCKET)
 	{
 		PacketHelper::ErrorHandler();
