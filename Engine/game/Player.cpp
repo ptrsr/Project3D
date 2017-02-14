@@ -10,7 +10,7 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 {
 	_name = "Player" + playerId;
 
-	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y));
+	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
 	this->setBehaviour(new MovementBehaviour(this, playerId, boardPos, 1.0f, 0.8f, 0.3f));
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));

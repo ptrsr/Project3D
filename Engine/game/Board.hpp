@@ -23,6 +23,7 @@ private:
 	glm::vec2 _size = glm::vec2(9, 9);
 
 	Tile* _boardArray[9][9];
+
 	void initializeBoard();
 
 	//Singleton

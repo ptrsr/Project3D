@@ -10,4 +10,9 @@ enum Id {
 	p4
 };
 
+enum PType
+{
+	score
+};
+
 #endif // !ENUMS_H

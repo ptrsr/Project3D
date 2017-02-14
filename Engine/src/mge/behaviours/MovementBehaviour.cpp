@@ -18,16 +18,35 @@ void MovementBehaviour::update(float pStep)
 
 	if (_curTime < _moveTime) //are we moving?
 	{
-		float cancelTime;
+		float cancelTime; //temporary variable for mid air canceling
 
-		if (_canceled && _curTime > (cancelTime = _moveTime / 2.f))
+		if (_canceled && _curTime > (cancelTime = _moveTime / 2.f)) //is the move invalid and are we halfway?
 		{
-			float step = (cancelTime - _lastMoveTime) - _curTime - cancelTime;
+			float step = (_curTime - cancelTime) - (cancelTime - _lastMoveTime);
+			
+			//inverse the direction and axis
 			_axis = -_axis;
-		}
+			_trans = -_trans;
 
-		roll(((pStep + _deltaTime) / _moveTime)); //roll
-		move(_curTime, pStep + _deltaTime); //move
+			//Inverse the desired direction for next move
+			Direction tDir = _cDir;
+			inverseDirection();
+
+			if (_dDir == tDir)
+				_dDir = _cDir;
+
+			roll(step / _moveTime);
+			move(_curTime, step);
+
+			_boardPos -= glm::vec2(_trans.x, _trans.z);
+
+			_canceled = false;
+		}
+		else //do the regular move and roll
+		{
+			roll(((pStep + _deltaTime) / _moveTime)); //roll
+			move(_curTime, pStep + _deltaTime); //move
+		}
 
 		_deltaTime = 0; //we don't have time which we have to catch up
 		_lastMoveTime = _curTime; //save the last time we moved
@@ -116,6 +135,8 @@ void MovementBehaviour::setDirection()
 
 	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
 		_canceled = true;
+
+	std::cout << _boardPos << std::endl;
 }
 
 void MovementBehaviour::checkKeys()
@@ -131,6 +152,28 @@ void MovementBehaviour::checkKeys()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		_dDir = left;
+}
+
+void MovementBehaviour::inverseDirection()
+{
+	switch (_cDir)
+	{
+	case up:
+		_cDir = down;
+		break;
+
+	case down:
+		_cDir = up;
+		break;
+
+	case left:
+		_cDir = right;
+		break;
+
+	case right:
+		_cDir = left;
+		break;
+	}
 }
 
 MovementBehaviour::~MovementBehaviour()

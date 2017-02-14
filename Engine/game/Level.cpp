@@ -4,6 +4,7 @@
 #include "Board.hpp"
 
 #include "Enums.hpp"
+#include "PickUps/ScoreCube.hpp"
 
 Level::Level(glm::vec2 pSize) :GameObject("level")
 {
@@ -11,6 +12,7 @@ Level::Level(glm::vec2 pSize) :GameObject("level")
 	_player = new Player(p1, glm::vec2(0));
 
 	Board::get();
+	PickUp* score = new ScoreCube();
 }
 
 Level::~Level()

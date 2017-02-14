@@ -26,7 +26,8 @@ class MovementBehaviour : public AbstractBehaviour
 
 		void checkKeys();
 		void setDirection();
-		
+		void inverseDirection();
+
 		void roll(float pStep);
 		void move(float pPhase, float pTime);
 		

@@ -41,6 +41,9 @@
     <Filter Include="game">
       <UniqueIdentifier>{53268f6e-5baf-464a-88d0-c711df038eb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\PickUps">
+      <UniqueIdentifier>{79f24174-77c6-4caf-8f5e-2bba6a3d18db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -236,6 +239,12 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\scenes\LevelScene.hpp">
       <Filter>MGE Source files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\PickUps\PickUp.hpp">
+      <Filter>game\PickUps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\PickUps\ScoreCube.hpp">
+      <Filter>game\PickUps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +454,12 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\LevelScene.cpp">
       <Filter>MGE Source files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\PickUps\PickUp.cpp">
+      <Filter>game\PickUps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\PickUps\ScoreCube.cpp">
+      <Filter>game\PickUps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

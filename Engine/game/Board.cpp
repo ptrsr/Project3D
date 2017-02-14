@@ -58,7 +58,7 @@ bool Board::outOfBounds(glm::vec2 pos)
 {
 	Board* board = Board::get();
 
-	if (pos.x < 0 || pos.y < 0 || pos.x > board->_size.x || pos.y > board->_size.y)
+	if (pos.x < 0 || pos.y < 0 || pos.x >= board->_size.x || pos.y >= board->_size.y)
 		return true;
 
 	return false;
