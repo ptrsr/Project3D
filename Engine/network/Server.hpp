@@ -6,6 +6,7 @@
 
 #include <Windows.h>
 #include <thread>
+#include <algorithm>
 
 #include "../network/DataType.hpp"
 
@@ -32,10 +33,10 @@ private:
 	bool _running = false; //Indication if the server is running
 
 	void AcceptClients(); //Attempts to accept incoming clients
-	void HandleClients(); //Receives data from all clients
+	void HandleClients(SOCKET client); //Receives data from all clients
 	void HandlePacket(DataType type, char* buf); //Handles received packages
-	void NotifyClients(DataType type, char* buf, int fromClientId); //Sends data to all other clients
+	void NotifyClients(DataType type, char* data, SOCKET sourceClient); //Sends data to all other clients
 
 	void CloseConnection(SOCKET client); //Closes a client's connection attempting to join
-	void CloseConnection(int clientId); //Closes a connected client's connection
+	void CloseClientConnection(SOCKET client); //Closes a connected client's connection
 };

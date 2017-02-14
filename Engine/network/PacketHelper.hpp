@@ -19,6 +19,7 @@ public:
 	static int Send(DataType dataType, char* data, SOCKET client);
 	static pair<DataType, char*> Receive(char* buffer, SOCKET client);
 	static bool Connected(SOCKET client);
+	static void ErrorHandler();
 private:
 	static int SendData(char* buf, int len, SOCKET client);
 	static int ReceiveData(char* buf, int len, SOCKET client);

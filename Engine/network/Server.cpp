@@ -23,13 +23,9 @@ int Server::StartServer()
 	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize socket and set version to 2.2
 	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type to IPv4, TCP protocol
 
-	//Enable non-blocking
-	u_long nonBlocking = 1;
-	ioctlsocket(_sock, FIONBIO, &nonBlocking);
-
 	if (_sock == INVALID_SOCKET)
 	{
-		cout << "ERROR: Invalid socket" << endl;
+		PacketHelper::ErrorHandler();
 		WSACleanup();
 		return 0;
 	}
@@ -48,17 +44,25 @@ int Server::StartServer()
 	
 	if (err != 0)
 	{
-		cout << "ERROR: Socket binding failed" << endl;
+		PacketHelper::ErrorHandler();
 		StopServer();
 		return 0;
 	}
 	cout << "Socket binding succesful" << endl;
 
+	timeval tv;
+	tv.tv_sec = 5000; //Time-out in mili-seconds
+
+	//Apply time-out to socket
+	setsockopt(_sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, sizeof(tv));
+	setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(tv));
+	
 	cout << "Listening to socket.." << endl;
 	err = listen(_sock, _maxClients); //Listen to our socket with a client limit of 3
+
 	if (err == SOCKET_ERROR)
 	{
-		cout << "ERROR: Socket listening error" << endl;
+		PacketHelper::ErrorHandler();
 		StopServer();
 		return 0;
 	}
@@ -67,12 +71,8 @@ int Server::StartServer()
 	cout << "Server succesfully started" << endl;
 	_running = true;
 
-	//Start threads for accepting clients
-	thread acceptClients(&Server::AcceptClients, this);
-	thread handleClients(&Server::HandleClients, this);
-	//Join threads
-	acceptClients.join();
-	handleClients.join();
+	thread acceptClients(&Server::AcceptClients, this); //Start thread for accepting clients
+	acceptClients.join(); //Join it with the main thread
 
 	return 0;
 }
@@ -90,11 +90,11 @@ void Server::AcceptClients()
 
 		if (client == INVALID_SOCKET)
 		{
-			//cout << "ERROR: Client invalid socket" << endl;
+			cout << "ERROR: Client invalid socket" << endl;
 			continue;
 		}
 
-		cout << "A client has joined the server(IP: " << inet_ntoa(*(struct in_addr*)&_iSock.sin_addr.s_addr) << ")" << endl;
+		cout << "A client has joined the server(ID: " << client << " IP: " << inet_ntoa(*(struct in_addr*)&_iSock.sin_addr.s_addr) << ")" << endl;
 
 		if (_connectedClients < _maxClients)
 		{
@@ -105,6 +105,9 @@ void Server::AcceptClients()
 			{
 				cout << "Client has succesfully connected" << endl;
 				_sockClients.push_back(client); //Save the socket
+				
+				thread handleClient(&Server::HandleClients, this, client); //Start thread for handling the client
+				handleClient.detach(); //Let the thread live on it's own
 
 				_connectedClients++; //Update connected clients
 			}
@@ -126,30 +129,22 @@ void Server::AcceptClients()
 	}
 }
 
-void Server::HandleClients()
+void Server::HandleClients(SOCKET client)
 {
 	while (_running)
 	{
-		//Check if there are any clients
-		if (_sockClients.size() == 0)
-			continue;
-
-		//Check data from each client
-		for (int i = 0; i < _sockClients.size(); i++)
+		//Check if the client is still connected
+		if (!PacketHelper::Connected(client))
 		{
-			//Check if the client is still connected
-			if (!PacketHelper::Connected(_sockClients[i]))
-			{
-				cout << "Client id: " << i << endl;
-				CloseConnection(i);
-				continue;
-			}
-
-			//Attempt to receive data
-			char buffer[256];
-			pair<DataType, char*> data = PacketHelper::Receive(buffer, _sockClients[i]);
-			HandlePacket(data.first, data.second);
+			cout << "Client id: " << client << endl;
+			CloseClientConnection(client);
+			break;
 		}
+
+		//Attempt to receive data
+		char buffer[256];
+		pair<DataType, char*> data = PacketHelper::Receive(buffer, client);
+		HandlePacket(data.first, data.second);
 	}
 }
 
@@ -185,7 +180,7 @@ void Server::HandlePacket(DataType type, char* buf)
 	}
 }
 
-void Server::NotifyClients(DataType type, char*, int fromClientId)
+void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
 {
 
 }
@@ -198,10 +193,10 @@ void Server::CloseConnection(SOCKET client)
 	closesocket(client); //Closes a client's connection
 }
 
-void Server::CloseConnection(int clientId)
+void Server::CloseClientConnection(SOCKET client)
 {
-	closesocket(_sockClients[clientId]); //Closes a client's connection
-	_sockClients.erase(_sockClients.begin() + clientId); //Removes the client from the list
+	closesocket(client); //Closes a client's connection
+	_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
 	_connectedClients--; //Update current connected clients
 }
 
