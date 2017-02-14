@@ -80,11 +80,11 @@ void SyncScene::_render() {
 
 	TestData testData;
 
-	testData.t = 0;
-	testData.r = 0;
-	testData.g = 0;
-	testData.b = 0;
-	testData.a = 0;
+	testData.t = 1;
+	testData.r = pos.x;
+	testData.g = pos.y;
+	testData.b = pos.z;
+	testData.a = 2;
 
 	testData.pX = 5.0f;
 	testData.pY = 5.0f;
