@@ -161,10 +161,8 @@ void Client::HandlePacket(DataType type, char* buf)
 		SyncScene::instance->gCube->rotate(testData.rY, glm::vec3(0, 1, 0));
 		SyncScene::instance->gCube->rotate(testData.rX, glm::vec3(1, 0, 0));
 		SyncScene::instance->gCube->rotate(testData.rZ, glm::vec3(0, 0, 1));
-
 		break;
 	case DataType::PLAYERDATA:
-	{
 		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
 		switch (playerData.direction)
 		{
@@ -181,7 +179,6 @@ void Client::HandlePacket(DataType type, char* buf)
 			cout << "right" << endl;
 			break;
 		}
-	}
 	break;
 	}
 }
