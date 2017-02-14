@@ -33,6 +33,10 @@ SyncScene* SyncScene::instance = 0;
 SyncScene::SyncScene() : AbstractGame()
 {
 	instance = this;
+
+	client = new Client();
+	thread tCon(&Client::Connect, client, (char*)"127.0.0.1", 8888);
+	tCon.detach();
 }
 
 

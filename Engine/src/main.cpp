@@ -24,17 +24,10 @@ int main()
 {
     cout << "Starting Game" << endl;
 
-	Client* client = new Client();
-	thread tCon(&Client::Connect, client, (char*)"127.0.0.1", 8888);
-	//client->Connect("127.0.0.1", 8888);
-
 	SyncScene* syncScene = new SyncScene();
 	syncScene->initialize();
 	syncScene->run();
-	tCon.join();
-
-	//delete syncScene;
-	delete client;
+	delete syncScene;
 
 	cout << "Closing Game" << endl;
 	cin.get();

@@ -3,6 +3,8 @@
 #include <mge/core/AbstractGame.hpp>
 #include "mge/core/GameObject.hpp"
 
+#include "../network/Client.hpp"
+
 class SyncScene : public AbstractGame
 {
 	//PUBLIC FUNCTIONS
@@ -14,7 +16,10 @@ public:
 	virtual void initialize();
 
 	static SyncScene* instance;
+
 	GameObject* gCube;
+
+	Client* client;
 protected:
 	virtual void _initializeScene();
 

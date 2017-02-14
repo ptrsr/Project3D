@@ -154,7 +154,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::TESTDATA:
 		TestData testData = *reinterpret_cast<TestData*>(buf);
-		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+		//cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
 		
 		SyncScene::instance->gCube->setLocalPosition(glm::vec3(testData.pX, testData.pY, testData.pZ));
 		SyncScene::instance->gCube->rotate(testData.rY, glm::vec3(0, 1, 0));
