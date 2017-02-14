@@ -76,19 +76,14 @@ void SyncScene::_render() {
 
 
 	glm::vec3 pos = gCube->getLocalPosition();
-	glm::vec3 rot = gCube->getTransform()[1];
+	glm::vec3 rot = gCube->getTransform()[2];
+	cout << rot << endl;
 
 	TestData testData;
 
-	testData.t = 1;
-	testData.r = pos.x;
-	testData.g = pos.y;
-	testData.b = pos.z;
-	testData.a = 2;
-
-	testData.pX = 5.0f;
-	testData.pY = 5.0f;
-	testData.pZ = 5.0f;
+	testData.pX = pos.x;
+	testData.pY = pos.y;
+	testData.pZ = pos.z;
 
 	testData.rX = rot.x;
 	testData.rY = rot.y;
