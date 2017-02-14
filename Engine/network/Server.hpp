@@ -21,6 +21,7 @@ public:
 	int StartServer();
 	int StopServer();
 
+	void Send(DataType type, char* data);
 private:
 	SOCKET _sock; //Our socket that client's use to connect
 	vector<SOCKET> _sockClients; //Sockets to send/receive clients

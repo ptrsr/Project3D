@@ -14,6 +14,9 @@ Server::~Server()
 
 }
 
+//
+//Start Server
+//
 int Server::StartServer()
 {
 	cout << "Starting server.." << endl;
@@ -78,6 +81,27 @@ int Server::StartServer()
 	return 0;
 }
 
+//
+//Stop Server
+//
+int Server::StopServer()
+{
+	cout << "Stopping server.." << endl;
+	closesocket(_sock); //Close our socket
+	WSACleanup(); //Clean up everything
+	cout << "Server stopped" << endl;
+	return 1;
+}
+
+void Server::Send(DataType type, char* data)
+{
+	if (_sockClients.size() > 0)
+		PacketHelper::Send(type, data, _sockClients[0]);
+}
+
+//
+//Accept Clients
+//
 void Server::AcceptClients()
 {
 	NetWorkCommand netCode; //Connection code
@@ -201,16 +225,4 @@ void Server::CloseClientConnection(SOCKET client)
 	closesocket(client); //Closes a client's connection
 	_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
 	_connectedClients--; //Update current connected clients
-}
-
-//
-//Stop Server
-//
-int Server::StopServer()
-{
-	cout << "Stopping server.." << endl;
-	closesocket(_sock); //Close our socket
-	WSACleanup(); //Clean up everything
-	cout << "Server stopped" << endl;
-	return 1;
 }

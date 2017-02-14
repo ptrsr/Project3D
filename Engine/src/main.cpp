@@ -24,16 +24,10 @@ int main()
 {
     cout << "Starting Game" << endl;
 
-	Server* server = new Server(8888, 4);
-	thread tServer(&Server::StartServer, server);
-
 	SyncScene* syncScene = new SyncScene();
 	syncScene->initialize();
 	syncScene->run();
-	tServer.join();
-
 	delete syncScene;
-	delete server;
 
 	cout << "Closing Game" << endl;
 	cin.get();

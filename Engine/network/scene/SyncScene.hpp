@@ -2,6 +2,9 @@
 
 #include <mge/core/AbstractGame.hpp>
 
+#include "mge/core/GameObject.hpp"
+
+#include "../network/Server.hpp"
 
 class SyncScene : public AbstractGame
 {
@@ -14,6 +17,10 @@ public:
 	virtual void initialize();
 
 	static SyncScene* instance;
+
+	GameObject* gCube;
+	Server* server;
+
 protected:
 	virtual void _initializeScene();
 
@@ -21,8 +28,6 @@ protected:
 	virtual void _render();
 
 private:
-	void _updateHud();
-
 	SyncScene(const SyncScene&);
 	SyncScene& operator=(const SyncScene&);
 };
