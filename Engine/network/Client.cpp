@@ -158,9 +158,6 @@ void Client::HandlePacket(DataType type, char* buf)
 		cout << testData.pX << " " << testData.pY << " " << testData.pZ << " " << testData.rX << " " << testData.rY << " " << testData.rZ << endl;
 
 		SyncScene::instance->gCube->setLocalPosition(glm::vec3(testData.pX, testData.pY, testData.pZ));
-		SyncScene::instance->gCube->rotate(testData.rY, glm::vec3(0, 1, 0));
-		SyncScene::instance->gCube->rotate(testData.rX, glm::vec3(1, 0, 0));
-		SyncScene::instance->gCube->rotate(testData.rZ, glm::vec3(0, 0, 1));
 		break;
 	case DataType::PLAYERDATA:
 		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
