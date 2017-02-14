@@ -23,7 +23,7 @@ private:
 	SOCKADDR_IN _iSock; //This socket contains info about our socket
 	WSADATA _data; //This is to save our socket version
 	bool _connected = false;
-	int _timeOut = 120000; //Time-out in mili-seconds
+	int _timeOut = 60000; //Time-out in mili-seconds
 
 	void ReceiveResponse();
 	void ReceiveData();
