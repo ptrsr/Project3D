@@ -13,7 +13,7 @@
 
 int spawn(lua_State* lua) 
 {
-	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3), lua_tonumber(lua, -2), lua_tonumber(lua, -1)));
+	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3)*2, lua_tonumber(lua, -2)*2, lua_tonumber(lua, -1)*2));
 	ObjectCache::push(obj);
 
 	World::add(obj);
@@ -89,6 +89,31 @@ int setPos(lua_State* lua)
 
 	return 0;
 }
+
+int setRotation(lua_State* lua)
+{
+	std::cout << "Trying" << std::endl;
+	if (lua_gettop(lua) == 4 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
+	{
+		GameObject* obj = ObjectCache::find(lua_tostring(lua, -4));
+
+		if (obj != nullptr)
+		{
+			cout << "Setting rotation" << endl;
+			obj->rotate(lua_tonumber(lua, -2), glm::vec3(0, 1, 0));
+			obj->rotate(lua_tonumber(lua, -3), glm::vec3(1, 0, 0));
+			obj->rotate(lua_tonumber(lua, -1), glm::vec3(0, 0, 1));
+		}
+		else
+			std::cout << "error getting rotation: object doesn't exist" << std::endl;
+	}
+	else std::cout << "error: rotation param isn't a number" << std::endl;
+
+	return 0;
+}
+
+
+
 int move(lua_State* lua)
 {
 	if (lua_gettop(lua) == 3 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
@@ -134,10 +159,13 @@ int setTexture(lua_State* lua)
 			return 0;
 		}
 	}
-	else
+	else if (size == 4 && lua_isnumber(lua, -size + 1)) {
+		obj->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3((lua_tonumber(lua, -size + 1), lua_tonumber(lua, -size + 2), lua_tonumber(lua, -size + 3)))));
+	}
+	else {
+		obj->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(1, 1, 1)));
 		std::cout << "Loading default white material" << std::endl;
-
-	obj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment));
+	}
 	return 0;
 }
 int setMesh(lua_State* lua)
@@ -225,6 +253,9 @@ LuaParser::LuaParser(std::string fileName)
 
 		lua_pushcfunction(lua, setPos);
 		lua_setglobal(lua, "setPos");
+
+		lua_pushcfunction(lua, setRotation);
+		lua_setglobal(lua, "setRotation");
 
 		lua_pushcfunction(lua, getPos);
 		lua_setglobal(lua, "getPos");

@@ -1,4 +1,4 @@
-GameObject = { name, mesh, texture, x = 0, y = 0, z = 0 }
+GameObject = { name, mesh, texture, x = 0, y = 0, z = 0 , r = 1 , g= 1, b = 1,rotationX = 0, rotationY = 0, rotationZ = 0}
 
 --creates a GameObject
 function GameObject:new (obj)
@@ -18,6 +18,7 @@ function GameObject:new (obj)
 	end
 	
 	spawn(obj.name, obj.x, obj.y, obj.z)
+	setRotation(obj.name,obj.rotationX,obj.rotationY,obj.rotationZ)
 	
 	if obj.mesh then
 		setMesh(obj.name, obj.mesh)
@@ -26,7 +27,7 @@ function GameObject:new (obj)
 	if obj.texture then
 		setTexture(obj.name, obj.texture)
 	else
-		setTexture(obj.name)
+		setTexture(obj.name, obj.r,obj.g,obj.b)
 	end
 	
 	return obj
