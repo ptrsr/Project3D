@@ -95,8 +95,7 @@ int Server::StopServer()
 
 void Server::Send(DataType type, char* data)
 {
-	if (_sockClients.size() > 0)
-		PacketHelper::Send(type, data, _sockClients[0]);
+	NotifyClients(type, data, _sock);
 }
 
 //
@@ -209,7 +208,16 @@ void Server::HandlePacket(DataType type, char* buf)
 
 void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
 {
+	for (int i = 0; i < _sockClients.size(); i++)
+	{
+		//Check if we're not sending data to ourself
+		SOCKET client = _sockClients[i];
+		if (client == sourceClient)
+			continue;
 
+		//Send data to the client
+		PacketHelper::Send(type, data, _sockClients[i]);
+	}
 }
 
 //
