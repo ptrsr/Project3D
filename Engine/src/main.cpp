@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../network/Server.hpp"
+#include "../network/scene/SyncScene.hpp"
 
 using namespace std;
 
@@ -24,8 +25,14 @@ int main()
     cout << "Starting Game" << endl;
 
 	Server* server = new Server(8888, 4);
-	server->StartServer();
+	thread tServer(&Server::StartServer, server);
 
+	SyncScene* syncScene = new SyncScene();
+	syncScene->initialize();
+	syncScene->run();
+	tServer.join();
+
+	delete syncScene;
 	delete server;
 
 	cout << "Closing Game" << endl;

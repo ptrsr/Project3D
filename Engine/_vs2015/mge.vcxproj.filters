@@ -44,6 +44,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{55b02cc7-09b7-4e1e-9125-c19a797d4446}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network\scene">
+      <UniqueIdentifier>{1bc2ed3d-a6a1-44fb-bb23-27ccd8acabe2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -253,6 +256,9 @@
     <ClInclude Include="..\game\Direction.hpp">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\scene\SyncScene.hpp">
+      <Filter>Network\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -449,6 +455,9 @@
     </ClCompile>
     <ClCompile Include="..\network\PacketHelper.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\scene\SyncScene.cpp">
+      <Filter>Network\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

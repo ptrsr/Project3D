@@ -111,6 +111,7 @@ void Server::AcceptClients()
 				handleClient.detach(); //Let the thread live on it's own
 
 				_connectedClients++; //Update connected clients
+				cout << "Connected clients : " << _connectedClients << endl;
 			}
 			else
 			{
@@ -139,6 +140,7 @@ void Server::HandleClients(SOCKET client)
 		{
 			cout << "Client id: " << client << endl;
 			CloseClientConnection(client);
+			cout << "Connected clients : " << _connectedClients << endl;
 			break;
 		}
 
