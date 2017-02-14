@@ -58,7 +58,6 @@ void SyncScene::_initializeScene()
 	_renderer->setClearColor(0, 0, 0);
 
 	Camera* camera = new Camera("camera", glm::vec3(0, 2, 10));
-	//camera->rotate(180, glm::vec3(0, 1, 0));
 	_world->add(camera);
 	_world->setMainCamera(camera);
 
@@ -85,6 +84,6 @@ void SyncScene::_render() {
 	testData.rX = rot.x;
 	testData.rY = rot.y;
 	testData.rZ = rot.z;
-
+	
 	server->Send(DataType::TESTDATA, (char*)&testData);
 }
