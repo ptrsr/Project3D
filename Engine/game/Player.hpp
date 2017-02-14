@@ -10,9 +10,12 @@
 
 class Player : public GameObject
 {
+private:
+	MovementBehaviour* _movement;
+
 public:
 	Player(Id playerId, glm::vec2 boardPos);
-
+	glm::vec2 getBoardPos();
 
 };
 

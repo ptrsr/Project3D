@@ -1,5 +1,6 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "../game/Board.hpp"
+#include "../game/PickUps/ScoreCube.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
@@ -58,6 +59,14 @@ void MovementBehaviour::update(float pStep)
 		_lastMoveTime = 0; //we are done with the move
 	
 		_boardPos += glm::vec2(_trans.x, _trans.z);
+
+		for each (PickUp* pickUp in PickUp::getPickUps())
+		{
+			if (pickUp->getBoardPos() == _boardPos)
+			{
+				pickUp->applyPickUp(_player);
+			}
+		}
 
 		Board::setOwner(_boardPos, _id);
 	}
@@ -174,6 +183,11 @@ void MovementBehaviour::inverseDirection()
 		_cDir = left;
 		break;
 	}
+}
+
+glm::vec2 MovementBehaviour::getBoardPos()
+{
+	return _boardPos;
 }
 
 MovementBehaviour::~MovementBehaviour()

@@ -3,11 +3,10 @@
 
 #include "PickUp.hpp"
 
-
 class ScoreCube : public PickUp
 {
 public:
-	ScoreCube();
+	ScoreCube(std::vector<Player*> pPlayers);
 
 private:
 

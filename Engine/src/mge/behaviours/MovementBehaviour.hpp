@@ -7,12 +7,16 @@
 
 class MovementBehaviour : public AbstractBehaviour
 {
+	class Player;
+
 	public:
 		MovementBehaviour(GameObject* pPlayer, Id playerId, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
 		void message(send::Message) { };
+
+		glm::vec2 getBoardPos();
 
 	private:
 		enum Direction
