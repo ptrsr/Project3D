@@ -109,6 +109,21 @@ int Client::Connect(char* IP, int port)
 	return 0;
 }
 
+int Client::Disconnect()
+{
+	cout << "Closing socket.." << endl;
+	_connected = false; //Stop the data loop
+	closesocket(_sock); //Close our socket
+	WSACleanup(); //Clean up everything
+	cout << "Socked closed" << endl;
+	return 1;
+}
+
+void Client::Send(DataType type, char* data)
+{
+	PacketHelper::Send(type, data, _sock);
+}
+
 void Client::ReceiveResponse()
 {
 	char buffer[4];
@@ -178,14 +193,4 @@ void Client::HandlePacket(DataType type, char* buf)
 		}
 	break;
 	}
-}
-
-int Client::Disconnect()
-{
-	cout << "Closing socket.." << endl;
-	_connected = false; //Stop the data loop
-	closesocket(_sock); //Close our socket
-	WSACleanup(); //Clean up everything
-	cout << "Socked closed" << endl;
-	return 1;
 }
