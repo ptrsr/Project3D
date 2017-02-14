@@ -9,7 +9,7 @@
 
 Client::Client()
 {
-
+	
 }
 
 Client::~Client()
@@ -24,8 +24,9 @@ int Client::Connect(char* IP, int port)
 	WSAStartup(MAKEWORD(2, 2), &_data); //Initialize our socket on version 2.2 and save it to data
 	_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Set socket type IPv4 and set stream, TCP protocol
 
+	//Time-out struct
 	timeval tv;
-	tv.tv_sec = 5000; //Time-out in mili-seconds
+	tv.tv_sec = _timeOut;
 
 	//Apply time-out to socket
 	setsockopt(_sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, sizeof(tv));
@@ -117,7 +118,7 @@ int Client::Connect(char* IP, int port)
 
 void Client::ReceiveResponse()
 {
-	char buffer[10];
+	char buffer[4];
 	pair<DataType, char*> data = PacketHelper::Receive(buffer, _sock);
 	HandlePacket(data.first, data.second);
 }
