@@ -53,7 +53,7 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(PlayerData);
 	default:
 		cout << "ERROR: Could not match a DataType" << endl;
-		break;
+		return -1;
 	}
 }
 
