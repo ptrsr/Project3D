@@ -73,7 +73,7 @@ void SyncScene::_initializeScene()
 }
 
 void SyncScene::_render() {
-	AbstractGame::_render();/*
+	AbstractGame::_render();
 	TestData testData;
 	glm::vec3 pos = gCube->getLocalPosition();
 	glm::vec3 rot = gCube->getTransform()[1];
@@ -86,5 +86,5 @@ void SyncScene::_render() {
 	testData.rY = rot.y;
 	testData.rZ = rot.z;
 
-	server->Send(DataType::TESTDATA, (char*)&testData);*/
+	server->Send(DataType::TESTDATA, (char*)&testData);
 }

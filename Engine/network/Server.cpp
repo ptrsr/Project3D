@@ -134,9 +134,6 @@ void Server::AcceptClients()
 				thread handleClient(&Server::HandleClients, this, client); //Start thread for handling the client
 				handleClient.detach(); //Let the thread live on it's own
 
-				TestData testData = { 0, 1, 2, 3, 4 };
-				PacketHelper::Send(DataType::TESTDATA, (char*)&testData, client);
-
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
 			}
