@@ -9,12 +9,11 @@ struct TestData
 	float g;
 	float b;
 	float a;
-	char input[100];
-
 	float pX;
 	float pY;
 	float pZ;
 	float rX;
 	float rY;
 	float rZ;
+	char input[100];
 };
