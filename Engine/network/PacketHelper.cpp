@@ -29,9 +29,13 @@ bool PacketHelper::Connected(SOCKET client)
 {
 	char buf;
 	int err = recv(client, &buf, 1, MSG_PEEK);
-	if (err == SOCKET_ERROR)
+	switch (err)
 	{
+	case SOCKET_ERROR:
 		ErrorHandler();
+		return false;
+	case 0:
+		cout << "Client disconnected" << endl;
 		return false;
 	}
 	return true;
