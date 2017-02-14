@@ -35,10 +35,6 @@ SyncScene* SyncScene::instance = 0;
 SyncScene::SyncScene() : AbstractGame()
 {
 	instance = this;
-
-	server = new Server(8888, 4);
-	thread tServer(&Server::StartServer, server);
-	tServer.detach();
 }
 
 
@@ -69,6 +65,10 @@ void SyncScene::_initializeScene()
 	gCube->setMaterial(cMat);
 	gCube->setBehaviour(new KeysBehaviour(-5.0f, 90.0f));
 	_world->add(gCube);
+
+	server = new Server(8888, 4);
+	thread tServer(&Server::StartServer, server);
+	tServer.detach();
 }
 
 void SyncScene::_render() {
@@ -76,7 +76,7 @@ void SyncScene::_render() {
 	TestData testData;
 	glm::vec3 pos = gCube->getLocalPosition();
 	glm::vec3 rot = gCube->getTransform()[1];
-	glm::mat4 mat = gCube->getTransform();
+
 	testData.pX = pos.x;
 	testData.pY = pos.y;
 	testData.pZ = pos.z;
