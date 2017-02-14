@@ -13,7 +13,7 @@
 
 int spawn(lua_State* lua) 
 {
-	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3), lua_tonumber(lua, -2), lua_tonumber(lua, -1)));
+	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3)*2, lua_tonumber(lua, -2)*2, lua_tonumber(lua, -1)*2));
 	ObjectCache::push(obj);
 
 	World::add(obj);

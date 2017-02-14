@@ -29,8 +29,6 @@ void CameraBehaviour::update(float pStep)
 
 	newPos = newPos*(1 - pStep) + currentPos*pStep;
 
-	cout << newPos << endl;
-
 	_owner->setTransform(newPos);
 	
 

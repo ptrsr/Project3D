@@ -23,12 +23,14 @@ using namespace std;
 #include "mge/behaviours/KeysBehaviour.hpp"
 #include "mge/behaviours/LookAt.hpp"
 #include "mge/behaviours/OrbitBehaviour.hpp"
+#include "mge/behaviours/CameraBehaviour.hpp"
 
 #include "mge/behaviours/DirectionalLight.hpp"
 #include "mge/behaviours/PointLight.hpp"
 #include "mge/behaviours/SpotLight.hpp"
 
 #include "mge/auxiliary/LuaParser.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
 
 #include "mge/util/DebugHud.hpp"
 
@@ -56,7 +58,7 @@ void ObjectViewer::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
 
-	Camera* camera = new Camera();
+	Camera* camera = new Camera(glm::vec2(1280,720),"camera",glm::vec3(15,10,15));
 	_world->add(camera);
 	_world->setMainCamera(camera);
 
@@ -71,9 +73,20 @@ void ObjectViewer::_initializeScene()
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
-
+/*
 	GameObject* empty = new GameObject("empty",glm::vec3(0,0,0));
-	camera->setBehaviour(new OrbitBehaviour(empty, 5));
+	camera->setBehaviour(new OrbitBehaviour(empty, 5));*/
+
+
+	GameObject* plane = ObjectCache::find("Plane");
+	if (plane != NULL) {
+		plane->rotateDegrees(45, glm::vec3(0, 1, 0));
+		plane->rotateDegrees(45, glm::vec3(0, 0, 1));
+		camera->setBehaviour(new CameraBehaviour(plane));
+	}
+	else {
+		cout << "Camera behaviour is not set" << endl;
+	}
 
 	_world->add(center);
 	_world->add(holder);
