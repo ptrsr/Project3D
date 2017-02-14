@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../network/Client.hpp"
+#include "../network/scene/SyncScene.hpp"
 
 using namespace std;
 
@@ -24,8 +25,15 @@ int main()
     cout << "Starting Game" << endl;
 
 	Client* client = new Client();
-	client->Connect("127.0.0.1", 8888);
+	thread tCon(&Client::Connect, client, (char*)"127.0.0.1", 8888);
+	//client->Connect("127.0.0.1", 8888);
 
+	SyncScene* syncScene = new SyncScene();
+	syncScene->initialize();
+	syncScene->run();
+	tCon.join();
+
+	//delete syncScene;
 	delete client;
 
 	cout << "Closing Game" << endl;

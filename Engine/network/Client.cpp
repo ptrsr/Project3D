@@ -1,11 +1,6 @@
 #include "../network/Client.hpp"
 
-#include <thread>
-#include <sstream>
-
-#include "../network/PacketHelper.hpp"
-
-#include "mge/core/GameObject.hpp"
+#include "../network/scene/SyncScene.hpp"
 
 Client::Client()
 {
@@ -62,8 +57,6 @@ int Client::Connect(char* IP, int port)
 
 	//Receive server NetCMD
 	ReceiveResponse();
-
-	GameObject* obj = new GameObject("Test", glm::vec3(5, 1, 7));
 
 	DataType dataType = DataType::PLAYERDATA;
 	DataType dataType2 = DataType::TESTDATA;
@@ -162,6 +155,12 @@ void Client::HandlePacket(DataType type, char* buf)
 	case DataType::TESTDATA:
 		TestData testData = *reinterpret_cast<TestData*>(buf);
 		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
+		
+		SyncScene::instance->gCube->setLocalPosition(glm::vec3(testData.pX, testData.pY, testData.pZ));
+		SyncScene::instance->gCube->rotate(testData.rY, glm::vec3(0, 1, 0));
+		SyncScene::instance->gCube->rotate(testData.rX, glm::vec3(1, 0, 0));
+		SyncScene::instance->gCube->rotate(testData.rZ, glm::vec3(0, 0, 1));
+
 		break;
 	case DataType::PLAYERDATA:
 	{

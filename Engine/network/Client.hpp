@@ -3,9 +3,10 @@
 #include <Windows.h>
 #include <stdio.h>
 
+#include <thread>
 #include <iostream>
 
-#include "../network/DataType.hpp"
+#include "../network/PacketHelper.hpp"
 
 using namespace std;
 

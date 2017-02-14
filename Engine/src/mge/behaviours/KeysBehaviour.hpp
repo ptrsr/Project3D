@@ -13,6 +13,7 @@ class KeysBehaviour : public AbstractBehaviour
 		KeysBehaviour(float pMoveSpeed = 5, float pTurnSpeed = 45);
 		virtual ~KeysBehaviour();
 		virtual void update( float pStep );
+		virtual void message(sendMsg::Message message) override { };
 
     private:
         float _moveSpeed;
