@@ -26,7 +26,7 @@ int Client::Connect(char* IP, int port)
 
 	if (_sock == INVALID_SOCKET)
 	{
-		cout << "ERROR: Invalid socket" << endl;
+		PacketHelper::ErrorHandler();
 		WSACleanup();
 		return 1;
 	}
@@ -45,7 +45,7 @@ int Client::Connect(char* IP, int port)
 	int connection = connect(_sock, (struct sockaddr*)&_iSock, sizeof(_iSock)); //Connect to the server given the info from out socket and size of our socket
 	if (connection != 0)
 	{
-		cout << "ERROR: Failed to connect" << endl;
+		PacketHelper::ErrorHandler();
 		Disconnect();
 		return 0;
 	}
