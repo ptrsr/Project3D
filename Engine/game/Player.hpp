@@ -6,12 +6,22 @@
 #include "mge/core/GameObject.hpp"
 #include "Tile.hpp"
 
+#include "Enums.hpp"
+
 class Player : public GameObject
 {
+private:
+	Id _id;
+	int _score;
+
 public:
-	Player(Tile::Id playerId, Tile* boardArray[9][9]);
+	MovementBehaviour* _movement;
 
 
+	Player(Id playerId, glm::vec2 boardPos);
+	glm::vec2 getBoardPos();
+
+	void addScore(int pScore);
 };
 
 #endif

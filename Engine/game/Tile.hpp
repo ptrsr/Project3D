@@ -3,21 +3,15 @@
 
 #include "mge/core/GameObject.hpp"
 #include "mge/materials/LitMaterial.hpp"
+#include "Enums.hpp"
 
 class Tile : public GameObject
 {
 public:
-	enum Id {
-		none,
-		p1,
-		p2,
-		p3,
-		p4
-	};
-
 	Tile(glm::vec3 pPosition, Mesh* pMesh);
 
-	void SetOwner(Id pPlayer);
+	void setOwner(Id pPlayer);
+	Id getOwner();
 
 	LitMaterial* _material;
 

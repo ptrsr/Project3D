@@ -1,54 +1,84 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
-#include "mge/core/GameObject.hpp"
-#include <SFML/Window/Keyboard.hpp>
+#include "../game/Board.hpp"
+#include "../game/PickUps/ScoreCube.hpp"
 
+#include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
 
-
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Tile* pBoardArray[9][9], float pJumpHeight, float pTime, float pWait) :
-	 player(pPlayer), jumpHeight(pJumpHeight), totalTime(pTime)
+MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Id pPlayerId, glm::vec2 pBoardPos, float pJumpHeight, float pTime, float pWait) :
+	 _player(pPlayer), _id(pPlayerId), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
 {
-	//boardArray = pBoardArray;
-	waitPerc = std::max(0.f, std::min(pWait, 1.f));
-	moveTime -= totalTime * waitPerc;
-}
-
-MovementBehaviour::~MovementBehaviour()
-{
-	//dtor
+	_moveTime = _totalTime - _totalTime * std::max(0.f, std::min(pWait, 1.f));
 }
 
 void MovementBehaviour::update(float pStep)
 {
 	checkKeys(); //set desired direction, doesn't update current direction yet
 
-	curTime += pStep; //total time into the animation
+	_curTime += pStep; //total time into the animation
 
-	if (curTime < moveTime) //are we moving?
+	if (_curTime < _moveTime) //are we moving?
 	{
-		roll(((pStep + deltaTime) / moveTime)); //roll
-		move(curTime, pStep + deltaTime); //move
+		float cancelTime; //temporary variable for mid air canceling
 
-		deltaTime = 0; //we don't have time which we have to catch up
-		lastMoveTime = curTime; //save the last time we moved
+		if (_canceled && _curTime > (cancelTime = _moveTime / 2.f)) //is the move invalid and are we halfway?
+		{
+			float step = (_curTime - cancelTime) - (cancelTime - _lastMoveTime);
+			
+			//inverse the direction and axis
+			_axis = -_axis;
+			_trans = -_trans;
+
+			//Inverse the desired direction for next move
+			Direction tDir = _cDir;
+			inverseDirection();
+
+			if (_dDir == tDir)
+				_dDir = _cDir;
+
+			roll(step / _moveTime);
+			move(_curTime, step);
+
+			_boardPos -= glm::vec2(_trans.x, _trans.z);
+
+			_canceled = false;
+		}
+		else //do the regular move and roll
+		{
+			roll(((pStep + _deltaTime) / _moveTime)); //roll
+			move(_curTime, pStep + _deltaTime); //move
+		}
+
+		_deltaTime = 0; //we don't have time which we have to catch up
+		_lastMoveTime = _curTime; //save the last time we moved
 	}
-	else if (lastMoveTime != 0) //the move time is over, but did we forgot the last bit?
+	else if (_lastMoveTime != 0) //the move time is over, but did we forgot the last bit?
 	{
-		roll(1 - lastMoveTime / moveTime); //roll the last bit
-		move(moveTime, moveTime - lastMoveTime); //move the last bit
-		lastMoveTime = 0; //we are done with the move
+		roll(1 - _lastMoveTime / _moveTime); //roll the last bit
+		move(_moveTime, _moveTime - _lastMoveTime); //move the last bit
+		_lastMoveTime = 0; //we are done with the move
 	
-		
+		_boardPos += glm::vec2(_trans.x, _trans.z);
+
+		for each (PickUp* pickUp in PickUp::getPickUps())
+		{
+			if (pickUp->getBoardPos() == _boardPos)
+			{
+				pickUp->applyPickUp(this);
+			}
+		}
+
+		Board::setOwner(_boardPos, _id);
 	}
 
-	if (curTime >= totalTime) //is the animation done?
+	if (_curTime >= _totalTime) //is the animation done?
 	{
-		curTime -= totalTime; //we don't set it to 0 because we are already into the other animation
-		deltaTime = curTime; //time we have to catch up next animation
+		_curTime -= _totalTime; //we don't set it to 0 because we are already into the other animation
+		_deltaTime = _curTime; //time we have to catch up next animation
 		
-		cDir = dDir; //set the current direction to the desired one
+		_cDir = _dDir; //set the current direction to the desired one
 
-		if (cDir != none) //do we have a direction?
+		if (_cDir != none) //do we have a direction?
 			setDirection();
 	}
 		
@@ -58,72 +88,114 @@ void MovementBehaviour::update(float pStep)
 void MovementBehaviour::roll(float pStep) 
 {
 	float angle = (glm::pi<float>() / 2.f) * pStep;
-	player->rotate(angle, axis);
+	_player->rotate(angle, _axis);
 }
 
 //pTime is for the height (phase of sinus wave)
 //if Pstep is 1, move to next position
 void MovementBehaviour::move(float pTime, float pStep) 
 {
-	float phase = (pTime / moveTime);
+	float phase = (pTime / _moveTime);
 
-	float height = std::sin(phase * glm::pi<float>()) * jumpHeight;
-	float difference = height - lastHeight;
-	lastHeight = height;
+	float height = std::sin(phase * glm::pi<float>()) * _jumpHeight;
+	float difference = height - _lastHeight;
+	_lastHeight = height;
 
 	glm::mat4 tMat;
 
-	if (cDir == none)
+	if (_cDir == none)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
-		tMat = glm::translate(glm::mat4(), (pStep * (distance / moveTime) * trans + glm::vec3(0, difference, 0)));
+		tMat = glm::translate(glm::mat4(), (pStep * (_distance / _moveTime) * _trans + glm::vec3(0, difference, 0)));
 
-	player->setTransform(tMat * player->getTransform());
+	_player->setTransform(tMat * _player->getTransform());
 }
 
 //sets the axis and translation direction
 void MovementBehaviour::setDirection()
 {
-	worldMat = player->getWorldTransform();
+	glm::mat4 worldMat = _player->getWorldTransform();
 	glm::vec4 temp;
 
-	switch (cDir) //world to local axis
+	switch (_cDir) //world to local axis
 	{
 	case up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
-		trans = glm::vec3(0, 0, 1);
+		_trans = glm::vec3(0, 0, 1);
 		break;
 
 	case down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
-		trans = glm::vec3(0, 0, -1);
+		_trans = glm::vec3(0, 0, -1);
 		break;
 
 	case left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
-		trans = glm::vec3(1, 0, 0);
+		_trans = glm::vec3(1, 0, 0);
 		break;
 
 	case right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
-		trans = glm::vec3(-1, 0, 0);
+		_trans = glm::vec3(-1, 0, 0);
 		break;
 	}
 
-	axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
+	_axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
+
+	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
+		_canceled = true;
+
+	std::cout << _boardPos << std::endl;
 }
 
 void MovementBehaviour::checkKeys()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		dDir = up;
+		_dDir = up;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		dDir = down;
+		_dDir = down;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		dDir = right;
+		_dDir = right;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		dDir = left;
+		_dDir = left;
+}
+
+void MovementBehaviour::inverseDirection()
+{
+	switch (_cDir)
+	{
+	case up:
+		_cDir = down;
+		break;
+
+	case down:
+		_cDir = up;
+		break;
+
+	case left:
+		_cDir = right;
+		break;
+
+	case right:
+		_cDir = left;
+		break;
+	}
+}
+
+Id MovementBehaviour::getPlayerId()
+{
+	return _id;
+}
+
+glm::vec2 MovementBehaviour::getBoardPos()
+{
+	return _boardPos;
+}
+
+MovementBehaviour::~MovementBehaviour()
+{
+	//dtor
 }

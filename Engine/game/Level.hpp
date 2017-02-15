@@ -12,18 +12,12 @@
 
 class Level : public GameObject
 {
-	
-public:
-	Level(glm::vec2 pSize);
-	GameObject* getObject(int xTile, int zTile);
 private:
 	glm::vec2 _size;
-	GameObject * _player;
 
-	Tile* _boardArray[9][9];
-	void initializeLevel();
-	Mesh * _cubeMesh;
-
+public:
+	Level(glm::vec2 pSize);
 	~Level();
+
 };
 #endif
