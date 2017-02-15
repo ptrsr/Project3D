@@ -289,6 +289,9 @@
     <ClInclude Include="..\network\scene\SyncScene.hpp">
       <Filter>network\scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\Server.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -524,6 +527,9 @@
     </ClCompile>
     <ClCompile Include="..\network\scene\SyncScene.cpp">
       <Filter>network\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\Server.cpp">
+      <Filter>network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

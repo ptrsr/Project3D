@@ -18,10 +18,7 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 	ReceiveData(dataType, 4, client);
 
 	DataType type = *reinterpret_cast<DataType*>(dataType);
-	if (type < 0)
-	{
-		cout << endl;
-	}
+
 	//Receive actual data using the buffer
 	ReceiveData(buffer, SizeOfData(type), client);
 
