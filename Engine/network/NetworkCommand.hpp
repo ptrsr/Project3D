@@ -1,0 +1,6 @@
+enum NetWorkCommand
+{
+	CONNECTION_ACCEPTED,
+	SERVER_FULL,
+	CONNCETION_BANNED
+};
