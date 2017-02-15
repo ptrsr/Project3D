@@ -51,7 +51,7 @@ void SyncScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
 
-	Camera* camera = new Camera("camera", glm::vec3(0, 2, 10));
+	Camera* camera = new Camera(glm::vec2(1280, 720), "camera", glm::vec3(0, 2, 10));
 	_world->add(camera);
 	_world->setMainCamera(camera);
 

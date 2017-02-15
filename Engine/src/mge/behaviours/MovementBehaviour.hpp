@@ -12,7 +12,7 @@ class MovementBehaviour : public AbstractBehaviour
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
 	private:
 
 		void checkKeys();

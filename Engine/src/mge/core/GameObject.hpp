@@ -56,7 +56,7 @@ class GameObject
 		AbstractBehaviour* getBehaviour() const;
 
 		virtual void update(float pStep);
-		virtual void message(send::Message);
+		virtual void message(sendMsg::Message);
 
         //child management
 

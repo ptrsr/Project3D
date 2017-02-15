@@ -14,7 +14,7 @@ class OrbitBehaviour : public AbstractBehaviour
 
 		virtual void update(float pStep);
 
-		virtual void message(send::Message message) override {  };
+		virtual void message(sendMsg::Message message) override {  };
 
 	private:
 		GameObject * _target;

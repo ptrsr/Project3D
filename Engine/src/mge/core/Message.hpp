@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-namespace send
+namespace sendMsg
 {
 	enum Message
 	{

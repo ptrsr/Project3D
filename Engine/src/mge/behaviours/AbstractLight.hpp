@@ -19,7 +19,7 @@ public:
 	glm::vec3 getWorldPosition();
 	glm::vec3 getDirection();
 
-	virtual void message(send::Message message) { std::cout << "hello" << std::endl; }
+	virtual void message(sendMsg::Message message) { std::cout << "hello" << std::endl; }
 
 protected:
 	AbstractLight::~AbstractLight();

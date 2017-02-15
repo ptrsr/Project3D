@@ -186,7 +186,7 @@ GameObject* GameObject::getChildAt(int pIndex) {
     return _children[pIndex];
 }
 
-void GameObject::message(send::Message message) 
+void GameObject::message(sendMsg::Message message) 
 {
 	if (_behaviour)
 	{

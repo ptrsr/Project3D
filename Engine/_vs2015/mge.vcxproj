@@ -169,6 +169,16 @@
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
     <ClInclude Include="..\game\Tile.hpp" />
+    <ClInclude Include="..\network\Client.hpp" />
+    <ClInclude Include="..\network\Data.hpp" />
+    <ClInclude Include="..\network\DataType.hpp" />
+    <ClInclude Include="..\network\NetworkCommand.hpp" />
+    <ClInclude Include="..\network\PacketHelper.hpp" />
+    <ClInclude Include="..\network\PlayerData.hpp" />
+    <ClInclude Include="..\network\scene\SyncScene.hpp" />
+    <ClInclude Include="..\network\ScoreData.hpp" />
+    <ClInclude Include="..\network\TestData.hpp" />
+    <ClInclude Include="..\network\TileData.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
@@ -242,6 +252,9 @@
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
     <ClCompile Include="..\game\Tile.cpp" />
+    <ClCompile Include="..\network\Client.cpp" />
+    <ClCompile Include="..\network\PacketHelper.cpp" />
+    <ClCompile Include="..\network\scene\SyncScene.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />

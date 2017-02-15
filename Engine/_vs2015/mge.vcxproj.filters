@@ -44,6 +44,12 @@
     <Filter Include="MGE Source files\scenes\menuStates">
       <UniqueIdentifier>{1ba4f96f-545b-44c3-93c7-64cef9bb6340}</UniqueIdentifier>
     </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{48ac5777-20be-4d01-895a-648297a21871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\scene">
+      <UniqueIdentifier>{6a48c7db-a244-4fc5-bfb9-449587c39d7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -252,6 +258,36 @@
     <ClInclude Include="..\game\Tile.hpp" />
     <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\Client.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\Data.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\DataType.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\NetworkCommand.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\PacketHelper.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\PlayerData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\ScoreData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TestData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TileData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\scene\SyncScene.hpp">
+      <Filter>network\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -479,6 +515,15 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\Client.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\PacketHelper.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\scene\SyncScene.cpp">
+      <Filter>network\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
