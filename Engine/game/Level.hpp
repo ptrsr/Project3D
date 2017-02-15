@@ -8,16 +8,41 @@
 #include "mge/materials/LitMaterial.hpp"
 #include "mge/config.hpp"
 
-#include "../game/Tile.hpp"
+#include "Player.hpp"
+#include "PickUps\PickUp.hpp"
+#include "Board.hpp"
 
 class Level : public GameObject
 {
-private:
-	glm::vec2 _size;
-
 public:
-	Level(glm::vec2 pSize);
 	~Level();
 
+	static Level* get();
+	static std::vector<Player*> getPlayers();
+	static std::vector<PickUp*> getPickUps();
+	static Board*				getBoard();
+
+	virtual void update(float pStep);
+
+	void step(Player* pPlayer);
+
+private:
+	static Level* _level;
+
+	void spawnPlayer(Id, glm::vec2 pBoardPos);
+	void spawnPickUp(PickUp* pPickUp);
+	
+	std::vector<Player*> _players;
+	std::vector<PickUp*> _pickups;
+	Board* _board;
+
+	float _curTime;
+	float _totalMoveTime = config::TOTAL_MOVE_TIME;
+	glm::vec2 _size;
+
+	Level();
+
+	Level(const Level&) = delete;
+	Level& operator=(const Level&) = delete;
 };
 #endif

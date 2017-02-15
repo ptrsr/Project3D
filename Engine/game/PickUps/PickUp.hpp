@@ -20,15 +20,25 @@ public:
 	virtual inline void update(float pStep) { };
 	virtual void applyPickUp(MovementBehaviour* pPlayer) = 0;
 
-	void spawn();
+	void step();
 
 	glm::vec2 getBoardPos();
 
+
+protected:
+	int _minDelay = 0;
+	int _maxDelay = 0;
+
+	void reset();
+
 private:
+
+	void spawn();
+
 	static std::vector<PickUp*> _pickUps;
 
-	float _minDelay;
-	float _maxDelay;
+	float _countDown = 0;
+
 
 	glm::vec2 _boardPos;
 

@@ -12,10 +12,13 @@ ScoreCube::ScoreCube(std::vector<MovementBehaviour*> pPlayers) : PickUp("ScoreCu
 	this->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(0, 1, 0)));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj"));
 	this->scale(glm::vec3(0.3f));
+
+	_minDelay = 1;
+	_maxDelay = 3;
 }
 
 void ScoreCube::applyPickUp(MovementBehaviour* pPlayer)
 {
 	((Player*)pPlayer->getOwner())->addScore(Board::getScore(pPlayer->getPlayerId()));
-	spawn();
+	reset();
 }

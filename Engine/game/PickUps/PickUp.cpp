@@ -25,6 +25,8 @@ std::vector<PickUp*> PickUp::getPickUps()
 
 void PickUp::spawn()
 {
+	std::cout << "spawned" << std::endl;
+
 	std::vector<glm::vec2> positions;
 
 	for (int j = 0; j < 9; j++)
@@ -56,6 +58,26 @@ void PickUp::spawn()
 glm::vec2 PickUp::getBoardPos()
 {
 	return _boardPos;
+}
+
+void PickUp::reset()
+{
+	_boardPos = glm::vec2(-1);
+	setLocalPosition(glm::vec3(0, -10, 0));
+	_countDown = (rand() % (_maxDelay - _minDelay)) + _minDelay;
+}
+
+void PickUp::step()
+{
+	if (_countDown == -1)
+		return;
+
+	_countDown--;
+
+	std::cout << _countDown << std::endl;
+
+	if (_countDown == 0)
+		spawn();
 }
 
 PickUp::~PickUp()

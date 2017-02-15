@@ -4,9 +4,11 @@
 
 #include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
+#include "../game/Level.hpp"
+#include "../game/Player.hpp"
 
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Id pPlayerId, glm::vec2 pBoardPos, float pJumpHeight, float pTime, float pWait) :
-	 _player(pPlayer), _id(pPlayerId), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
+	 _player(pPlayer), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
 {
 	_moveTime = _totalTime - _totalTime * std::max(0.f, std::min(pWait, 1.f));
 }
@@ -144,8 +146,6 @@ void MovementBehaviour::setDirection()
 
 	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
 		_canceled = true;
-
-	std::cout << _boardPos << std::endl;
 }
 
 void MovementBehaviour::checkKeys()

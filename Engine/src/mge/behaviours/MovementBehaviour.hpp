@@ -10,7 +10,7 @@ class MovementBehaviour : public AbstractBehaviour
 	class Player;
 
 	public:
-		MovementBehaviour(GameObject* pPlayer, Id playerId, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
@@ -36,18 +36,17 @@ class MovementBehaviour : public AbstractBehaviour
 		void roll(float pStep);
 		void move(float pPhase, float pTime);
 		
-		GameObject* _player;
-		Id		    _id;
+		Player* _player;
 
 		//settings
-		float _totalTime  = 1;
+		float _totalTime;
 		float _moveTime;
 
-		float _jumpHeight = 0.4f;
-		float _distance	  = 1;
+		float _jumpHeight;
+		float _distance;
 
 		//vars
-		glm::vec2 _boardPos;
+		glm::vec2& _boardPos;
 
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);

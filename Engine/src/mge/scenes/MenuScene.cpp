@@ -74,9 +74,6 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-
-	_level = new Level(glm::vec2(9, 9));
-
 	_currentState = -1;
 
 

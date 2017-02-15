@@ -13,7 +13,7 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 
 	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
 
-	_movement = new MovementBehaviour(this, playerId, boardPos, 1.0f, 0.8f, 0.3f);
+	_movement = new MovementBehaviour(this, boardPos, 1.0f, 3.f, 0.3f);
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
@@ -32,4 +32,9 @@ void Player::addScore(int pScore)
 glm::vec2 Player::getBoardPos()
 {
 	return _movement->getBoardPos();
+}
+
+Id Player::getId()
+{
+	return _id;
 }
