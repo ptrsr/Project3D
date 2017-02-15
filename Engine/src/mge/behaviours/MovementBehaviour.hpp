@@ -14,7 +14,7 @@ class MovementBehaviour : public AbstractBehaviour
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
 		Id getPlayerId();
