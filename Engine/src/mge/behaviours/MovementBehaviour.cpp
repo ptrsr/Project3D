@@ -5,8 +5,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Id pPlayerId, glm::vec2 pBoardPos, float pJumpHeight, float pTime, float pWait) :
-	 _player(pPlayer), _id(pPlayerId), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
+MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Id pPlayerId, glm::vec2 pBoardPos, float pJumpHeight, float pTime, float pWait, bool isPlayer) :
+	 _player(pPlayer), _id(pPlayerId), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime), _isPlayer(isPlayer)
 {
 	_moveTime = _totalTime - _totalTime * std::max(0.f, std::min(pWait, 1.f));
 }
@@ -78,10 +78,16 @@ void MovementBehaviour::update(float pStep)
 		
 		_cDir = _dDir; //set the current direction to the desired one
 
-		if (_cDir != none) //do we have a direction?
+		if (_cDir != Direction::idle) //do we have a direction?
 			setDirection();
 	}
 		
+}
+
+//change the desired direction publically
+void MovementBehaviour::setDesiredDirection(Direction dir)
+{
+	_dDir = dir;
 }
 
 //if step is 1, we rotate 90 degrees
@@ -103,7 +109,7 @@ void MovementBehaviour::move(float pTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == none)
+	if (_cDir == Direction::idle)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / _moveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -119,22 +125,22 @@ void MovementBehaviour::setDirection()
 
 	switch (_cDir) //world to local axis
 	{
-	case up:
+	case Direction::up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, 1);
 		break;
 
-	case down:
+	case Direction::down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, -1);
 		break;
 
-	case left:
+	case Direction::left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
 		_trans = glm::vec3(1, 0, 0);
 		break;
 
-	case right:
+	case Direction::right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
 		_trans = glm::vec3(-1, 0, 0);
 		break;
@@ -151,36 +157,36 @@ void MovementBehaviour::setDirection()
 void MovementBehaviour::checkKeys()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		_dDir = up;
+		setDesiredDirection(Direction::up);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		_dDir = down;
+		setDesiredDirection(Direction::down);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		_dDir = right;
+		setDesiredDirection(Direction::right);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		_dDir = left;
+		setDesiredDirection(Direction::left);
 }
 
 void MovementBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
-	case up:
-		_cDir = down;
+	case Direction::up:
+		_cDir = Direction::down;
 		break;
 
-	case down:
-		_cDir = up;
+	case Direction::down:
+		_cDir = Direction::up;
 		break;
 
-	case left:
-		_cDir = right;
+	case Direction::left:
+		_cDir = Direction::right;
 		break;
 
-	case right:
-		_cDir = left;
+	case Direction::right:
+		_cDir = Direction::left;
 		break;
 	}
 }

@@ -2,6 +2,7 @@
 
 enum Direction
 {
+	idle,
 	up,
 	down,
 	left,

@@ -4,13 +4,14 @@
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
 #include "../game/Tile.hpp"
+#include "../game/Direction.hpp"
 
 class MovementBehaviour : public AbstractBehaviour
 {
 	class Player;
 
 	public:
-		MovementBehaviour(GameObject* pPlayer, Id playerId, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(GameObject* pPlayer, Id playerId, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait, bool isPlayer);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
@@ -18,26 +19,19 @@ class MovementBehaviour : public AbstractBehaviour
 
 		glm::vec2 getBoardPos();
 		Id getPlayerId();
-
+		
+		void setDesiredDirection(Direction dir);
 	private:
-		enum Direction
-		{
-			none,
-			up,
-			down,
-			left,
-			right
-		};
-
 		void checkKeys();
-		void setDirection();
 		void inverseDirection();
+		void setDirection();
 
 		void roll(float pStep);
 		void move(float pPhase, float pTime);
 		
 		GameObject* _player;
 		Id		    _id;
+		bool		_isPlayer;
 
 		//settings
 		float _totalTime  = 1;
@@ -56,9 +50,9 @@ class MovementBehaviour : public AbstractBehaviour
 		float _deltaTime    = 0;
 		float _lastMoveTime = 0;
 		float _lastHeight   = 0;
-
-		Direction _cDir = none;
-		Direction _dDir = none;
+		
+		Direction _cDir = Direction::idle;
+		Direction _dDir = Direction::idle;
 
 		bool _canceled = false;
 };
