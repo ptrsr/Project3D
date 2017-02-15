@@ -64,7 +64,7 @@ void MovementBehaviour::update(float pStep)
 		{
 			if (pickUp->getBoardPos() == _boardPos)
 			{
-				pickUp->applyPickUp(_player);
+				pickUp->applyPickUp(this);
 			}
 		}
 
@@ -183,6 +183,11 @@ void MovementBehaviour::inverseDirection()
 		_cDir = left;
 		break;
 	}
+}
+
+Id MovementBehaviour::getPlayerId()
+{
+	return _id;
 }
 
 glm::vec2 MovementBehaviour::getBoardPos()

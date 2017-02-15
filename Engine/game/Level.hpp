@@ -12,14 +12,12 @@
 
 class Level : public GameObject
 {
-	
+private:
+	glm::vec2 _size;
+
 public:
 	Level(glm::vec2 pSize);
 	~Level();
-
-private:
-	glm::vec2 _size;
-	GameObject * _player;
 
 };
 #endif

@@ -29,7 +29,7 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 	Tile* tile = board->_boardArray[(int)boardPos.x][(int)boardPos.y];
 
 	if (tile)
-		tile->SetOwner(player);
+		tile->setOwner(player);
 }
 
 void Board::initializeBoard() 
@@ -62,6 +62,28 @@ bool Board::outOfBounds(glm::vec2 pos)
 		return true;
 
 	return false;
+}
+
+int Board::getScore(Id pPlayerId)
+{
+	Board* board = Board::get();
+	int score = 0;
+
+
+	for (int i = 0; i < board->_size.x; i++) {
+		for (int j = 0; j < board->_size.y; j++) {
+
+			Tile* tile = board->_boardArray[j][i];
+
+			if (tile->getOwner() == pPlayerId)
+			{
+				score++;
+				tile->setOwner(none);
+			}
+		}
+	}
+
+	return score;
 }
 
 Board::~Board()

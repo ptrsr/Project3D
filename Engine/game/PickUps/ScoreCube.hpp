@@ -6,8 +6,9 @@
 class ScoreCube : public PickUp
 {
 public:
-	ScoreCube(std::vector<Player*> pPlayers);
+	ScoreCube(std::vector<MovementBehaviour*> pPlayers);
 
+	virtual void applyPickUp(MovementBehaviour* pPlayer);
 private:
 
 };

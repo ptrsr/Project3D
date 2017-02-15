@@ -4,7 +4,9 @@
 
 #include <algorithm>
 
-PickUp::PickUp(std::string pName, std::vector<Player*> pPlayers) : GameObject(pName)
+std::vector<PickUp*> PickUp::_pickUps;
+
+PickUp::PickUp(std::string pName, std::vector<MovementBehaviour*> pPlayers) : GameObject(pName)
 {
 	srand(time(NULL));
 
@@ -32,7 +34,7 @@ void PickUp::spawn()
 			glm::vec2 pos = glm::vec2(i, j);
 			bool available = true;
 
-			for each (Player* player in _players)
+			for each (MovementBehaviour* player in _players)
 			{
 				glm::vec2 dif = player->getBoardPos() - pos;
 

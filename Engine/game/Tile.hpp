@@ -10,7 +10,8 @@ class Tile : public GameObject
 public:
 	Tile(glm::vec3 pPosition, Mesh* pMesh);
 
-	void SetOwner(Id pPlayer);
+	void setOwner(Id pPlayer);
+	Id getOwner();
 
 	LitMaterial* _material;
 

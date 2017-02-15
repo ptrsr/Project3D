@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #include "../game/Tile.hpp"
-
+#include "../game/Enums.hpp"
 class Board
 {
 	
@@ -11,6 +11,7 @@ public:
 	static bool outOfBounds(glm::vec2);
 
 	static void setOwner(glm::vec2 boardPos, Id player);
+	static int getScore(Id pPlayerId);
 
 	~Board();
 

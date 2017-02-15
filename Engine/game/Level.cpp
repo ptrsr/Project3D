@@ -8,10 +8,10 @@
 
 Level::Level(glm::vec2 pSize) :GameObject("level")
 {
-	std::vector<Player*> players;
+	std::vector<MovementBehaviour*> players;
 
 	_size = pSize;
-	_player = new Player(p1, glm::vec2(0)); players.push_back((Player*)_player);
+	Player* player1 = new Player(p1, glm::vec2(0)); players.push_back(player1->_movement);
 
 	Board::get();
 	PickUp* score = new ScoreCube(players);
@@ -19,6 +19,5 @@ Level::Level(glm::vec2 pSize) :GameObject("level")
 
 Level::~Level()
 {
-	delete _player;
 	delete Board::get();
 }

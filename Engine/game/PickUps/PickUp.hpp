@@ -10,15 +10,17 @@ class PickUp : public GameObject
 {
 public:
 	LitMaterial* _material;
-	std::vector<Player*> _players;
+	std::vector<MovementBehaviour*> _players;
 
-	PickUp(std::string name, std::vector<Player*> pPlayers);
+	PickUp(std::string name, std::vector<MovementBehaviour*> pPlayers);
+	~PickUp();
 
 	static std::vector<PickUp*> getPickUps();
 
-	virtual void update(float pStep);
-
+	virtual inline void update(float pStep) { };
 	virtual void applyPickUp(MovementBehaviour* pPlayer) = 0;
+
+	void spawn();
 
 	glm::vec2 getBoardPos();
 
@@ -30,7 +32,6 @@ private:
 
 	glm::vec2 _boardPos;
 
-	void spawn();
 };
 
 #endif

@@ -9,6 +9,7 @@
 Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 {
 	_name = "Player" + playerId;
+	_id = playerId;
 
 	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
 
@@ -21,6 +22,12 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 	World::add(this);
 
 };
+
+void Player::addScore(int pScore)
+{
+	_score += pScore;
+	std::cout << "Player " << _id << " scored: " << pScore << std::endl;
+}
 
 glm::vec2 Player::getBoardPos()
 {

@@ -17,6 +17,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void message(send::Message) { };
 
 		glm::vec2 getBoardPos();
+		Id getPlayerId();
 
 	private:
 		enum Direction
