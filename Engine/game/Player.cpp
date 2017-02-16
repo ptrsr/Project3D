@@ -4,18 +4,35 @@
 #include "mge/config.hpp"
 #include "mge/materials/LitMaterial.hpp"
 
-Player::Player(Tile::Id playerId, Tile* boardArray[9][9]) : GameObject("temp")
+#include "Enums.hpp"
+
+Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 {
 	_name = "Player" + playerId;
+	_id = playerId;
 
+	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
 
-	//Setting the color of the cube below the player
-	this->setBehaviour(new MovementBehaviour(this, boardArray, 1.0f, 0.8f, 0.3f));
+	_movement = new MovementBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
+	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "elementcube.obj"));
-	this->setLocalPosition(glm::vec3(0, 0.5f, 0));
 	this->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(1, 0, 0)));
-	World::add(this);
-
 };
+
+void Player::addScore(int pScore)
+{
+	_score += pScore;
+	std::cout << "Player " << _id << " scored: " << pScore << std::endl;
+}
+
+glm::vec2 Player::getBoardPos()
+{
+	return _movement->getBoardPos();
+}
+
+Id Player::getId()
+{
+	return _id;
+}

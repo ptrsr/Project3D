@@ -13,7 +13,7 @@ class LookAt : public AbstractBehaviour
         virtual ~LookAt();
 
         virtual void update(float pStep);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
 
     private:
         GameObject * _target;   //what are we looking at?

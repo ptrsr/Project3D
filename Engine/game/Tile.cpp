@@ -8,12 +8,9 @@ Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
 	_material = new LitMaterial(LitMaterial::vertex);
 	this->setMaterial(_material);
 	this->setMesh(pMesh);
-
-	World::add(this);
-
 }
 
-void Tile::SetOwner(Id pPlayer)
+void Tile::setOwner(Id pPlayer)
 {
 	_owner = pPlayer;
 
@@ -39,4 +36,9 @@ void Tile::SetOwner(Id pPlayer)
 		_material->setColor(glm::vec3(0.87f, 0.72f, 0.53f));
 		break;
 	}
+}
+
+Id Tile::getOwner()
+{
+	return _owner;
 }

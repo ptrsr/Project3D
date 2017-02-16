@@ -25,6 +25,9 @@ GameObject::~GameObject()
 
 	if (_behaviour)
 		delete _behaviour;
+
+	if (_parent)
+		_parent->remove(this);
 }
 
 void GameObject::setName (std::string pName)
@@ -186,12 +189,11 @@ GameObject* GameObject::getChildAt(int pIndex) {
     return _children[pIndex];
 }
 
-void GameObject::message(send::Message message) 
+void GameObject::message(sendMsg::Message message) 
 {
 	if (_behaviour)
 	{
 		_behaviour->message(message);
-		std::cout << "gameobject sends message" << std::endl;
 	}
 
 	for each (GameObject* child in _children)

@@ -43,13 +43,13 @@ std::vector<AbstractLight*>* World::GetLights() {
 void World::_innerAdd(GameObject* pChild)
 {
 	GameObject::_innerAdd(pChild);
-	pChild->message(send::addedToScene);
+	//pChild->message(send::addedToScene);
 }
 
 void World::_innerRemove(GameObject* pChild)
 {
 	GameObject::_innerRemove(pChild);
-	pChild->message(send::removedFromScene);
+	//pChild->message(send::removedFromScene);
 }
 
 void World::add(GameObject* pChild)

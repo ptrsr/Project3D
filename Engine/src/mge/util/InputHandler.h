@@ -12,7 +12,7 @@
 class InputHandler
 {
 public:
-	static enum State
+	enum State
 	{
 		down,
 		pressed,

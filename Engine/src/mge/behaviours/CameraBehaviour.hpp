@@ -13,7 +13,7 @@ class CameraBehaviour : public AbstractBehaviour
 
 		virtual void update(float pStep);
 		void changeTarget(GameObject* newTarget);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
 	private:
 		
 		GameObject* _target;

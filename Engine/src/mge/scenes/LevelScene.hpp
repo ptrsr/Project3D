@@ -1,17 +1,18 @@
-#ifndef SPOTSCENE_H
-#define SPOTSCENE_H
+#ifndef LEVELSCENE_H
+#define LEVELSCENE_H
 
 #include <mge/core/AbstractGame.hpp>
+#include "../game/Level.hpp"
 
 class DebugHud;
 
-class SpotScene: public AbstractGame
+class LevelScene: public AbstractGame
 {
     //PUBLIC FUNCTIONS
 
 	public:
-		SpotScene();
-		virtual ~SpotScene();
+		LevelScene();
+		virtual ~LevelScene();
 
         virtual void initialize();
 
@@ -23,11 +24,12 @@ class SpotScene: public AbstractGame
 
 	private:
 		DebugHud* _hud;                   //hud display
+		Level* _level;
 
         void _updateHud();
 
-        SpotScene(const SpotScene&);
-        SpotScene& operator=(const SpotScene&);
+        LevelScene(const LevelScene&);
+        LevelScene& operator=(const LevelScene&);
 };
 
 #endif // LIGHTSCENE_H

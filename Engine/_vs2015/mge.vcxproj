@@ -166,9 +166,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\Board.hpp" />
+    <ClInclude Include="..\game\Direction.hpp" />
     <ClInclude Include="..\game\Level.hpp" />
+    <ClInclude Include="..\game\PickUps\PickUp.hpp" />
+    <ClInclude Include="..\game\PickUps\ScoreCube.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
     <ClInclude Include="..\game\Tile.hpp" />
+    <ClInclude Include="..\network\Client.hpp" />
+    <ClInclude Include="..\network\Data.hpp" />
+    <ClInclude Include="..\network\DataType.hpp" />
+    <ClInclude Include="..\network\NetworkCommand.hpp" />
+    <ClInclude Include="..\network\PacketHelper.hpp" />
+    <ClInclude Include="..\network\PlayerData.hpp" />
+    <ClInclude Include="..\network\scene\SyncScene.hpp" />
+    <ClInclude Include="..\network\ScoreData.hpp" />
+    <ClInclude Include="..\network\Server.hpp" />
+    <ClInclude Include="..\network\TestData.hpp" />
+    <ClInclude Include="..\network\TileData.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
@@ -225,13 +240,13 @@
     <ClInclude Include="..\src\mge\materials\TerrainMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\TextureMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\WobbleMaterial.hpp" />
+    <ClInclude Include="..\src\mge\scenes\LevelScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\MenuScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\AbstactState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp" />
-    <ClInclude Include="..\src\mge\scenes\SpotScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
@@ -239,9 +254,16 @@
     <ClInclude Include="..\src\mge\util\InputHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\game\Board.cpp" />
     <ClCompile Include="..\game\Level.cpp" />
+    <ClCompile Include="..\game\PickUps\PickUp.cpp" />
+    <ClCompile Include="..\game\PickUps\ScoreCube.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
     <ClCompile Include="..\game\Tile.cpp" />
+    <ClCompile Include="..\network\Client.cpp" />
+    <ClCompile Include="..\network\PacketHelper.cpp" />
+    <ClCompile Include="..\network\scene\SyncScene.cpp" />
+    <ClCompile Include="..\network\Server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
@@ -302,13 +324,13 @@
     <ClCompile Include="..\src\mge\materials\TerrainMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\TextureMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\WobbleMaterial.cpp" />
+    <ClCompile Include="..\src\mge\scenes\LevelScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\MenuScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\AbstactState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp" />
-    <ClCompile Include="..\src\mge\scenes\SpotScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />

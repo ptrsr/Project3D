@@ -5,23 +5,22 @@
 #include <glm.hpp>
 #include "../game/Tile.hpp"
 
+class Player;
+
 class MovementBehaviour : public AbstractBehaviour
 {
+
 	public:
-		MovementBehaviour(GameObject* pPlayer, Tile* boardArray[9][9], float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
-		void message(send::Message) { };
+		void message(sendMsg::Message) { };
+
+		glm::vec2 getBoardPos();
+		Id getPlayerId();
+
 	private:
-
-		void checkKeys();
-		void setDirection();
-		
-		void roll(float pStep);
-		void move(float pPhase, float pTime);
-
-
 		enum Direction
 		{
 			none,
@@ -30,32 +29,38 @@ class MovementBehaviour : public AbstractBehaviour
 			left,
 			right
 		};
+
+		void checkKeys();
+		void setDirection();
+		void inverseDirection();
+
+		void roll(float pStep);
+		void move(float pPhase, float pTime);
 		
-		GameObject* player;
+		Player* _player;
 
-		//set
-		Tile* boardArray[9][9];
+		//settings
+		float _totalTime;
+		float _moveTime;
 
-		float totalTime = 1;
-		float waitPerc = 0.2f;
-		float jumpHeight = 0.4f;
+		float _jumpHeight	= 1;
+		float _distance		= 1;
 
-		//updated
-		glm::vec3 axis = glm::vec3(1,0,0);
-		glm::vec3 trans = glm::vec3(1, 0, 0);
+		//vars
+		glm::vec2 _boardPos;
 
-		glm::mat4 worldMat;
+		glm::vec3 _axis  = glm::vec3(1,0,0);
+		glm::vec3 _trans = glm::vec3(0,0,0);
 
-		bool moving = true;
+		float _curTime      = 0;
+		float _deltaTime    = 0;
+		float _lastMoveTime = 0;
+		float _lastHeight   = 0;
 
-		float moveTime = totalTime;
-		float curTime = 0;
-		float deltaTime = 0;
-		float lastMoveTime = 0;
-		float distance = 1;
-		float lastHeight = 0;
-		Direction cDir = none;
-		Direction dDir = none;
+		Direction _cDir = none;
+		Direction _dDir = none;
+
+		bool _canceled = false;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

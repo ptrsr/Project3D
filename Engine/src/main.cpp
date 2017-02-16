@@ -4,7 +4,7 @@
 #include "mge/scenes/LightScene.hpp"
 #include "mge/scenes/TerrainScene.hpp"
 #include "mge/scenes/ObjectViewer.hpp"
-#include "mge/scenes/SpotScene.hpp"
+#include "mge/scenes/LevelScene.hpp"
 
 #include "mge/scenes/MenuScene.hpp"
 /**
@@ -34,6 +34,3 @@ int main()
 
     return 0;
 }
-
-
-

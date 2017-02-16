@@ -9,6 +9,8 @@ namespace config {
     const std::string MGE_FONT_PATH ("mge/fonts/");
 	const std::string MGE_SCENE_PATH("mge/scenes/");
 	const std::string MGE_LUA_PATH("mge/lua scripts/");
+
+	const float TOTAL_MOVE_TIME = 0.8f;
 }
 
 
