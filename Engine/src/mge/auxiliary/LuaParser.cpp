@@ -85,15 +85,10 @@ int setPos(lua_State* lua)
 		{
 			float x = 0;
 			x = lua_tonumber(lua, -3);
-			cout << x << endl;
 			float y = 0;
 			y = lua_tonumber(lua, -2);
-
-			cout << y << endl;
 			float z = 0;
 			z = lua_tonumber(lua, -1);
-
-			cout << z << endl;
 			obj->setLocalPosition(glm::vec3(-x, y, z));
 		}
 		else
@@ -118,11 +113,8 @@ int setRotation(lua_State* lua)
 
 
 			float x = lua_tonumber(lua, -3);
-			cout << "x = " << x << endl;
 			float y = lua_tonumber(lua, -2);
-			cout << "y = " << y << endl;
 			float z = lua_tonumber(lua, -1);
-			cout << "z = " << z << endl;
 
 
 			obj->rotateDegrees(-y, glm::vec3(0, 1, 0));

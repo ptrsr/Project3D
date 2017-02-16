@@ -46,10 +46,10 @@ void StartState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
-	spotLight->setBehaviour(new DirectionalLight());
-	spotLight->rotate(90, glm::vec3(1, 0, 0));
-	World::add(spotLight);
+	//GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
+	//spotLight->setBehaviour(new DirectionalLight());
+	//spotLight->rotate(90, glm::vec3(1, 0, 0));
+	//World::add(spotLight);
 
 
 	GameObject * plane = ObjectCache::find("StartPlane");
@@ -58,13 +58,25 @@ void StartState::_initializeScene()
 		
 	}
 
-	for (int i = 0; i < 4; i++) {
+	/*for (int i = 0; i < 4; i++) {
 		GameObject* rock = new GameObject("rock1", glm::vec3((i * 0.5f) - 0.75f, 0.2f, 20));
 		rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
 		rock->setMesh(cubeMesh);
 		rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
 		World::add(rock);
 		_selectableObjs[i] = rock;
+	}*/
+	GameObject * create = ObjectCache::find("create_text");
+	if (create != NULL)
+	{
+		_selectableObjs[0] = create;
+
+	}
+	GameObject * credits = ObjectCache::find("credits_text");
+	if (credits != NULL)
+	{
+		_selectableObjs[1] = credits;
+
 	}
 
 	
@@ -83,7 +95,13 @@ int StartState::CheckSelection() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
 		_inAnotherState = true;
 		_isKeyPress = true;
-		return _counter;
+		if (_selectableObjs[_counter]->getName() == "create_text") {
+			return 3;
+		}
+		else if (_selectableObjs[_counter]->getName() == "credits_text") {
+
+			return 1;
+		}
 	}
 	else return -1;
 }
@@ -94,22 +112,22 @@ void StartState::_updateColor() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter--;
-		if (_counter < 0) _counter = 3;
+		if (_counter < 0) _counter = 1;
 
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		_counter++;
-		if (_counter > 3) _counter = 0;
+		if (_counter > 1) _counter = 0;
 
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 	}
 	else if(_isKeyPress){
 		_delayCounter++;
@@ -123,10 +141,10 @@ void StartState::_updateColor() {
 
 
 void StartState::_clearObjectColor() {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (i == _counter) continue;
 		GameObject* gObj = _selectableObjs[i];
-		gObj->getMaterial()->setColor(glm::vec3(1, 0, 1));
+		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 	}
 }
 

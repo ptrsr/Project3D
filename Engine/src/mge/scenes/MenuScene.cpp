@@ -111,6 +111,7 @@ void MenuScene::_render() {
     AbstractGame::_render();
     _updateHud();
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
+
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -165,6 +166,7 @@ void MenuScene::_deleteScene() {
 
 void MenuScene::_changeCameraState(AbstactState* state) {
 		GameObject* plane = state->getPlane();
+		
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
 			camera->setBehaviour(new CameraBehaviour(plane));

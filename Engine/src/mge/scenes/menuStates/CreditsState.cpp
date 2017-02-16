@@ -51,19 +51,19 @@ void CreditsState::_initializeScene()
 		_plane = plane;
 	}
 
-	_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
-	_writingStone->rotate(-75, glm::vec3(0, 1, 0));
-	_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
-	_writingStone->setMesh(cubeMesh);
-	_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	World::add(_writingStone);
+	//_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
+	//_writingStone->rotate(-75, glm::vec3(0, 1, 0));
+	//_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
+	//_writingStone->setMesh(cubeMesh);
+	//_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
+	//World::add(_writingStone);
 
-	_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
-	_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
-	_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	_selectableObj->setMesh(cubeMesh);
-	_selectableObj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 1, 1)));
-	World::add(_selectableObj);
+	//_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
+	//_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
+	//_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
+	//_selectableObj->setMesh(cubeMesh);
+	//_selectableObj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 1, 1)));
+	//World::add(_selectableObj);
 
 	
 }
@@ -87,6 +87,12 @@ void CreditsState::_updateColor() {}
 int CreditsState::CheckSelection() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
+		cout << "Going back to start" << endl;
+		_isKeyPress = true;
+		_inAnotherState = true;
+		return -1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;

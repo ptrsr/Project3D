@@ -54,20 +54,20 @@ void JoinState::_initializeScene()
 	}
 
 
-	GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));
-	writingStone->rotate(75, glm::vec3(0, 1, 0));
-	writingStone->scale(glm::vec3(0.2f, 0.2f, 0.5f));
-	writingStone->setMesh(cubeMesh);
-	writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	World::add(writingStone);
-	_selectableObjs[1] = writingStone;
-	GameObject* rock = new GameObject("rock1", glm::vec3(2.5f, 0.2f, 19.5f));
-	rock->rotate(75, glm::vec3(0, 1, 0));
-	rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	rock->setMesh(cubeMesh);
-	rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	World::add(rock);
-	_selectableObjs[0] = rock;
+	//GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));
+	//writingStone->rotate(75, glm::vec3(0, 1, 0));
+	//writingStone->scale(glm::vec3(0.2f, 0.2f, 0.5f));
+	//writingStone->setMesh(cubeMesh);
+	//writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
+	//World::add(writingStone);
+	//_selectableObjs[1] = writingStone;
+	//GameObject* rock = new GameObject("rock1", glm::vec3(2.5f, 0.2f, 19.5f));
+	//rock->rotate(75, glm::vec3(0, 1, 0));
+	//rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
+	//rock->setMesh(cubeMesh);
+	//rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
+	//World::add(rock);
+	//_selectableObjs[0] = rock;
 
 	
 }
