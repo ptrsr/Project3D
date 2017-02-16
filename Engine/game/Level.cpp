@@ -17,8 +17,8 @@ Level::Level(glm::vec2 pSize) :GameObject("level")
 void Level::initializeLevel() 
 {
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
-	for (int i = 0; i <= _size.x; i++) {
-		for (int j = 0; j <= _size.y; j++) {
+	for (int i = 0; i < _size.x; i++) {
+		for (int j = 0; j < _size.y; j++) {
 
 			glm::vec3 color;
 

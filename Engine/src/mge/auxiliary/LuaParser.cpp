@@ -13,7 +13,8 @@
 
 int spawn(lua_State* lua) 
 {
-	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3)*2, lua_tonumber(lua, -2)*2, lua_tonumber(lua, -1)*2));
+	GameObject* obj = new GameObject(lua_tostring(lua, -1), glm::vec3(0, 0, 0));
+	//obj->scale(glm::vec3(2, 2, 2));
 	ObjectCache::push(obj);
 
 	World::add(obj);
@@ -76,12 +77,25 @@ int getPos(lua_State* lua)
 }
 int setPos(lua_State* lua)
 {
-	if (lua_gettop(lua) == 3 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
+	if (lua_gettop(lua) == 4 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
 	{
-		GameObject* obj = ObjectCache::find(lua_tostring(lua, -1));
+		GameObject* obj = ObjectCache::find(lua_tostring(lua, -4));
 
 		if (obj != nullptr)
-			obj->setLocalPosition(glm::vec3(lua_tonumber(lua, -3), lua_tonumber(lua, -2), lua_tonumber(lua, -1)));
+		{
+			float x = 0;
+			x = lua_tonumber(lua, -3);
+			cout << x << endl;
+			float y = 0;
+			y = lua_tonumber(lua, -2);
+
+			cout << y << endl;
+			float z = 0;
+			z = lua_tonumber(lua, -1);
+
+			cout << z << endl;
+			obj->setLocalPosition(glm::vec3(-(lua_tonumber(lua, -3)), lua_tonumber(lua, -2), (lua_tonumber(lua, -1))));
+		}
 		else
 			std::cout << "error getting position: object doesn't exist" << std::endl;
 	}
@@ -99,10 +113,21 @@ int setRotation(lua_State* lua)
 
 		if (obj != nullptr)
 		{
+
 			cout << "Setting rotation" << endl;
-			obj->rotate(lua_tonumber(lua, -2), glm::vec3(0, 1, 0));
-			obj->rotate(lua_tonumber(lua, -3), glm::vec3(1, 0, 0));
-			obj->rotate(lua_tonumber(lua, -1), glm::vec3(0, 0, 1));
+
+
+			float x = lua_tonumber(lua, -3);
+			cout << "x = " << x << endl;
+			float y = lua_tonumber(lua, -2);
+			cout << "y = " << y << endl;
+			float z = lua_tonumber(lua, -1);
+			cout << "z = " << z << endl;
+
+
+			obj->rotateDegrees(lua_tonumber(lua, -2)+180, glm::vec3(0, 1, 0));
+			obj->rotateDegrees(-(lua_tonumber(lua, -3)), glm::vec3(1, 0, 0));
+			obj->rotateDegrees((lua_tonumber(lua, -1)), glm::vec3(0, 0, 1));
 		}
 		else
 			std::cout << "error getting rotation: object doesn't exist" << std::endl;
@@ -181,6 +206,7 @@ int setMesh(lua_State* lua)
 		}
 
 		obj->setMesh(Mesh::load(config::MGE_MODEL_PATH + lua_tostring(lua, -1)));
+		//obj->scale(glm::vec3(2, 2, 2));
 	}
 
 	return 0;

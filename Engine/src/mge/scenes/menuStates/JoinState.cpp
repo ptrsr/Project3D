@@ -10,6 +10,8 @@ using namespace std;
 
 #include "mge/core/Camera.hpp"
 
+#include "mge/auxiliary/ObjectCache.hpp"
+
 #include "mge/materials/AbstractMaterial.hpp"
 
 #include "mge/materials/ColorMaterial.hpp"
@@ -45,11 +47,11 @@ void JoinState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-	_plane = new GameObject("plane", glm::vec3(2.5f, 0, 19));
-	_plane->setMesh(planeMesh);
-	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	_plane->rotate(255, glm::vec3(0, 1, 0));
-	World::add(_plane);
+
+	GameObject * plane = ObjectCache::find("CreditsPlane");
+	if (plane != NULL) {
+		_plane = plane;
+	}
 
 
 	GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));

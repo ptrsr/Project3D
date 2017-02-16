@@ -79,10 +79,14 @@ void ObjectViewer::_initializeScene()
 
 
 	GameObject* plane = ObjectCache::find("Plane");
+	GameObject* cube = ObjectCache::find("Cube");
+	if (cube != NULL) {
+		cube->scale(glm::vec3(4.5f, 0, 4.5f));
+	}
 	if (plane != NULL) {
-		plane->rotateDegrees(45, glm::vec3(0, 1, 0));
-		plane->rotateDegrees(45, glm::vec3(0, 0, 1));
-		camera->setBehaviour(new CameraBehaviour(plane));
+		/*plane->rotateDegrees(45, glm::vec3(0, 1, 0));
+		plane->rotateDegrees(45, glm::vec3(0, 0, 1));*/
+		camera->setBehaviour(new OrbitBehaviour(plane,20));
 	}
 	else {
 		cout << "Camera behaviour is not set" << endl;
