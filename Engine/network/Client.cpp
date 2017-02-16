@@ -1,7 +1,5 @@
 #include "../network/Client.hpp"
 
-#include "../network/scene/SyncScene.hpp"
-
 Client::Client()
 {
 	
@@ -12,7 +10,7 @@ Client::~Client()
 
 }
 
-int Client::Connect(char* IP, int port)
+int Client::Connect(const char* IP, int port)
 {
 	cout << "Setting up client.." << endl;
 	cout << "Creating socket.." << endl;
@@ -88,21 +86,8 @@ int Client::Connect(char* IP, int port)
 	string input2 = "Here is another string";
 	strcpy(testData2.input, input2.c_str());
 
-	PlayerData playerData;
-	playerData.direction = Direction::up;
-	PlayerData playerData2;
-	playerData2.direction = Direction::down;
-	PlayerData playerData3;
-	playerData3.direction = Direction::left;
-	PlayerData playerData4;
-	playerData4.direction = Direction::right;
-
 	PacketHelper::Send(dataType2, (char*)&testData, _sock);
 	PacketHelper::Send(dataType2, (char*)&testData2, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData2, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData3, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData4, _sock);
 
 	receiveData.join();
 
@@ -171,26 +156,12 @@ void Client::HandlePacket(DataType type, char* buf)
 		TestData testData = *reinterpret_cast<TestData*>(buf);
 		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
 		cout << testData.pX << " " << testData.pY << " " << testData.pZ << " " << testData.rX << " " << testData.rY << " " << testData.rZ << endl;
-
-		SyncScene::instance->gCube->setLocalPosition(glm::vec3(testData.pX, testData.pY, testData.pZ));
 		break;
 	case DataType::PLAYERDATA:
 		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
-		switch (playerData.direction)
-		{
-		case Direction::up:
-			cout << "up" << endl;
-			break;
-		case Direction::down:
-			cout << "down" << endl;
-			break;
-		case Direction::left:
-			cout << "left" << endl;
-			break;
-		case Direction::right:
-			cout << "right" << endl;
-			break;
-		}
-	break;
+		break;
+	case DataType::MOVEDATA:
+		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
+		break;
 	}
 }

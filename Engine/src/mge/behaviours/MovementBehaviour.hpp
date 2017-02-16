@@ -11,25 +11,17 @@ class MovementBehaviour : public AbstractBehaviour
 {
 
 	public:
-		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait, bool controlled);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
 		void message(sendMsg::Message) { };
 
+		void setDir(Direction dir);
 		glm::vec2 getBoardPos();
 		Id getPlayerId();
 
 	private:
-		enum Direction
-		{
-			none,
-			up,
-			down,
-			left,
-			right
-		};
-
 		void checkKeys();
 		void setDirection();
 		void inverseDirection();
@@ -38,6 +30,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void move(float pPhase, float pTime);
 		
 		Player* _player;
+		bool _controlled;
 
 		//settings
 		float _totalTime;

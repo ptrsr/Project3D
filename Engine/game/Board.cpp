@@ -9,6 +9,26 @@ Board::Board() : GameObject("Board")
 	initializeBoard();
 }
 
+void Board::ResetBoard()
+{
+	for (int i = 0; i < _size.x; i++)
+	{
+		for (int j = 0; j < _size.y; j++)
+		{
+			glm::vec3 color;
+
+			if ((j + i) % 2)
+				color = glm::vec3(1);
+			else
+				color = glm::vec3(0.4f);
+
+			Tile* tile = _boardArray[j][i];
+			tile->setOwner(Id::empty);
+			tile->getMaterial()->setColor(color);
+		}
+	}
+}
+
 void Board::setOwner(glm::vec2 boardPos, Id player)
 {
 	if (outOfBounds(boardPos))
@@ -60,7 +80,7 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(none);
+				tile->setOwner(Id::empty);
 			}
 		}
 	}

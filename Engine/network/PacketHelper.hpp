@@ -3,13 +3,13 @@
 #include <Windows.h>
 
 #include "../network/NetworkCommand.hpp"
-#include "../network/DataType.hpp"
+#include "../network/packets/DataType.hpp"
 
-#include "../network/Data.hpp"
-#include "../network/PlayerData.hpp"
-#include "../network/TileData.hpp"
-#include "../network/ScoreData.hpp"
-#include "../network/TestData.hpp"
+#include "../network/packets/PlayerData.hpp"
+#include "../network/packets/MoveData.hpp"
+#include "../network/packets/TileData.hpp"
+#include "../network/packets/ScoreData.hpp"
+#include "../network/packets/TestData.hpp"
 
 using namespace std;
 

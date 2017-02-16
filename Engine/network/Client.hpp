@@ -16,7 +16,7 @@ public:
 	Client();
 	~Client();
 
-	int Connect(char* IP, int port);
+	int Connect(const char* IP, int port);
 	int Disconnect();
 	void Send(DataType type, char* data);
 private:

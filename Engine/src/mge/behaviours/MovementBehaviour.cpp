@@ -9,8 +9,8 @@
 
 
 
-MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
-	 _player(pPlayer), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait, bool controlled) :
+	 _player(pPlayer), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime), _controlled(controlled)
 {
 	_moveTime = _totalTime - _totalTime * std::max(0.f, std::min(pWait, 1.f));
 }
@@ -115,22 +115,22 @@ void MovementBehaviour::setDirection()
 
 	switch (_cDir) //world to local axis
 	{
-	case up:
+	case Direction::up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, 1);
 		break;
 
-	case down:
+	case Direction::down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, -1);
 		break;
 
-	case left:
+	case Direction::left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
 		_trans = glm::vec3(1, 0, 0);
 		break;
 
-	case right:
+	case Direction::right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
 		_trans = glm::vec3(-1, 0, 0);
 		break;
@@ -144,37 +144,40 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
+	if (!_controlled)
+		return;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		_dDir = up;
+		_dDir = Direction::up;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		_dDir = down;
+		_dDir = Direction::down;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		_dDir = right;
+		_dDir = Direction::right;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		_dDir = left;
+		_dDir = Direction::left;
 }
 
 void MovementBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
-	case up:
-		_cDir = down;
+	case Direction::up:
+		_cDir = Direction::down;
 		break;
 
-	case down:
-		_cDir = up;
+	case Direction::down:
+		_cDir = Direction::up;
 		break;
 
-	case left:
-		_cDir = right;
+	case Direction::left:
+		_cDir = Direction::right;
 		break;
 
-	case right:
-		_cDir = left;
+	case Direction::right:
+		_cDir = Direction::left;
 		break;
 	}
 }
@@ -187,6 +190,11 @@ Id MovementBehaviour::getPlayerId()
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
+}
+
+void MovementBehaviour::setDir(Direction dir)
+{
+	_dDir = dir;
 }
 
 MovementBehaviour::~MovementBehaviour()

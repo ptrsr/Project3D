@@ -1,8 +1,7 @@
 #include "../network/Server.hpp"
 
 #include "../network/PacketHelper.hpp"
-
-#include "mge/core/GameObject.hpp"
+#include "../game/Level.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
@@ -93,9 +92,20 @@ int Server::StopServer()
 	return 1;
 }
 
+//
+//Send
+//
 void Server::Send(DataType type, char* data)
 {
 	NotifyClients(type, data, _sock);
+}
+
+//
+//Connected Count
+//
+int Server::ConnectedCount()
+{
+	return _connectedClients;
 }
 
 //
@@ -186,21 +196,6 @@ void Server::HandlePacket(DataType type, char* buf)
 	case DataType::PLAYERDATA:
 		{
 			PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
-			switch (playerData->direction)
-			{
-			case Direction::up:
-				cout << "up" << endl;
-				break;
-			case Direction::down:
-				cout << "down" << endl;
-				break;
-			case Direction::left:
-				cout << "left" << endl;
-				break;
-			case Direction::right:
-				cout << "right" << endl;
-				break;
-			}
 		}
 		break;
 	}
@@ -217,6 +212,26 @@ void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
 
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
+	}
+}
+
+//
+//Send Game State
+//
+void Server::SendGameState()
+{
+	Level* level = Level::get();
+
+	vector<Player*> players = level->getPlayers();
+
+	for (int i = 0; i < players.size(); i++)
+	{
+		Player* player = players[i];
+		PlayerData pData;
+		pData.playerId = player->getId();
+		pData.boardX = player->getBoardPos().x;
+		pData.boardY = player->getBoardPos().y;
+		Send(DataType::PLAYERDATA, (char*)&pData);
 	}
 }
 

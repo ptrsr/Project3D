@@ -3,7 +3,7 @@
 
 
 enum Id {
-	none,
+	empty,
 	p1,
 	p2,
 	p3,
@@ -13,6 +13,15 @@ enum Id {
 enum PType
 {
 	score
+};
+
+enum Direction
+{
+	none,
+	up,
+	down,
+	left,
+	right
 };
 
 #endif // !ENUMS_H

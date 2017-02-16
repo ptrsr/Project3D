@@ -1,5 +1,4 @@
 #pragma once
-#pragma comment(lib, "ws2_32.lib")
 
 #include <iostream>
 #include <vector>
@@ -8,7 +7,7 @@
 #include <thread>
 #include <algorithm>
 
-#include "../network/DataType.hpp"
+#include "../network/packets/DataType.hpp"
 
 using namespace std;
 
@@ -22,6 +21,8 @@ public:
 	int StopServer();
 
 	void Send(DataType type, char* data);
+
+	int ConnectedCount();
 private:
 	SOCKET _sock; //Our socket that client's use to connect
 	vector<SOCKET> _sockClients; //Sockets to send/receive clients
@@ -38,6 +39,8 @@ private:
 	void HandleClients(SOCKET client); //Receives data from all clients
 	void HandlePacket(DataType type, char* buf); //Handles received packages
 	void NotifyClients(DataType type, char* data, SOCKET sourceClient); //Sends data to all other clients
+
+	void SendGameState();
 
 	void CloseConnection(SOCKET client); //Closes a client's connection attempting to join
 	void CloseClientConnection(SOCKET client); //Closes a connected client's connection

@@ -1,6 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <thread>
 #include <iostream>
 #include "mge/core/World.hpp"
 #include "mge/core/GameObject.hpp"
@@ -12,15 +13,22 @@
 #include "PickUps\PickUp.hpp"
 #include "Board.hpp"
 
+class Client;
+class Server;
+
 class Level : public GameObject
 {
 public:
 	~Level();
 
 	static Level* get();
+	static Player*				getPlayer(Id playerId);
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
+
+	void Host();
+	void Join(const char* IP, int port);
 
 	virtual void update(float pStep);
 
@@ -30,9 +38,14 @@ public:
 private:
 	static Level* _level;
 
-	void spawnPlayer(Id, glm::vec2 pBoardPos);
+	void RemovePlayers();
+	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp(PickUp* pPickUp);
-	
+	void SetupLevel(Id playerId);
+
+	Client* _client;
+	Server* _server;
+
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
 	Board* _board;

@@ -9,11 +9,11 @@ class Board : public GameObject
 public:
 	Board();
 	
+	void ResetBoard();
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 boardPos, Id player);
 	int getScore(Id pPlayerId);
-
 private:
 	glm::vec2 _size = glm::vec2(9, 9);
 
