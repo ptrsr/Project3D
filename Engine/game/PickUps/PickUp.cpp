@@ -2,29 +2,21 @@
 #include "mge/core/World.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
+#include "../game/Level.hpp"
+
 #include <algorithm>
 
-std::vector<PickUp*> PickUp::_pickUps;
-
-PickUp::PickUp(std::string pName, std::vector<MovementBehaviour*> pPlayers) : GameObject(pName)
+PickUp::PickUp(std::string pName) : GameObject(pName)
 {
 	srand(time(NULL));
 
-	_players = pPlayers;
-	
 	World::add(this);
-	_pickUps.push_back(this);
-
-	spawn();
-}
-
-std::vector<PickUp*> PickUp::getPickUps()
-{
-	return _pickUps;
 }
 
 void PickUp::spawn()
 {
+	std::cout << "spawned" << std::endl;
+
 	std::vector<glm::vec2> positions;
 
 	for (int j = 0; j < 9; j++)
@@ -34,7 +26,7 @@ void PickUp::spawn()
 			glm::vec2 pos = glm::vec2(i, j);
 			bool available = true;
 
-			for each (MovementBehaviour* player in _players)
+			for each (Player* player in Level::getPlayers())
 			{
 				glm::vec2 dif = player->getBoardPos() - pos;
 
@@ -58,7 +50,26 @@ glm::vec2 PickUp::getBoardPos()
 	return _boardPos;
 }
 
+void PickUp::reset()
+{
+	_boardPos = glm::vec2(-1);
+	setLocalPosition(glm::vec3(0, -10, 0));
+	_countDown = (rand() % (_maxDelay - _minDelay)) + _minDelay;
+}
+
+void PickUp::step()
+{
+	if (_countDown == -1)
+		return;
+
+	_countDown--;
+
+	if (_countDown == 0)
+		spawn();
+}
+
 PickUp::~PickUp()
 {
-	_pickUps.erase(std::remove(_pickUps.begin(), _pickUps.end(), this), _pickUps.end());
+	std::vector<PickUp*>& pickUps = Level::getPickUps();
+	pickUps.erase(std::remove(pickUps.begin(), pickUps.end(), this), pickUps.end());
 }

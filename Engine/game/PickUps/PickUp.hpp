@@ -4,32 +4,38 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/materials/LitMaterial.hpp"
 
+#include "../game/Player.hpp"
+
 #include <vector>
 
 class PickUp : public GameObject
 {
 public:
 	LitMaterial* _material;
-	std::vector<MovementBehaviour*> _players;
 
-	PickUp(std::string name, std::vector<MovementBehaviour*> pPlayers);
+	PickUp(std::string name);
 	~PickUp();
 
-	static std::vector<PickUp*> getPickUps();
 
 	virtual inline void update(float pStep) { };
-	virtual void applyPickUp(MovementBehaviour* pPlayer) = 0;
+	virtual void applyPickUp(Player* pPlayer) = 0;
 
-	void spawn();
+	void step();
 
 	glm::vec2 getBoardPos();
 
+
+protected:
+	void reset();
+
+	int _minDelay = 0;
+	int _maxDelay = 0;
+
+
 private:
-	static std::vector<PickUp*> _pickUps;
+	void spawn();
 
-	float _minDelay;
-	float _maxDelay;
-
+	float _countDown = 0;
 	glm::vec2 _boardPos;
 
 };

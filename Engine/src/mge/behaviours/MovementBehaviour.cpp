@@ -1,12 +1,16 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
-#include "../game/Board.hpp"
-#include "../game/PickUps/ScoreCube.hpp"
+
+#include "../game/Level.hpp"
+#include "../game/Player.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
+
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(GameObject* pPlayer, Id pPlayerId, glm::vec2 pBoardPos, float pJumpHeight, float pTime, float pWait, bool isPlayer) :
-	 _player(pPlayer), _id(pPlayerId), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime), _isPlayer(isPlayer)
+
+
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
+	 _player(pPlayer), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
 {
 	_moveTime = _totalTime - _totalTime * std::max(0.f, std::min(pWait, 1.f));
 }
@@ -57,18 +61,10 @@ void MovementBehaviour::update(float pStep)
 		roll(1 - _lastMoveTime / _moveTime); //roll the last bit
 		move(_moveTime, _moveTime - _lastMoveTime); //move the last bit
 		_lastMoveTime = 0; //we are done with the move
-	
+
 		_boardPos += glm::vec2(_trans.x, _trans.z);
 
-		for each (PickUp* pickUp in PickUp::getPickUps())
-		{
-			if (pickUp->getBoardPos() == _boardPos)
-			{
-				pickUp->applyPickUp(this);
-			}
-		}
-
-		Board::setOwner(_boardPos, _id);
+		Level::step(_player);
 	}
 
 	if (_curTime >= _totalTime) //is the animation done?
@@ -78,16 +74,10 @@ void MovementBehaviour::update(float pStep)
 		
 		_cDir = _dDir; //set the current direction to the desired one
 
-		if (_cDir != Direction::idle) //do we have a direction?
+		if (_cDir != none) //do we have a direction?
 			setDirection();
 	}
 		
-}
-
-//change the desired direction publically
-void MovementBehaviour::setDesiredDirection(Direction dir)
-{
-	_dDir = dir;
 }
 
 //if step is 1, we rotate 90 degrees
@@ -109,7 +99,7 @@ void MovementBehaviour::move(float pTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == Direction::idle)
+	if (_cDir == none)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / _moveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -125,22 +115,22 @@ void MovementBehaviour::setDirection()
 
 	switch (_cDir) //world to local axis
 	{
-	case Direction::up:
+	case up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, 1);
 		break;
 
-	case Direction::down:
+	case down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, -1);
 		break;
 
-	case Direction::left:
+	case left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
 		_trans = glm::vec3(1, 0, 0);
 		break;
 
-	case Direction::right:
+	case right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
 		_trans = glm::vec3(-1, 0, 0);
 		break;
@@ -148,52 +138,50 @@ void MovementBehaviour::setDirection()
 
 	_axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
 
-	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
+	if (Level::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
 		_canceled = true;
-
-	std::cout << _boardPos << std::endl;
 }
 
 void MovementBehaviour::checkKeys()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		setDesiredDirection(Direction::up);
+		_dDir = up;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		setDesiredDirection(Direction::down);
+		_dDir = down;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		setDesiredDirection(Direction::right);
+		_dDir = right;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		setDesiredDirection(Direction::left);
+		_dDir = left;
 }
 
 void MovementBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
-	case Direction::up:
-		_cDir = Direction::down;
+	case up:
+		_cDir = down;
 		break;
 
-	case Direction::down:
-		_cDir = Direction::up;
+	case down:
+		_cDir = up;
 		break;
 
-	case Direction::left:
-		_cDir = Direction::right;
+	case left:
+		_cDir = right;
 		break;
 
-	case Direction::right:
-		_cDir = Direction::left;
+	case right:
+		_cDir = left;
 		break;
 	}
 }
 
 Id MovementBehaviour::getPlayerId()
 {
-	return _id;
+	return _player->getId();
 }
 
 glm::vec2 MovementBehaviour::getBoardPos()

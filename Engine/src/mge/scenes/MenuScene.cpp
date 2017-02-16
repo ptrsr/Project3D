@@ -59,7 +59,7 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-	Camera* camera = new Camera(glm::vec2(1200, 720), "camera", glm::vec3(0, 1, 17));
+    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(0,1,17));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
@@ -74,10 +74,10 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-
-	_level = new Level(glm::vec2(9, 9));
-
 	_currentState = -1;
+
+	Level::get();
+	
 }
 
 void MenuScene::_render() {

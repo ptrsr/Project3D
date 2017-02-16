@@ -55,7 +55,7 @@ void LevelScene::_initializeScene()
 {
     _renderer->setClearColor(0,0,0);
 
-	_level = new Level(glm::vec2(9,9));
+	Level::get();
 
 	GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
 	spotLight->setBehaviour(new DirectionalLight());
@@ -88,9 +88,5 @@ void LevelScene::_updateHud() {
 
 LevelScene::~LevelScene()
 {
-	std::cout << "no" << std::endl;
-
 	delete _level;
-
-
 }

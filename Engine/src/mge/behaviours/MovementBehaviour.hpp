@@ -4,14 +4,14 @@
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
 #include "../game/Tile.hpp"
-#include "../game/Direction.hpp"
+
+class Player;
 
 class MovementBehaviour : public AbstractBehaviour
 {
-	class Player;
 
 	public:
-		MovementBehaviour(GameObject* pPlayer, Id playerId, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait, bool isPlayer);
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
 		virtual void update(float pStep);
@@ -19,26 +19,32 @@ class MovementBehaviour : public AbstractBehaviour
 
 		glm::vec2 getBoardPos();
 		Id getPlayerId();
-		
-		void setDesiredDirection(Direction dir);
+
 	private:
+		enum Direction
+		{
+			none,
+			up,
+			down,
+			left,
+			right
+		};
+
 		void checkKeys();
-		void inverseDirection();
 		void setDirection();
+		void inverseDirection();
 
 		void roll(float pStep);
 		void move(float pPhase, float pTime);
 		
-		GameObject* _player;
-		Id		    _id;
-		bool		_isPlayer;
+		Player* _player;
 
 		//settings
-		float _totalTime  = 1;
+		float _totalTime;
 		float _moveTime;
 
-		float _jumpHeight = 0.4f;
-		float _distance	  = 1;
+		float _jumpHeight	= 1;
+		float _distance		= 1;
 
 		//vars
 		glm::vec2 _boardPos;
@@ -50,9 +56,9 @@ class MovementBehaviour : public AbstractBehaviour
 		float _deltaTime    = 0;
 		float _lastMoveTime = 0;
 		float _lastHeight   = 0;
-		
-		Direction _cDir = Direction::idle;
-		Direction _dDir = Direction::idle;
+
+		Direction _cDir = none;
+		Direction _dDir = none;
 
 		bool _canceled = false;
 };
