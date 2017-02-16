@@ -18,18 +18,10 @@ class MovementBehaviour : public AbstractBehaviour
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
+		glm::vec2 getNextPos();
 		Id getPlayerId();
 
 	private:
-		enum Direction
-		{
-			none,
-			up,
-			down,
-			left,
-			right
-		};
-
 		void checkKeys();
 		void setDirection();
 		void inverseDirection();
@@ -57,8 +49,8 @@ class MovementBehaviour : public AbstractBehaviour
 		float _lastMoveTime = 0;
 		float _lastHeight   = 0;
 
-		Direction _cDir = none;
-		Direction _dDir = none;
+		Dir _cDir = none;
+		Dir _dDir = none;
 
 		bool _canceled = false;
 };

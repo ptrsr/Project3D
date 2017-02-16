@@ -4,6 +4,7 @@
 #include "../game/Player.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
+#include "../game/Enums.hpp"
 
 #include <algorithm>
 
@@ -34,7 +35,7 @@ void MovementBehaviour::update(float pStep)
 			_trans = -_trans;
 
 			//Inverse the desired direction for next move
-			Direction tDir = _cDir;
+			Dir tDir = _cDir;
 			inverseDirection();
 
 			if (_dDir == tDir)
@@ -115,22 +116,22 @@ void MovementBehaviour::setDirection()
 
 	switch (_cDir) //world to local axis
 	{
-	case up:
+	case Dir::up:
 		temp = glm::vec4(1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, 1);
 		break;
 
-	case down:
+	case Dir::down:
 		temp = glm::vec4(-1, 0, 0, 1) * worldMat;
 		_trans = glm::vec3(0, 0, -1);
 		break;
 
-	case left:
+	case Dir::left:
 		temp = glm::vec4(0, 0, -1, 1) * worldMat;
 		_trans = glm::vec3(1, 0, 0);
 		break;
 
-	case right:
+	case Dir::right:
 		temp = glm::vec4(0, 0, 1, 1) * worldMat;
 		_trans = glm::vec3(-1, 0, 0);
 		break;
@@ -138,43 +139,60 @@ void MovementBehaviour::setDirection()
 
 	_axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
 
-	if (Level::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
+	if (!Level::checkAvailable(_player))
 		_canceled = true;
 }
 
 void MovementBehaviour::checkKeys()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		_dDir = up;
+	if (getPlayerId() == p1)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			_dDir = Dir::up;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		_dDir = down;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			_dDir = Dir::down;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		_dDir = right;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			_dDir = Dir::right;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		_dDir = left;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			_dDir = Dir::left;
+	}
+	else if (getPlayerId() == p3)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			_dDir = Dir::up;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			_dDir = Dir::down;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			_dDir = Dir::right;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			_dDir = Dir::left;
+	}
 }
 
 void MovementBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
-	case up:
-		_cDir = down;
+	case Dir::up:
+		_cDir = Dir::down;
 		break;
 
-	case down:
-		_cDir = up;
+	case Dir::down:
+		_cDir = Dir::up;
 		break;
 
-	case left:
-		_cDir = right;
+	case Dir::left:
+		_cDir = Dir::right;
 		break;
 
-	case right:
-		_cDir = left;
+	case Dir::right:
+		_cDir = Dir::left;
 		break;
 	}
 }
@@ -187,6 +205,32 @@ Id MovementBehaviour::getPlayerId()
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
+}
+
+glm::vec2 MovementBehaviour::getNextPos()
+{
+	glm::vec2 dPos;
+
+	switch (_dDir)
+	{
+	case Dir::up:
+		dPos = glm::vec2(0, 1);
+		break;
+
+	case Dir::down:
+		dPos = glm::vec2(0, -1);
+		break;
+	
+	case Dir::left:
+		dPos = glm::vec2(1, 0);
+		break;
+
+	case Dir::right:
+		dPos = glm::vec2(-1, 0);
+		break;
+	}
+
+	return dPos + _boardPos;
 }
 
 MovementBehaviour::~MovementBehaviour()

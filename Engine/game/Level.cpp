@@ -11,6 +11,7 @@ Level* Level::_level;
 Level::Level() :GameObject("level")
 {
 	spawnPlayer(Id::p1, glm::vec2(0, 0));
+	spawnPlayer(Id::p3, glm::vec2(8, 8));
 	spawnPickUp(new ScoreCube());
 
 	_board = new Board();
@@ -52,9 +53,23 @@ void Level::step(Player* pPlayer)
 			pickUp->applyPickUp(pPlayer);
 }
 
-bool Level::outOfBounds(glm::vec2 pBoardPos)
+bool Level::checkAvailable(Player* pPlayer)
 {
-	return Level::get()->_board->outOfBounds(pBoardPos);
+	Level* level = Level::get();
+	glm::vec2 nextPos = pPlayer->getNextPos();
+
+	if (level->_board->outOfBounds(nextPos))
+		return false;
+
+	for each (Player* player in level->_players)
+	{
+		if (pPlayer == player)
+			continue;
+
+		if (player->getNextPos() == nextPos)
+			return false;
+	}
+	return true;
 }
 
 void Level::update(float pStep)
@@ -80,7 +95,7 @@ void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos)
 			return;
 		}
 	}
-	Player* player = new Player(p1, pBoardPos);
+	Player* player = new Player(pPlayerId, pBoardPos);
 	World::add(player);
 	_players.push_back(player);
 }

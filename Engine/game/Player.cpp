@@ -18,7 +18,13 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "elementcube.obj"));
-	this->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(1, 0, 0)));
+
+	glm::vec3 color = glm::vec3(1, 0, 0);
+
+	if (playerId == p3)
+		color = glm::vec3(0, 0, 1);
+
+	this->setMaterial(new LitMaterial(LitMaterial::fragment, color));
 };
 
 void Player::addScore(int pScore)
@@ -30,6 +36,11 @@ void Player::addScore(int pScore)
 glm::vec2 Player::getBoardPos()
 {
 	return _movement->getBoardPos();
+}
+
+glm::vec2 Player::getNextPos()
+{
+	return _movement->getNextPos();
 }
 
 Id Player::getId()

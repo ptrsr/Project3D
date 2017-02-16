@@ -167,7 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\game\Board.hpp" />
-    <ClInclude Include="..\game\Direction.hpp" />
+    <ClInclude Include="..\game\Enums.hpp" />
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\PickUps\PickUp.hpp" />
     <ClInclude Include="..\game\PickUps\ScoreCube.hpp" />

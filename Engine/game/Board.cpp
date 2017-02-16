@@ -60,7 +60,7 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(none);
+				tile->setOwner(Id::empty);
 			}
 		}
 	}

@@ -21,6 +21,7 @@ public:
 	glm::vec2 getBoardPos();
 
 	void addScore(int pScore);
+	glm::vec2 getNextPos();
 	Id getId();
 };
 

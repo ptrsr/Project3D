@@ -25,7 +25,7 @@ public:
 	virtual void update(float pStep);
 
 	static void step(Player* pPlayer);
-	static bool outOfBounds(glm::vec2 pBoardPos);
+	static bool checkAvailable(Player* pPlayer);
 
 private:
 	static Level* _level;
