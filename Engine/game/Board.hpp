@@ -3,7 +3,7 @@
 
 #include "../game/Tile.hpp"
 #include "../game/Enums.hpp"
-class Board
+class Board : public GameObject
 {
 	
 public:
@@ -13,8 +13,6 @@ public:
 
 	void setOwner(glm::vec2 boardPos, Id player);
 	int getScore(Id pPlayerId);
-
-	~Board();
 
 private:
 	glm::vec2 _size = glm::vec2(9, 9);

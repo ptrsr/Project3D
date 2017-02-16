@@ -13,7 +13,8 @@ Level::Level() :GameObject("level")
 	spawnPlayer(Id::p1, glm::vec2(0, 0));
 	spawnPickUp(new ScoreCube());
 
-	Board* _board = new Board();
+	_board = new Board();
+	_board->setParent(this);
 	World::add(this);
 }
 
@@ -42,21 +43,30 @@ Board* Level::getBoard()
 
 void Level::step(Player* pPlayer)
 {
-	_board->setOwner(pPlayer->getBoardPos(), pPlayer->getId());
+	Level* level = Level::get();
+
+	level->_board->setOwner(pPlayer->getBoardPos(), pPlayer->getId());
+
+	for each (PickUp* pickUp in level->_pickups)
+		if (pPlayer->getBoardPos() == pickUp->getBoardPos())
+			pickUp->applyPickUp(pPlayer);
+}
+
+bool Level::outOfBounds(glm::vec2 pBoardPos)
+{
+	return Level::get()->_board->outOfBounds(pBoardPos);
 }
 
 void Level::update(float pStep)
 {
 	_curTime += pStep;
 
-	std::cout << "test" << std::endl;
-
-	if (_curTime >= _totalMoveTime)
+	if (_curTime > _totalMoveTime)
 	{
-		for each (PickUp* pickUp in PickUp::getPickUps())
-			pickUp->step();
-
 		_curTime -= _totalMoveTime;
+
+		for each (PickUp* pickUp in _pickups)
+			pickUp->step();
 	}
 }
 
@@ -70,25 +80,15 @@ void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos)
 			return;
 		}
 	}
-
-	Player* player = new Player(p1, pBoardPos); 
-	player->setParent(this);
+	Player* player = new Player(p1, pBoardPos);
+	World::add(player);
 	_players.push_back(player);
 }
 
 void Level::spawnPickUp(PickUp* pPickUp)
 {
 	_pickups.push_back(pPickUp);
-	pPickUp->setParent(Level::get());
+	pPickUp->setParent(this);
 }
 
-Level::~Level()
-{
-	for each (Player* player in _players)
-		delete player;
-
-	for each (PickUp* pickUp in _pickups)
-		delete pickUp;
-
-	delete _board;
-}
+Level::~Level() { }

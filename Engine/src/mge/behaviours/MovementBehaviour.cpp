@@ -1,11 +1,13 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
-#include "../game/Board.hpp"
-#include "../game/PickUps/ScoreCube.hpp"
 
-#include <SFML/Window/Keyboard.hpp>
-#include <algorithm>
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
+
+#include <SFML/Window/Keyboard.hpp>
+
+#include <algorithm>
+
+
 
 MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
 	 _player(pPlayer), _boardPos(pBoardPos), _jumpHeight(pJumpHeight), _totalTime(pTime)
@@ -59,18 +61,10 @@ void MovementBehaviour::update(float pStep)
 		roll(1 - _lastMoveTime / _moveTime); //roll the last bit
 		move(_moveTime, _moveTime - _lastMoveTime); //move the last bit
 		_lastMoveTime = 0; //we are done with the move
-	
+
 		_boardPos += glm::vec2(_trans.x, _trans.z);
 
-		for each (PickUp* pickUp in PickUp::getPickUps())
-		{
-			if (pickUp->getBoardPos() == _boardPos)
-			{
-				pickUp->applyPickUp(this);
-			}
-		}
-
-		Board::setOwner(_boardPos, _id);
+		Level::step(_player);
 	}
 
 	if (_curTime >= _totalTime) //is the animation done?
@@ -144,7 +138,7 @@ void MovementBehaviour::setDirection()
 
 	_axis = glm::round(glm::normalize(glm::vec3(temp))); //normalize angle for precise movement
 
-	if (Board::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
+	if (Level::outOfBounds(_boardPos + glm::vec2(_trans.x, _trans.z)))
 		_canceled = true;
 }
 
@@ -187,7 +181,7 @@ void MovementBehaviour::inverseDirection()
 
 Id MovementBehaviour::getPlayerId()
 {
-	return _id;
+	return _player->getId();
 }
 
 glm::vec2 MovementBehaviour::getBoardPos()

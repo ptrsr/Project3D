@@ -76,7 +76,7 @@ void MenuScene::_initializeScene()
 
 	_currentState = -1;
 
-
+	Level::get();
 	
 }
 

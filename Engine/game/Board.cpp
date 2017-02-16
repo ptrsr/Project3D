@@ -4,7 +4,7 @@
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
 
-Board::Board()
+Board::Board() : GameObject("Board")
 {
 	initializeBoard();
 }
@@ -35,13 +35,14 @@ void Board::initializeBoard()
 			tile->_material->setColor(color);
 
 			_boardArray[j][i] = tile;
+			tile->setParent(this);
 		}
 	}
 }
 
 bool Board::outOfBounds(glm::vec2 pos)
 {
-	if (pos.x < 0 || pos.y < 0 || pos.x >= _size.x || pos.y >= _size.y)
+	if (pos.x < 0 || pos.y < 0 || pos.x >= 9 || pos.y >= 9)
 		return true;
 
 	return false;
@@ -64,11 +65,4 @@ int Board::getScore(Id pPlayerId)
 		}
 	}
 	return score;
-}
-
-Board::~Board()
-{
-	for (int i = 0; i < _size.x; i++)
-		for (int j = 0; j < _size.y; j++)
-				delete _boardArray[i][j];
 }

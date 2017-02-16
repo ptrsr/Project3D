@@ -5,9 +5,10 @@
 #include <glm.hpp>
 #include "../game/Tile.hpp"
 
+class Player;
+
 class MovementBehaviour : public AbstractBehaviour
 {
-	class Player;
 
 	public:
 		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
@@ -42,11 +43,11 @@ class MovementBehaviour : public AbstractBehaviour
 		float _totalTime;
 		float _moveTime;
 
-		float _jumpHeight;
-		float _distance;
+		float _jumpHeight	= 1;
+		float _distance		= 1;
 
 		//vars
-		glm::vec2& _boardPos;
+		glm::vec2 _boardPos;
 
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);

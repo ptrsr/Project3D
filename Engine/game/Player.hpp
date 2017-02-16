@@ -17,7 +17,6 @@ private:
 public:
 	MovementBehaviour* _movement;
 
-
 	Player(Id playerId, glm::vec2 boardPos);
 	glm::vec2 getBoardPos();
 

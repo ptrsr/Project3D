@@ -8,8 +8,6 @@ Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
 	_material = new LitMaterial(LitMaterial::vertex);
 	this->setMaterial(_material);
 	this->setMesh(pMesh);
-
-	World::add(this);
 }
 
 void Tile::setOwner(Id pPlayer)
