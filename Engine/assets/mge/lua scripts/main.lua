@@ -1,8 +1,8 @@
 require 'GameObject'
-StartPlane = GameObject:new{name = "StartPlane",x = 5.5,y = 2,z = 28, rotationX = 0.0000, rotationY = 0.0000, rotationZ = 0.0000}
+StartPlane = GameObject:new{name = "StartPlane",x = 5.5,y = 2,z = 28, rotationX = 0.0000, rotationY = 180.0000, rotationZ = 0.0000}
 JoinPlane = GameObject:new{name = "JoinPlane",x = 5.5,y = 2,z = 28, rotationX = 0.0000, rotationY = 270.0000, rotationZ = 0.0000}
 CreditsPlane = GameObject:new{name = "CreditsPlane",x = 5.5,y = 2,z = 28, rotationX = 0.0000, rotationY = 90.0000, rotationZ = 0.0000}
-LevelPlane = GameObject:new{name = "LevelPlane",x = 4.5,y = 8,z = -4.5, rotationX = 45.0000, rotationY = 0.0000, rotationZ = 0.0000}
+LevelPlane = GameObject:new{name = "LevelPlane",x = 4.5,y = 8,z = -4.5, rotationX = -45.0000, rotationY = 180.0000, rotationZ = 0.0000}
 Playfield = GameObject:new{name = "Playfield",mesh = "Cubes.obj",x = 4.5,y = 0,z = 4.5,r = 1,g = 1,b = 1, rotationX = 0.0000, rotationY = 0.0000, rotationZ = 0.0000}
 FullArray = GameObject:new{name = "FullArray",mesh = "Cubes.obj",x = 5,y = 0,z = 30,r = 1,g = 1,b = 1, rotationX = 0.0000, rotationY = 0.0000, rotationZ = 0.0000}
 temple = GameObject:new{name = "temple",mesh = "temple.obj",x = 6,y = 4,z = 44.5,r = 0.4117647,g = 0.3487889,b = 0.2361592, rotationX = 0.0000, rotationY = 180.0000, rotationZ = 0.0000}

@@ -13,7 +13,7 @@
 
 int spawn(lua_State* lua) 
 {
-	GameObject* obj = new GameObject(lua_tostring(lua, -1), glm::vec3(0, 0, 0));
+	GameObject* obj = new GameObject(lua_tostring(lua, -1), glm::vec3(0,0,0));
 	//obj->scale(glm::vec3(2, 2, 2));
 	ObjectCache::push(obj);
 
@@ -94,7 +94,7 @@ int setPos(lua_State* lua)
 			z = lua_tonumber(lua, -1);
 
 			cout << z << endl;
-			obj->setLocalPosition(glm::vec3(-(lua_tonumber(lua, -3)), lua_tonumber(lua, -2), (lua_tonumber(lua, -1))));
+			obj->setLocalPosition(glm::vec3(-x, y, z));
 		}
 		else
 			std::cout << "error getting position: object doesn't exist" << std::endl;
@@ -125,9 +125,9 @@ int setRotation(lua_State* lua)
 			cout << "z = " << z << endl;
 
 
-			obj->rotateDegrees(lua_tonumber(lua, -2)+180, glm::vec3(0, 1, 0));
-			obj->rotateDegrees(-(lua_tonumber(lua, -3)), glm::vec3(1, 0, 0));
-			obj->rotateDegrees((lua_tonumber(lua, -1)), glm::vec3(0, 0, 1));
+			obj->rotateDegrees(-y, glm::vec3(0, 1, 0));
+			obj->rotateDegrees(x, glm::vec3(1, 0, 0));
+			obj->rotateDegrees(-z, glm::vec3(0, 0, 1));
 		}
 		else
 			std::cout << "error getting rotation: object doesn't exist" << std::endl;
