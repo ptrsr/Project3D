@@ -209,6 +209,9 @@ glm::vec2 MovementBehaviour::getBoardPos()
 
 glm::vec2 MovementBehaviour::getNextPos()
 {
+	if (!Level::checkAvailable(_player))
+		return _boardPos;
+
 	glm::vec2 dPos;
 
 	switch (_dDir)
