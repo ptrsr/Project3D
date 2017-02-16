@@ -9,6 +9,7 @@ using namespace std;
 #include "mge/core/World.hpp"
 
 #include "mge/core/Camera.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
 
 #include "mge/materials/AbstractMaterial.hpp"
 
@@ -32,6 +33,7 @@ using namespace std;
 
 #include "mge/util/DebugHud.hpp"
 #include "mge/util/InputHandler.h"
+#include "mge/auxiliary/LuaParser.hpp"
 
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
@@ -65,6 +67,27 @@ void MenuScene::_initializeScene()
     _world->setMainCamera(camera);
 
 
+	LuaParser* luaParser = new LuaParser("main.lua");
+
+	GameObject* center = new GameObject("center");
+	GameObject* holder = new GameObject("holder");
+	GameObject* light = new GameObject("light");
+
+	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
+
+	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
+	light->setParent(holder);
+
+	GameObject* cube = ObjectCache::find("Playfield");
+	if (cube != NULL) {
+		cube->scale(glm::vec3(4.5f, 0, 4.5f));
+	}
+	GameObject* WholeCube = ObjectCache::find("FullArray");
+	if (cube != NULL) {
+		cube->scale(glm::vec3(4.5f, 0, 4.5f));
+	}
+
+
 	_startState = new StartState();
 	_startState->_initializeScene();
 
@@ -74,9 +97,13 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-	_currentState = -1;
 
 	Level::get();
+
+	_currentState = -1;
+	_world->add(center);
+	_world->add(holder);
+
 	
 }
 
@@ -84,6 +111,7 @@ void MenuScene::_render() {
     AbstractGame::_render();
     _updateHud();
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
+
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -94,6 +122,7 @@ void MenuScene::_render() {
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
+			cout << "JoinState" << endl;
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -115,6 +144,8 @@ void MenuScene::_render() {
 			break;
 
 		case 1:
+
+			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -134,10 +165,8 @@ void MenuScene::_deleteScene() {
 
 
 void MenuScene::_changeCameraState(AbstactState* state) {
-		GameObject* plane = new GameObject("empty",glm::vec3(0,0,0));
-		plane->setTransform(state->getPlane()->getTransform());
-
-		plane->translate(glm::vec3(0,2,5));
+		GameObject* plane = state->getPlane();
+		
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
 			camera->setBehaviour(new CameraBehaviour(plane));
@@ -145,10 +174,12 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 		}
 }
 void MenuScene::_changeCameraState(Level* level) {
-		GameObject* empty = new GameObject("empty", glm::vec3(4, 6, -4));
-		empty->rotateDegrees(180, glm::vec3(0, 1, 0));
+	GameObject* empty = new GameObject("empty", glm::vec3(0,0,0));
+	GameObject * plane = ObjectCache::find("LevelPlane");
+	if (plane != NULL) {
+		empty = plane;
 
-		empty->rotateDegrees(-45, glm::vec3(1, 0, 0));
+	}
 		Camera * camera = _world->getMainCamera();
 		camera->setBehaviour(new CameraBehaviour(empty));
 
