@@ -13,7 +13,6 @@ Level::Level(glm::vec2 pSize) :GameObject("level")
 	_player = new Player(Tile::p1, _boardArray);
 	
 }
-
 void Level::initializeLevel() 
 {
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");

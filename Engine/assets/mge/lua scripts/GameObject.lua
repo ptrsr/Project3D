@@ -17,8 +17,9 @@ function GameObject:new (obj)
 		return
 	end
 	
-	spawn(obj.name, obj.x, obj.y, obj.z)
+	spawn(obj.name)
 	setRotation(obj.name,obj.rotationX,obj.rotationY,obj.rotationZ)
+	setPos(obj.name,obj.x,obj.y,obj.z)
 	
 	if obj.mesh then
 		setMesh(obj.name, obj.mesh)

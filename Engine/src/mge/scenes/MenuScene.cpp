@@ -164,10 +164,7 @@ void MenuScene::_deleteScene() {
 
 
 void MenuScene::_changeCameraState(AbstactState* state) {
-		GameObject* plane = new GameObject("empty",glm::vec3(0,0,0));
-		plane->setTransform(state->getPlane()->getTransform());
-
-		plane->translate(glm::vec3(0,2,5));
+		GameObject* plane = state->getPlane();
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
 			camera->setBehaviour(new CameraBehaviour(plane));
