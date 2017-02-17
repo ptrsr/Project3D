@@ -11,7 +11,7 @@
 ScoreCube::ScoreCube() : PickUp("ScoreCube")
 {
 	this->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(0, 1, 0)));
-	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj"));
+	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "special_cube.obj"));
 	this->scale(glm::vec3(0.3f));
 
 	_minDelay = 4;

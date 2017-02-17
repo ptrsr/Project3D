@@ -11,7 +11,7 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 	_name = "Player" + playerId;
 	_id = playerId;
 
-	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
+	this->setLocalPosition(glm::vec3(boardPos.x, 1.0f, boardPos.y)); 
 
 	_movement = new MovementBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
 	this->setBehaviour(_movement);

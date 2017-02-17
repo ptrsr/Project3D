@@ -10,7 +10,7 @@ Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
-	setLocalPosition(glm::vec3(-8.5f, 0, 0));
+	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
 	spawnPlayer(Id::p1, glm::vec2(0, 0));
 	spawnPlayer(Id::p3, glm::vec2(8, 8));
@@ -20,8 +20,8 @@ Level::Level() :GameObject("level")
 	_board->setParent(this);
 	World::add(this);
 
-	_moveTime = 0.55f;
-	_totalTime = 0.8f;
+	_moveTime = 0.4f;
+	_totalTime = 0.6f;
 }
 
 Level* Level::get()

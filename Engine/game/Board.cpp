@@ -24,7 +24,7 @@ void Board::initializeBoard()
 	for (int i = 0; i < _size.x; i++) {
 		for (int j = 0; j < _size.y; j++) 
 		{
-			Tile * tile = new Tile(glm::vec3(j, -0.5f, i), planeMesh);
+			Tile * tile = new Tile(glm::vec3(j, 0, i), planeMesh);
 
 			_boardArray[j][i] = tile;
 			tile->setParent(this);
