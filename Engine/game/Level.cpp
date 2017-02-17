@@ -10,6 +10,8 @@ Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
+	setLocalPosition(glm::vec3(-8.5f, 0, 0));
+
 	spawnPlayer(Id::p1, glm::vec2(0, 0));
 	spawnPlayer(Id::p3, glm::vec2(8, 8));
 	spawnPickUp(new ScoreCube());
