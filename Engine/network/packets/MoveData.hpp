@@ -5,5 +5,5 @@
 struct MoveData
 {
 	Id playerId;
-	Direction direction;
+	Dir direction;
 };

@@ -15,7 +15,7 @@ enum PType
 	score
 };
 
-enum Direction
+enum Dir
 {
 	none,
 	up,

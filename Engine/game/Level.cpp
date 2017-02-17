@@ -125,13 +125,13 @@ void Level::AddSpawn(Player* player)
 
 void Level::update(float pStep)
 {
-	if (_spawnQueue.size() > 0)
-	{
-		Player* player = _spawnQueue[0];
-		SpawnPlayer(player->getId(), player->getBoardPos(), _players.size() == 0 ? true : false);
-		_spawnQueue.erase(_spawnQueue.begin());
-		delete player;
-	}
+	//if (_spawnQueue.size() > 0)
+	//{
+	//	Player* player = _spawnQueue[0];
+	//	SpawnPlayer(player->getId(), player->getBoardPos(), _players.size() == 0 ? true : false);
+	//	_spawnQueue.erase(_spawnQueue.begin());
+	//	delete player;
+	//}
 
 	_curTime += pStep;
 
