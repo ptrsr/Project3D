@@ -14,36 +14,32 @@ class MovementBehaviour : public AbstractBehaviour
 		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
 		virtual ~MovementBehaviour();
 
-		virtual void update(float pStep);
+		virtual void update(float pStep) { };
+
+		void checkKeys();
+		void move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime);
+		void finishMove(float pMoveTime, float pLastMoveTime);
+		void setDirection();
+		void cancelMove();
+		void jump(float pHeight);
+
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
+		glm::vec2 getNextPos();
 		Id getPlayerId();
 
 	private:
-		enum Direction
-		{
-			none,
-			up,
-			down,
-			left,
-			right
-		};
-
-		void checkKeys();
-		void setDirection();
 		void inverseDirection();
 
-		void roll(float pStep);
-		void move(float pPhase, float pTime);
+		void rotate(float pStep);
+		void translate(float pTime, float pMoveTime, float pStep);
 		
 		Player* _player;
 
 		//settings
-		float _totalTime;
-		float _moveTime;
-
-		float _jumpHeight	= 1;
+		float _dJumpHeight  = 1;
+		float _cJumpHeight  = 1;
 		float _distance		= 1;
 
 		//vars
@@ -52,13 +48,10 @@ class MovementBehaviour : public AbstractBehaviour
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);
 
-		float _curTime      = 0;
-		float _deltaTime    = 0;
-		float _lastMoveTime = 0;
 		float _lastHeight   = 0;
 
-		Direction _cDir = none;
-		Direction _dDir = none;
+		Dir _cDir = none;
+		Dir _dDir = none;
 
 		bool _canceled = false;
 };

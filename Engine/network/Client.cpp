@@ -89,13 +89,13 @@ int Client::Connect(char* IP, int port)
 	strcpy(testData2.input, input2.c_str());
 
 	PlayerData playerData;
-	playerData.direction = Direction::up;
+	playerData.direction = Dir::up;
 	PlayerData playerData2;
-	playerData2.direction = Direction::down;
+	playerData2.direction = Dir::down;
 	PlayerData playerData3;
-	playerData3.direction = Direction::left;
+	playerData3.direction = Dir::left;
 	PlayerData playerData4;
-	playerData4.direction = Direction::right;
+	playerData4.direction = Dir::right;
 
 	PacketHelper::Send(dataType2, (char*)&testData, _sock);
 	PacketHelper::Send(dataType2, (char*)&testData2, _sock);
@@ -178,16 +178,16 @@ void Client::HandlePacket(DataType type, char* buf)
 		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
 		switch (playerData.direction)
 		{
-		case Direction::up:
+		case Dir::up:
 			cout << "up" << endl;
 			break;
-		case Direction::down:
+		case Dir::down:
 			cout << "down" << endl;
 			break;
-		case Direction::left:
+		case Dir::left:
 			cout << "left" << endl;
 			break;
-		case Direction::right:
+		case Dir::right:
 			cout << "right" << endl;
 			break;
 		}

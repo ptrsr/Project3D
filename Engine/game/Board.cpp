@@ -19,20 +19,12 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 
 void Board::initializeBoard() 
 {
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
+	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "playfield_tile.obj");
 
 	for (int i = 0; i < _size.x; i++) {
-		for (int j = 0; j < _size.y; j++) {
-
-			glm::vec3 color;
-
-			if ((j + i) % 2)
-				color = glm::vec3(1);
-			else
-				color = glm::vec3(0.4f);
-
-			Tile * tile = new Tile(glm::vec3(j, 0, i), planeMesh);
-			tile->_material->setColor(color);
+		for (int j = 0; j < _size.y; j++) 
+		{
+			Tile * tile = new Tile(glm::vec3(j, -0.5f, i), planeMesh);
 
 			_boardArray[j][i] = tile;
 			tile->setParent(this);
@@ -60,7 +52,7 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(none);
+				tile->setOwner(Id::empty);
 			}
 		}
 	}

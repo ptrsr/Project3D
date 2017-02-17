@@ -188,16 +188,16 @@ void Server::HandlePacket(DataType type, char* buf)
 			PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
 			switch (playerData->direction)
 			{
-			case Direction::up:
+			case Dir::up:
 				cout << "up" << endl;
 				break;
-			case Direction::down:
+			case Dir::down:
 				cout << "down" << endl;
 				break;
-			case Direction::left:
+			case Dir::left:
 				cout << "left" << endl;
 				break;
-			case Direction::right:
+			case Dir::right:
 				cout << "right" << endl;
 				break;
 			}

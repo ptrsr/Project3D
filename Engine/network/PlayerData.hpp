@@ -1,9 +1,9 @@
 #pragma once
 
 #include <glm.hpp>
-#include "../game/Direction.hpp"
+#include "../game/Enums.hpp"
 
 struct PlayerData
 {
-	Direction direction;
+	Dir direction;
 };

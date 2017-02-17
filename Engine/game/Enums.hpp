@@ -1,18 +1,24 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-
 enum Id {
-	none,
+	empty,
 	p1,
 	p2,
 	p3,
 	p4
 };
 
-enum PType
-{
+enum PType {
 	score
+};
+
+enum Dir {
+	none,
+	up,
+	down,
+	left,
+	right
 };
 
 #endif // !ENUMS_H

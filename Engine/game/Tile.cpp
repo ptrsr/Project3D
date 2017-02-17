@@ -17,7 +17,7 @@ void Tile::setOwner(Id pPlayer)
 	switch (pPlayer)
 	{
 	case none:
-		_material->setColor(glm::vec3(0.7f));
+		_material->setColor(glm::vec3(1));
 		break;
 
 	case p1:
@@ -29,7 +29,7 @@ void Tile::setOwner(Id pPlayer)
 		break;
 
 	case p3:
-		_material->setColor(glm::vec3(1, 0, 1));
+		_material->setColor(glm::vec3(0, 0, 1));
 		break;
 
 	case p4:
