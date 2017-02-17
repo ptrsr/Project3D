@@ -17,6 +17,8 @@ private:
 public:
 	MovementBehaviour* _movement;
 
+	bool _checked = false;
+
 	Player(Id playerId, glm::vec2 boardPos);
 	glm::vec2 getBoardPos();
 

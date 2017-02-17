@@ -24,7 +24,6 @@ public:
 
 	virtual void update(float pStep);
 
-	static void step(Player* pPlayer);
 	static bool checkAvailable(Player* pPlayer);
 
 private:
@@ -33,12 +32,18 @@ private:
 	void spawnPlayer(Id, glm::vec2 pBoardPos);
 	void spawnPickUp(PickUp* pPickUp);
 	
+	void checkCollisions();
+
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
 	Board* _board;
 
 	float _curTime;
-	float _totalMoveTime = config::TOTAL_MOVE_TIME;
+	float _deltaTime;
+	float _lastMoveTime;
+	float _totalTime;
+	float _moveTime;
+
 	glm::vec2 _size;
 
 	Level();
