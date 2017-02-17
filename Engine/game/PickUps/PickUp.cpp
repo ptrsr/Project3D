@@ -42,7 +42,7 @@ void PickUp::spawn()
 	}
 
 	_boardPos = positions[std::rand() % positions.size()];
-	setLocalPosition(glm::vec3(_boardPos.x, 0.5f, _boardPos.y));
+	setLocalPosition(glm::vec3(_boardPos.x, 1, _boardPos.y));
 }
 
 glm::vec2 PickUp::getBoardPos()

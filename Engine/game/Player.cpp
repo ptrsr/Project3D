@@ -33,6 +33,11 @@ void Player::addScore(int pScore)
 	std::cout << "Player " << _id << " scored: " << pScore << std::endl;
 }
 
+int Player::getScore()
+{
+	return _score;
+}
+
 glm::vec2 Player::getBoardPos()
 {
 	return _movement->getBoardPos();

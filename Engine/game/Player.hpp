@@ -12,7 +12,7 @@ class Player : public GameObject
 {
 private:
 	Id _id;
-	int _score;
+	int _score = 0;
 
 public:
 	MovementBehaviour* _movement;
@@ -23,6 +23,7 @@ public:
 	glm::vec2 getBoardPos();
 
 	void addScore(int pScore);
+	int  getScore();
 	glm::vec2 getNextPos();
 	Id getId();
 };
