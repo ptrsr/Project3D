@@ -21,7 +21,7 @@ public:
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
-
+	static void reset();
 	virtual void update(float pStep);
 
 	static bool checkAvailable(Player* pPlayer);

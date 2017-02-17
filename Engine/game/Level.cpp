@@ -32,6 +32,12 @@ Level* Level::get()
 	return _level;
 }
 
+void Level::reset()
+{
+	delete _level;
+	_level = new Level();
+}
+
 std::vector<Player*> Level::getPlayers()
 {
 	return Level::get()->_players;
