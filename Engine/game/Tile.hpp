@@ -7,6 +7,8 @@
 
 class Tile : public GameObject
 {
+
+
 public:
 	Tile(glm::vec3 pPosition, Mesh* pMesh);
 
@@ -16,7 +18,7 @@ public:
 	LitMaterial* _material;
 
 private:
-	Id _owner = none;
+	Id _owner = Id::empty;
 
 };
 

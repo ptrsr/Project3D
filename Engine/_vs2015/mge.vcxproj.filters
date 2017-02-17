@@ -304,7 +304,7 @@
     <ClInclude Include="..\game\Board.hpp">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\Direction.hpp">
+    <ClInclude Include="..\game\Enums.hpp">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
