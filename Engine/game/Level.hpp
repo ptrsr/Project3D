@@ -32,14 +32,15 @@ public:
 
 	virtual void update(float pStep);
 
-	static void step(Player* pPlayer);
-	static bool outOfBounds(glm::vec2 pBoardPos);
+	static bool checkAvailable(Player* pPlayer);
 
 	void SetupLevel();
 	pair<int, int> GetSpawnPosition(Id playerId);
 	void AddSpawn(Player* player);
 private:
 	static Level* _level;
+
+	void checkCollisions();
 
 	void RemovePlayers();
 	void SpawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
@@ -55,7 +56,11 @@ private:
 	std::vector<pair<int, int>> _spawnPos;
 
 	float _curTime;
-	float _totalMoveTime = config::TOTAL_MOVE_TIME;
+	float _deltaTime;
+	float _lastMoveTime;
+	float _totalTime;
+	float _moveTime;
+
 	glm::vec2 _size;
 
 	Level();
