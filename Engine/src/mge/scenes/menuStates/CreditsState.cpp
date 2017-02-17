@@ -51,6 +51,12 @@ void CreditsState::_initializeScene()
 		_plane = plane;
 	}
 
+	GameObject * back = ObjectCache::find("back_text");
+	if (back != NULL)
+	{
+		_selectableObj = back;
+	}
+
 	//_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
 	//_writingStone->rotate(-75, glm::vec3(0, 1, 0));
 	//_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));

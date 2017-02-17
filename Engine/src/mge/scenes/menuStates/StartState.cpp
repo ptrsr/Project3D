@@ -118,6 +118,7 @@ void StartState::_updateColor() {
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
 		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
@@ -128,6 +129,7 @@ void StartState::_updateColor() {
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
 		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	else if(_isKeyPress){
 		_delayCounter++;
@@ -145,6 +147,8 @@ void StartState::_clearObjectColor() {
 		if (i == _counter) continue;
 		GameObject* gObj = _selectableObjs[i];
 		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+
+		gObj->scale(glm::vec3(1, 1, 0.5f));
 	}
 }
 

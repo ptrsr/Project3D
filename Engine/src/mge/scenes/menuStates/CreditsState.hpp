@@ -28,6 +28,10 @@ class CreditsState : public AbstactState
 		int _counter = 0;
 		void _updateColor();
 		void _clearObjectColor();
+		string pathBackWhite;
+		string pathBackRed;
+		Texture * white;
+		Texture * red;
 
 		bool _isKeyPress = true;
 		int _delay = 15;

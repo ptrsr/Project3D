@@ -53,9 +53,6 @@ void MenuScene::initialize() {
     AbstractGame::initialize();
 
     //setup the custom part
-	cout << "Initializing HUD" << endl;
-	_hud = new DebugHud(_window);
-	cout << "HUD initialized." << endl << endl;
 }
 //build the game _world
 void MenuScene::_initializeScene()
@@ -65,6 +62,10 @@ void MenuScene::_initializeScene()
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
+
+	cout << "Initializing HUD" << endl;
+	_hud = new DebugHud(_window);
+	cout << "HUD initialized." << endl << endl;
 
 
 	LuaParser* luaParser = new LuaParser("main.lua");
@@ -187,6 +188,14 @@ void MenuScene::_changeCameraState(Level* level) {
 }
 
 void MenuScene::_updateHud() {
+
+	string debugInfo = "";
+	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
+	debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getBoard()->getScore(Id::p1))+ "\n");
+	debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getBoard()->getScore(Id::p2))+ "\n");
+
+	_hud->setDebugInfo(debugInfo);
+	_hud->draw();
 }
 MenuScene::~MenuScene()
 {

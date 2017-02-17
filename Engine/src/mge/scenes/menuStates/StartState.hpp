@@ -24,9 +24,17 @@ class StartState : public AbstactState
 	private:
 		GameObject* _selectableObjs[4];
 		GameObject* _plane;
-		int _counter = 0;
+		int _counter = 1;
 		void _updateColor();
 		void _clearObjectColor();
+		string pathCreateWhite;
+		string pathCreateRed;
+		string pathCreditsWhite;
+		string pathCreditsRed;
+		Texture * createWhite;
+		Texture * createRed;
+		Texture * creditsWhite;
+		Texture * creditsRed;
 
 		bool _isKeyPress = true;
 		int _delay = 15;

@@ -172,6 +172,7 @@ int setTexture(lua_State* lua)
 
 		if (texture)
 		{
+			cout << obj->getName() << endl;
 			obj->setMaterial(new LitMaterial(texture, 10));
 			return 0;
 		}
