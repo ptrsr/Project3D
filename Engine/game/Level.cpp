@@ -43,12 +43,12 @@ void Level::Host()
 {
 	SetupLevel(); //Reset the board
 
+	pair<int, int> spawnPos = GetSpawnPosition(Id::p1);
+	spawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
+
 	_server = new Server(8888, 3); //Create a server
 	thread server(&Server::StartServer, _server); //Create a thread for the server
 	server.detach(); //Let it run seperately from the main thread
-
-	pair<int, int> spawnPos = GetSpawnPosition(Id::p1);
-	spawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
 }
 
 void Level::Join(const char* IP, int port)

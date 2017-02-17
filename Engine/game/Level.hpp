@@ -55,11 +55,11 @@ private:
 	Board* _board;
 	std::vector<pair<int, int>> _spawnPos;
 
-	float _curTime;
-	float _deltaTime;
-	float _lastMoveTime;
-	float _totalTime;
-	float _moveTime;
+	float _curTime = 0;
+	float _deltaTime = 0;
+	float _lastMoveTime = 0;
+	float _totalTime = 0;
+	float _moveTime = 0;
 
 	glm::vec2 _size;
 
