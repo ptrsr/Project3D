@@ -14,8 +14,9 @@ Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
-	//spawnPlayer(Id::p1, glm::vec2(0, 0));
-	//spawnPickUp(new ScoreCube());
+	//setLocalPosition(glm::vec3(-8.5f, 0, 0));
+
+	spawnPickUp(new ScoreCube());
 
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
 	_spawnPos.push_back(make_pair<int, int>(0, 8));
@@ -47,7 +48,7 @@ void Level::Host()
 	server.detach(); //Let it run seperately from the main thread
 
 	pair<int, int> spawnPos = GetSpawnPosition(Id::p1);
-	SpawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
+	spawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
 }
 
 void Level::Join(const char* IP, int port)
@@ -69,7 +70,7 @@ void Level::SetupLevel()
 Player* Level::getPlayer(Id playerId)
 {
 	std::vector<Player*> players = Level::get()->getPlayers();
-	
+
 	for (int i = 0; i < players.size(); i++)
 	{
 		if (players[i]->getId() == playerId)
@@ -244,7 +245,7 @@ void Level::RemovePlayers()
 	}
 }
 
-void Level::SpawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
+void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 {
 	for each (Player* player in _players)
 	{
@@ -255,7 +256,7 @@ void Level::SpawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 		}
 	}
 	Player* player = new Player(pPlayerId, pBoardPos, controlled);
-	World::add(player);
+	player->setParent(this);
 	_players.push_back(player);
 }
 

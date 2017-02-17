@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include <thread>
+
 #include <iostream>
 #include "mge/core/World.hpp"
 #include "mge/core/GameObject.hpp"
@@ -40,11 +40,11 @@ public:
 private:
 	static Level* _level;
 
-	void checkCollisions();
-
 	void RemovePlayers();
-	void SpawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
+	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp(PickUp* pPickUp);
+	
+	void checkCollisions();
 
 	Client* _client;
 	Server* _server;
