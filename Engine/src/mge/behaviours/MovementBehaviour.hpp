@@ -20,7 +20,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void setDir(Direction dir);
 		glm::vec2 getBoardPos();
 		Id getPlayerId();
-
+		bool IsControlled();
 	private:
 		void checkKeys();
 		void setDirection();

@@ -17,6 +17,11 @@ Level::Level() :GameObject("level")
 	//spawnPlayer(Id::p1, glm::vec2(0, 0));
 	//spawnPickUp(new ScoreCube());
 
+	_spawnPos.push_back(make_pair<int, int>(0, 0));
+	_spawnPos.push_back(make_pair<int, int>(0, 8));
+	_spawnPos.push_back(make_pair<int, int>(8, 8));
+	_spawnPos.push_back(make_pair<int, int>(8, 0));
+
 	_board = new Board();
 	_board->setParent(this);
 	World::add(this);
@@ -32,31 +37,30 @@ Level* Level::get()
 
 void Level::Host()
 {
+	SetupLevel(); //Reset the board
+
 	_server = new Server(8888, 3); //Create a server
 	thread server(&Server::StartServer, _server); //Create a thread for the server
 	server.detach(); //Let it run seperately from the main thread
 
-	SetupLevel(Id::p1);
+	pair<int, int> spawnPos = GetSpawnPosition(Id::p1);
+	SpawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
 }
 
 void Level::Join(const char* IP, int port)
 {
+	SetupLevel(); //Reset the board
+
 	_client = new Client(); //Create a client
 	thread client(&Client::Connect, _client, IP, port); //Create a thread for the client
 	client.detach(); //Let it run seperately from the main thread
 }
 
-void Level::SetupLevel(Id playerId)
+void Level::SetupLevel()
 {
 	_board->ResetBoard(); //Reset the board
 
 	RemovePlayers(); //Reset the players
-
-	for (int i = 0; i < _server->ConnectedCount() + 4; i++)
-	{
-		Id id = static_cast<Id>(i + 1); //PlayerId
-		spawnPlayer(id, glm::vec2(i, i), playerId == id ? true : false); //Spawn either a controlled or non-controlled player
-	}
 }
 
 Player* Level::getPlayer(Id playerId)
@@ -103,8 +107,26 @@ bool Level::outOfBounds(glm::vec2 pBoardPos)
 	return Level::get()->_board->outOfBounds(pBoardPos);
 }
 
+pair<int, int> Level::GetSpawnPosition(Id playerId)
+{
+	return _spawnPos[playerId - 1];
+}
+
+void Level::AddSpawn(Player* player)
+{
+	_spawnQueue.push_back(player);
+}
+
 void Level::update(float pStep)
 {
+	if (_spawnQueue.size() > 0)
+	{
+		Player* player = _spawnQueue[0];
+		SpawnPlayer(player->getId(), player->getBoardPos(), _players.size() == 0 ? true : false);
+		_spawnQueue.erase(_spawnQueue.begin());
+		delete player;
+	}
+
 	_curTime += pStep;
 
 	if (_curTime > _totalMoveTime)
@@ -125,7 +147,7 @@ void Level::RemovePlayers()
 	}
 }
 
-void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
+void Level::SpawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 {
 	for each (Player* player in _players)
 	{

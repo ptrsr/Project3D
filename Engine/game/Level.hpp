@@ -35,20 +35,24 @@ public:
 	static void step(Player* pPlayer);
 	static bool outOfBounds(glm::vec2 pBoardPos);
 
+	void SetupLevel();
+	pair<int, int> GetSpawnPosition(Id playerId);
+	void AddSpawn(Player* player);
 private:
 	static Level* _level;
 
 	void RemovePlayers();
-	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
+	void SpawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp(PickUp* pPickUp);
-	void SetupLevel(Id playerId);
 
 	Client* _client;
 	Server* _server;
 
+	std::vector<Player*> _spawnQueue;
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
 	Board* _board;
+	std::vector<pair<int, int>> _spawnPos;
 
 	float _curTime;
 	float _totalMoveTime = config::TOTAL_MOVE_TIME;

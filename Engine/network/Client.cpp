@@ -1,5 +1,7 @@
 #include "../network/Client.hpp"
 
+#include "../game/Level.hpp"
+
 Client::Client()
 {
 	
@@ -68,6 +70,7 @@ int Client::Connect(const char* IP, int port)
 		return 0;
 	}
 
+	/*
 	TestData testData;
 	testData.t = 512;
 	testData.r = 0.15f;
@@ -87,7 +90,7 @@ int Client::Connect(const char* IP, int port)
 	strcpy(testData2.input, input2.c_str());
 
 	PacketHelper::Send(dataType2, (char*)&testData, _sock);
-	PacketHelper::Send(dataType2, (char*)&testData2, _sock);
+	PacketHelper::Send(dataType2, (char*)&testData2, _sock);*/
 
 	receiveData.join();
 
@@ -97,6 +100,7 @@ int Client::Connect(const char* IP, int port)
 int Client::Disconnect()
 {
 	cout << "Closing socket.." << endl;
+	_playerId == Id::empty; //Reset player id
 	_connected = false; //Stop the data loop
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
@@ -158,7 +162,12 @@ void Client::HandlePacket(DataType type, char* buf)
 		cout << testData.pX << " " << testData.pY << " " << testData.pZ << " " << testData.rX << " " << testData.rY << " " << testData.rZ << endl;
 		break;
 	case DataType::PLAYERDATA:
-		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
+	{
+		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
+		if (_playerId == Id::empty) _playerId = pData.playerId; //Assign player id
+		Level* level = Level::get();
+		level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), false)); //Spawn player
+	}
 		break;
 	case DataType::MOVEDATA:
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);

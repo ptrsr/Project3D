@@ -22,6 +22,7 @@ public:
 
 	void addScore(int pScore);
 	Id getId();
+	bool IsControlled();
 };
 
 #endif

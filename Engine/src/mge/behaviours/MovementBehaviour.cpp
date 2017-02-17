@@ -197,6 +197,11 @@ void MovementBehaviour::setDir(Direction dir)
 	_dDir = dir;
 }
 
+bool MovementBehaviour::IsControlled()
+{
+	return _controlled;
+}
+
 MovementBehaviour::~MovementBehaviour()
 {
 	//dtor

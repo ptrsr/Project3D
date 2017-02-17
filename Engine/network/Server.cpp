@@ -166,6 +166,8 @@ void Server::AcceptClients()
 
 void Server::HandleClients(SOCKET client)
 {
+	SendGameState(); //Send game state to client
+
 	while (_running)
 	{
 		//Check if the client is still connected
@@ -224,8 +226,22 @@ void Server::SendGameState()
 
 	vector<Player*> players = level->getPlayers();
 
+	//Send client player id and pos
+	PlayerData cData;
+	cData.playerId = static_cast<Id>(players.size() + 1);
+	pair<int, int> spawnPos = level->GetSpawnPosition(cData.playerId);
+	cData.boardX = spawnPos.first;
+	cData.boardY = spawnPos.second;
+
+	Send(DataType::PLAYERDATA, (char*)&cData);
+	level->AddSpawn(new Player(cData.playerId, glm::vec2(cData.boardX, cData.boardY), false));
+
+	//Send player positions
 	for (int i = 0; i < players.size(); i++)
 	{
+		if (cData.playerId == players[i]->getId())
+			continue;
+
 		Player* player = players[i];
 		PlayerData pData;
 		pData.playerId = player->getId();
