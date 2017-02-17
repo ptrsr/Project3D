@@ -19,7 +19,7 @@ void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float
 	if (_canceled && pCurTime > (cancelTime = pMoveTime / 2.f)) //is the move invalid and are we halfway?
 	{
 		float step = (pCurTime - cancelTime) - (cancelTime - pLastMoveTime);
-
+			
 		//inverse the direction and axis
 		_axis = -_axis;
 		_trans = -_trans;
@@ -55,7 +55,7 @@ void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 }
 
 //if step is 1, we rotate 90 degrees
-void MovementBehaviour::rotate(float pStep)
+void MovementBehaviour::rotate(float pStep) 
 {
 	float angle = (glm::pi<float>() / 2.f) * pStep;
 	_player->rotate(angle, _axis);
@@ -63,7 +63,7 @@ void MovementBehaviour::rotate(float pStep)
 
 //pTime is for the height (phase of sinus wave)
 //if Pstep is 1, move to next position
-void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep)
+void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep) 
 {
 	float height = std::sin((pTime / pMoveTime) * glm::pi<float>()) * _cJumpHeight;
 	float difference = height - _lastHeight;
@@ -121,6 +121,8 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
+	if (!_controlled)
+		return;
 	if (getPlayerId() == p1)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -211,7 +213,7 @@ glm::vec2 MovementBehaviour::getNextPos()
 	case Dir::down:
 		dPos = glm::vec2(0, -1);
 		break;
-
+	
 	case Dir::left:
 		dPos = glm::vec2(1, 0);
 		break;

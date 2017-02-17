@@ -17,10 +17,10 @@ Player::Player(Id playerId, glm::vec2 boardPos, bool controlled) : GameObject("t
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
-
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "elementcube.obj"));
 
 	glm::vec3 color(playerId == Id::p1 ? 1 : playerId == Id::p2 ? 0 : 0.87f, playerId == Id::p2 ? 1 : playerId == Id::p4 ? 0.72f : 0, playerId == p3 ? 1 : playerId == Id::p4 ? 0.53f : 0);
+
 	this->setMaterial(new LitMaterial(LitMaterial::fragment, color));
 };
 
