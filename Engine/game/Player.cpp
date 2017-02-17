@@ -35,6 +35,11 @@ glm::vec2 Player::getBoardPos()
 	return _movement->getBoardPos();
 }
 
+glm::vec2 Player::getNextPos()
+{
+	return _movement->getNextPos();
+}
+
 Id Player::getId()
 {
 	return _id;
