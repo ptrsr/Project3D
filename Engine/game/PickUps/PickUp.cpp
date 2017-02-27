@@ -42,7 +42,7 @@ void PickUp::spawn()
 	}
 
 	_boardPos = positions[std::rand() % positions.size()];
-	setLocalPosition(glm::vec3(_boardPos.x, 1, _boardPos.y));
+	setLocalPosition(glm::vec3(_boardPos.x, _spawnHeight, _boardPos.y));
 }
 
 glm::vec2 PickUp::getBoardPos()
@@ -66,6 +66,11 @@ void PickUp::step()
 
 	if (_countDown == 0)
 		spawn();
+}
+
+void PickUp::hover(float pStep)
+{
+	
 }
 
 PickUp::~PickUp()

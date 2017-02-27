@@ -20,6 +20,9 @@ public:
 	virtual inline void update(float pStep) { };
 	virtual void applyPickUp(Player* pPlayer) = 0;
 
+	void hover(float pStep);
+
+
 	void step();
 
 	glm::vec2 getBoardPos();
@@ -36,6 +39,12 @@ private:
 	void spawn();
 
 	float _countDown = 0;
+
+	float _spawnHeight;
+	float _spawnTime;
+	float _floatTimer;
+	float _floatHeight;
+
 	glm::vec2 _boardPos;
 
 };
