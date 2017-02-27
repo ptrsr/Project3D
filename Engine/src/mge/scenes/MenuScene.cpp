@@ -35,6 +35,7 @@ using namespace std;
 #include "mge/util/InputHandler.h"
 #include "mge/auxiliary/LuaParser.hpp"
 
+
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
@@ -51,7 +52,6 @@ MenuScene::MenuScene():AbstractGame (),_hud(0)
 void MenuScene::initialize() {
     //setup the core part
     AbstractGame::initialize();
-
     //setup the custom part
 }
 //build the game _world
@@ -98,6 +98,9 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
+	_text = new Text(TextType::IP);
+	_text->_initializeScene();
+
 
 	Level::get();
 
@@ -111,6 +114,8 @@ void MenuScene::_initializeScene()
 void MenuScene::_render() {
     AbstractGame::_render();
     _updateHud();
+	_text->Update();
+
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
 
 		switch (_currentState) {

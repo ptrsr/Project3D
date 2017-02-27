@@ -307,6 +307,9 @@
     <ClInclude Include="..\game\Enums.hpp">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\Text.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -554,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="..\game\Board.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\Text.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -188,6 +188,7 @@
     <ClInclude Include="..\src\mge\auxiliary\Hex.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\Text.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractBehaviour.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractLight.hpp" />
     <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp" />
@@ -267,6 +268,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
+    <ClCompile Include="..\src\mge\auxiliary\Text.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractLight.cpp" />
     <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp" />

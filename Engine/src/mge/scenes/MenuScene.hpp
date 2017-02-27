@@ -6,6 +6,7 @@
 #include "mge/core/GameObject.hpp"
 
 #include "mge/scenes/menuStates/AbstactState.hpp"
+#include "mge/auxiliary/Text.hpp"
 #include "../game/Level.hpp"
 class DebugHud;
 
@@ -31,6 +32,7 @@ class MenuScene : public AbstractGame
 		AbstactState * _joinState;
 		AbstactState * _creditsState;
 		AbstactState* _newState = nullptr;
+		Text * _text;
 		Level* _level;
 		int _currentState = -1;
 		int _nextState = -1;
