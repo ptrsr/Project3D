@@ -6,7 +6,7 @@
 class ScoreCube : public PickUp
 {
 public:
-	ScoreCube();
+	ScoreCube(float moveTime);
 
 	virtual void applyPickUp(Player* pPlayer);
 private:

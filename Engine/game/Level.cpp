@@ -14,7 +14,7 @@ Level::Level() :GameObject("level")
 
 	spawnPlayer(Id::p1, glm::vec2(0, 0));
 	spawnPlayer(Id::p3, glm::vec2(8, 8));
-	spawnPickUp(new ScoreCube());
+	spawnPickUp(new ScoreCube(0.8f));
 
 	_board = new Board();
 	_board->setParent(this);
@@ -79,6 +79,9 @@ void Level::update(float pStep)
 	//check for player input
 	for each (Player* player in _players)
 		player->_movement->checkKeys();
+
+	for each (PickUp* pickUp in _pickups)
+		pickUp->hover(pStep);
 
 	//if player is moving
 	if (_curTime < _moveTime)

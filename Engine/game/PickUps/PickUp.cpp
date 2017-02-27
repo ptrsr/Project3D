@@ -6,8 +6,10 @@
 
 #include <algorithm>
 
-PickUp::PickUp(std::string pName) : GameObject(pName)
+PickUp::PickUp(std::string pName, float moveTime) : GameObject(pName)
 {
+	_moveTime = moveTime;
+
 	srand(time(NULL));
 
 	World::add(this);
@@ -55,22 +57,41 @@ void PickUp::reset()
 	_boardPos = glm::vec2(-1);
 	setLocalPosition(glm::vec3(0, -10, 0));
 	_countDown = (rand() % (_maxDelay - _minDelay)) + _minDelay;
+	_floatTimer = 0;
 }
 
 void PickUp::step()
 {
-	if (_countDown == -1)
-		return;
-
 	_countDown--;
 
+	if (_countDown < 0)
+		return;
+
 	if (_countDown == 0)
+	{
 		spawn();
+		std::cout << "spawn" << std::endl;
+	}
 }
 
 void PickUp::hover(float pStep)
 {
-	
+	if (_countDown <= 0)
+	{
+		_floatTimer += pStep;
+
+		rotate((glm::sin(_floatTimer) + 2) / 30.f, glm::normalize(glm::vec3(sin(_floatTimer), cos(_floatTimer), -sin(_floatTimer))));
+
+		float height = glm::sin(_floatTimer) * _hoverDif + _hoverHeight;
+
+		if (_floatTimer <= _moveTime)
+		{
+			float multiplier = 1 - _floatTimer / _moveTime;
+			height += (multiplier * multiplier) * (_spawnHeight - height);
+		}
+		
+		setLocalPosition(glm::vec3(_boardPos.x, height, _boardPos.y));
+	}
 }
 
 PickUp::~PickUp()
