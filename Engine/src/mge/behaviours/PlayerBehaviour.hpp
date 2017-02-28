@@ -1,5 +1,5 @@
-#ifndef MOVEMENTBEHAVIOUR_H
-#define MOVEMENTBEHAVIOUR_H
+#ifndef PLAYERBEHAVIOUR_H
+#define PLAYERBEHAVIOUR_H
 
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
@@ -7,14 +7,15 @@
 
 class Player;
 
-class MovementBehaviour : public AbstractBehaviour
+class PlayerBehaviour : public AbstractBehaviour
 {
 
 	public:
-		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
-		virtual ~MovementBehaviour();
+		PlayerBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		virtual ~PlayerBehaviour();
 
 		virtual void update(float pStep) { };
+		virtual void activateAbility() = 0;
 
 		void checkKeys();
 		void move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime);
@@ -23,13 +24,14 @@ class MovementBehaviour : public AbstractBehaviour
 		void cancelMove();
 		void jump(float pHeight);
 
+
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
 		glm::vec2 getNextPos();
 		Id getPlayerId();
 
-	private:
+	protected:
 		void inverseDirection();
 
 		void rotate(float pStep);

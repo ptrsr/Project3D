@@ -1,4 +1,4 @@
-#include "mge/behaviours/MovementBehaviour.hpp"
+#include "mge/behaviours/PlayerBehaviour.hpp"
 
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
@@ -8,11 +8,11 @@
 
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
+PlayerBehaviour::PlayerBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
 	 _player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight)
 { }
 
-void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime)
+void PlayerBehaviour::move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime)
 {
 	float cancelTime; //temporary variable for mid air canceling
 
@@ -45,7 +45,7 @@ void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float
 	}
 }
 
-void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
+void PlayerBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 {
 	rotate(1 - pLastMoveTime / pMoveTime);
 	translate(pMoveTime, pMoveTime, pMoveTime - pLastMoveTime);
@@ -55,7 +55,7 @@ void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 }
 
 //if step is 1, we rotate 90 degrees
-void MovementBehaviour::rotate(float pStep) 
+void PlayerBehaviour::rotate(float pStep) 
 {
 	float angle = (glm::pi<float>() / 2.f) * pStep;
 	_player->rotate(angle, _axis);
@@ -63,7 +63,7 @@ void MovementBehaviour::rotate(float pStep)
 
 //pTime is for the height (phase of sinus wave)
 //if Pstep is 1, move to next position
-void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep) 
+void PlayerBehaviour::translate(float pTime, float pMoveTime, float pStep) 
 {
 	float height = std::sin((pTime / pMoveTime) * glm::pi<float>()) * _cJumpHeight;
 	float difference = height - _lastHeight;
@@ -80,7 +80,7 @@ void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep)
 }
 
 //sets the axis and translation direction
-void MovementBehaviour::setDirection()
+void PlayerBehaviour::setDirection()
 {
 	_cDir = _dDir;
 
@@ -119,13 +119,12 @@ void MovementBehaviour::setDirection()
 		_canceled = true;
 }
 
-void MovementBehaviour::checkKeys()
+void PlayerBehaviour::checkKeys()
 {
 	if (getPlayerId() == p1)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			_dDir = Dir::up;
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			_dDir = Dir::down;
 
@@ -148,10 +147,14 @@ void MovementBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			_dDir = Dir::left;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			activateAbility();
+		}
 	}
 }
 
-void MovementBehaviour::inverseDirection()
+void PlayerBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
@@ -173,27 +176,27 @@ void MovementBehaviour::inverseDirection()
 	}
 }
 
-void MovementBehaviour::cancelMove()
+void PlayerBehaviour::cancelMove()
 {
 	_canceled = true;
 }
 
-void MovementBehaviour::jump(float pHeight)
+void PlayerBehaviour::jump(float pHeight)
 {
 	_cJumpHeight = pHeight;
 }
 
-Id MovementBehaviour::getPlayerId()
+Id PlayerBehaviour::getPlayerId()
 {
 	return _player->getId();
 }
 
-glm::vec2 MovementBehaviour::getBoardPos()
+glm::vec2 PlayerBehaviour::getBoardPos()
 {
 	return _boardPos;
 }
 
-glm::vec2 MovementBehaviour::getNextPos()
+glm::vec2 PlayerBehaviour::getNextPos()
 {
 	glm::vec2 dPos;
 
@@ -219,7 +222,7 @@ glm::vec2 MovementBehaviour::getNextPos()
 	return dPos + _boardPos;
 }
 
-MovementBehaviour::~MovementBehaviour()
+PlayerBehaviour::~PlayerBehaviour()
 {
 	//dtor
 }
