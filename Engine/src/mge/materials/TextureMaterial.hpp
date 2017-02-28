@@ -3,32 +3,26 @@
 
 #include "mge/core/ShaderProgram.hpp"
 #include "mge/core/Texture.hpp"
-#include "mge/materials/AbstractMaterial.hpp"
+#include "mge/materials/LitMaterial.hpp"
 
-/**
- * Simple single texture material, this is a sample which doesn't cache anything upfront and
- * passes in separate matrices for the MVP calculation
- */
-class TextureMaterial : public AbstractMaterial
+
+class TextureMaterial : public LitMaterial
 {
     public:
-        TextureMaterial (Texture* pDiffuseTexture);
+        TextureMaterial (Texture* pDiffuseTexture, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f);
         virtual ~TextureMaterial ();
 
-        virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
-
-        void setDiffuseTexture (Texture* pDiffuseTexture);
+        void setTexture (Texture* pDiffuseTexture);
 
     protected:
+		virtual void renderPolygons(Mesh* pMesh) override;
+
+		
+
     private:
-        static ShaderProgram* _shader;
-        static void _lazyInitializeShader();
+		static GLint _uTexture;
 
-        Texture* _diffuseTexture;
-
-        TextureMaterial(const TextureMaterial&);
-        TextureMaterial& operator=(const TextureMaterial&);
-
+        Texture* _texture;
 };
 
 #endif // TEXTUREMATERIAL_H
