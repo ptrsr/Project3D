@@ -40,7 +40,7 @@ void TextureMaterial::_lazyInitializeShader()
 		_shader = new ShaderProgram();
 
 		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + "litTexture.vs");
-		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "litFragment.fs");
+		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "litTexture.fs");
 		_shader->finalize();
 
 		//vertex uniforms
@@ -79,16 +79,28 @@ void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const g
 
 	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
 
-	renderTexture();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _texture->getId());
+	glUniform1i(_uTexture, 0);
+
 	renderLights();
 	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
 }
 
 void TextureMaterial::renderTexture()
 {
+	std::cout << "hello" << std::endl;
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture->getId());
 	glUniform1i(_uTexture, 0);
+}
+
+glm::vec3 TextureMaterial::getColor() {
+	return _modelColor;
+}
+void TextureMaterial::setColor(glm::vec3 newColor) {
+	_modelColor = newColor;
 }
 
 void TextureMaterial::renderLights()
@@ -153,4 +165,3 @@ void TextureMaterial::renderLights()
 	glUniform3fv(_shader->getUniformLocation("lightCount"), 1, glm::value_ptr(glm::vec3(dLights, pLights, sLights)));
 }
 
-TextureMaterial::~TextureMaterial() { }

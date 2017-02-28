@@ -14,6 +14,9 @@ class TextureMaterial : public AbstractMaterial
 
         void setTexture (Texture* pDiffuseTexture);
 
+		glm::vec3 getColor();
+		void setColor(glm::vec3 pColor);
+
 private:
 	static void _lazyInitializeShader();
 	void renderLights();
