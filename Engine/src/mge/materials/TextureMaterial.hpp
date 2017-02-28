@@ -4,27 +4,45 @@
 #include "mge/core/ShaderProgram.hpp"
 #include "mge/core/Texture.hpp"
 #include "mge/materials/LitMaterial.hpp"
+#include "SFML/Graphics.hpp"
 
-
-class TextureMaterial : public LitMaterial
+class TextureMaterial : public AbstractMaterial
 {
-    public:
-        TextureMaterial (Texture* pDiffuseTexture, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f);
-        virtual ~TextureMaterial ();
+ public:
+        TextureMaterial (Texture* pTexture, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
+		virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
         void setTexture (Texture* pDiffuseTexture);
 
-    protected:
-		virtual ShaderProgram* getShader() override;
-		
-		virtual void renderPolygons(Mesh* pMesh) override;
+private:
+	static void _lazyInitializeShader();
+	void renderLights();
+	void renderTexture();
 
-    private:
-		static ShaderProgram* _shader;
+	static ShaderProgram* _shader;
 
-		static GLint _uTexture;
+	//vertex uniforms
+	static GLint _uMVPMatrix;
+	static GLint _uModelMatrix;
 
-        Texture* _texture;
+	//fragment uniforms
+	static GLint _uModelColor;
+	static GLint _uTexture;
+	static GLint _uShininess;
+	static GLint _uCameraPos;
+
+	//vertex attributes
+	static GLint _aVertex;
+	static GLint _aNormal;
+	static GLint _aUV;
+
+	//lights
+	std::vector<AbstractLight*>* _lights;
+
+	//settings
+	glm::vec3 _modelColor;
+	Texture* _texture;
+	float _shininess;
 };
 
 #endif // TEXTUREMATERIAL_H

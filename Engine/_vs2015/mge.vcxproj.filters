@@ -136,9 +136,6 @@
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp">
       <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp">
-      <Filter>MGE Source files\mge\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\core\lua\lapi.h">
       <Filter>MGE Source files\mge\core\lua</Filter>
     </ClInclude>
@@ -309,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\MeshCache.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\TextureCache.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">

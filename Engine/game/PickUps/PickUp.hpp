@@ -3,7 +3,6 @@
 
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/materials/LitMaterial.hpp"
-
 #include "../game/Player.hpp"
 
 #include <vector>
@@ -15,7 +14,6 @@ public:
 
 	PickUp(std::string name, float moveTime);
 	~PickUp();
-
 
 	virtual inline void update(float pStep) { };
 	virtual void applyPickUp(Player* pPlayer) = 0;

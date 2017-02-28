@@ -22,15 +22,32 @@ public:
 	glm::vec3 getColor();
 	void setColor(glm::vec3 pColor);
 
-protected:
-
 private:
-	static ShaderProgram* _lazyInitializeShader(std::string shaderName);
+	static void _lazyInitializeShader();
 	void renderLights();
 
 	static ShaderProgram* _shader;
 
-	LitMaterial(const LitMaterial&);
+	//vertex uniforms
+	static GLint _uMVPMatrix;
+	static GLint _uModelMatrix;
+
+	//fragment uniforms
+	static GLint _uModelColor;
+	static GLint _uShininess;
+	static GLint _uCameraPos;
+
+	//vertex attributes
+	static GLint _aVertex;
+	static GLint _aNormal;
+	static GLint _aU;
+
+	//lights
+	std::vector<AbstractLight*>* _lights;
+	
+	//settings
+	glm::vec3 _modelColor;
+	float _shininess;
 };
 
 #endif // LITMATERIAL_H
