@@ -31,6 +31,7 @@ Texture* Texture::load(std::string pName)
         texture = _loadFromFile(pName);
 		if (texture)
 		{
+			texture->setName(pName);
 			std::cout << "Texture " << pName << " with id " << texture->getId() << " loaded." << std::endl;
 			std::cout << "Caching texture." << std::endl;
 			_textures[pName] = texture;
@@ -63,6 +64,14 @@ Texture* Texture::_loadFromFile(std::string pName) {
     } else {
         return 0;
     }
+}
+
+std::string Texture::getName() {
+	return _name;
+}
+
+void Texture::setName(std::string replacement) {
+	_name = replacement;
 }
 
 

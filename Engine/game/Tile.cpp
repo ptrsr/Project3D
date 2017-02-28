@@ -1,11 +1,15 @@
 #include "Tile.hpp"
 #include "mge/core/World.hpp"
+#include "mge/config.hpp"
+#include "mge/auxiliary/TextureCache.hpp"
 
 Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
 {
 	this->setLocalPosition(pPosition);
 
 	_material = new LitMaterial(LitMaterial::vertex);
+	//Texture * texture = Texture::load(config::MGE_TEXTURE_PATH + "playfield_tile_sg_Ambient_occlusion.png");
+	_material = new LitMaterial();
 	this->setMaterial(_material);
 	this->setMesh(pMesh);
 }
