@@ -18,12 +18,12 @@ public:
 
 
 	virtual inline void update(float pStep) { };
-	virtual void applyPickUp(Player* pPlayer) = 0;
+	virtual glm::vec2 applyPickUp(Player* pPlayer) = 0;
 
 	void step();
 
 	glm::vec2 getBoardPos();
-
+	void spawn(glm::vec2 pos);
 
 protected:
 	void reset();
@@ -37,7 +37,6 @@ private:
 
 	float _countDown = 0;
 	glm::vec2 _boardPos;
-
 };
 
 #endif

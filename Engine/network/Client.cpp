@@ -1,6 +1,7 @@
 #include "../network/Client.hpp"
 
 #include "../game/Level.hpp"
+#include "../game/PickUps/ScoreCube.hpp"
 
 Client::Client()
 {
@@ -113,6 +114,11 @@ void Client::Send(DataType type, char* data)
 	PacketHelper::Send(type, data, _sock);
 }
 
+Id Client::GetId()
+{
+	return _playerId;
+}
+
 void Client::ReceiveResponse()
 {
 	char buffer[4];
@@ -156,21 +162,43 @@ void Client::HandlePacket(DataType type, char* buf)
 		}
 	}
 		break;
-	case DataType::TESTDATA:
-		TestData testData = *reinterpret_cast<TestData*>(buf);
-		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
-		cout << testData.pX << " " << testData.pY << " " << testData.pZ << " " << testData.rX << " " << testData.rY << " " << testData.rZ << endl;
-		break;
 	case DataType::PLAYERDATA:
-	{
 		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
-		if (_playerId == Id::empty) _playerId = pData.playerId; //Assign player id
-		Level* level = Level::get();
-		level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), false)); //Spawn player
-	}
+		if (pData.controlled)
+			_playerId = pData.playerId; //Assign player id
+		{
+			Level* level = Level::get();
+			level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled)); //Add player to spawn queue
+		}
+		break;
+	case DataType::TIMEDATA:
+		TimeData timeData = *reinterpret_cast<TimeData*>(buf);
+		{
+			Level* level = Level::get();
+			//level->_curTime = timeData.curTime;
+			//level->_deltaTime = timeData.deltaTime;
+			//level->_lastMoveTime = timeData.lastMoveTime;
+			//level->_totalTime = timeData.totalTime;
+			//level->_moveTime = timeData.moveTime;
+		}
+		break;
+	case DataType::STARTDATA:
+		StartData startData = *reinterpret_cast<StartData*>(buf);
+		Level::get()->Start(startData.start);
 		break;
 	case DataType::MOVEDATA:
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
+		if (moveData.playerId == _playerId)
+			return; //Skip me
+		Level::get()->AddMove(moveData); //Add move to spawn queue
+		break;
+	case DataType::PICKUPDATA:
+		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);
+		Level::get()->AddPickUp(pickupData);
+		break;
+	case DataType::SCOREDATA:
+		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
+		Level::get()->AddScore(scoreData);
 		break;
 	}
 }

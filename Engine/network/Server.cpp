@@ -145,6 +145,16 @@ void Server::AcceptClients()
 
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
+
+				if (_connectedClients == 1)
+				{
+					Sleep(7500);
+					StartData sd;
+					sd.start = true;
+					NotifyClients(DataType::STARTDATA, (char*)&sd, _sock); //Give the start sign
+
+					Level::get()->Start(sd.start); //Start our game too
+				}
 			}
 			else
 			{
@@ -190,14 +200,12 @@ void Server::HandlePacket(DataType type, char* buf)
 {
 	switch (type)
 	{
-	case DataType::TESTDATA:
-		TestData testData = *reinterpret_cast<TestData*>(buf);
-		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
-		cout << testData.input << endl;
-		break;
-	case DataType::PLAYERDATA:
+	case DataType::MOVEDATA:
+		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
 		{
-			PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
+			Level* level = Level::get();
+			level->AddMove(moveData);
+			NotifyClients(DataType::MOVEDATA, buf, _sockClients[moveData.playerId - 2]);
 		}
 		break;
 	}
@@ -226,29 +234,28 @@ void Server::SendGameState()
 
 	vector<Player*> players = level->getPlayers();
 
+	//Send current player positions
+	for (int i = 0; i < players.size(); i++)
+	{
+		Player* player = players[i];
+		PlayerData pData;
+		pData.playerId = player->getId();
+		pData.controlled = false;
+		pData.boardX = player->getBoardPos().x;
+		pData.boardY = player->getBoardPos().y;
+		Send(DataType::PLAYERDATA, (char*)&pData);
+	}
+
 	//Send client player id and pos
 	PlayerData cData;
 	cData.playerId = static_cast<Id>(players.size() + 1);
 	pair<int, int> spawnPos = level->GetSpawnPosition(cData.playerId);
+	cData.controlled = true;
 	cData.boardX = spawnPos.first;
 	cData.boardY = spawnPos.second;
 
 	Send(DataType::PLAYERDATA, (char*)&cData);
 	level->AddSpawn(new Player(cData.playerId, glm::vec2(cData.boardX, cData.boardY), false));
-
-	//Send player positions
-	for (int i = 0; i < players.size(); i++)
-	{
-		if (cData.playerId == players[i]->getId())
-			continue;
-
-		Player* player = players[i];
-		PlayerData pData;
-		pData.playerId = player->getId();
-		pData.boardX = player->getBoardPos().x;
-		pData.boardY = player->getBoardPos().y;
-		Send(DataType::PLAYERDATA, (char*)&pData);
-	}
 }
 
 //

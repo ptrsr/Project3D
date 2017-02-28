@@ -121,36 +121,28 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		temp = !temp;
+		cout << temp << endl;
+		_sleep(100);
+	}
+	if (!temp)
+		return;
 	if (!_controlled)
 		return;
-	if (getPlayerId() == p1)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-			_dDir = Dir::up;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-			_dDir = Dir::down;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		_dDir = Dir::up;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			_dDir = Dir::right;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		_dDir = Dir::down;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			_dDir = Dir::left;
-	}
-	else if (getPlayerId() == p3)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			_dDir = Dir::up;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		_dDir = Dir::right;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			_dDir = Dir::down;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			_dDir = Dir::right;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			_dDir = Dir::left;
-	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		_dDir = Dir::left;
 }
 
 void MovementBehaviour::inverseDirection()
@@ -193,6 +185,16 @@ Id MovementBehaviour::getPlayerId()
 bool MovementBehaviour::IsControlled()
 {
 	return _controlled;
+}
+
+Dir MovementBehaviour::GetDDir()
+{
+	return _dDir;
+}
+
+void MovementBehaviour::SetDDir(Dir dir)
+{
+	_dDir = dir;
 }
 
 glm::vec2 MovementBehaviour::getBoardPos()

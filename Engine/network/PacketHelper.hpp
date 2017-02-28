@@ -5,11 +5,14 @@
 #include "../network/NetworkCommand.hpp"
 #include "../network/packets/DataType.hpp"
 
+#include "../network/packets/TimeData.hpp"
+#include "../network/packets/StartData.hpp"
 #include "../network/packets/PlayerData.hpp"
 #include "../network/packets/MoveData.hpp"
 #include "../network/packets/TileData.hpp"
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/TestData.hpp"
+#include "../network/packets/PickupData.hpp"
 
 using namespace std;
 

@@ -10,8 +10,13 @@
 #include "mge/config.hpp"
 
 #include "Player.hpp"
-#include "PickUps\PickUp.hpp"
+#include "PickUps/PickUp.hpp"
 #include "Board.hpp"
+
+#include "../network/packets/DataType.hpp"
+#include "../network/packets/MoveData.hpp"
+#include "../network/packets/PickupData.hpp"
+#include "../network/packets/ScoreData.hpp"
 
 class Client;
 class Server;
@@ -36,30 +41,49 @@ public:
 
 	void SetupLevel();
 	pair<int, int> GetSpawnPosition(Id playerId);
+
+	void Start(bool value);
 	void AddSpawn(Player* player);
+	void AddMove(MoveData move);
+	void AddPickUp(PickupData pickUp);
+	void AddScore(ScoreData score);
+
+	void spawnPickUp(PickUp* pPickUp, glm::vec2 pos);
+	void removePickUp(glm::vec2 pos);
+
+	void CreatePacket(DataType type);
+	void CreatePacket(glm::vec2 pos, glm::vec2 oldPos);
+	void CreatePacket(Id playerId, int score);
 private:
 	static Level* _level;
 
 	void RemovePlayers();
 	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp(PickUp* pPickUp);
+
+	void Send(DataType type, char* data);
 	
 	void checkCollisions();
 
-	Client* _client;
-	Server* _server;
+	Client* _client = NULL;
+	Server* _server = NULL;
 
-	std::vector<Player*> _spawnQueue;
-	std::vector<Player*> _players;
-	std::vector<PickUp*> _pickups;
-	Board* _board;
-	std::vector<pair<int, int>> _spawnPos;
+	bool _start = false;
 
 	float _curTime = 0;
 	float _deltaTime = 0;
 	float _lastMoveTime = 0;
 	float _totalTime = 0;
 	float _moveTime = 0;
+
+	std::vector<Player*> _spawnQueue;
+	std::vector<MoveData> _moveQueue;
+	std::vector<PickupData> _pickUpQueue;
+	std::vector<ScoreData> _scoreQueue;
+	std::vector<Player*> _players;
+	std::vector<PickUp*> _pickups;
+	Board* _board;
+	std::vector<pair<int, int>> _spawnPos;
 
 	glm::vec2 _size;
 

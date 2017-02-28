@@ -8,7 +8,7 @@ class ScoreCube : public PickUp
 public:
 	ScoreCube();
 
-	virtual void applyPickUp(Player* pPlayer);
+	virtual glm::vec2 applyPickUp(Player* pPlayer);
 private:
 
 };

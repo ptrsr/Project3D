@@ -7,4 +7,5 @@ struct PlayerData
 	Id playerId;
 	int boardX;
 	int boardY;
+	bool controlled;
 };

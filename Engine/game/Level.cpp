@@ -16,8 +16,6 @@ Level::Level() :GameObject("level")
 {
 	//setLocalPosition(glm::vec3(-8.5f, 0, 0));
 
-	spawnPickUp(new ScoreCube());
-
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
 	_spawnPos.push_back(make_pair<int, int>(0, 8));
 	_spawnPos.push_back(make_pair<int, int>(8, 8));
@@ -119,26 +117,139 @@ pair<int, int> Level::GetSpawnPosition(Id playerId)
 	return _spawnPos[playerId - 1];
 }
 
+void Level::Start(bool value)
+{
+	_start = value;
+}
+
 void Level::AddSpawn(Player* player)
 {
 	_spawnQueue.push_back(player);
 }
 
+void Level::AddMove(MoveData move)
+{
+	_moveQueue.push_back(move);
+}
+
+void Level::AddPickUp(PickupData pickUp)
+{
+	_pickUpQueue.push_back(pickUp);
+}
+
+void Level::AddScore(ScoreData score)
+{
+	_scoreQueue.push_back(score);
+}
+
+void Level::CreatePacket(DataType type)
+{
+	for (int i = 0; i < _players.size(); i++)
+	{
+		if (_server != NULL || _client != NULL && i == (_client->GetId() - 1))
+		{
+			switch (type)
+			{
+			case TIMEDATA:
+				TimeData td;
+				td.curTime = _curTime;
+				td.deltaTime = _deltaTime;
+				td.lastMoveTime = _lastMoveTime;
+				td.totalTime = _totalTime;
+				td.moveTime = _moveTime;
+				Send(type, (char*)&td);
+				break;
+			case MOVEDATA:
+				MoveData md;
+				md.playerId = _players[i]->getId();
+				md.direction = _players[i]->_movement->GetDDir();
+				Send(type, (char*)&md);
+				break;
+			case SCOREDATA:
+				break;
+			case TILEDATA:
+				break;
+			}
+		}
+	}
+}
+
+void Level::CreatePacket(glm::vec2 pos, glm::vec2 oldPos)
+{
+	PickupData pd;
+	pd.boardX = pos.x;
+	pd.boardY = pos.y;
+	pd.oldX = oldPos.x;
+	pd.oldY = oldPos.y;
+	Send(DataType::PICKUPDATA, (char*)&pd);
+}
+
+void Level::CreatePacket(Id playerId, int score)
+{
+	ScoreData sd;
+	sd.playerId = playerId;
+	sd.score = score;
+
+	Send(DataType::SCOREDATA, (char*)&sd);
+}
+
+void Level::Send(DataType type, char* data)
+{
+	if (_client != NULL)
+		_client->Send(type, data);
+	if (_server != NULL)
+		_server->Send(type, data);
+}
+
 void Level::update(float pStep)
 {
-	//if (_spawnQueue.size() > 0)
-	//{
-	//	Player* player = _spawnQueue[0];
-	//	SpawnPlayer(player->getId(), player->getBoardPos(), _players.size() == 0 ? true : false);
-	//	_spawnQueue.erase(_spawnQueue.begin());
-	//	delete player;
-	//}
+	//
+	// - More testing with 4 players
+	// - Clean up queues
+	// - Handle client/host leaving
+	// - Remember to set client/server to NULL on leaving
+	//
+	while (_spawnQueue.size() > 0)
+	{
+		Player* player = _spawnQueue[0];
+		spawnPlayer(player->getId(), player->getBoardPos(), player->IsControlled());
+		_spawnQueue.erase(_spawnQueue.begin());
+		delete player;
+	}
+	while (_pickUpQueue.size() > 0)
+	{
+		PickupData pData = _pickUpQueue[0];
+		removePickUp(glm::vec2(pData.oldX, pData.oldY));
+		if (pData.boardX != -1 && pData.boardY != -1)
+			spawnPickUp(new ScoreCube(), glm::vec2(pData.boardX, pData.boardY));
+		_pickUpQueue.erase(_pickUpQueue.begin());
+	}
+
+	if (!_start)
+		return;
+
+	if (_server != NULL && _pickups.size() == 0)
+		spawnPickUp(new ScoreCube()); //Spawn the score cube
 
 	_curTime += pStep;
 
-	//check for player input
-	for each (Player* player in _players)
-		player->_movement->checkKeys();
+	if (_curTime < 0.75f)
+	{
+		//check for player input
+		for each (Player* player in _players)
+			player->_movement->checkKeys();
+	}
+	else
+	{
+		CreatePacket(DataType::MOVEDATA);
+
+		while (_moveQueue.size() > 0)
+		{
+			MoveData move = _moveQueue[0];
+			_players[move.playerId - 1]->_movement->SetDDir(move.direction);
+			_moveQueue.erase(_moveQueue.begin());
+		}
+	}
 
 	//if player is moving
 	if (_curTime < _moveTime)
@@ -148,6 +259,8 @@ void Level::update(float pStep)
 
 		_deltaTime = 0;
 		_lastMoveTime = _curTime;
+
+
 	}
 	//if move ended
 	else if (_lastMoveTime != 0)
@@ -160,17 +273,32 @@ void Level::update(float pStep)
 			//set tiles to new owner
 			_board->setOwner(player->getBoardPos(), player->getId());
 
-			//apply pickups
-			for each (PickUp* pickUp in _pickups)
-				if (pickUp->getBoardPos() == player->getBoardPos())
-					pickUp->applyPickUp(player);
+			if (_server != NULL)
+			{
+				//apply pickups
+				for each (PickUp* pickUp in _pickups)
+					if (pickUp->getBoardPos() == player->getBoardPos())
+					{
+						glm::vec2 oldPos = pickUp->applyPickUp(player);
+						CreatePacket(pickUp->getBoardPos(), oldPos);
+					}
+			}
 		}
 		_lastMoveTime = 0;
 	}
+		
 
 	//if animation is done
 	if (_curTime >= _totalTime)
 	{
+		while (_scoreQueue.size() > 0)
+		{
+			ScoreData sData = _scoreQueue[0];
+			_players[sData.playerId - 1]->addScore(sData.score); //Add player score
+			_board->getScore(sData.playerId); //Clean player line
+			_scoreQueue.erase(_scoreQueue.begin());
+		}
+
 		//set next move direction to desired direction
 		for each (Player* player in _players)
 			player->_movement->setDirection();
@@ -264,6 +392,26 @@ void Level::spawnPickUp(PickUp* pPickUp)
 {
 	_pickups.push_back(pPickUp);
 	pPickUp->setParent(this);
+}
+
+void Level::spawnPickUp(PickUp* pPickUp, glm::vec2 pos)
+{
+	_pickups.push_back(pPickUp);
+	pPickUp->setParent(this);
+	pPickUp->spawn(pos);
+}
+
+void Level::removePickUp(glm::vec2 pos)
+{
+	for (int i = 0; i < _pickups.size(); i++)
+	{
+		if (_pickups[i]->getBoardPos() == pos)
+		{
+			delete _pickups[i];
+			_pickups.erase(_pickups.begin() + i);
+			return;
+		}
+	}
 }
 
 Level::~Level() { }

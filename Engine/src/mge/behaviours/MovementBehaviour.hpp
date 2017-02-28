@@ -28,7 +28,11 @@ class MovementBehaviour : public AbstractBehaviour
 		glm::vec2 getNextPos();
 		Id getPlayerId();
 		bool IsControlled();
+		Dir GetDDir();
+		void SetDDir(Dir dir);
 
+
+		bool temp = false; //Freeze key Q
 	private:
 		void inverseDirection();
 

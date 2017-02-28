@@ -178,10 +178,13 @@
     <ClInclude Include="..\network\PacketHelper.hpp" />
     <ClInclude Include="..\network\packets\DataType.hpp" />
     <ClInclude Include="..\network\packets\MoveData.hpp" />
+    <ClInclude Include="..\network\packets\PickupData.hpp" />
     <ClInclude Include="..\network\packets\PlayerData.hpp" />
     <ClInclude Include="..\network\packets\ScoreData.hpp" />
+    <ClInclude Include="..\network\packets\StartData.hpp" />
     <ClInclude Include="..\network\packets\TestData.hpp" />
     <ClInclude Include="..\network\packets\TileData.hpp" />
+    <ClInclude Include="..\network\packets\TimeData.hpp" />
     <ClInclude Include="..\network\scene\SyncScene.hpp" />
     <ClInclude Include="..\network\Server.hpp" />
     <ClInclude Include="..\src\glm.hpp" />

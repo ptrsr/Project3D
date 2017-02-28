@@ -11,6 +11,8 @@ PickUp::PickUp(std::string pName) : GameObject(pName)
 	srand(time(NULL));
 
 	World::add(this);
+
+	setLocalPosition(glm::vec3(0, -10, 0));
 }
 
 void PickUp::spawn()
@@ -45,6 +47,13 @@ void PickUp::spawn()
 	setLocalPosition(glm::vec3(_boardPos.x, 1, _boardPos.y));
 }
 
+void PickUp::spawn(glm::vec2 pos)
+{
+	_countDown = -1;
+	_boardPos = pos;
+	setLocalPosition(glm::vec3(pos.x, 1, pos.y));
+}
+
 glm::vec2 PickUp::getBoardPos()
 {
 	return _boardPos;
@@ -53,7 +62,7 @@ glm::vec2 PickUp::getBoardPos()
 void PickUp::reset()
 {
 	_boardPos = glm::vec2(-1);
-	setLocalPosition(glm::vec3(0, -10, 0));
+	setLocalPosition(glm::vec3(0, -100, 0));
 	_countDown = (rand() % (_maxDelay - _minDelay)) + _minDelay;
 }
 
@@ -65,7 +74,10 @@ void PickUp::step()
 	_countDown--;
 
 	if (_countDown == 0)
+	{
 		spawn();
+		Level::get()->CreatePacket(_boardPos, glm::vec2(-1 - 1));
+	}
 }
 
 PickUp::~PickUp()

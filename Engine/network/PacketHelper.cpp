@@ -49,6 +49,10 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(NetWorkCommand);
 	case DataType::TESTDATA:
 		return sizeof(TestData);
+	case DataType::TIMEDATA:
+		return sizeof(TimeData);
+	case DataType::STARTDATA:
+		return sizeof(StartData);
 	case DataType::PLAYERDATA:
 		return sizeof(PlayerData);
 	case DataType::MOVEDATA:
@@ -57,6 +61,8 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(ScoreData);
 	case DataType::TILEDATA:
 		return sizeof(TileData);
+	case DataType::PICKUPDATA:
+		return sizeof(PickupData);
 	default:
 		cout << "ERROR: Could not match a DataType" << endl;
 		return -1;
