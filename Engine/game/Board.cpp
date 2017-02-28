@@ -3,6 +3,7 @@
 
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
+#include "mge/auxiliary/MeshCache.hpp"
 
 Board::Board() : GameObject("Board")
 {
@@ -19,13 +20,19 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 
 void Board::initializeBoard() 
 {
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "playfield_tile.obj");
+	Mesh* planeMesh;
+	if (MeshCache::exists(config::MGE_MODEL_PATH + "playfield_tile.obj")) {
+		planeMesh = MeshCache::find(config::MGE_MODEL_PATH + "playfield_tile.obj");
+	}
+	else {
+		planeMesh = Mesh::load(config::MGE_MODEL_PATH + "playfield_tile.obj");
+		MeshCache::push(planeMesh);
+	}
 
 	for (int i = 0; i < _size.x; i++) {
 		for (int j = 0; j < _size.y; j++) 
 		{
-			Tile * tile = new Tile(glm::vec3(j, 0, i), planeMesh);
-
+			Tile * tile = new Tile(glm::vec3(j, 0.f, i), planeMesh);
 			_boardArray[j][i] = tile;
 			tile->setParent(this);
 		}

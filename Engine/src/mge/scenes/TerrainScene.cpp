@@ -17,7 +17,6 @@ using namespace std;
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
-#include "mge/materials/TerrainMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -63,10 +62,10 @@ void TerrainScene::_initializeScene()
 	GameObject* terrain = new GameObject("terrain");
 	terrain->setMesh(Mesh::load(config::MGE_MODEL_PATH + "plane_8192.obj"));
 	
-	TerrainMaterial* terMat = new TerrainMaterial("heightmap.png", "diffuse1.jpg", "water.jpg", "diffuse3.jpg", "diffuse4.jpg", "splatmap.png");
-	//TerrainMaterial* terMat = new TerrainMaterial("heightmap2.png", "diffuse1.jpg", "diffuse2.jpg", "diffuse3.jpg", "diffuse4.jpg", "splatmap2.png");
-	terMat->enableWater(true, 2);
-	terrain->setMaterial(terMat);
+	//TerrainMaterial* terMat = new TerrainMaterial("heightmap.png", "diffuse1.jpg", "water.jpg", "diffuse3.jpg", "diffuse4.jpg", "splatmap.png");
+	////TerrainMaterial* terMat = new TerrainMaterial("heightmap2.png", "diffuse1.jpg", "diffuse2.jpg", "diffuse3.jpg", "diffuse4.jpg", "splatmap2.png");
+	//terMat->enableWater(true, 2);
+	//terrain->setMaterial(terMat);
 
 	camera->setBehaviour(new OrbitBehaviour(terrain, 3));
 

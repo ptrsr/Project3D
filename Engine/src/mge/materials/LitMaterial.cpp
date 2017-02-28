@@ -29,39 +29,33 @@ GLint LitMaterial::_aUV = 0;
 LitMaterial::LitMaterial(glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
 	: _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
 {
-	_lazyInitializeShader(_shaderName);
+	if (!_shader)
+		_shader = _lazyInitializeShader(_shaderName);
 }
 
-LitMaterial::LitMaterial(std::string pShaderName, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
-	: _shaderName(pShaderName), _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
+ShaderProgram* LitMaterial::_lazyInitializeShader(std::string shaderName) 
 {
-	_lazyInitializeShader(_shaderName);
-}
+	ShaderProgram* shader = new ShaderProgram();
 
-void LitMaterial::_lazyInitializeShader(std::string shaderName) 
-{
-	if (!_shader) 
-	{
-		_shader = new ShaderProgram();
+	shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + shaderName + ".vs");
+	shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + shaderName + ".fs");
+	shader->finalize();
 
-		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + shaderName + ".vs");
-		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + shaderName + ".fs");
-		_shader->finalize();
+	//vertex uniforms
+	_uMVPMatrix		 = shader->getUniformLocation("mvpMatrix");
+	_uModelMatrix    = shader->getUniformLocation("modelMatrix");
 
-		//vertex uniforms
-		_uMVPMatrix		 = _shader->getUniformLocation("mvpMatrix");
-		_uModelMatrix    = _shader->getUniformLocation("modelMatrix");
+	//fragment uniforms
+	_uModelColor = shader->getUniformLocation("modelColor");
+	_uShininess  = shader->getUniformLocation("shininess");
+	_uCameraPos  = shader->getUniformLocation("cameraPos");
 
-		//fragment uniforms
-		_uModelColor = _shader->getUniformLocation("modelColor");
-		_uShininess  = _shader->getUniformLocation("shininess");
-		_uCameraPos  = _shader->getUniformLocation("cameraPos");
+	//vertex attributes
+	_aVertex = shader->getAttribLocation("vertex");
+	_aNormal = shader->getAttribLocation("normal");
+	_aUV	 = shader->getAttribLocation("uv");
 
-		//vertex attributes
-		_aVertex = _shader->getAttribLocation("vertex");
-		_aNormal = _shader->getAttribLocation("normal");
-		_aUV	 = _shader->getAttribLocation("uv");
-	}
+	return shader;
 }
 
 glm::vec3 LitMaterial::getColor() {
@@ -73,8 +67,7 @@ void LitMaterial::setColor(glm::vec3 newColor) {
 
 void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
 {
-	_shader->use();
-	renderLights();
+	getShader()->use();
 
 	//uniforms
 	glm::mat4 mvpMatrix = pProjectionMatrix * pViewMatrix * pModelMatrix;
@@ -84,27 +77,22 @@ void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);
 
-	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
 
+	std::cout << _uModelColor << std::endl;
+	glUniform3fv(_uModelColor, 1, glm::value_ptr(glm::vec3(1,1,1)));
+
+	renderLights();
 	renderPolygons(pMesh);
+}
 
-
+ShaderProgram* LitMaterial::getShader()
+{
+	return _shader;
 }
 
 void LitMaterial::renderPolygons(Mesh* pMesh)
 {
-	//if (_lit == Lit::texture)
-	//{
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, _texture->getId());
-	//	glUniform1i(_uTexture, 0);
-	//} else
-
-
-	//vertex attributes
-	//if (_lit == Lit::texture)
-	//	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
-	pMesh->streamToOpenGL(_aVertex, _aNormal, -1);
+	pMesh->streamToOpenGL(_aVertex, _aNormal, -1 );
 }
 
 void LitMaterial::renderLights()

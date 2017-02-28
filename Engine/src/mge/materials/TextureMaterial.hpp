@@ -15,11 +15,13 @@ class TextureMaterial : public LitMaterial
         void setTexture (Texture* pDiffuseTexture);
 
     protected:
+		virtual ShaderProgram* getShader() override;
+		
 		virtual void renderPolygons(Mesh* pMesh) override;
 
-		
-
     private:
+		static ShaderProgram* _shader;
+
 		static GLint _uTexture;
 
         Texture* _texture;

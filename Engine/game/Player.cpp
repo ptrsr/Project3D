@@ -24,7 +24,7 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 	if (playerId == p3)
 		color = glm::vec3(0, 0, 1);
 
-	this->setMaterial(new LitMaterial(LitMaterial::fragment, color));
+	this->setMaterial(new LitMaterial(color));
 };
 
 void Player::addScore(int pScore)

@@ -6,18 +6,28 @@
 #include "mge/core/GameObject.hpp"
 #include "mge/config.hpp"
 
+ShaderProgram* TextureMaterial::_shader = NULL;
+
 //uniforms
 GLint TextureMaterial::_uTexture = 0;
 
-TextureMaterial::TextureMaterial(Texture* pTexture, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f)
-	: LitMaterial("litTexture", pModelColor, pShininess), _texture(pTexture)
+TextureMaterial::TextureMaterial(Texture* pTexture, glm::vec3 pModelColor, float pShininess)
+	: LitMaterial(pModelColor, pShininess), _texture(pTexture)
 { 
-	_uTexture = _shader->getUniformLocation("dTexture");
+	if (!_shader)
+	{
+		_shader = _lazyInitializeShader("litTexture");
+		_uTexture = _shader->getUniformLocation("dTexture");
+	}
 }
-
 
 void TextureMaterial::setTexture (Texture* pTexture) {
     _texture = pTexture;
+}
+
+ShaderProgram* TextureMaterial::getShader()
+{
+	return _shader;
 }
 
 void TextureMaterial::renderPolygons(Mesh* pMesh)

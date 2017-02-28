@@ -13,7 +13,6 @@
 class LitMaterial : public AbstractMaterial
 {
 public:
-
 	LitMaterial(glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
 	
 	virtual ~LitMaterial();
@@ -24,39 +23,12 @@ public:
 	void setColor(glm::vec3 pColor);
 
 protected:
-	LitMaterial(std::string pShaderName, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
-
-	
-	static void _lazyInitializeShader(std::string shaderName);
-	
-	void renderLights();
-	virtual void renderPolygons(Mesh* mesh);
-
-	std::string _shaderName = "litFragment";
-
-	//shader and lighting
-	static ShaderProgram* _shader;
-	std::vector<AbstractLight*>* _lights;
-	
-	//material settings
-	glm::vec3 _modelColor;
-	float _shininess;
-
-	//vertex uniforms
-	static GLint _uMVPMatrix;
-	static GLint _uModelMatrix;
-
-	//vertex attributes
-	static GLint _aVertex;
-	static GLint _aNormal;
-	static GLint _aUV;
-
-	//fragment uniforms
-	static GLint _uModelColor;
-	static GLint _uShininess;
-	static GLint _uCameraPos;
 
 private:
+	static ShaderProgram* _lazyInitializeShader(std::string shaderName);
+	void renderLights();
+
+	static ShaderProgram* _shader;
 
 	LitMaterial(const LitMaterial&);
 };

@@ -7,7 +7,9 @@
 #include "mge/materials/ColorMaterial.hpp"
 #include "Hex.hpp"
 #include "ObjectCache.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "MeshCache.hpp"
+#include "TextureCache.hpp"
+#include "mge/materials/TextureMaterial.hpp"
 #include "mge/core/Camera.hpp"
 #include "mge/behaviours/OrbitBehaviour.hpp"
 
@@ -101,21 +103,15 @@ int setPos(lua_State* lua)
 
 int setRotation(lua_State* lua)
 {
-	std::cout << "Trying" << std::endl;
 	if (lua_gettop(lua) == 4 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
 	{
 		GameObject* obj = ObjectCache::find(lua_tostring(lua, -4));
 
 		if (obj != nullptr)
 		{
-
-			cout << "Setting rotation" << endl;
-
-
 			float x = lua_tonumber(lua, -3);
 			float y = lua_tonumber(lua, -2);
 			float z = lua_tonumber(lua, -1);
-
 
 			obj->rotateDegrees(-y, glm::vec3(0, 1, 0));
 			obj->rotateDegrees(x, glm::vec3(1, 0, 0));
@@ -166,22 +162,32 @@ int setTexture(lua_State* lua)
 		return 0;
 	}
 
+
+
 	if (size == 2 && lua_isstring(lua, -size + 1))
 	{
-		Texture* texture = Texture::load(config::MGE_TEXTURE_PATH + lua_tostring(lua, -size + 1));
+		Texture* texture;
+		std::string tName = config::MGE_TEXTURE_PATH + lua_tostring(lua, -size + 1);
 
+		if (TextureCache::exists(tName)) {
+			texture = TextureCache::find(tName);
+		}
+		else {
+			texture = Texture::load(tName);
+			TextureCache::push(texture);
+		}
+		
 		if (texture)
 		{
-			cout << obj->getName() << endl;
-			obj->setMaterial(new LitMaterial(texture, 10));
+			obj->setMaterial(new TextureMaterial(texture));
 			return 0;
 		}
 	}
 	else if (size == 4 && lua_isnumber(lua, -size + 1)) {
-		obj->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3((lua_tonumber(lua, -size + 1), lua_tonumber(lua, -size + 2), lua_tonumber(lua, -size + 3)))));
+		obj->setMaterial(new LitMaterial(glm::vec3(lua_tonumber(lua, -size + 1), lua_tonumber(lua, -size + 2), lua_tonumber(lua, -size + 3))));
 	}
 	else {
-		obj->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(1, 1, 1)));
+		obj->setMaterial(new LitMaterial());
 		std::cout << "Loading default white material" << std::endl;
 	}
 	return 0;
@@ -197,8 +203,15 @@ int setMesh(lua_State* lua)
 			std::cout << "error setting model: object doesn't exist" << std::endl;
 			return 0;
 		}
-
-		obj->setMesh(Mesh::load(config::MGE_MODEL_PATH + lua_tostring(lua, -1)));
+		if (MeshCache::exists(config::MGE_MODEL_PATH + lua_tostring(lua, -1))) {
+			Mesh* mesh = MeshCache::find(config::MGE_MODEL_PATH + lua_tostring(lua, -1));
+			obj->setMesh(mesh);
+		}
+		else {
+			Mesh * mesh = Mesh::load(config::MGE_MODEL_PATH + lua_tostring(lua, -1));
+			MeshCache::push(mesh);
+			obj->setMesh(mesh);
+		}
 		//obj->scale(glm::vec3(2, 2, 2));
 	}
 

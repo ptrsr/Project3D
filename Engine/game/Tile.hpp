@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include "mge/core/GameObject.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "mge/materials/TextureMaterial.hpp"
 #include "Enums.hpp"
 
 class Tile : public GameObject

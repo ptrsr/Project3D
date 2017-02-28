@@ -17,7 +17,6 @@ using namespace std;
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
-#include "mge/materials/TerrainMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -79,14 +78,6 @@ void MenuScene::_initializeScene()
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
-	GameObject* cube = ObjectCache::find("Playfield");
-	if (cube != NULL) {
-		cube->scale(glm::vec3(4.5f, 0, 4.5f));
-	}
-	GameObject* WholeCube = ObjectCache::find("FullArray");
-	if (cube != NULL) {
-		cube->scale(glm::vec3(4.5f, 0, 4.5f));
-	}
 
 
 	_startState = new StartState();
