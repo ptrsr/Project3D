@@ -21,4 +21,10 @@ enum Dir {
 	right
 };
 
+enum SFX {
+	playerJump1 = 0,
+};
+
+
+
 #endif // !ENUMS_H

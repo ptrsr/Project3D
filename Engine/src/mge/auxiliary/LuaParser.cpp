@@ -192,10 +192,51 @@ int setTexture(lua_State* lua)
 	}
 	return 0;
 }
+
+int setSpecular(lua_State* lua) {
+	int size = lua_gettop(lua);
+
+	if (size == 0)
+	{
+		std::cout << "error: setSpecular parameters" << std::endl;
+		return 0;
+	}
+
+
+	GameObject* obj = ObjectCache::find(lua_tostring(lua, -size));
+
+	if (!obj)
+	{
+		std::cout << "error: object doesn't exist" << std::endl;
+		return 0;
+	}
+
+	if (size == 2 && lua_isstring(lua, -size + 1))
+	{
+		Texture* texture;
+		std::string tName = config::MGE_SPECULAR_PATH + lua_tostring(lua, -size + 1);
+
+		if (TextureCache::exists(tName)) {
+			texture = TextureCache::find(tName);
+		}
+		else {
+			texture = Texture::load(tName);
+			TextureCache::push(texture);
+		}
+
+		if (texture)
+		{
+			((TextureMaterial*)obj->getMaterial())->setSpecular(texture);
+			return 0;
+		}
+	}
+	return 0;
+}
+
 int setMesh(lua_State* lua)
 {
 	if (lua_gettop(lua) == 2 && lua_isstring(lua, -2) && lua_isstring(lua, -1))
-	{
+	{ 
 		GameObject* obj = ObjectCache::find(lua_tostring(lua, -2));
 
 		if (!obj)

@@ -67,6 +67,8 @@ void MenuScene::_initializeScene()
 	cout << "HUD initialized." << endl << endl;
 
 
+
+
 	LuaParser* luaParser = new LuaParser("main.lua");
 
 	GameObject* center = new GameObject("center");

@@ -64,6 +64,10 @@ void TextureMaterial::setTexture(Texture* pTexture)
 {
 	_texture = pTexture;
 }
+void TextureMaterial::setSpecular(Texture* pSpecularTexture)
+{
+	_specular = pSpecularTexture;
+}
 
 void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
 {
@@ -89,8 +93,6 @@ void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const g
 
 void TextureMaterial::renderTexture()
 {
-	std::cout << "hello" << std::endl;
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture->getId());
 	glUniform1i(_uTexture, 0);
