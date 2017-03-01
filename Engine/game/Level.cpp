@@ -72,6 +72,13 @@ bool Level::checkAvailable(Player* pPlayer)
 	return true;
 }
 
+void Level::ApplyPickUp(Player* pPlayer)
+{
+	for each (PickUp* pickUp in Level::getPickUps())
+		if (pickUp->getBoardPos() == pPlayer->getBoardPos())
+			pickUp->applyPickUp(pPlayer);
+}
+
 void Level::update(float pStep)
 {
 	_curTime += pStep;
@@ -87,7 +94,7 @@ void Level::update(float pStep)
 	if (_curTime < _moveTime)
 	{
 		for each (Player* player in _players)
-			player->_movement->move(pStep + _deltaTime, _curTime, _moveTime, _lastMoveTime);
+			player->_movement->move(pStep);
 
 		_deltaTime = 0;
 		_lastMoveTime = _curTime;

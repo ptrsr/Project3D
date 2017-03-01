@@ -1,4 +1,4 @@
-#include "Scorecube.hpp"
+#include "SpeedUp.hpp"
 #include "mge/core/World.hpp"
 #include "mge/materials/LitMaterial.hpp"
 #include "mge/core/Mesh.hpp"
@@ -8,9 +8,9 @@
 #include "../game/Board.hpp"
 #include "../game/Level.hpp"
 
-ScoreCube::ScoreCube(float moveTime) : PickUp("ScoreCube", moveTime)
+SpeedUp::SpeedUp(float moveTime) : PickUp("speedup", moveTime)
 {
-	this->setMaterial(new LitMaterial(glm::vec3(0, 1, 0)));
+	this->setMaterial(new LitMaterial(glm::vec3(0, 0, 1)));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "special_cube.obj"));
 	this->scale(glm::vec3(0.5f));
 
@@ -20,7 +20,7 @@ ScoreCube::ScoreCube(float moveTime) : PickUp("ScoreCube", moveTime)
 	reset();
 }
 
-void ScoreCube::applyPickUp(Player* pPlayer)
+void SpeedUp::applyPickUp(Player* pPlayer)
 {
 	pPlayer->addScore(Level::getBoard()->getScore(pPlayer->getId()));
 	reset();

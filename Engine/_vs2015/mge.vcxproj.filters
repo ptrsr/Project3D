@@ -313,6 +313,9 @@
     <ClInclude Include="..\src\mge\auxiliary\TextureCache.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\PickUps\SpeedUp.hpp">
+      <Filter>game\PickUps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -566,6 +569,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\TextureCache.cpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\PickUps\SpeedUp.cpp">
+      <Filter>game\PickUps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

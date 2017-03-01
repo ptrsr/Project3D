@@ -12,13 +12,56 @@ MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float
 	 _player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight)
 { }
 
-void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime)
+void MovementBehaviour::update(float pStep)
+{
+	_curTime += pStep;
+
+	checkKeys();
+
+	if (_curTime < _moveTime)
+	{
+		move(pStep);
+
+		_deltaTime = 0;
+		_lastMoveTime = _curTime;
+	}
+
+	//if move ended
+	else if (_lastMoveTime != 0)
+	{
+		//finish player animation
+		finishMove(_moveTime, _lastMoveTime);
+
+		//set tiles to new owner
+		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
+
+		//apply pickups
+		Level::ApplyPickUp(_player);
+
+		_lastMoveTime = 0;
+	}
+
+	if (_curTime >= _totalTime)
+	{
+		//set next move direction to desired direction
+		setDirection();
+
+		checkCollisions();
+
+		//reset time for next step
+		_curTime -= _totalTime;
+		_deltaTime = _curTime;
+	}
+}
+
+
+void MovementBehaviour::move(float pStep)
 {
 	float cancelTime; //temporary variable for mid air canceling
 
-	if (_canceled && pCurTime > (cancelTime = pMoveTime / 2.f)) //is the move invalid and are we halfway?
+	if (_canceled && _curTime > (cancelTime = _moveTime / 2.f)) //is the move invalid and are we halfway?
 	{
-		float step = (pCurTime - cancelTime) - (cancelTime - pLastMoveTime);
+		float step = (_curTime - cancelTime) - (cancelTime - _lastMoveTime);
 			
 		//inverse the direction and axis
 		_axis = -_axis;
@@ -31,8 +74,8 @@ void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float
 		if (_dDir == tDir)
 			_dDir = _cDir;
 
-		rotate(step / pMoveTime);
-		translate(pCurTime, pMoveTime, step);
+		rotate(step / _moveTime);
+		translate(_curTime, _moveTime, step);
 
 		_boardPos -= glm::vec2(_trans.x, _trans.z);
 
@@ -40,8 +83,8 @@ void MovementBehaviour::move(float pStep, float pCurTime, float pMoveTime, float
 	}
 	else
 	{
-		rotate((pStep / pMoveTime));
-		translate(pCurTime, pMoveTime, pStep);
+		rotate((pStep / _moveTime));
+		translate(_curTime, _moveTime, pStep);
 	}
 }
 

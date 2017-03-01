@@ -21,7 +21,10 @@ public:
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
-	static void reset();
+	static void					reset();
+	static void					ApplyPickUp(Player* pPlayer);
+	static void					checkCollision(Player* pPlayer);
+
 	virtual void update(float pStep);
 
 	static bool checkAvailable(Player* pPlayer);

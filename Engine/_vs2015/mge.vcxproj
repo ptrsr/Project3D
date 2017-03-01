@@ -171,6 +171,7 @@
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\PickUps\PickUp.hpp" />
     <ClInclude Include="..\game\PickUps\ScoreCube.hpp" />
+    <ClInclude Include="..\game\PickUps\SpeedUp.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
     <ClInclude Include="..\game\Tile.hpp" />
     <ClInclude Include="..\network\Client.hpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\PickUps\PickUp.cpp" />
     <ClCompile Include="..\game\PickUps\ScoreCube.cpp" />
+    <ClCompile Include="..\game\PickUps\SpeedUp.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
     <ClCompile Include="..\game\Tile.cpp" />
     <ClCompile Include="..\network\Client.cpp" />
