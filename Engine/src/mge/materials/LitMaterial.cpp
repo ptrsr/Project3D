@@ -110,7 +110,7 @@ void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::
 		glBindTexture(GL_TEXTURE_2D, _texture->getId());
 		glUniform1i(_uTexture, 0);
 	} else
-		glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
+		glUniform3fv(_uModelColor, 1, glm::value_ptr(glm::vec3(1,0,0)));
 
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);

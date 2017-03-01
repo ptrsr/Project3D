@@ -17,6 +17,13 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 	_boardArray[(int)boardPos.x][(int)boardPos.y]->setOwner(player);
 }
 
+Id Board::getOwnerOfTile(glm::vec2 boardPos) {
+	if (outOfBounds(boardPos))
+		return Id::p4;
+
+	return _boardArray[(int)boardPos.x][(int)boardPos.y]->getOwner();
+}
+
 void Board::initializeBoard() 
 {
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "playfield_tile.obj");

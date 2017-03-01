@@ -12,6 +12,7 @@ public:
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 boardPos, Id player);
+	Id getOwnerOfTile(glm::vec2 boardPos);
 	int getScore(Id pPlayerId);
 
 private:

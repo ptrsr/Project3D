@@ -38,6 +38,7 @@ class PlayerBehaviour : public AbstractBehaviour
 		void translate(float pTime, float pMoveTime, float pStep);
 		
 		Player* _player;
+		bool _hasActivated = false;
 
 		//settings
 		float _dJumpHeight  = 1;
