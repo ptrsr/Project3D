@@ -1,7 +1,7 @@
 #ifndef PICKUP_H
 #define PICKUP_H
 
-#include "mge/behaviours/MovementBehaviour.hpp"
+#include "mge/behaviours/PlayerBehaviour.hpp"
 #include "mge/materials/LitMaterial.hpp"
 #include "../game/Player.hpp"
 

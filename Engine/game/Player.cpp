@@ -13,7 +13,12 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 
 	this->setLocalPosition(glm::vec3(boardPos.x, 1.0f, boardPos.y)); 
 
-	_movement = new MovementBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
+	if (playerId == Id::p1) {
+		_movement = new FireBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
+	}
+	else {
+		_movement = new WindBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
+	}
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));

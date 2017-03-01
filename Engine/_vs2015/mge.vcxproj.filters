@@ -229,9 +229,6 @@
     <ClInclude Include="..\game\Level.hpp">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
-      <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\scenes\MenuScene.hpp">
@@ -312,6 +309,21 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\TextureCache.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\PlayerBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\FireBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\EarthBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\WaterBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\WindBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -501,9 +513,6 @@
     <ClCompile Include="..\game\Level.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
-      <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp">
       <Filter>MGE Source files</Filter>
     </ClCompile>
@@ -566,6 +575,21 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\TextureCache.cpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\EarthBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\FireBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\PlayerBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\WaterBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\WindBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
