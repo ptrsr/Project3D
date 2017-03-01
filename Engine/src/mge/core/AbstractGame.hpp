@@ -31,7 +31,6 @@ class AbstractGame
         virtual void initialize(int windowWidth = 1280, int windowHeight = 720);
         //run the actual process of updating all objects, rendering them and processing events
         virtual void run();
-
     protected:
 
         //methods above delegate behaviour to the methods below so that you can override it in a subclass
