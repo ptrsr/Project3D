@@ -13,6 +13,7 @@ class TextureMaterial : public AbstractMaterial
 		virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
         void setTexture (Texture* pDiffuseTexture);
+		void setSpecular(Texture* pSpecularTexture);
 
 		glm::vec3 getColor();
 		void setColor(glm::vec3 pColor);
@@ -45,6 +46,7 @@ private:
 	//settings
 	glm::vec3 _modelColor;
 	Texture* _texture;
+	Texture* _specular;
 	float _shininess;
 };
 

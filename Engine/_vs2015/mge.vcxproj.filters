@@ -325,6 +325,9 @@
     <ClInclude Include="..\src\mge\behaviours\WindBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\AudioManager.h">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -590,6 +593,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\WindBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\AudioManager.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
