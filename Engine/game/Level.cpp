@@ -231,11 +231,11 @@ void Level::update(float pStep)
 	while (_moveQueue.size() > 0)
 	{
 		MoveData move = _moveQueue[0];
-		//_players[move.playerId - 1]->_movement->SetDDir(move.direction);
+		_players[move.playerId - 1]->_movement->SetDDir(move.direction);
 
-		Player* player = getPlayers()[move.playerId - 1];
-		player->_movement->SetDDir(move.direction);
-		player->setLocalPosition(glm::vec3(move.toBoardX, 0.5f, move.toBoardY));
+		//Player* player = getPlayers()[move.playerId - 1];
+		//player->_movement->SetDDir(move.direction);
+		//player->setLocalPosition(glm::vec3(move.toBoardX, 0.5f, move.toBoardY));
 
 		_moveQueue.erase(_moveQueue.begin());
 	}
