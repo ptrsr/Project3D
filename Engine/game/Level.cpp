@@ -93,15 +93,13 @@ void Level::update(float pStep)
 			pickUp->step();
 
 		coolDowns();
+		checkCollisions();
 
 		_curTime -= _totalTime;
 	}
 }
 
-void Level::checkCollision(Player* pPlayer)
-{
 
-}
 
 void Level::applyAbility(Player* pPlayer)
 {

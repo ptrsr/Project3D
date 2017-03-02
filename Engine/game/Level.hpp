@@ -23,8 +23,6 @@ public:
 	static Board*				getBoard();
 	static void					reset();
 	static void					ApplyPickUp(Player* pPlayer);
-	static void					checkCollision(Player* pPlayer);
-
 	static void					applyAbility(Player* pPlayer);
 
 	virtual void update(float pStep);
