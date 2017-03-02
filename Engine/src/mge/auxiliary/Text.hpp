@@ -41,6 +41,8 @@ class Text
 		string text;
 		string copyForCompare;
 		std::vector<GameObject*> objs;
+		GameObject* posOfObjs[23];
+		
 		bool _isKeyPress = true;
 		int _delay = 15;
 		int _delayCounter = 0;
