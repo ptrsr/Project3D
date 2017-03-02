@@ -38,7 +38,7 @@ private:
 	void AcceptClients(); //Attempts to accept incoming clients
 	void HandleClients(SOCKET client); //Receives data from all clients
 	void HandlePacket(DataType type, char* buf); //Handles received packages
-	void NotifyClients(DataType type, char* data, SOCKET sourceClient); //Sends data to all other clients
+	void NotifyClients(DataType type, char* data); //Sends data to all other clients
 
 	void SendGameState(SOCKET client);
 

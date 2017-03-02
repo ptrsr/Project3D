@@ -12,7 +12,15 @@ Board::Board() : GameObject("Board")
 
 void Board::ResetBoard()
 {
-
+	for (int i = 0; i < _size.x; i++)
+	{
+		for (int j = 0; j < _size.y; j++)
+		{
+			Tile* tile = _boardArray[j][i];
+			tile->setOwner(Id::empty);
+			tile->getMaterial()->setColor(glm::vec3(1));
+		}
+	}
 }
 
 void Board::setOwner(glm::vec2 boardPos, Id player)

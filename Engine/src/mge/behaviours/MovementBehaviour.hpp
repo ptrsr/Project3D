@@ -26,6 +26,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
+		void setBoardPos(glm::vec2 pos);
 		glm::vec2 getNextPos();
 		void enableAbility();
 		bool IsControlled();

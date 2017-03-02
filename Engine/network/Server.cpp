@@ -97,7 +97,7 @@ int Server::StopServer()
 //
 void Server::SendAll(DataType type, char* data)
 {
-	NotifyClients(type, data, _sock);
+	NotifyClients(type, data);
 }
 
 //
@@ -151,7 +151,7 @@ void Server::AcceptClients()
 					Sleep(7500);
 					StartData sd;
 					sd.start = true;
-					NotifyClients(DataType::STARTDATA, (char*)&sd, _sock); //Give the start sign
+					NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
 
 					Level::get()->Start(sd.start); //Start our game too
 				}
@@ -208,25 +208,19 @@ void Server::HandlePacket(DataType type, char* buf)
 			player->_movement->SetDDir(moveData.direction);
 			glm::vec2 curPos = player->_movement->getBoardPos();
 			
-			moveData.toBoardX = curPos.x;
-			moveData.toBoardY = curPos.y;
+			moveData.boardX = curPos.x;
+			moveData.boardY = curPos.y;
 
-			NotifyClients(DataType::MOVEDATA, (char*)&moveData, _sockClients[moveData.playerId - 2]);
-			//level->AddMove(moveData);
+			NotifyClients(DataType::MOVEDATA, (char*)&moveData);
 		}
 		break;
 	}
 }
 
-void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
+void Server::NotifyClients(DataType type, char* data)
 {
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
-		//Check if we're not sending data to the one we just received from
-		SOCKET client = _sockClients[i];
-		if (client == sourceClient)
-			continue;
-
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
 	}
@@ -263,7 +257,7 @@ void Server::SendGameState(SOCKET client)
 
 	PacketHelper::Send(DataType::PLAYERDATA, (char*)&cData, client);
 	cData.controlled = false;
-	NotifyClients(DataType::PLAYERDATA, (char*)&cData, client);
+	NotifyClients(DataType::PLAYERDATA, (char*)&cData);
 	level->AddSpawn(cData);
 }
 

@@ -14,7 +14,7 @@ Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
-	//setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
+	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
 	_spawnPos.push_back(make_pair<int, int>(0, 8));
@@ -168,11 +168,13 @@ void Level::CreatePacket(DataType type)
 	}
 }
 
-void Level::CreatePacket(Id playerId, Dir dir)
+void Level::CreatePacket(Id playerId, Dir dir, glm::vec2 pos)
 {
 	MoveData md;
 	md.playerId = playerId;
 	md.direction = dir;
+	md.boardX = pos.x;
+	md.boardY = pos.y;
 
 	Send(DataType::MOVEDATA, (char*)&md);
 }
@@ -235,17 +237,6 @@ void Level::update(float pStep)
 		spawnPlayer(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled);
 		_spawnQueue.erase(_spawnQueue.begin());
 	}
-	while (_moveQueue.size() > 0)
-	{
-		MoveData move = _moveQueue[0];
-		_players[move.playerId - 1]->_movement->SetDDir(move.direction);
-
-		//Player* player = getPlayers()[move.playerId - 1];
-		//player->_movement->SetDDir(move.direction);
-		//player->setLocalPosition(glm::vec3(move.toBoardX, 0.5f, move.toBoardY));
-
-		_moveQueue.erase(_moveQueue.begin());
-	}
 	while (_pickUpQueue.size() > 0)
 	{
 		PickupData pData = _pickUpQueue[0];
@@ -263,23 +254,40 @@ void Level::update(float pStep)
 	
 	_curTime += pStep;
 
-	if (_curTime < 0.65f)
+	if (_curTime < 0.65f) //Wait for cube to land
 	{
 		_send = false;
-		//check for player input
-		for each (Player* player in _players)
-			player->_movement->checkKeys();
 	}
 	else
 	{
 		if (!_send)
 		{
+			//Send move data
 			if (_server != NULL)
-				CreatePacket(Id::p1, _players[0]->_movement->GetDDir());
+				CreatePacket(Id::p1, _players[0]->_movement->GetDDir(), _players[0]->_movement->getBoardPos());
 			if (_client != NULL)
-				CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir());
+				CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir(), _players[_client->GetId() - 1]->getBoardPos());
 		}
 		_send = true;
+
+		while (_moveQueue.size() > 0)
+		{
+			MoveData move = _moveQueue[0];
+			//_players[move.playerId - 1]->_movement->SetDDir(move.direction);
+
+			Player* player = getPlayers()[move.playerId - 1];
+			player->_movement->SetDDir(move.direction);
+			player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+			_moveQueue.erase(_moveQueue.begin());
+		}
+		while (_scoreQueue.size() > 0)
+		{
+			ScoreData sData = _scoreQueue[0];
+			_board->getScore(sData.playerId);
+			_players[sData.playerId - 1]->addScore(sData.score);
+			_scoreQueue.erase(_scoreQueue.begin());
+		}
 	}
 	
 	for each (PickUp* pickUp in _pickups)

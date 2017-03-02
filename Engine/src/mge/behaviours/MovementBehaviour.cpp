@@ -18,7 +18,8 @@ void MovementBehaviour::update(float pStep)
 
 	_curTime += pStep;
 
-	checkKeys();
+	if (_curTime < 0.65f)
+		checkKeys();
 
 	if (_curTime < _moveTime)
 	{
@@ -233,6 +234,11 @@ void MovementBehaviour::jump(float pHeight)
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
+}
+
+void MovementBehaviour::setBoardPos(glm::vec2 pos)
+{
+	_boardPos = pos;
 }
 
 void MovementBehaviour::fireAbility(bool toggle)

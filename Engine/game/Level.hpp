@@ -55,7 +55,7 @@ public:
 	void removePickUp(glm::vec2 pos);
 
 	void CreatePacket(DataType type);
-	void CreatePacket(Id playerId, Dir dir);
+	void CreatePacket(Id playerId, Dir dir, glm::vec2 pos);
 	void CreatePacket(glm::vec2 pos, glm::vec2 oldPos);
 	void CreatePacket(Id playerId, int score);
 	

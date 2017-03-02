@@ -26,7 +26,6 @@ glm::vec2 ScoreCube::applyPickUp(Player* pPlayer)
 	int score = Level::getBoard()->getScore(pPlayer->getId());
 	pPlayer->addScore(score);
 	Level::get()->CreatePacket(pPlayer->getId(), score);
-	pPlayer->addScore(Level::getBoard()->getScore(pPlayer->getId()));
 	
 	for each (Player* player in Level::getPlayers())
 		player->enableAbility();

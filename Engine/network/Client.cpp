@@ -132,6 +132,8 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::PLAYERDATA:
 		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
+		if (_playerId == pData.playerId || pData.playerId <= Level::get()->getPlayers().size())
+			return; //Data already exist
 		cout << pData.playerId << " p ID" << endl;
 		if (_playerId == Id::empty && pData.controlled)
 		{
@@ -139,17 +141,6 @@ void Client::HandlePacket(DataType type, char* buf)
 			cout << _playerId << " my ID" << endl;
 		}
 		Level::get()->AddSpawn(pData);
-		break;
-	case DataType::TIMEDATA:
-		TimeData timeData = *reinterpret_cast<TimeData*>(buf);
-		{
-			Level* level = Level::get();
-			//level->_curTime = timeData.curTime;
-			//level->_deltaTime = timeData.deltaTime;
-			//level->_lastMoveTime = timeData.lastMoveTime;
-			//level->_totalTime = timeData.totalTime;
-			//level->_moveTime = timeData.moveTime;
-		}
 		break;
 	case DataType::STARTDATA:
 		StartData startData = *reinterpret_cast<StartData*>(buf);
@@ -159,15 +150,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
 		if (moveData.playerId > Level::get()->getPlayers().size())
 			return; //Invalid player
-		if (moveData.playerId == _playerId)
-			return; //Skip me
-		{
-			Level* level = Level::get();
-			//Player* player = level->getPlayers()[moveData.playerId - 1];
-			//player->_movement->SetDDir(moveData.direction);
-			//player->setLocalPosition(glm::vec3(moveData.toBoardX, 0.5f, moveData.toBoardY));
-			Level::get()->AddMove(moveData); //Add move to spawn queue
-		}
+		Level::get()->AddMove(moveData); //Add move to spawn queue
 		break;
 	case DataType::PICKUPDATA:
 		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);

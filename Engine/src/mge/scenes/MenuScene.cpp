@@ -139,16 +139,15 @@ void MenuScene::_render() {
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
+
+				Level::get()->Host();
+				//Level::get()->Join("127.0.0.1", 8888);
+
 			}
-
-			Level::get()->Host();
-			//Level::get()->Join("127.0.0.1", 8888);
-
 			if (_currentState != 3) _cameraStateChanged = false;
 			break;
 
 		case 1:
-
 			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
@@ -194,8 +193,8 @@ void MenuScene::_updateHud() {
 
 	string debugInfo = "";
 	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
-	debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
-	debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
+	//debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
+	//debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
 
 	_hud->setDebugInfo(debugInfo);
 	_hud->draw();
