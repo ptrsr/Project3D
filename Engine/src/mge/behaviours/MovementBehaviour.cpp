@@ -50,8 +50,6 @@ void MovementBehaviour::update(float pStep)
 		//set next move direction to desired direction
 		setDirection();
 
-		Level::checkCollision(_player);
-
 		//reset time for next step
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
@@ -190,7 +188,7 @@ void MovementBehaviour::checkKeys()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
 		{
 			_activate = true;
-			_available = false;
+			//_available = false;
 
 		}
 	}
@@ -266,7 +264,11 @@ void MovementBehaviour::fireAbility(bool toggle)
 
 glm::vec2 MovementBehaviour::getNextPos()
 {
+	if (_canceled)
+		return _boardPos;
+
 	glm::vec2 dPos;
+
 
 	switch (_dDir)
 	{
