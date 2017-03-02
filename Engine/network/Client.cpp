@@ -59,40 +59,8 @@ int Client::Connect(const char* IP, int port)
 	//Receive server NetCMD
 	ReceiveResponse();
 
-	DataType dataType = DataType::PLAYERDATA;
-	DataType dataType2 = DataType::TESTDATA;
-
 	//Start a thread for handling data
 	thread receiveData(&Client::ReceiveData, this);
-
-	if (!_connected)
-	{
-		receiveData.join();
-		return 0;
-	}
-
-	/*
-	TestData testData;
-	testData.t = 512;
-	testData.r = 0.15f;
-	testData.g = 0.30f;
-	testData.b = 0.60f;
-	testData.a = 0.075f;
-	string input = "Testing a very long message to see if it receives correctly on the other side";
-	strcpy(testData.input, input.c_str());
-
-	TestData testData2;
-	testData2.t = 0;
-	testData2.r = 0;
-	testData2.g = 0;
-	testData2.b = 0;
-	testData2.a = 0;
-	string input2 = "Here is another string";
-	strcpy(testData2.input, input2.c_str());
-
-	PacketHelper::Send(dataType2, (char*)&testData, _sock);
-	PacketHelper::Send(dataType2, (char*)&testData2, _sock);*/
-
 	receiveData.join();
 
 	return 0;
@@ -164,11 +132,16 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::PLAYERDATA:
 		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
-		if (pData.controlled)
+		cout << pData.playerId << " p ID" << endl;
+		if (_playerId == Id::empty && pData.controlled)
+		{
 			_playerId = pData.playerId; //Assign player id
+			cout << _playerId << " my ID" << endl;
+		}
 		{
 			Level* level = Level::get();
-			level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled)); //Add player to spawn queue
+			if (level->getPlayers().size() < pData.playerId)
+				level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled)); //Add player to spawn queue
 		}
 		break;
 	case DataType::TIMEDATA:
@@ -188,6 +161,8 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::MOVEDATA:
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
+		if (moveData.playerId > Level::get()->getPlayers().size())
+			return; //Invalid player
 		if (moveData.playerId == _playerId)
 			return; //Skip me
 		Level::get()->AddMove(moveData); //Add move to spawn queue

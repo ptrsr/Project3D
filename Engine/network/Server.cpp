@@ -95,7 +95,7 @@ int Server::StopServer()
 //
 //Send
 //
-void Server::Send(DataType type, char* data)
+void Server::SendAll(DataType type, char* data)
 {
 	NotifyClients(type, data, _sock);
 }
@@ -146,7 +146,7 @@ void Server::AcceptClients()
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
 
-				if (_connectedClients == 1)
+				if (_connectedClients == 3)
 				{
 					Sleep(7500);
 					StartData sd;
@@ -176,12 +176,12 @@ void Server::AcceptClients()
 
 void Server::HandleClients(SOCKET client)
 {
-	SendGameState(); //Send game state to client
+	SendGameState(client); //Send game state to client
 
 	while (_running)
 	{
 		//Check if the client is still connected
-		if (!PacketHelper::Connected(client))
+		if (!PacketHelper::Connected( client))
 		{
 			cout << "Client id: " << client << endl;
 			CloseClientConnection(client);
@@ -204,8 +204,8 @@ void Server::HandlePacket(DataType type, char* buf)
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
 		{
 			Level* level = Level::get();
-			level->AddMove(moveData);
 			NotifyClients(DataType::MOVEDATA, buf, _sockClients[moveData.playerId - 2]);
+			level->AddMove(moveData);
 		}
 		break;
 	}
@@ -215,7 +215,7 @@ void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
 {
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
-		//Check if we're not sending data to ourself
+		//Check if we're not sending data to the one we just received from
 		SOCKET client = _sockClients[i];
 		if (client == sourceClient)
 			continue;
@@ -228,7 +228,7 @@ void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
 //
 //Send Game State
 //
-void Server::SendGameState()
+void Server::SendGameState(SOCKET client)
 {
 	Level* level = Level::get();
 
@@ -243,7 +243,7 @@ void Server::SendGameState()
 		pData.controlled = false;
 		pData.boardX = player->getBoardPos().x;
 		pData.boardY = player->getBoardPos().y;
-		Send(DataType::PLAYERDATA, (char*)&pData);
+		SendAll(DataType::PLAYERDATA, (char*)&pData);
 	}
 
 	//Send client player id and pos
@@ -254,7 +254,9 @@ void Server::SendGameState()
 	cData.boardX = spawnPos.first;
 	cData.boardY = spawnPos.second;
 
-	Send(DataType::PLAYERDATA, (char*)&cData);
+	PacketHelper::Send(DataType::PLAYERDATA, (char*)&cData, client);
+	cData.controlled = false;
+	NotifyClients(DataType::PLAYERDATA, (char*)&cData, client);
 	level->AddSpawn(new Player(cData.playerId, glm::vec2(cData.boardX, cData.boardY), false));
 }
 

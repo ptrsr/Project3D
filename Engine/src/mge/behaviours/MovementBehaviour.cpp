@@ -127,8 +127,8 @@ void MovementBehaviour::checkKeys()
 		cout << temp << endl;
 		_sleep(100);
 	}
-	if (!temp)
-		return;
+	//if (!temp)
+	//	return;
 	if (!_controlled)
 		return;
 

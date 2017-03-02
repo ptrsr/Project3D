@@ -174,6 +174,15 @@ void Level::CreatePacket(DataType type)
 	}
 }
 
+void Level::CreatePacket(Id playerId, Dir dir)
+{
+	MoveData md;
+	md.playerId = playerId;
+	md.direction = dir;
+
+	Send(DataType::MOVEDATA, (char*)&md);
+}
+
 void Level::CreatePacket(glm::vec2 pos, glm::vec2 oldPos)
 {
 	PickupData pd;
@@ -198,7 +207,7 @@ void Level::Send(DataType type, char* data)
 	if (_client != NULL)
 		_client->Send(type, data);
 	if (_server != NULL)
-		_server->Send(type, data);
+		_server->SendAll(type, data);
 }
 
 void Level::update(float pStep)
@@ -215,6 +224,12 @@ void Level::update(float pStep)
 		spawnPlayer(player->getId(), player->getBoardPos(), player->IsControlled());
 		_spawnQueue.erase(_spawnQueue.begin());
 		delete player;
+	}
+	while (_moveQueue.size() > 0)
+	{
+		MoveData move = _moveQueue[0];
+		_players[move.playerId - 1]->_movement->SetDDir(move.direction);
+		_moveQueue.erase(_moveQueue.begin());
 	}
 	while (_pickUpQueue.size() > 0)
 	{
@@ -233,22 +248,26 @@ void Level::update(float pStep)
 
 	_curTime += pStep;
 
-	if (_curTime < 0.75f)
+	if (_curTime < 0.65f)
 	{
+		_send = false;
 		//check for player input
 		for each (Player* player in _players)
 			player->_movement->checkKeys();
 	}
 	else
 	{
-		CreatePacket(DataType::MOVEDATA);
-
-		while (_moveQueue.size() > 0)
-		{
-			MoveData move = _moveQueue[0];
-			_players[move.playerId - 1]->_movement->SetDDir(move.direction);
-			_moveQueue.erase(_moveQueue.begin());
-		}
+		//if (!_send)
+		//{
+			if (_server != NULL)
+				CreatePacket(Id::p1, _players[0]->_movement->GetDDir());
+			if (_client != NULL)
+				CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir());
+		//}
+		//_send = true;
+		//if (!_send)
+			//CreatePacket(_server != NULL ? Id::p1 : _client->GetId(), _server != NULL ? _players[0]->_movement->GetDDir() : _players[_client->GetId() - 1]->_movement->GetDDir());
+		//_send = true;
 	}
 
 	//if player is moving
@@ -259,8 +278,6 @@ void Level::update(float pStep)
 
 		_deltaTime = 0;
 		_lastMoveTime = _curTime;
-
-
 	}
 	//if move ended
 	else if (_lastMoveTime != 0)

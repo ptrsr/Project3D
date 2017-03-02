@@ -2,6 +2,7 @@
 
 enum DataType
 {
+	ERRORTYPE,
 	NETWORKCMD,
 	TESTDATA,
 	TIMEDATA,

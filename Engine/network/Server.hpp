@@ -20,7 +20,7 @@ public:
 	int StartServer();
 	int StopServer();
 
-	void Send(DataType type, char* data);
+	void SendAll(DataType type, char* data);
 
 	int ConnectedCount();
 private:
@@ -40,7 +40,7 @@ private:
 	void HandlePacket(DataType type, char* buf); //Handles received packages
 	void NotifyClients(DataType type, char* data, SOCKET sourceClient); //Sends data to all other clients
 
-	void SendGameState();
+	void SendGameState(SOCKET client);
 
 	void CloseConnection(SOCKET client); //Closes a client's connection attempting to join
 	void CloseClientConnection(SOCKET client); //Closes a connected client's connection

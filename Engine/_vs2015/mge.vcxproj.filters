@@ -289,7 +289,6 @@
     <ClInclude Include="..\game\Board.hpp">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\Enums.hpp" />
     <ClInclude Include="..\network\packets\DataType.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
@@ -316,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="..\network\packets\PickupData.hpp">
       <Filter>network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Enums.hpp">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

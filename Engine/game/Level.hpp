@@ -52,6 +52,7 @@ public:
 	void removePickUp(glm::vec2 pos);
 
 	void CreatePacket(DataType type);
+	void CreatePacket(Id playerId, Dir dir);
 	void CreatePacket(glm::vec2 pos, glm::vec2 oldPos);
 	void CreatePacket(Id playerId, int score);
 private:
@@ -69,6 +70,7 @@ private:
 	Server* _server = NULL;
 
 	bool _start = false;
+	bool _send = false;
 
 	float _curTime = 0;
 	float _deltaTime = 0;

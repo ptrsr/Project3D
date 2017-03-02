@@ -108,8 +108,8 @@ void MenuScene::_render() {
 			}
 			if (!_cameraStateChanged) {
 
-				//Level::get()->Host();
-				Level::get()->Join("127.0.0.1", 8888);
+				Level::get()->Host();
+				//Level::get()->Join("127.0.0.1", 8888);
 
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
