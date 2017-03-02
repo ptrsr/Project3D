@@ -21,12 +21,13 @@ class MovementBehaviour : public AbstractBehaviour
 		void setDirection();
 		void cancelMove();
 		void jump(float pHeight);
+		void fireAbility(bool toggle);
 
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
 		glm::vec2 getNextPos();
-		Id getPlayerId();
+		void enableAbility();
 
 	private:
 		void inverseDirection();
@@ -47,18 +48,22 @@ class MovementBehaviour : public AbstractBehaviour
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);
 
-		float _curTime;
-		float _deltaTime;
-		float _lastMoveTime;
-		float _totalTime;
-		float _moveTime;
+		float _curTime		= 0;
+		float _deltaTime	= 0;
+		float _lastMoveTime = 0;
+		float _totalTime	= 0;
+		float _moveMulti	= 1;
+
+		float _moveTime		= 0;
 
 		float _lastHeight   = 0;
 
-		Dir _cDir = none;
-		Dir _dDir = none;
+		Dir _cDir = emtpy;
+		Dir _dDir = emtpy;
 
 		bool _canceled = false;
+		bool _activate = false;
+		bool _available = true;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

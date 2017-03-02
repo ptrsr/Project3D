@@ -18,7 +18,7 @@ public:
 	LitMaterial* _material;
 
 private:
-	Id _owner = Id::empty;
+	Id _owner = Id::none;
 
 };
 

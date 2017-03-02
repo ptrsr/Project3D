@@ -5,6 +5,7 @@
 
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
+#include "PickUps/SpeedUp.hpp"
 
 Level* Level::_level;
 
@@ -12,16 +13,14 @@ Level::Level() :GameObject("level")
 {
 	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
-	spawnPlayer(Id::p1, glm::vec2(0, 0));
-	spawnPlayer(Id::p3, glm::vec2(8, 8));
+	spawnPlayer(Id::fire, glm::vec2(0, 0));
+	spawnPlayer(Id::water, glm::vec2(8, 8));
 	spawnPickUp(new ScoreCube(0.8f));
+	spawnPickUp(new SpeedUp(0.8f));
 
 	_board = new Board();
 	_board->setParent(this);
 	World::add(this);
-
-	_moveTime = 0.4f;
-	_totalTime = 0.6f;
 }
 
 Level* Level::get()
@@ -83,57 +82,79 @@ void Level::update(float pStep)
 {
 	_curTime += pStep;
 
-	//check for player input
-	for each (Player* player in _players)
-		player->_movement->checkKeys();
-
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
 
-	//if player is moving
-	if (_curTime < _moveTime)
-	{
-		for each (Player* player in _players)
-			player->_movement->move(pStep);
-
-		_deltaTime = 0;
-		_lastMoveTime = _curTime;
-	}
-	//if move ended
-	else if (_lastMoveTime != 0)
-	{
-		for each (Player* player in _players)
-		{
-			//finish player animation
-			player->_movement->finishMove(_moveTime, _lastMoveTime);
-
-			//set tiles to new owner
-			_board->setOwner(player->getBoardPos(), player->getId());
-
-			//apply pickups
-			for each (PickUp* pickUp in _pickups)
-				if (pickUp->getBoardPos() == player->getBoardPos())
-					pickUp->applyPickUp(player);
-		}
-		_lastMoveTime = 0;
-	}
+	for each (Player* player in _players)
+		player->update(pStep);
 
 	//if animation is done
 	if (_curTime >= _totalTime)
 	{
-		//set next move direction to desired direction
-		for each (Player* player in _players)
-			player->_movement->setDirection();
-
-		checkCollisions();
-
-		//pickup spawning countdown
 		for each (PickUp* pickUp in _pickups)
 			pickUp->step();
 
-		//reset time for next step
+		coolDowns();
+
 		_curTime -= _totalTime;
-		_deltaTime = _curTime;
+	}
+}
+
+void Level::checkCollision(Player* pPlayer)
+{
+
+}
+
+void Level::applyAbility(Player* pPlayer)
+{
+	switch (pPlayer->getId())
+	{
+	case wind:
+		Level::getBoard()->fireAbility(pPlayer->getBoardPos());
+		break;
+
+	case earth:
+		Level::getBoard()->earthAbility(pPlayer->getBoardPos());
+		break;
+
+	case water:
+
+		break;
+
+	case fire:
+		pPlayer->_movement->fireAbility(true);
+		Level::get()->_windCooldown = 4;
+		break;
+	}
+}
+
+void Level::coolDowns()
+{
+	if (_windCooldown > 0)
+	{
+		_windCooldown--;
+
+		if (_windCooldown == 0)
+			for each (Player* player in _players)
+				if (player->getId() == fire)
+				{
+					player->_movement->fireAbility(false);
+					break;
+				}
+	}
+
+	if (_waterCooldown > 0)
+	{
+		_waterCooldown--;
+
+		if (_waterCooldown == 0)
+			for each (Player* player in _players)
+			{
+				if (player->getId() == water)
+					continue;
+
+				player->_movement->fireAbility(2.0f);
+			}
 	}
 }
 
@@ -181,7 +202,6 @@ void Level::checkCollisions()
 			}
 		}
 	}
-
 	for each (Player* player in _players)
 		player->_checked = false;
 }
@@ -196,7 +216,7 @@ void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos)
 			return;
 		}
 	}
-	Player* player = new Player(pPlayerId, pBoardPos);
+	Player* player = new Player(pPlayerId, pBoardPos, _totalTime, _wait);
 	player->setParent(this);
 	_players.push_back(player);
 }

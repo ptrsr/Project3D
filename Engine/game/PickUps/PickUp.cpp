@@ -41,8 +41,11 @@ void PickUp::spawn()
 
 			for each (PickUp* pickUp in Level::getPickUps())
 			{
-				available = false;
-				break;
+				if (pickUp->getBoardPos() == pos)
+				{
+					available = false;
+					break;
+				}
 			}
 
 			if (available)

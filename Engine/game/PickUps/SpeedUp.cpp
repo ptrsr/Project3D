@@ -22,6 +22,5 @@ SpeedUp::SpeedUp(float moveTime) : PickUp("speedup", moveTime)
 
 void SpeedUp::applyPickUp(Player* pPlayer)
 {
-	pPlayer->addScore(Level::getBoard()->getScore(pPlayer->getId()));
-	reset();
+	pPlayer->_movement->fireAbility(2);
 }

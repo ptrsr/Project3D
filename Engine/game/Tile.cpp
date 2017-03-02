@@ -20,23 +20,23 @@ void Tile::setOwner(Id pPlayer)
 
 	switch (pPlayer)
 	{
-	case none:
+	case emtpy:
 		_material->setColor(glm::vec3(1));
 		break;
 
-	case p1:
+	case fire:
 		_material->setColor(glm::vec3(1, 0, 0));
 		break;
 
-	case p2:
+	case earth:
 		_material->setColor(glm::vec3(0, 1, 0));
 		break;
 
-	case p3:
+	case water:
 		_material->setColor(glm::vec3(0, 0, 1));
 		break;
 
-	case p4:
+	case wind:
 		_material->setColor(glm::vec3(0.87f, 0.72f, 0.53f));
 		break;
 	}

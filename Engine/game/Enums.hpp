@@ -2,11 +2,11 @@
 #define ENUMS_H
 
 enum Id {
-	empty,
-	p1,
-	p2,
-	p3,
-	p4
+	none,
+	fire,
+	earth,
+	water,
+	wind
 };
 
 enum PType {
@@ -14,7 +14,7 @@ enum PType {
 };
 
 enum Dir {
-	none,
+	emtpy,
 	up,
 	down,
 	left,

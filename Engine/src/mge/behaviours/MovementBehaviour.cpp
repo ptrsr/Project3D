@@ -9,23 +9,24 @@
 #include <algorithm>
 
 MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
-	 _player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight)
+	_player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight), _totalTime(pTime), _moveTime(glm::clamp(pTime * ( 1 - pWait), 0.f, 1.f))
 { }
 
 void MovementBehaviour::update(float pStep)
 {
+	pStep *= _moveMulti;
+
 	_curTime += pStep;
 
 	checkKeys();
 
 	if (_curTime < _moveTime)
 	{
-		move(pStep);
+		move(pStep + _deltaTime);
 
 		_deltaTime = 0;
 		_lastMoveTime = _curTime;
 	}
-
 	//if move ended
 	else if (_lastMoveTime != 0)
 	{
@@ -38,6 +39,9 @@ void MovementBehaviour::update(float pStep)
 		//apply pickups
 		Level::ApplyPickUp(_player);
 
+		//apply ability
+
+
 		_lastMoveTime = 0;
 	}
 
@@ -46,14 +50,19 @@ void MovementBehaviour::update(float pStep)
 		//set next move direction to desired direction
 		setDirection();
 
-		checkCollisions();
+		Level::checkCollision(_player);
 
 		//reset time for next step
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
+
+		if (_activate)
+		{
+			_activate = false;
+			Level::applyAbility(_player);
+		}
 	}
 }
-
 
 void MovementBehaviour::move(float pStep)
 {
@@ -114,7 +123,7 @@ void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == none)
+	if (_cDir == emtpy)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / pMoveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -127,7 +136,7 @@ void MovementBehaviour::setDirection()
 {
 	_cDir = _dDir;
 
-	if (_cDir == Dir::none)
+	if (_cDir == Dir::emtpy)
 		return;
 
 	glm::mat4 worldMat = _player->getWorldTransform();
@@ -164,7 +173,7 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
-	if (getPlayerId() == p1)
+	if (_player->getId() == fire)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			_dDir = Dir::up;
@@ -177,8 +186,15 @@ void MovementBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			_dDir = Dir::left;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
+		{
+			_activate = true;
+			_available = false;
+
+		}
 	}
-	else if (getPlayerId() == p3)
+	else if (_player->getId() == water)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			_dDir = Dir::up;
@@ -192,6 +208,11 @@ void MovementBehaviour::checkKeys()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			_dDir = Dir::left;
 	}
+}
+
+void MovementBehaviour::enableAbility()
+{
+	_available = true;
 }
 
 void MovementBehaviour::inverseDirection()
@@ -226,14 +247,21 @@ void MovementBehaviour::jump(float pHeight)
 	_cJumpHeight = pHeight;
 }
 
-Id MovementBehaviour::getPlayerId()
-{
-	return _player->getId();
-}
+
 
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
+}
+
+void MovementBehaviour::fireAbility(bool toggle)
+{
+	if (toggle)
+		_totalTime = _moveTime;
+	else
+		_totalTime = _moveTime * 2;
+
+	std::cout << _moveTime * 2;
 }
 
 glm::vec2 MovementBehaviour::getNextPos()
