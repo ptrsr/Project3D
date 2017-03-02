@@ -97,7 +97,7 @@ void MenuScene::_initializeScene()
 
 	Level::get();
 
-	_currentState = -1;
+	_currentState = 3;
 	_world->add(center);
 	_world->add(holder);
 
@@ -140,6 +140,10 @@ void MenuScene::_render() {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
 			}
+
+			Level::get()->Host();
+			//Level::get()->Join("127.0.0.1", 8888);
+
 			if (_currentState != 3) _cameraStateChanged = false;
 			break;
 

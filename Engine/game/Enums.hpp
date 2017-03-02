@@ -2,7 +2,7 @@
 #define ENUMS_H
 
 enum Id {
-	none,
+	empty,
 	p1,
 	p2,
 	p3,
@@ -14,7 +14,7 @@ enum PType {
 };
 
 enum Dir {
-	emtpy,
+	none,
 	up,
 	down,
 	left,

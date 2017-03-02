@@ -20,7 +20,7 @@ void Tile::setOwner(Id pPlayer)
 
 	switch (pPlayer)
 	{
-	case emtpy:
+	case Id::empty:
 		_material->setColor(glm::vec3(1));
 		break;
 

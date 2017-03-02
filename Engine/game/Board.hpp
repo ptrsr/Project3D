@@ -9,6 +9,8 @@ class Board : public GameObject
 public:
 	Board();
 	
+	void ResetBoard();
+
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
