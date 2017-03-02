@@ -21,6 +21,7 @@ public:
 
 	Player(Id playerId, glm::vec2 boardPos, bool controlled);
 	glm::vec2 getBoardPos();
+	void setBoardPos(glm::vec2 pos);
 
 	void addScore(int pScore);
 	glm::vec2 getNextPos();

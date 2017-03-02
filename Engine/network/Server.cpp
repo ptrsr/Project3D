@@ -206,10 +206,10 @@ void Server::HandlePacket(DataType type, char* buf)
 			Level* level = Level::get();
 			Player* player = level->getPlayers()[moveData.playerId - 1];
 			player->_movement->SetDDir(moveData.direction);
-			glm::vec2 nextPos = player->_movement->getNextPos();
+			glm::vec2 curPos = player->_movement->getBoardPos();
 			
-			moveData.toBoardX = nextPos.x;
-			moveData.toBoardY = nextPos.y;
+			moveData.toBoardX = curPos.x;
+			moveData.toBoardY = curPos.y;
 
 			NotifyClients(DataType::MOVEDATA, (char*)&moveData, _sockClients[moveData.playerId - 2]);
 			//level->AddMove(moveData);

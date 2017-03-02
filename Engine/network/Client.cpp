@@ -167,10 +167,10 @@ void Client::HandlePacket(DataType type, char* buf)
 			return; //Skip me
 		{
 			Level* level = Level::get();
-			Player* player = level->getPlayers()[moveData.playerId - 1];
-			player->_movement->SetDDir(moveData.direction);
-
-			//Level::get()->AddMove(moveData); //Add move to spawn queue
+			//Player* player = level->getPlayers()[moveData.playerId - 1];
+			//player->_movement->SetDDir(moveData.direction);
+			//player->setLocalPosition(glm::vec3(moveData.toBoardX, 0.5f, moveData.toBoardY));
+			Level::get()->AddMove(moveData); //Add move to spawn queue
 		}
 		break;
 	case DataType::PICKUPDATA:

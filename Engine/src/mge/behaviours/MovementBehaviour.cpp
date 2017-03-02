@@ -202,6 +202,11 @@ glm::vec2 MovementBehaviour::getBoardPos()
 	return _boardPos;
 }
 
+void MovementBehaviour::setBoardPos(glm::vec2 pos)
+{
+	_boardPos = pos;
+}
+
 glm::vec2 MovementBehaviour::getNextPos()
 {
 	glm::vec2 dPos;
