@@ -31,7 +31,7 @@ public:
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
 	static void					reset();
-	static void					ApplyPickUp(Player* pPlayer);
+	void						ApplyPickUp(Player* pPlayer);
 	static void					applyAbility(Player* pPlayer);
 
 	void Host();
@@ -83,8 +83,6 @@ private:
 	std::vector<MoveData> _moveQueue;
 	std::vector<PickupData> _pickUpQueue;
 	std::vector<ScoreData> _scoreQueue;
-	std::vector<Player*> _players;
-	std::vector<PickUp*> _pickups;
 	
 	bool _start = false;
 	bool _send = false;

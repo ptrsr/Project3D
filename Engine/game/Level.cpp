@@ -153,15 +153,6 @@ void Level::CreatePacket(DataType type)
 		{
 			switch (type)
 			{
-			case TIMEDATA:
-				TimeData td;
-				td.curTime = _curTime;
-				td.deltaTime = _deltaTime;
-				td.lastMoveTime = _lastMoveTime;
-				td.totalTime = _totalTime;
-				td.moveTime = _moveTime;
-				Send(type, (char*)&td);
-				break;
 			case MOVEDATA:
 				MoveData md;
 				md.playerId = _players[i]->getId();
@@ -219,11 +210,11 @@ void Level::ApplyPickUp(Player* pPlayer)
 	{
 		for each (PickUp* pickUp in Level::getPickUps())
 			if (pickUp->getBoardPos() == pPlayer->getBoardPos())
-					if (pickUp->getBoardPos() == player->getBoardPos())
-					{
-						glm::vec2 oldPos = pickUp->applyPickUp(player);
-						CreatePacket(pickUp->getBoardPos(), oldPos);
-					}
+				if (pickUp->getBoardPos() == pPlayer->getBoardPos())
+				{
+					glm::vec2 oldPos = pickUp->applyPickUp(pPlayer);
+					CreatePacket(pickUp->getBoardPos(), oldPos);
+				}
 	}
 }
 

@@ -13,27 +13,25 @@ class MovementBehaviour : public AbstractBehaviour
 		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait, bool controlled);
 		virtual ~MovementBehaviour();
 
-		virtual void update(float pStep) { };
+		virtual inline void update(float pStep);
 
 		void checkKeys();
-		void move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime);
+		void move(float pStep);
 		void finishMove(float pMoveTime, float pLastMoveTime);
 		void setDirection();
 		void cancelMove();
 		void jump(float pHeight);
+		void fireAbility(bool toggle);
 
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
-		void setBoardPos(glm::vec2 pos);
 		glm::vec2 getNextPos();
-		Id getPlayerId();
+		void enableAbility();
 		bool IsControlled();
 		Dir GetDDir();
 		void SetDDir(Dir dir);
 
-
-		bool temp = false; //Freeze key Q
 	private:
 		void inverseDirection();
 
@@ -54,12 +52,22 @@ class MovementBehaviour : public AbstractBehaviour
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);
 
+		float _curTime		= 0;
+		float _deltaTime	= 0;
+		float _lastMoveTime = 0;
+		float _totalTime	= 0;
+		float _moveMulti	= 1;
+
+		float _moveTime		= 0;
+
 		float _lastHeight   = 0;
 
-		Dir _cDir = none;
-		Dir _dDir = none;
+		Dir _cDir = Dir::none;
+		Dir _dDir = Dir::none;
 
 		bool _canceled = false;
+		bool _activate = false;
+		bool _available = true;
 };
 
 #endif // ROTATINGBEHAVIOUR_H
