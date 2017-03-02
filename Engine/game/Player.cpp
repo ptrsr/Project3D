@@ -13,7 +13,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 
 	this->setLocalPosition(glm::vec3(boardPos.x, 1.0f, boardPos.y)); 
 
-	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait, bool controlled);
+	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait, controlled);
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
