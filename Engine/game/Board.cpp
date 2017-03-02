@@ -3,30 +3,11 @@
 
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
+#include "mge/auxiliary/MeshCache.hpp"
 
 Board::Board() : GameObject("Board")
 {
 	initializeBoard();
-}
-
-void Board::ResetBoard()
-{
-	for (int i = 0; i < _size.x; i++)
-	{
-		for (int j = 0; j < _size.y; j++)
-		{
-			glm::vec3 color;
-
-			if ((j + i) % 2)
-				color = glm::vec3(1);
-			else
-				color = glm::vec3(0.4f);
-
-			Tile* tile = _boardArray[j][i];
-			tile->setOwner(Id::empty);
-			tile->getMaterial()->setColor(color);
-		}
-	}
 }
 
 void Board::setOwner(glm::vec2 boardPos, Id player)
@@ -37,23 +18,28 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 	_boardArray[(int)boardPos.x][(int)boardPos.y]->setOwner(player);
 }
 
+Id Board::getOwnerOfTile(glm::vec2 boardPos) {
+	if (outOfBounds(boardPos))
+		return Id::none;
+
+	return _boardArray[(int)boardPos.x][(int)boardPos.y]->getOwner();
+}
+
 void Board::initializeBoard() 
 {
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
+	Mesh* planeMesh;
+	if (MeshCache::exists(config::MGE_MODEL_PATH + "playfield_tile.obj")) {
+		planeMesh = MeshCache::find(config::MGE_MODEL_PATH + "playfield_tile.obj");
+	}
+	else {
+		planeMesh = Mesh::load(config::MGE_MODEL_PATH + "playfield_tile.obj");
+		MeshCache::push(planeMesh);
+	}
 
 	for (int i = 0; i < _size.x; i++) {
-		for (int j = 0; j < _size.y; j++) {
-
-			glm::vec3 color;
-
-			if ((j + i) % 2)
-				color = glm::vec3(1);
-			else
-				color = glm::vec3(0.4f);
-
-			Tile * tile = new Tile(glm::vec3(j, 0, i), planeMesh);
-			tile->_material->setColor(color);
-
+		for (int j = 0; j < _size.y; j++) 
+		{
+			Tile * tile = new Tile(glm::vec3(j, 0.f, i), planeMesh);
 			_boardArray[j][i] = tile;
 			tile->setParent(this);
 		}
@@ -80,9 +66,43 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(Id::empty);
+				tile->setOwner(none);
 			}
 		}
 	}
 	return score;
+}
+
+void Board::fireAbility(glm::vec2 pBoardPos)
+{
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
+
+			if (!outOfBounds(pos))
+			{
+				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
+
+				if (tile->getOwner() != none)
+					tile->setOwner(p1);
+			}
+		}
+	}
+}
+
+void Board::earthAbility(glm::vec2 pBoardPos)
+{
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
+
+			if (!outOfBounds(pos))
+			{
+				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
+
+				if (tile->getOwner() == none)
+					tile->setOwner(p2);
+			}
+		}
+	}
 }
