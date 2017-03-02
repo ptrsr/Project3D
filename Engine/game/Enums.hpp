@@ -3,10 +3,10 @@
 
 enum Id {
 	none,
-	fire,
-	earth,
-	water,
-	wind
+	p1,
+	p2,
+	p3,
+	p4
 };
 
 enum PType {

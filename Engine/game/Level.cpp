@@ -12,8 +12,8 @@ Level::Level() :GameObject("level")
 {
 	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
-	spawnPlayer(Id::fire, glm::vec2(0, 0));
-	spawnPlayer(Id::water, glm::vec2(8, 8));
+	spawnPlayer(Id::p1, glm::vec2(0, 0));
+	spawnPlayer(Id::p3, glm::vec2(8, 8));
 	spawnPickUp(new ScoreCube(_totalTime));
 
 	_board = new Board();
@@ -107,19 +107,19 @@ void Level::applyAbility(Player* pPlayer)
 {
 	switch (pPlayer->getId())
 	{
-	case wind:
+	case p4:
 		Level::getBoard()->fireAbility(pPlayer->getBoardPos());
 		break;
 
-	case earth:
+	case p2:
 		Level::getBoard()->earthAbility(pPlayer->getBoardPos());
 		break;
 
-	case water:
+	case p3:
 
 		break;
 
-	case fire:
+	case p1:
 		pPlayer->_movement->fireAbility(true);
 		Level::get()->_windCooldown = 4;
 		break;
@@ -134,7 +134,7 @@ void Level::coolDowns()
 
 		if (_windCooldown == 0)
 			for each (Player* player in _players)
-				if (player->getId() == fire)
+				if (player->getId() == p1)
 				{
 					player->_movement->fireAbility(false);
 					break;
@@ -148,7 +148,7 @@ void Level::coolDowns()
 		if (_waterCooldown == 0)
 			for each (Player* player in _players)
 			{
-				if (player->getId() == water)
+				if (player->getId() == p3)
 					continue;
 
 				player->_movement->fireAbility(2.0f);

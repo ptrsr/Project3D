@@ -173,7 +173,7 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
-	if (_player->getId() == fire)
+	if (_player->getId() == p1)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			_dDir = Dir::up;
@@ -194,7 +194,7 @@ void MovementBehaviour::checkKeys()
 
 		}
 	}
-	else if (_player->getId() == water)
+	else if (_player->getId() == p3)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			_dDir = Dir::up;

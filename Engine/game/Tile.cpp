@@ -24,19 +24,19 @@ void Tile::setOwner(Id pPlayer)
 		_material->setColor(glm::vec3(1));
 		break;
 
-	case fire:
+	case Id::p1:
 		_material->setColor(glm::vec3(1, 0, 0));
 		break;
 
-	case earth:
+	case Id::p2:
 		_material->setColor(glm::vec3(0, 1, 0));
 		break;
 
-	case water:
+	case Id::p3:
 		_material->setColor(glm::vec3(0, 0, 1));
 		break;
 
-	case wind:
+	case Id::p4:
 		_material->setColor(glm::vec3(0.87f, 0.72f, 0.53f));
 		break;
 	}
