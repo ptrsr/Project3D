@@ -6,7 +6,7 @@
 class ScoreCube : public PickUp
 {
 public:
-	ScoreCube();
+	ScoreCube(float moveTime);
 
 	virtual glm::vec2 applyPickUp(Player* pPlayer);
 private:

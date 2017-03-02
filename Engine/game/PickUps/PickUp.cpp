@@ -6,13 +6,13 @@
 
 #include <algorithm>
 
-PickUp::PickUp(std::string pName) : GameObject(pName)
+PickUp::PickUp(std::string pName, float moveTime) : GameObject(pName)
 {
+	_moveTime = moveTime;
+
 	srand(time(NULL));
 
 	World::add(this);
-
-	setLocalPosition(glm::vec3(0, -10, 0));
 }
 
 void PickUp::spawn()
@@ -38,13 +38,23 @@ void PickUp::spawn()
 					break;
 				}
 			}
+
+			for each (PickUp* pickUp in Level::getPickUps())
+			{
+				if (pickUp->getBoardPos() == pos)
+				{
+					available = false;
+					break;
+				}
+			}
+
 			if (available)
 				positions.push_back(pos);
 		}
 	}
 
 	_boardPos = positions[std::rand() % positions.size()];
-	setLocalPosition(glm::vec3(_boardPos.x, 1, _boardPos.y));
+	setLocalPosition(glm::vec3(_boardPos.x, _spawnHeight, _boardPos.y));
 }
 
 void PickUp::spawn(glm::vec2 pos)
@@ -62,21 +72,43 @@ glm::vec2 PickUp::getBoardPos()
 void PickUp::reset()
 {
 	_boardPos = glm::vec2(-1);
-	setLocalPosition(glm::vec3(0, -100, 0));
+	setLocalPosition(glm::vec3(0, -10, 0));
 	_countDown = (rand() % (_maxDelay - _minDelay)) + _minDelay;
+	_floatTimer = 0;
 }
 
 void PickUp::step()
 {
-	if (_countDown == -1)
-		return;
-
 	_countDown--;
+
+	if (_countDown < 0)
+		return;
 
 	if (_countDown == 0)
 	{
 		spawn();
 		Level::get()->CreatePacket(_boardPos, glm::vec2(-1 - 1));
+		std::cout << "spawn" << std::endl;
+	}
+}
+
+void PickUp::hover(float pStep)
+{
+	if (_countDown <= 0)
+	{
+		_floatTimer += pStep;
+
+		rotate((glm::sin(_floatTimer) + 2) / 30.f, glm::normalize(glm::vec3(sin(_floatTimer), cos(_floatTimer), -sin(_floatTimer))));
+
+		float height = glm::sin(_floatTimer) * _hoverDif + _hoverHeight;
+
+		if (_floatTimer <= _moveTime)
+		{
+			float multiplier = 1 - _floatTimer / _moveTime;
+			height += (multiplier * multiplier) * (_spawnHeight - height);
+		}
+		
+		setLocalPosition(glm::vec3(_boardPos.x, height, _boardPos.y));
 	}
 }
 

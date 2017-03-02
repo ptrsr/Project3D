@@ -6,14 +6,14 @@
 
 #include "Enums.hpp"
 
-Player::Player(Id playerId, glm::vec2 boardPos, bool controlled) : GameObject("temp")
+Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool controlled) : GameObject("temp")
 {
 	_name = "Player" + playerId;
 	_id = playerId;
 
-	this->setLocalPosition(glm::vec3(boardPos.x, 0.5f, boardPos.y)); 
+	this->setLocalPosition(glm::vec3(boardPos.x, 1.0f, boardPos.y)); 
 
-	_movement = new MovementBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f, controlled);
+	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait, bool controlled);
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
@@ -21,7 +21,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, bool controlled) : GameObject("t
 
 	glm::vec3 color(playerId == Id::p1 ? 1 : playerId == Id::p2 ? 0 : 0.87f, playerId == Id::p2 ? 1 : playerId == Id::p4 ? 0.72f : 0, playerId == p3 ? 1 : playerId == Id::p4 ? 0.53f : 0);
 
-	this->setMaterial(new LitMaterial(LitMaterial::fragment, color));
+	this->setMaterial(new LitMaterial(color));
 };
 
 void Player::addScore(int pScore)
@@ -30,15 +30,14 @@ void Player::addScore(int pScore)
 	std::cout << "Player " << _id << " scored: " << pScore << std::endl;
 }
 
+int Player::getScore()
+{
+	return _score;
+}
+
 glm::vec2 Player::getBoardPos()
 {
 	return _movement->getBoardPos();
-}
-
-void Player::setBoardPos(glm::vec2 pos)
-{
-	this->setLocalPosition(glm::vec3(pos.x, 0.5f, pos.y));
-	_movement->setBoardPos(pos);
 }
 
 glm::vec2 Player::getNextPos()
@@ -49,6 +48,11 @@ glm::vec2 Player::getNextPos()
 Id Player::getId()
 {
 	return _id;
+}
+
+void Player::enableAbility()
+{
+	_movement->enableAbility();
 }
 
 bool Player::IsControlled()

@@ -1,4 +1,4 @@
-#include "ScoreCube.hpp"
+#include "Scorecube.hpp"
 #include "mge/core/World.hpp"
 #include "mge/materials/LitMaterial.hpp"
 #include "mge/core/Mesh.hpp"
@@ -8,11 +8,11 @@
 #include "../game/Board.hpp"
 #include "../game/Level.hpp"
 
-ScoreCube::ScoreCube() : PickUp("ScoreCube")
+ScoreCube::ScoreCube(float moveTime) : PickUp("ScoreCube", moveTime)
 {
-	this->setMaterial(new LitMaterial(LitMaterial::fragment, glm::vec3(0, 1, 0)));
-	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj"));
-	this->scale(glm::vec3(0.3f));
+	this->setMaterial(new LitMaterial(glm::vec3(0, 1, 0)));
+	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "special_cube.obj"));
+	this->scale(glm::vec3(0.5f));
 
 	_minDelay = 4;
 	_maxDelay = 10;
@@ -26,7 +26,12 @@ glm::vec2 ScoreCube::applyPickUp(Player* pPlayer)
 	int score = Level::getBoard()->getScore(pPlayer->getId());
 	pPlayer->addScore(score);
 	Level::get()->CreatePacket(pPlayer->getId(), score);
+	pPlayer->addScore(Level::getBoard()->getScore(pPlayer->getId()));
+	
+	for each (Player* player in Level::getPlayers())
+		player->enableAbility();
+	
 	reset();
-
+	
 	return oldPos;
 }

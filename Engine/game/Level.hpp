@@ -1,7 +1,6 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-
 #include <iostream>
 #include "mge/core/World.hpp"
 #include "mge/core/GameObject.hpp"
@@ -10,7 +9,7 @@
 #include "mge/config.hpp"
 
 #include "Player.hpp"
-#include "PickUps/PickUp.hpp"
+#include "PickUps\PickUp.hpp"
 #include "Board.hpp"
 
 #include "../network/packets/DataType.hpp"
@@ -31,17 +30,20 @@ public:
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
+	static void					reset();
+	static void					ApplyPickUp(Player* pPlayer);
+	static void					applyAbility(Player* pPlayer);
 
 	void Host();
 	void Join(const char* IP, int port);
-
+	
 	virtual void update(float pStep);
 
 	static bool checkAvailable(Player* pPlayer);
-
+	
 	void SetupLevel();
 	pair<int, int> GetSpawnPosition(Id playerId);
-
+	
 	void Start(bool value);
 	void AddSpawn(Player* player);
 	void AddMove(MoveData move);
@@ -55,6 +57,7 @@ public:
 	void CreatePacket(Id playerId, Dir dir);
 	void CreatePacket(glm::vec2 pos, glm::vec2 oldPos);
 	void CreatePacket(Id playerId, int score);
+	
 private:
 	static Level* _level;
 
@@ -62,32 +65,42 @@ private:
 	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp(PickUp* pPickUp);
 
+	void coolDowns();
+	void checkCollisions();
+
 	void Send(DataType type, char* data);
 	
-	void checkCollisions();
+	std::vector<Player*> _players;
+	std::vector<PickUp*> _pickups;
+	Board* _board;
 
 	Client* _client = NULL;
 	Server* _server = NULL;
-
-	bool _start = false;
-	bool _send = false;
-
-	float _curTime = 0;
-	float _deltaTime = 0;
-	float _lastMoveTime = 0;
-	float _totalTime = 0;
-	float _moveTime = 0;
-
+	
+	std::vector<pair<int, int>> _spawnPos;
+	
 	std::vector<Player*> _spawnQueue;
 	std::vector<MoveData> _moveQueue;
 	std::vector<PickupData> _pickUpQueue;
 	std::vector<ScoreData> _scoreQueue;
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
-	Board* _board;
-	std::vector<pair<int, int>> _spawnPos;
+	
+	bool _start = false;
+	bool _send = false;
+	
+	//timing settings
+	float _totalTime = 0.8f;
+	float _wait		 = 0.5f;
+
+	//time variable
+	float _curTime = 0;
 
 	glm::vec2 _size;
+
+	//player abilities
+	int _waterCooldown = 0;
+	int _windCooldown  = 0;
 
 	Level();
 

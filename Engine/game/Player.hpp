@@ -12,18 +12,19 @@ class Player : public GameObject
 {
 private:
 	Id _id;
-	int _score;
+	int _score = 0;
 
 public:
 	MovementBehaviour* _movement;
 
 	bool _checked = false;
 
-	Player(Id playerId, glm::vec2 boardPos, bool controlled);
+	Player(Id playerId, glm::vec2 boardPos, float pMoveTime, float pWait, bool controlled);
 	glm::vec2 getBoardPos();
-	void setBoardPos(glm::vec2 pos);
 
 	void addScore(int pScore);
+	void enableAbility();
+	int getScore();
 	glm::vec2 getNextPos();
 	Id getId();
 	bool IsControlled();

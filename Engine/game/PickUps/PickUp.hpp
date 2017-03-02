@@ -13,14 +13,15 @@ class PickUp : public GameObject
 public:
 	LitMaterial* _material;
 
-	PickUp(std::string name);
+	PickUp(std::string name, float moveTime);
 	~PickUp();
-
 
 	virtual inline void update(float pStep) { };
 	virtual glm::vec2 applyPickUp(Player* pPlayer) = 0;
 
-	void step();
+	virtual void step();
+
+	void hover(float pStep);
 
 	glm::vec2 getBoardPos();
 	void spawn(glm::vec2 pos);
@@ -36,7 +37,16 @@ private:
 	void spawn();
 
 	float _countDown = 0;
+	float _floatTimer = 0;
+
+	float _spawnHeight = 7;
+
+	float _moveTime;
+	float _hoverDif = 0.4f;
+	float _hoverHeight = 1.2f;
+
 	glm::vec2 _boardPos;
+
 };
 
 #endif

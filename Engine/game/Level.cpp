@@ -14,7 +14,7 @@ Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
-	//setLocalPosition(glm::vec3(-8.5f, 0, 0));
+	//setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
 	_spawnPos.push_back(make_pair<int, int>(0, 8));
@@ -24,9 +24,6 @@ Level::Level() :GameObject("level")
 	_board = new Board();
 	_board->setParent(this);
 	World::add(this);
-
-	_moveTime = 0.55f;
-	_totalTime = 0.8f;
 }
 
 Level* Level::get()
@@ -56,6 +53,12 @@ void Level::Join(const char* IP, int port)
 	_client = new Client(); //Create a client
 	thread client(&Client::Connect, _client, IP, port); //Create a thread for the client
 	client.detach(); //Let it run seperately from the main thread
+}
+
+void Level::reset()
+{
+	delete _level;
+	_level = new Level();
 }
 
 void Level::SetupLevel()
@@ -210,6 +213,20 @@ void Level::Send(DataType type, char* data)
 		_server->SendAll(type, data);
 }
 
+void Level::ApplyPickUp(Player* pPlayer)
+{
+	if (_server != NULL)
+	{
+		for each (PickUp* pickUp in Level::getPickUps())
+			if (pickUp->getBoardPos() == pPlayer->getBoardPos())
+					if (pickUp->getBoardPos() == player->getBoardPos())
+					{
+						glm::vec2 oldPos = pickUp->applyPickUp(player);
+						CreatePacket(pickUp->getBoardPos(), oldPos);
+					}
+	}
+}
+
 void Level::update(float pStep)
 {
 	//
@@ -253,7 +270,7 @@ void Level::update(float pStep)
 
 	if (_server != NULL && _pickups.size() == 0)
 		spawnPickUp(new ScoreCube()); //Spawn the score cube
-
+	
 	_curTime += pStep;
 
 	if (_curTime < 0.65f)
@@ -265,78 +282,87 @@ void Level::update(float pStep)
 	}
 	else
 	{
-		//if (!_send)
-		//{
+		if (!_send)
+		{
 			if (_server != NULL)
 				CreatePacket(Id::p1, _players[0]->_movement->GetDDir());
 			if (_client != NULL)
 				CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir());
-		//}
-		//_send = true;
-		//if (!_send)
-			//CreatePacket(_server != NULL ? Id::p1 : _client->GetId(), _server != NULL ? _players[0]->_movement->GetDDir() : _players[_client->GetId() - 1]->_movement->GetDDir());
-		//_send = true;
-	}
-
-	//if player is moving
-	if (_curTime < _moveTime)
-	{
-		for each (Player* player in _players)
-			player->_movement->move(pStep + _deltaTime, _curTime, _moveTime, _lastMoveTime);
-
-		_deltaTime = 0;
-		_lastMoveTime = _curTime;
-	}
-	//if move ended
-	else if (_lastMoveTime != 0)
-	{
-		for each (Player* player in _players)
-		{
-			//finish player animation
-			player->_movement->finishMove(_moveTime, _lastMoveTime);
-
-			//set tiles to new owner
-			_board->setOwner(player->getBoardPos(), player->getId());
-
-			if (_server != NULL)
-			{
-				//apply pickups
-				for each (PickUp* pickUp in _pickups)
-					if (pickUp->getBoardPos() == player->getBoardPos())
-					{
-						glm::vec2 oldPos = pickUp->applyPickUp(player);
-						CreatePacket(pickUp->getBoardPos(), oldPos);
-					}
-			}
 		}
-		_lastMoveTime = 0;
+		_send = true;
 	}
-		
+	
+	for each (PickUp* pickUp in _pickups)
+		pickUp->hover(pStep);
+
+	for each (Player* player in _players)
+		player->update(pStep);
 
 	//if animation is done
 	if (_curTime >= _totalTime)
 	{
-		while (_scoreQueue.size() > 0)
-		{
-			ScoreData sData = _scoreQueue[0];
-			_players[sData.playerId - 1]->addScore(sData.score); //Add player score
-			_board->getScore(sData.playerId); //Clean player line
-			_scoreQueue.erase(_scoreQueue.begin());
-		}
-
-		//set next move direction to desired direction
-		for each (Player* player in _players)
-			player->_movement->setDirection();
-
-		checkCollisions();
-
-		//pickup spawning countdown
 		for each (PickUp* pickUp in _pickups)
 			pickUp->step();
 
-		//reset time for next step
+		coolDowns();
+		checkCollisions();
+
 		_curTime -= _totalTime;
-		_deltaTime = _curTime;
+	}
+}
+
+
+
+void Level::applyAbility(Player* pPlayer)
+{
+	switch (pPlayer->getId())
+	{
+	case p4:
+		Level::getBoard()->fireAbility(pPlayer->getBoardPos());
+		break;
+
+	case p2:
+		Level::getBoard()->earthAbility(pPlayer->getBoardPos());
+		break;
+
+	case p3:
+
+		break;
+
+	case p1:
+		pPlayer->_movement->fireAbility(true);
+		Level::get()->_windCooldown = 4;
+		break;
+	}
+}
+
+void Level::coolDowns()
+{
+	if (_windCooldown > 0)
+	{
+		_windCooldown--;
+
+		if (_windCooldown == 0)
+			for each (Player* player in _players)
+				if (player->getId() == p1)
+				{
+					player->_movement->fireAbility(false);
+					break;
+				}
+	}
+
+	if (_waterCooldown > 0)
+	{
+		_waterCooldown--;
+
+		if (_waterCooldown == 0)
+			for each (Player* player in _players)
+			{
+				if (player->getId() == p3)
+					continue;
+
+				player->_movement->fireAbility(2.0f);
+			}
 	}
 }
 
@@ -384,7 +410,6 @@ void Level::checkCollisions()
 			}
 		}
 	}
-
 	for each (Player* player in _players)
 		player->_checked = false;
 }
@@ -408,7 +433,7 @@ void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 			return;
 		}
 	}
-	Player* player = new Player(pPlayerId, pBoardPos, controlled);
+	Player* player = new Player(pPlayerId, pBoardPos, _totalTime, _wait, controlled);
 	player->setParent(this);
 	_players.push_back(player);
 }
