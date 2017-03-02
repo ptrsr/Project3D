@@ -86,7 +86,7 @@ void Level::update(float pStep)
 	for each (Player* player in _players)
 		player->update(pStep);
 
-	//if animation is done
+	//If animation is done
 	if (_curTime >= _totalTime)
 	{
 		for each (PickUp* pickUp in _pickups)
