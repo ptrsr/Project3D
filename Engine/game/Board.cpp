@@ -66,9 +66,43 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(Id::empty);
+				tile->setOwner(none);
 			}
 		}
 	}
 	return score;
+}
+
+void Board::fireAbility(glm::vec2 pBoardPos)
+{
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
+
+			if (!outOfBounds(pos))
+			{
+				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
+
+				if (tile->getOwner() != none)
+					tile->setOwner(fire);
+			}
+		}
+	}
+}
+
+void Board::earthAbility(glm::vec2 pBoardPos)
+{
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
+
+			if (!outOfBounds(pos))
+			{
+				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
+
+				if (tile->getOwner() == none)
+					tile->setOwner(earth);
+			}
+		}
+	}
 }

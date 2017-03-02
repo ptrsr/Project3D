@@ -18,7 +18,7 @@ public:
 	virtual inline void update(float pStep) { };
 	virtual void applyPickUp(Player* pPlayer) = 0;
 
-	void step();
+	virtual void step();
 
 	void hover(float pStep);
 

@@ -21,7 +21,12 @@ public:
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
-	static void reset();
+	static void					reset();
+	static void					ApplyPickUp(Player* pPlayer);
+	static void					checkCollision(Player* pPlayer);
+
+	static void					applyAbility(Player* pPlayer);
+
 	virtual void update(float pStep);
 
 	static bool checkAvailable(Player* pPlayer);
@@ -32,19 +37,28 @@ private:
 	void spawnPlayer(Id, glm::vec2 pBoardPos);
 	void spawnPickUp(PickUp* pPickUp);
 	
+
+	void coolDowns();
 	void checkCollisions();
 
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
 	Board* _board;
 
+	//timing settings
+	float _totalTime = 0.8f;
+	float _wait		 = 0.5f;
+
+	//time variable
 	float _curTime;
-	float _deltaTime;
-	float _lastMoveTime;
-	float _totalTime;
-	float _moveTime;
+
 
 	glm::vec2 _size;
+
+	//player abilities
+	int _waterCooldown = 0;
+	int _windCooldown  = 0;
+
 
 	Level();
 

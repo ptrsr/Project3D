@@ -6,19 +6,14 @@
 
 #include "Enums.hpp"
 
-Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
+Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait) : GameObject("temp")
 {
 	_name = "Player" + playerId;
 	_id = playerId;
 
 	this->setLocalPosition(glm::vec3(boardPos.x, 1.0f, boardPos.y)); 
 
-	if (playerId == Id::p1) {
-		_movement = new FireBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
-	}
-	else {
-		_movement = new WindBehaviour(this, boardPos, 1.0f, 0.8f, 0.3f);
-	}
+	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait);
 	this->setBehaviour(_movement);
 
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
@@ -26,7 +21,7 @@ Player::Player(Id playerId, glm::vec2 boardPos) : GameObject("temp")
 
 	glm::vec3 color = glm::vec3(1, 0, 0);
 
-	if (playerId == p3)
+	if (playerId == water)
 		color = glm::vec3(0, 0, 1);
 
 	this->setMaterial(new LitMaterial(color));
@@ -56,4 +51,9 @@ glm::vec2 Player::getNextPos()
 Id Player::getId()
 {
 	return _id;
+}
+
+void Player::enableAbility()
+{
+	_movement->enableAbility();
 }

@@ -1,5 +1,5 @@
-#ifndef PLAYERBEHAVIOUR_H
-#define PLAYERBEHAVIOUR_H
+#ifndef MOVEMENTBEHAVIOUR_H
+#define MOVEMENTBEHAVIOUR_H
 
 #include "mge/behaviours/AbstractBehaviour.hpp"
 #include <glm.hpp>
@@ -7,38 +7,35 @@
 
 class Player;
 
-class PlayerBehaviour : public AbstractBehaviour
+class MovementBehaviour : public AbstractBehaviour
 {
-
 	public:
-		PlayerBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
-		virtual ~PlayerBehaviour();
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		virtual ~MovementBehaviour();
 
-		virtual void update(float pStep) { };
-		virtual void activateAbility() = 0;
+		virtual inline void update(float pStep);
 
 		void checkKeys();
-		void move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime);
+		void move(float pStep);
 		void finishMove(float pMoveTime, float pLastMoveTime);
 		void setDirection();
 		void cancelMove();
 		void jump(float pHeight);
-
+		void fireAbility(bool toggle);
 
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
 		glm::vec2 getNextPos();
-		Id getPlayerId();
+		void enableAbility();
 
-	protected:
+	private:
 		void inverseDirection();
 
 		void rotate(float pStep);
 		void translate(float pTime, float pMoveTime, float pStep);
 		
 		Player* _player;
-		bool _hasActivated = false;
 
 		//settings
 		float _dJumpHeight  = 1;
@@ -51,12 +48,22 @@ class PlayerBehaviour : public AbstractBehaviour
 		glm::vec3 _axis  = glm::vec3(1,0,0);
 		glm::vec3 _trans = glm::vec3(0,0,0);
 
+		float _curTime		= 0;
+		float _deltaTime	= 0;
+		float _lastMoveTime = 0;
+		float _totalTime	= 0;
+		float _moveMulti	= 1;
+
+		float _moveTime		= 0;
+
 		float _lastHeight   = 0;
 
-		Dir _cDir = none;
-		Dir _dDir = none;
+		Dir _cDir = emtpy;
+		Dir _dDir = emtpy;
 
 		bool _canceled = false;
+		bool _activate = false;
+		bool _available = true;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

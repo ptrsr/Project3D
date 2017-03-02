@@ -38,6 +38,16 @@ void PickUp::spawn()
 					break;
 				}
 			}
+
+			for each (PickUp* pickUp in Level::getPickUps())
+			{
+				if (pickUp->getBoardPos() == pos)
+				{
+					available = false;
+					break;
+				}
+			}
+
 			if (available)
 				positions.push_back(pos);
 		}

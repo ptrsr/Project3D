@@ -1,4 +1,4 @@
-#include "mge/behaviours/PlayerBehaviour.hpp"
+#include "mge/behaviours/MovementBehaviour.hpp"
 
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
@@ -8,17 +8,69 @@
 
 #include <algorithm>
 
-PlayerBehaviour::PlayerBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
-	 _player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight)
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
+	_player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight), _totalTime(pTime), _moveTime(glm::clamp(pTime * ( 1 - pWait), 0.f, 1.f))
 { }
 
-void PlayerBehaviour::move(float pStep, float pCurTime, float pMoveTime, float pLastMoveTime)
+void MovementBehaviour::update(float pStep)
+{
+	pStep *= _moveMulti;
+
+	_curTime += pStep;
+
+	checkKeys();
+
+	if (_curTime < _moveTime)
+	{
+		move(pStep + _deltaTime);
+
+		_deltaTime = 0;
+		_lastMoveTime = _curTime;
+	}
+	//if move ended
+	else if (_lastMoveTime != 0)
+	{
+		//finish player animation
+		finishMove(_moveTime, _lastMoveTime);
+
+		//set tiles to new owner
+		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
+
+		//apply pickups
+		Level::ApplyPickUp(_player);
+
+		//apply ability
+
+
+		_lastMoveTime = 0;
+	}
+
+	if (_curTime >= _totalTime)
+	{
+		//set next move direction to desired direction
+		setDirection();
+
+		Level::checkCollision(_player);
+
+		//reset time for next step
+		_curTime -= _totalTime;
+		_deltaTime = _curTime;
+
+		if (_activate)
+		{
+			_activate = false;
+			Level::applyAbility(_player);
+		}
+	}
+}
+
+void MovementBehaviour::move(float pStep)
 {
 	float cancelTime; //temporary variable for mid air canceling
 
-	if (_canceled && pCurTime > (cancelTime = pMoveTime / 2.f)) //is the move invalid and are we halfway?
+	if (_canceled && _curTime > (cancelTime = _moveTime / 2.f)) //is the move invalid and are we halfway?
 	{
-		float step = (pCurTime - cancelTime) - (cancelTime - pLastMoveTime);
+		float step = (_curTime - cancelTime) - (cancelTime - _lastMoveTime);
 			
 		//inverse the direction and axis
 		_axis = -_axis;
@@ -31,8 +83,8 @@ void PlayerBehaviour::move(float pStep, float pCurTime, float pMoveTime, float p
 		if (_dDir == tDir)
 			_dDir = _cDir;
 
-		rotate(step / pMoveTime);
-		translate(pCurTime, pMoveTime, step);
+		rotate(step / _moveTime);
+		translate(_curTime, _moveTime, step);
 
 		_boardPos -= glm::vec2(_trans.x, _trans.z);
 
@@ -40,12 +92,12 @@ void PlayerBehaviour::move(float pStep, float pCurTime, float pMoveTime, float p
 	}
 	else
 	{
-		rotate((pStep / pMoveTime));
-		translate(pCurTime, pMoveTime, pStep);
+		rotate((pStep / _moveTime));
+		translate(_curTime, _moveTime, pStep);
 	}
 }
 
-void PlayerBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
+void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 {
 	rotate(1 - pLastMoveTime / pMoveTime);
 	translate(pMoveTime, pMoveTime, pMoveTime - pLastMoveTime);
@@ -55,7 +107,7 @@ void PlayerBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 }
 
 //if step is 1, we rotate 90 degrees
-void PlayerBehaviour::rotate(float pStep) 
+void MovementBehaviour::rotate(float pStep) 
 {
 	float angle = (glm::pi<float>() / 2.f) * pStep;
 	_player->rotate(angle, _axis);
@@ -63,7 +115,7 @@ void PlayerBehaviour::rotate(float pStep)
 
 //pTime is for the height (phase of sinus wave)
 //if Pstep is 1, move to next position
-void PlayerBehaviour::translate(float pTime, float pMoveTime, float pStep) 
+void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep) 
 {
 	float height = std::sin((pTime / pMoveTime) * glm::pi<float>()) * _cJumpHeight;
 	float difference = height - _lastHeight;
@@ -71,7 +123,7 @@ void PlayerBehaviour::translate(float pTime, float pMoveTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == none)
+	if (_cDir == emtpy)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / pMoveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -80,11 +132,11 @@ void PlayerBehaviour::translate(float pTime, float pMoveTime, float pStep)
 }
 
 //sets the axis and translation direction
-void PlayerBehaviour::setDirection()
+void MovementBehaviour::setDirection()
 {
 	_cDir = _dDir;
 
-	if (_cDir == Dir::none)
+	if (_cDir == Dir::emtpy)
 		return;
 
 	glm::mat4 worldMat = _player->getWorldTransform();
@@ -119,12 +171,13 @@ void PlayerBehaviour::setDirection()
 		_canceled = true;
 }
 
-void PlayerBehaviour::checkKeys()
+void MovementBehaviour::checkKeys()
 {
-	if (getPlayerId() == p1)
+	if (_player->getId() == fire)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			_dDir = Dir::up;
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			_dDir = Dir::down;
 
@@ -133,11 +186,15 @@ void PlayerBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			_dDir = Dir::left;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			activateAbility();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
+		{
+			_activate = true;
+			_available = false;
+
 		}
 	}
-	else if (getPlayerId() == p3)
+	else if (_player->getId() == water)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			_dDir = Dir::up;
@@ -150,14 +207,15 @@ void PlayerBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			_dDir = Dir::left;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			activateAbility();
-		}
 	}
 }
 
-void PlayerBehaviour::inverseDirection()
+void MovementBehaviour::enableAbility()
+{
+	_available = true;
+}
+
+void MovementBehaviour::inverseDirection()
 {
 	switch (_cDir)
 	{
@@ -179,27 +237,34 @@ void PlayerBehaviour::inverseDirection()
 	}
 }
 
-void PlayerBehaviour::cancelMove()
+void MovementBehaviour::cancelMove()
 {
 	_canceled = true;
 }
 
-void PlayerBehaviour::jump(float pHeight)
+void MovementBehaviour::jump(float pHeight)
 {
 	_cJumpHeight = pHeight;
 }
 
-Id PlayerBehaviour::getPlayerId()
-{
-	return _player->getId();
-}
 
-glm::vec2 PlayerBehaviour::getBoardPos()
+
+glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
 }
 
-glm::vec2 PlayerBehaviour::getNextPos()
+void MovementBehaviour::fireAbility(bool toggle)
+{
+	if (toggle)
+		_totalTime = _moveTime;
+	else
+		_totalTime = _moveTime * 2;
+
+	std::cout << _moveTime * 2;
+}
+
+glm::vec2 MovementBehaviour::getNextPos()
 {
 	glm::vec2 dPos;
 
@@ -225,7 +290,7 @@ glm::vec2 PlayerBehaviour::getNextPos()
 	return dPos + _boardPos;
 }
 
-PlayerBehaviour::~PlayerBehaviour()
+MovementBehaviour::~MovementBehaviour()
 {
 	//dtor
 }
