@@ -165,7 +165,13 @@ void Client::HandlePacket(DataType type, char* buf)
 			return; //Invalid player
 		if (moveData.playerId == _playerId)
 			return; //Skip me
-		Level::get()->AddMove(moveData); //Add move to spawn queue
+		{
+			Level* level = Level::get();
+			Player* player = level->getPlayers()[moveData.playerId - 1];
+			player->_movement->SetDDir(moveData.direction);
+
+			//Level::get()->AddMove(moveData); //Add move to spawn queue
+		}
 		break;
 	case DataType::PICKUPDATA:
 		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);

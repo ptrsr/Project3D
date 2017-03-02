@@ -204,8 +204,15 @@ void Server::HandlePacket(DataType type, char* buf)
 		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
 		{
 			Level* level = Level::get();
-			NotifyClients(DataType::MOVEDATA, buf, _sockClients[moveData.playerId - 2]);
-			level->AddMove(moveData);
+			Player* player = level->getPlayers()[moveData.playerId - 1];
+			player->_movement->SetDDir(moveData.direction);
+			glm::vec2 nextPos = player->_movement->getNextPos();
+			
+			moveData.toBoardX = nextPos.x;
+			moveData.toBoardY = nextPos.y;
+
+			NotifyClients(DataType::MOVEDATA, (char*)&moveData, _sockClients[moveData.playerId - 2]);
+			//level->AddMove(moveData);
 		}
 		break;
 	}

@@ -213,6 +213,9 @@ void Level::Send(DataType type, char* data)
 void Level::update(float pStep)
 {
 	//
+	// - Server tells where the clients are going
+	// - Add time stamp to data packets
+	// - Send Move packets frame-independent
 	// - More testing with 4 players
 	// - Clean up queues
 	// - Handle client/host leaving

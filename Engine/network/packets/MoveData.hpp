@@ -6,4 +6,6 @@ struct MoveData
 {
 	Id playerId;
 	Dir direction;
+	int toBoardX;
+	int toBoardY;
 };
