@@ -17,7 +17,6 @@ using namespace std;
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
-#include "mge/materials/TerrainMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -79,10 +78,10 @@ void LightScene::_initializeScene()
 
 
 	///LUCAS
-    GameObject* lucas = new GameObject ("Lucas", glm::vec3(0, 0, 0));
-    lucas->setMesh(Mesh::load(config::MGE_MODEL_PATH + "lucas.obj", 0.0013f));
-    lucas->setMaterial(new LitMaterial(LitMaterial::Lit::fragment));
-    _world->add(lucas);
+    //GameObject* lucas = new GameObject ("Lucas", glm::vec3(0, 0, 0));
+    //lucas->setMesh(Mesh::load(config::MGE_MODEL_PATH + "lucas.obj", 0.0013f));
+    //lucas->setMaterial(new LitMaterial(LitMaterial::Lit::fragment));
+    //_world->add(lucas);
 
 	///SUZANA
 	//GameObject* suzana = new GameObject("suzana", glm::vec3(0, 1.f, 0));

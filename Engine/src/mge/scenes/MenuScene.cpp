@@ -9,6 +9,7 @@ using namespace std;
 #include "mge/core/World.hpp"
 
 #include "mge/core/Camera.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
 
 #include "mge/materials/AbstractMaterial.hpp"
 
@@ -16,7 +17,6 @@ using namespace std;
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
-#include "mge/materials/TerrainMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -32,6 +32,8 @@ using namespace std;
 
 #include "mge/util/DebugHud.hpp"
 #include "mge/util/InputHandler.h"
+#include "mge/auxiliary/LuaParser.hpp"
+
 
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
@@ -49,11 +51,7 @@ MenuScene::MenuScene():AbstractGame (),_hud(0)
 void MenuScene::initialize() {
     //setup the core part
     AbstractGame::initialize();
-
     //setup the custom part
-	cout << "Initializing HUD" << endl;
-	_hud = new DebugHud(_window);
-	cout << "HUD initialized." << endl << endl;
 }
 //build the game _world
 void MenuScene::_initializeScene()
@@ -63,6 +61,25 @@ void MenuScene::_initializeScene()
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
+
+	cout << "Initializing HUD" << endl;
+	_hud = new DebugHud(_window);
+	cout << "HUD initialized." << endl << endl;
+
+
+
+
+	LuaParser* luaParser = new LuaParser("main.lua");
+
+	GameObject* center = new GameObject("center");
+	GameObject* holder = new GameObject("holder");
+	GameObject* light = new GameObject("light");
+
+	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
+
+	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
+	light->setParent(holder);
+
 
 
 	_startState = new StartState();
@@ -74,15 +91,26 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-	_currentState = 3;
+	_text = new Text(TextType::IP);
+	_text->_initializeScene();
+
 
 	Level::get();
+
+	_currentState = -1;
+	_world->add(center);
+	_world->add(holder);
+
+	
 }
 
 void MenuScene::_render() {
     AbstractGame::_render();
     _updateHud();
+	_text->Update();
+
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
+
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -93,6 +121,7 @@ void MenuScene::_render() {
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
+			cout << "JoinState" << endl;
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -105,12 +134,9 @@ void MenuScene::_render() {
 		case 3:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
+				Level::reset();
 			}
 			if (!_cameraStateChanged) {
-
-				Level::get()->Host();
-				//Level::get()->Join("127.0.0.1", 8888);
-
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
 			}
@@ -118,6 +144,8 @@ void MenuScene::_render() {
 			break;
 
 		case 1:
+
+			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -137,10 +165,8 @@ void MenuScene::_deleteScene() {
 
 
 void MenuScene::_changeCameraState(AbstactState* state) {
-		GameObject* plane = new GameObject("empty",glm::vec3(0,0,0));
-		plane->setTransform(state->getPlane()->getTransform());
-
-		plane->translate(glm::vec3(0,2,5));
+		GameObject* plane = state->getPlane();
+		
 		if (plane != nullptr) {
 			Camera * camera = _world->getMainCamera();
 			camera->setBehaviour(new CameraBehaviour(plane));
@@ -148,10 +174,12 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 		}
 }
 void MenuScene::_changeCameraState(Level* level) {
-		GameObject* empty = new GameObject("empty", glm::vec3(4, 6, -4));
-		empty->rotateDegrees(180, glm::vec3(0, 1, 0));
+	GameObject* empty = new GameObject("empty", glm::vec3(0,0,0));
+	GameObject * plane = ObjectCache::find("LevelPlane");
+	if (plane != NULL) {
+		empty = plane;
 
-		empty->rotateDegrees(-45, glm::vec3(1, 0, 0));
+	}
 		Camera * camera = _world->getMainCamera();
 		camera->setBehaviour(new CameraBehaviour(empty));
 
@@ -159,6 +187,14 @@ void MenuScene::_changeCameraState(Level* level) {
 }
 
 void MenuScene::_updateHud() {
+
+	string debugInfo = "";
+	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
+	debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
+	debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
+
+	_hud->setDebugInfo(debugInfo);
+	_hud->draw();
 }
 MenuScene::~MenuScene()
 {

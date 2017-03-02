@@ -53,9 +53,6 @@
     <Filter Include="game\PickUps">
       <UniqueIdentifier>{c8982027-be65-4650-afa5-da05ac8479b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="network\packets">
-      <UniqueIdentifier>{2e015498-493b-4408-a67d-8511dbc73459}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -131,9 +128,6 @@
       <Filter>MGE Source files\mge\behaviours\Light</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mge\materials\LitMaterial.hpp">
-      <Filter>MGE Source files\mge\materials</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mge\materials\TerrainMaterial.hpp">
       <Filter>MGE Source files\mge\materials</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mge\scenes\LightScene.hpp">
@@ -235,9 +229,6 @@
     <ClInclude Include="..\game\Level.hpp">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
-      <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\scenes\MenuScene.hpp">
@@ -265,10 +256,28 @@
     <ClInclude Include="..\network\Client.hpp">
       <Filter>network</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\Data.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\DataType.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
     <ClInclude Include="..\network\NetworkCommand.hpp">
       <Filter>network</Filter>
     </ClInclude>
     <ClInclude Include="..\network\PacketHelper.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\PlayerData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\ScoreData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TestData.hpp">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\TileData.hpp">
       <Filter>network</Filter>
     </ClInclude>
     <ClInclude Include="..\network\scene\SyncScene.hpp">
@@ -289,35 +298,23 @@
     <ClInclude Include="..\game\Board.hpp">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="..\network\packets\DataType.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\MoveData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\PlayerData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\ScoreData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\TestData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\TileData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\TimeData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\StartData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\network\packets\PickupData.hpp">
-      <Filter>network\packets</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\Enums.hpp">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\Text.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\MeshCache.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\TextureCache.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\AudioManager.h">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -391,9 +388,6 @@
       <Filter>MGE Source files\mge\behaviours\Light</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\materials\LitMaterial.cpp">
-      <Filter>MGE Source files\mge\materials</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\mge\materials\TerrainMaterial.cpp">
       <Filter>MGE Source files\mge\materials</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\LightScene.cpp">
@@ -510,9 +504,6 @@
     <ClCompile Include="..\game\Level.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
-      <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp">
       <Filter>MGE Source files</Filter>
     </ClCompile>
@@ -566,6 +557,21 @@
     </ClCompile>
     <ClCompile Include="..\game\Board.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\Text.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\MeshCache.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\TextureCache.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\AudioManager.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
+      <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

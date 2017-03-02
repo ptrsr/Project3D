@@ -72,6 +72,7 @@ Mesh* Mesh::load(string pFileName, float pScale)
     cout << "Loading " << pFileName << "...";
 
 	Mesh* mesh = new Mesh(pFileName);
+	mesh->setName(pFileName);
 
 	ifstream file (pFileName, ios::in);
 
@@ -290,6 +291,15 @@ void Mesh::drawDebugInfo(const glm::mat4& pModelMatrix, const glm::mat4& pViewMa
 int Mesh::VertexCount()
 {
 	return _vertices.size();
+}
+
+
+std::string Mesh::getName() {
+	return _name;
+}
+
+void Mesh::setName(std::string replacement) {
+	_name = replacement;
 }
 
 

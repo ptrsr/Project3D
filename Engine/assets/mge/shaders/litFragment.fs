@@ -69,14 +69,15 @@ void main( void )
 	for (int i = 0; i < lightCount.x; i++)
 		color += CalcDirLight(dirLight[i], wNormal, viewDir);
 	
-	for (int i = 0; i < lightCount.y; i++)
-		color += CalcPointLight(pointLight[i], wNormal, viewDir);
+	//for (int i = 0; i < lightCount.y; i++)
+	//	color += CalcPointLight(pointLight[i], wNormal, viewDir);
 	
-	for (int i = 0; i < lightCount.z; i++)
-		color += CalcSpotLight(spotLight[i], wNormal, viewDir);
+	//for (int i = 0; i < lightCount.z; i++)
+	//	color += CalcSpotLight(spotLight[i], wNormal, viewDir);
 	
 	fColor = vec4(color, 1);
 }
+
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {

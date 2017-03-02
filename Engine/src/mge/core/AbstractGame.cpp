@@ -153,7 +153,6 @@ void AbstractGame::_processEvents()
                 //this version implements nonconstrained match viewport scaling
                 glViewport(0, 0, event.size.width, event.size.height);
                 break;
-
             default:
                 break;
         }

@@ -9,6 +9,7 @@ using namespace std;
 #include "mge/core/World.hpp"
 
 #include "mge/core/Camera.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
 
 #include "mge/materials/AbstractMaterial.hpp"
 
@@ -16,7 +17,6 @@ using namespace std;
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
-#include "mge/materials/TerrainMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -45,25 +45,30 @@ void CreditsState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-	_plane = new GameObject("plane", glm::vec3(-2.5f, 0, 19));
-	_plane->setMesh(planeMesh);
-	_plane->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	_plane->rotate(-255, glm::vec3(0, 1, 0));
-	World::add(_plane);
+	GameObject * plane = ObjectCache::find("JoinPlane");
+	if (plane != NULL) {
+		_plane = plane;
+	}
 
-	_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
-	_writingStone->rotate(-75, glm::vec3(0, 1, 0));
-	_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
-	_writingStone->setMesh(cubeMesh);
-	_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	World::add(_writingStone);
+	GameObject * back = ObjectCache::find("back_text");
+	if (back != NULL)
+	{
+		_selectableObj = back;
+	}
 
-	_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
-	_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
-	_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	_selectableObj->setMesh(cubeMesh);
-	_selectableObj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 1, 1)));
-	World::add(_selectableObj);
+	//_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
+	//_writingStone->rotate(-75, glm::vec3(0, 1, 0));
+	//_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
+	//_writingStone->setMesh(cubeMesh);
+	//_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
+	//World::add(_writingStone);
+
+	//_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
+	//_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
+	//_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
+	//_selectableObj->setMesh(cubeMesh);
+	//_selectableObj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 1, 1)));
+	//World::add(_selectableObj);
 
 	
 }
@@ -87,6 +92,12 @@ void CreditsState::_updateColor() {}
 int CreditsState::CheckSelection() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
+		cout << "Going back to start" << endl;
+		_isKeyPress = true;
+		_inAnotherState = true;
+		return -1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;

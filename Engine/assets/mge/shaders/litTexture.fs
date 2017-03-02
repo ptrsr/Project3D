@@ -87,7 +87,7 @@ void main( void )
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 tColor)
 {
-	float diff = max(0, dot(-light.direction, normal));
+	float diff = dot(-light.direction, normal) * 0.5f + 0.5f;
 	vec3 ref   = reflect(light.direction, normal);
 	float spec = pow(max(dot(viewDir, ref), 0), shininess);
 	

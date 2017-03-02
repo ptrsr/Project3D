@@ -9,8 +9,8 @@
 
 #include <string>
 
+//shader
 ShaderProgram* LitMaterial::_shader = NULL;
-LitMaterial::Lit LitMaterial::_lit = LitMaterial::vertex;
 
 //vertex uniforms
 GLint LitMaterial::_uMVPMatrix = 0;
@@ -20,68 +20,39 @@ GLint LitMaterial::_uModelMatrix = 0;
 GLint LitMaterial::_uModelColor = 0;
 GLint LitMaterial::_uShininess = 0;
 GLint LitMaterial::_uCameraPos = 0;
-GLint LitMaterial::_uTexture = 0;
 
 //vertex attributes
 GLint LitMaterial::_aVertex = 0;
 GLint LitMaterial::_aNormal = 0;
-GLint LitMaterial::_aUV = 0;
 
-LitMaterial::LitMaterial(Lit pLit, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
+LitMaterial::LitMaterial(glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
 	: _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
 {
-	_lit = pLit;
-	std::string shaderName;
-
-	switch (pLit)
-	{
-	case Lit::vertex:
-		shaderName = "litVertex";
-		break;
-
-	case Lit::fragment:
-		shaderName = "litFragment";
-		break;
-
-	case Lit::splat:
-		shaderName = "terrain";
-		break;
-	}
-
-	_lazyInitializeShader(shaderName);
+	_lazyInitializeShader();
 }
 
-LitMaterial::LitMaterial(Texture* pTexture, float pShininess, std::vector<AbstractLight*>* pLights)
-	:  _shininess(pShininess), _lights(pLights), _texture(pTexture)
+void LitMaterial::_lazyInitializeShader() 
 {
-	_lit = Lit::texture;
-	_lazyInitializeShader("litTexture");
-}
-
-void LitMaterial::_lazyInitializeShader(std::string shaderName) 
-{
-	if (!_shader) 
+	if (!_shader)
 	{
 		_shader = new ShaderProgram();
 
-		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + shaderName + ".vs");
-		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + shaderName + ".fs");
+		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + "litFragment.vs");
+		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "litFragment.fs");
 		_shader->finalize();
 
 		//vertex uniforms
-		_uMVPMatrix		 = _shader->getUniformLocation("mvpMatrix");
-		_uModelMatrix    = _shader->getUniformLocation("modelMatrix");
+		_uMVPMatrix = _shader->getUniformLocation("mvpMatrix");
+		_uModelMatrix = _shader->getUniformLocation("modelMatrix");
 
 		//fragment uniforms
 		_uModelColor = _shader->getUniformLocation("modelColor");
-		_uTexture	 = _shader->getUniformLocation("dTexture");
-		_uShininess  = _shader->getUniformLocation("shininess");
-		_uCameraPos  = _shader->getUniformLocation("cameraPos");
+		_uShininess = _shader->getUniformLocation("shininess");
+		_uCameraPos = _shader->getUniformLocation("cameraPos");
 
 		//vertex attributes
 		_aVertex = _shader->getAttribLocation("vertex");
 		_aNormal = _shader->getAttribLocation("normal");
-		_aUV	 = _shader->getAttribLocation("uv");
 	}
 }
 
@@ -95,36 +66,21 @@ void LitMaterial::setColor(glm::vec3 newColor) {
 void LitMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
 {
 	_shader->use();
-	addLights();
 
-	//vertex uniforms
+	//uniforms
 	glm::mat4 mvpMatrix = pProjectionMatrix * pViewMatrix * pModelMatrix;
 	glUniformMatrix4fv(_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
 	glUniformMatrix4fv(_uModelMatrix, 1, GL_FALSE, glm::value_ptr(pModelMatrix));
 
-	//fragment uniforms
-
-	if (_lit == Lit::texture)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _texture->getId());
-		glUniform1i(_uTexture, 0);
-	} else
-		glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
-
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);
+	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
 
-	//vertex attributes
-	if (_lit == Lit::texture)
-		pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
-	else
-		pMesh->streamToOpenGL(_aVertex, _aNormal, -1);
-
-	//pMesh->drawDebugInfo(pModelMatrix, pViewMatrix, pProjectionMatrix);
+	renderLights();
+	pMesh->streamToOpenGL(_aVertex, _aNormal, -1);
 }
 
-void LitMaterial::addLights()
+void LitMaterial::renderLights()
 {
 	int dLights = 0;
 	int pLights = 0;

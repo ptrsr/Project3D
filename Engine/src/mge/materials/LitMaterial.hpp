@@ -13,16 +13,7 @@
 class LitMaterial : public AbstractMaterial
 {
 public:
-	enum Lit
-	{
-		fragment,
-		vertex,
-		splat,
-		texture
-	};
-
-	LitMaterial(Lit pLit = vertex, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
-	LitMaterial(Texture* pTexture, float pShininess, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
+	LitMaterial(glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
 	
 	virtual ~LitMaterial();
 
@@ -31,42 +22,32 @@ public:
 	glm::vec3 getColor();
 	void setColor(glm::vec3 pColor);
 
-protected:
-	static void _lazyInitializeShader(std::string shaderName);
-	void addLights();
+private:
+	static void _lazyInitializeShader();
+	void renderLights();
 
-	std::vector<AbstractLight*>* _lights;
-	Texture* _texture;
-	
-
-	glm::vec3 _modelColor;
-	float _shininess;
-	
 	static ShaderProgram* _shader;
 
 	//vertex uniforms
 	static GLint _uMVPMatrix;
 	static GLint _uModelMatrix;
 
-	//vertex attributes
-	static GLint _aVertex;
-	static GLint _aNormal;
-	static GLint _aUV;
-
 	//fragment uniforms
 	static GLint _uModelColor;
 	static GLint _uShininess;
 	static GLint _uCameraPos;
-	static GLint _uTexture;
 
-private:
-	static Lit _lit;
+	//vertex attributes
+	static GLint _aVertex;
+	static GLint _aNormal;
+	static GLint _aU;
 
-	LitMaterial(const LitMaterial&);
-
+	//lights
+	std::vector<AbstractLight*>* _lights;
 	
-
-
+	//settings
+	glm::vec3 _modelColor;
+	float _shininess;
 };
 
 #endif // LITMATERIAL_H

@@ -27,13 +27,14 @@ DebugHud::~DebugHud()
 void DebugHud::_createDebugHud() {
     _debugText.setString("");
     _debugText.setFont(_font);
-	_debugText.setCharacterSize(16);
-	_debugText.setFillColor(sf::Color::White);
+	_debugText.setCharacterSize(30);
+	_debugText.setStyle(sf::Text::Style::Bold);
+	_debugText.setFillColor(sf::Color::Red);
 }
 
 void DebugHud::setDebugInfo(std::string pInfo) {
- //   _debugText.setString(pInfo);
-	//_debugText.setPosition(10, 10);
+    _debugText.setString(pInfo);
+	_debugText.setPosition(10, 10);
 }
 
 void DebugHud::draw()

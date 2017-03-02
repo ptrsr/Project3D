@@ -14,6 +14,9 @@ class Texture
 
 		GLuint getId();
 
+		std::string getName();
+		void setName(std::string replacement);
+
 	protected:
 
 		//all previously loaded meshes;
@@ -24,6 +27,8 @@ class Texture
 		GLuint _id;
 
 		Texture();
+	private:
+		std::string _name;
 
 };
 

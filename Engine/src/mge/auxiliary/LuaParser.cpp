@@ -7,13 +7,16 @@
 #include "mge/materials/ColorMaterial.hpp"
 #include "Hex.hpp"
 #include "ObjectCache.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "MeshCache.hpp"
+#include "TextureCache.hpp"
+#include "mge/materials/TextureMaterial.hpp"
 #include "mge/core/Camera.hpp"
 #include "mge/behaviours/OrbitBehaviour.hpp"
 
 int spawn(lua_State* lua) 
 {
-	GameObject* obj = new GameObject(lua_tostring(lua, -4), glm::vec3(lua_tonumber(lua, -3), lua_tonumber(lua, -2), lua_tonumber(lua, -1)));
+	GameObject* obj = new GameObject(lua_tostring(lua, -1), glm::vec3(0,0,0));
+	//obj->scale(glm::vec3(2, 2, 2));
 	ObjectCache::push(obj);
 
 	World::add(obj);
@@ -76,12 +79,20 @@ int getPos(lua_State* lua)
 }
 int setPos(lua_State* lua)
 {
-	if (lua_gettop(lua) == 3 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
+	if (lua_gettop(lua) == 4 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
 	{
-		GameObject* obj = ObjectCache::find(lua_tostring(lua, -1));
+		GameObject* obj = ObjectCache::find(lua_tostring(lua, -4));
 
 		if (obj != nullptr)
-			obj->setLocalPosition(glm::vec3(lua_tonumber(lua, -3), lua_tonumber(lua, -2), lua_tonumber(lua, -1)));
+		{
+			float x = 0;
+			x = lua_tonumber(lua, -3);
+			float y = 0;
+			y = lua_tonumber(lua, -2);
+			float z = 0;
+			z = lua_tonumber(lua, -1);
+			obj->setLocalPosition(glm::vec3(-x, y, z));
+		}
 		else
 			std::cout << "error getting position: object doesn't exist" << std::endl;
 	}
@@ -89,6 +100,33 @@ int setPos(lua_State* lua)
 
 	return 0;
 }
+
+int setRotation(lua_State* lua)
+{
+	if (lua_gettop(lua) == 4 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
+	{
+		GameObject* obj = ObjectCache::find(lua_tostring(lua, -4));
+
+		if (obj != nullptr)
+		{
+			float x = lua_tonumber(lua, -3);
+			float y = lua_tonumber(lua, -2);
+			float z = lua_tonumber(lua, -1);
+
+			obj->rotateDegrees(-y, glm::vec3(0, 1, 0));
+			obj->rotateDegrees(x, glm::vec3(1, 0, 0));
+			obj->rotateDegrees(-z, glm::vec3(0, 0, 1));
+		}
+		else
+			std::cout << "error getting rotation: object doesn't exist" << std::endl;
+	}
+	else std::cout << "error: rotation param isn't a number" << std::endl;
+
+	return 0;
+}
+
+
+
 int move(lua_State* lua)
 {
 	if (lua_gettop(lua) == 3 && lua_isnumber(lua, -1) && lua_isnumber(lua, -2) && lua_isnumber(lua, -3))
@@ -124,26 +162,81 @@ int setTexture(lua_State* lua)
 		return 0;
 	}
 
+
+
 	if (size == 2 && lua_isstring(lua, -size + 1))
 	{
-		Texture* texture = Texture::load(config::MGE_TEXTURE_PATH + lua_tostring(lua, -size + 1));
+		Texture* texture;
+		std::string tName = config::MGE_TEXTURE_PATH + lua_tostring(lua, -size + 1);
 
+		if (TextureCache::exists(tName)) {
+			texture = TextureCache::find(tName);
+		}
+		else {
+			texture = Texture::load(tName);
+			TextureCache::push(texture);
+		}
+		
 		if (texture)
 		{
-			obj->setMaterial(new LitMaterial(texture, 10));
+			obj->setMaterial(new TextureMaterial(texture));
 			return 0;
 		}
 	}
-	else
+	else if (size == 4 && lua_isnumber(lua, -size + 1)) {
+		obj->setMaterial(new LitMaterial(glm::vec3(lua_tonumber(lua, -size + 1), lua_tonumber(lua, -size + 2), lua_tonumber(lua, -size + 3))));
+	}
+	else {
+		obj->setMaterial(new LitMaterial());
 		std::cout << "Loading default white material" << std::endl;
-
-	obj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment));
+	}
 	return 0;
 }
+
+int setSpecular(lua_State* lua) {
+	int size = lua_gettop(lua);
+
+	if (size == 0)
+	{
+		std::cout << "error: setSpecular parameters" << std::endl;
+		return 0;
+	}
+
+
+	GameObject* obj = ObjectCache::find(lua_tostring(lua, -size));
+
+	if (!obj)
+	{
+		std::cout << "error: object doesn't exist" << std::endl;
+		return 0;
+	}
+
+	if (size == 2 && lua_isstring(lua, -size + 1))
+	{
+		Texture* texture;
+		std::string tName = config::MGE_SPECULAR_PATH + lua_tostring(lua, -size + 1);
+
+		if (TextureCache::exists(tName)) {
+			texture = TextureCache::find(tName);
+		}
+		else {
+			texture = Texture::load(tName);
+			TextureCache::push(texture);
+		}
+
+		if (texture)
+		{
+			((TextureMaterial*)obj->getMaterial())->setSpecular(texture);
+			return 0;
+		}
+	}
+	return 0;
+}
+
 int setMesh(lua_State* lua)
 {
 	if (lua_gettop(lua) == 2 && lua_isstring(lua, -2) && lua_isstring(lua, -1))
-	{
+	{ 
 		GameObject* obj = ObjectCache::find(lua_tostring(lua, -2));
 
 		if (!obj)
@@ -151,8 +244,16 @@ int setMesh(lua_State* lua)
 			std::cout << "error setting model: object doesn't exist" << std::endl;
 			return 0;
 		}
-
-		obj->setMesh(Mesh::load(config::MGE_MODEL_PATH + lua_tostring(lua, -1)));
+		if (MeshCache::exists(config::MGE_MODEL_PATH + lua_tostring(lua, -1))) {
+			Mesh* mesh = MeshCache::find(config::MGE_MODEL_PATH + lua_tostring(lua, -1));
+			obj->setMesh(mesh);
+		}
+		else {
+			Mesh * mesh = Mesh::load(config::MGE_MODEL_PATH + lua_tostring(lua, -1));
+			MeshCache::push(mesh);
+			obj->setMesh(mesh);
+		}
+		//obj->scale(glm::vec3(2, 2, 2));
 	}
 
 	return 0;
@@ -225,6 +326,9 @@ LuaParser::LuaParser(std::string fileName)
 
 		lua_pushcfunction(lua, setPos);
 		lua_setglobal(lua, "setPos");
+
+		lua_pushcfunction(lua, setRotation);
+		lua_setglobal(lua, "setRotation");
 
 		lua_pushcfunction(lua, getPos);
 		lua_setglobal(lua, "getPos");

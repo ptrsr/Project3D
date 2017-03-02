@@ -52,6 +52,8 @@ class GameObject
 		void setMaterial (AbstractMaterial* pMaterial);
 		AbstractMaterial* getMaterial() const;
 
+
+
 		void setBehaviour(AbstractBehaviour* pBehaviour);
 		AbstractBehaviour* getBehaviour() const;
 

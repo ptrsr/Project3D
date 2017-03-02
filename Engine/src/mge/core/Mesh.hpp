@@ -36,9 +36,13 @@ class Mesh
 
 		int VertexCount();
 
+		std::string getName();
+		void setName(std::string replacement);
+
 	protected:
 
 	    std::string _id;
+		std::string _name;
 
         //OpenGL id's for the different buffers created for this mesh
 		GLuint _indexBufferId;

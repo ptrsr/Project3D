@@ -23,6 +23,7 @@ class OrbitBehaviour : public AbstractBehaviour
 
 		sf::Vector2i _lastMousePos = sf::Vector2i();
 		sf::Vector2f _currentMousePos = sf::Vector2f();
+		bool cube = false;
 		float _distance;
 
 		glm::mat4 Orbit(GameObject * pTarget);

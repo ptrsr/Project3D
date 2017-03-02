@@ -22,7 +22,6 @@ void CameraBehaviour::changeTarget(GameObject* newTarget) {
 
 void CameraBehaviour::update(float pStep)
 {
-
 	glm::mat4 currentPos = _target->getTransform();
 	
 	glm::mat4 newPos = _owner->getTransform();
