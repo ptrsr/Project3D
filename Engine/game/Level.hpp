@@ -13,6 +13,7 @@
 #include "Board.hpp"
 
 #include "../network/packets/DataType.hpp"
+#include "../network/packets/PlayerData.hpp"
 #include "../network/packets/MoveData.hpp"
 #include "../network/packets/PickupData.hpp"
 #include "../network/packets/ScoreData.hpp"
@@ -45,7 +46,7 @@ public:
 	pair<int, int> GetSpawnPosition(Id playerId);
 	
 	void Start(bool value);
-	void AddSpawn(Player* player);
+	void AddSpawn(PlayerData player);
 	void AddMove(MoveData move);
 	void AddPickUp(PickupData pickUp);
 	void AddScore(ScoreData score);
@@ -79,7 +80,7 @@ private:
 	
 	std::vector<pair<int, int>> _spawnPos;
 	
-	std::vector<Player*> _spawnQueue;
+	std::vector<PlayerData> _spawnQueue;
 	std::vector<MoveData> _moveQueue;
 	std::vector<PickupData> _pickUpQueue;
 	std::vector<ScoreData> _scoreQueue;

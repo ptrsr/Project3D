@@ -138,11 +138,7 @@ void Client::HandlePacket(DataType type, char* buf)
 			_playerId = pData.playerId; //Assign player id
 			cout << _playerId << " my ID" << endl;
 		}
-		{
-			Level* level = Level::get();
-			if (level->getPlayers().size() < pData.playerId)
-				level->AddSpawn(new Player(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled)); //Add player to spawn queue
-		}
+		Level::get()->AddSpawn(pData);
 		break;
 	case DataType::TIMEDATA:
 		TimeData timeData = *reinterpret_cast<TimeData*>(buf);

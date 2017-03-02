@@ -125,7 +125,7 @@ void Level::Start(bool value)
 	_start = value;
 }
 
-void Level::AddSpawn(Player* player)
+void Level::AddSpawn(PlayerData player)
 {
 	_spawnQueue.push_back(player);
 }
@@ -231,10 +231,9 @@ void Level::update(float pStep)
 	//
 	while (_spawnQueue.size() > 0)
 	{
-		Player* player = _spawnQueue[0];
-		spawnPlayer(player->getId(), player->getBoardPos(), player->IsControlled());
+		PlayerData pData = _spawnQueue[0];
+		spawnPlayer(pData.playerId, glm::vec2(pData.boardX, pData.boardY), pData.controlled);
 		_spawnQueue.erase(_spawnQueue.begin());
-		delete player;
 	}
 	while (_moveQueue.size() > 0)
 	{
@@ -252,7 +251,7 @@ void Level::update(float pStep)
 		PickupData pData = _pickUpQueue[0];
 		removePickUp(glm::vec2(pData.oldX, pData.oldY));
 		if (pData.boardX != -1 && pData.boardY != -1)
-			spawnPickUp(new ScoreCube(), glm::vec2(pData.boardX, pData.boardY));
+			spawnPickUp(new ScoreCube(_totalTime), glm::vec2(pData.boardX, pData.boardY));
 		_pickUpQueue.erase(_pickUpQueue.begin());
 	}
 
@@ -260,7 +259,7 @@ void Level::update(float pStep)
 		return;
 
 	if (_server != NULL && _pickups.size() == 0)
-		spawnPickUp(new ScoreCube()); //Spawn the score cube
+		spawnPickUp(new ScoreCube(_totalTime)); //Spawn the score cube
 	
 	_curTime += pStep;
 

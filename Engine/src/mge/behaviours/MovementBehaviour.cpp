@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait, bool controlled) :
 	_player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight), _totalTime(pTime), _moveTime(glm::clamp(pTime * ( 1 - pWait), 0.f, 1.f)), _controlled(controlled)
 { }
 
@@ -37,7 +37,7 @@ void MovementBehaviour::update(float pStep)
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
 
 		//apply pickups
-		Level::ApplyPickUp(_player);
+		Level::get()->ApplyPickUp(_player);
 
 		//apply ability
 
@@ -121,7 +121,7 @@ void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == emtpy)
+	if (_cDir == Dir::none)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / pMoveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -134,7 +134,7 @@ void MovementBehaviour::setDirection()
 {
 	_cDir = _dDir;
 
-	if (_cDir == Dir::emtpy)
+	if (_cDir == Dir::none)
 		return;
 
 	glm::mat4 worldMat = _player->getWorldTransform();

@@ -264,7 +264,7 @@ void Server::SendGameState(SOCKET client)
 	PacketHelper::Send(DataType::PLAYERDATA, (char*)&cData, client);
 	cData.controlled = false;
 	NotifyClients(DataType::PLAYERDATA, (char*)&cData, client);
-	level->AddSpawn(new Player(cData.playerId, glm::vec2(cData.boardX, cData.boardY), false));
+	level->AddSpawn(cData);
 }
 
 //
