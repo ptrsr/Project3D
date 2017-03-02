@@ -2,11 +2,7 @@
 #define PLAYER_H
 
 #include <iostream>
-#include "mge/behaviours/PlayerBehaviour.hpp"
-#include "mge/behaviours/WindBehaviour.hpp"
-#include "mge/behaviours/WaterBehaviour.hpp"
-#include "mge/behaviours/FireBehaviour.hpp"
-#include "mge/behaviours/EarthBehaviour.hpp"
+#include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/core/GameObject.hpp"
 #include "Tile.hpp"
 
@@ -19,7 +15,7 @@ private:
 	int _score = 0;
 
 public:
-	PlayerBehaviour* _movement;
+	MovementBehaviour* _movement;
 
 	bool _checked = false;
 

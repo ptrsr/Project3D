@@ -12,6 +12,8 @@ public:
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
+	Id getOwnerOfTile(glm::vec2 boardPos);
+
 	int getScore(Id pPlayerId);
 
 	void fireAbility(glm::vec2 pBoardPos);

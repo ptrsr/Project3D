@@ -5,7 +5,6 @@
 
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
-#include "PickUps/SpeedUp.hpp"
 
 Level* Level::_level;
 
@@ -15,8 +14,7 @@ Level::Level() :GameObject("level")
 
 	spawnPlayer(Id::fire, glm::vec2(0, 0));
 	spawnPlayer(Id::water, glm::vec2(8, 8));
-	spawnPickUp(new ScoreCube(0.8f));
-	spawnPickUp(new SpeedUp(0.8f));
+	spawnPickUp(new ScoreCube(_totalTime));
 
 	_board = new Board();
 	_board->setParent(this);

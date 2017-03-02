@@ -20,7 +20,7 @@ void Board::setOwner(glm::vec2 boardPos, Id player)
 
 Id Board::getOwnerOfTile(glm::vec2 boardPos) {
 	if (outOfBounds(boardPos))
-		return Id::p4;
+		return Id::none;
 
 	return _boardArray[(int)boardPos.x][(int)boardPos.y]->getOwner();
 }
