@@ -45,7 +45,7 @@ void CreditsState::_initializeScene()
 	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
-	GameObject * plane = ObjectCache::find("JoinPlane");
+	GameObject * plane = ObjectCache::find("joinPlane");
 	if (plane != NULL) {
 		_plane = plane;
 	}

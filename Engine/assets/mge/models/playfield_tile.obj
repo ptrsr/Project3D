@@ -1,5 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
+mtllib playfield_tile.mtl
 g default
 v -0.500000 -0.500000 0.500000
 v 0.500000 -0.500000 0.500000
@@ -195,6 +196,7 @@ vn 1.000000 0.000000 0.000000
 vn 1.000000 0.000000 0.000000
 s 1
 g playfield_tile
+usemtl playfield_tile_sg
 f 9/31/1 10/20/2 12/32/3
 f 12/32/3 10/20/2 11/19/4
 s 2

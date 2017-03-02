@@ -5,6 +5,7 @@ using namespace std;
 
 #include "mge/core/Renderer.hpp"
 #include "mge/core/World.hpp"
+#include "mge/auxiliary/GameTimer.hpp"
 
 #include "mge/util/InputHandler.h"
 
@@ -99,6 +100,7 @@ void AbstractGame::run()
 
 		timeSinceLastUpdate += updateClock.restart();
 
+
 		if (timeSinceLastUpdate > timePerFrame)
 		{
             glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -122,6 +124,8 @@ void AbstractGame::run()
 
 void AbstractGame::_update(float pStep) {
     _world->update(pStep);
+	_gameTimer->Update(pStep);
+	
 }
 
 void AbstractGame::_render () {

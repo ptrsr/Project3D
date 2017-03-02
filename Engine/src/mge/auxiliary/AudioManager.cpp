@@ -5,18 +5,19 @@ using namespace sf;
 using namespace std;
 
 AudioManager* AudioManager::_audioManager;
-//Constructor
 AudioManager::AudioManager()
 {
-	//_backgroundMusic = new Music();
-	//if (!_backgroundMusic->openFromFile("background.wav")) {
-	//	cout << "Couldn't load sound from file" << endl;
-	//}
-	//else {
-	//	_backgroundMusic->openFromFile("background.wav");
-	//	_backgroundMusic->play();
-	//}
+	_backgroundMusic = new Music();
+
 	_path = config::MGE_SOUND_PATH;
+	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav");
+		_backgroundMusic->play();
+	}
 	GetNamesInString();
 	LoadAllSFX();
 }

@@ -22,7 +22,7 @@ class JoinState : public AbstactState
 		virtual void deleteScene();
 
 	private:
-		GameObject* _selectableObjs[2];
+		GameObject* _back;
 		GameObject* _plane;
 		int _counter = 0;
 		void _updateColor();
