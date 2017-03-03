@@ -5,8 +5,8 @@ class AudioManager
 {
 private:
 
-	sf::SoundBuffer _buffer[2];
-	std::string _nameOfSound[2];
+	sf::SoundBuffer _buffer[4];
+	std::string _nameOfSound[4];
 	std::string _path;
 	sf::Music* _backgroundMusic;
 	sf::Sound _sound;

@@ -10,6 +10,7 @@ using namespace std;
 
 #include "mge/core/Camera.hpp"
 #include "mge/auxiliary/ObjectCache.hpp"
+#include "mge/auxiliary/AudioManager.h"
 
 #include "mge/materials/AbstractMaterial.hpp"
 
@@ -95,12 +96,15 @@ int CreditsState::CheckSelection() {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;
+
+		AudioManager::get()->PlaySound(SFX::backButton1);
 		return -1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;
+		AudioManager::get()->PlaySound(SFX::backButton1);
 		return -1;
 	}
 	

@@ -124,6 +124,7 @@ void MenuScene::_render() {
 			_startState->Update();
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
+
 				_changeCameraState(_startState);
 			}
 			if (_currentState != -1) _cameraStateChanged = false;
@@ -132,6 +133,8 @@ void MenuScene::_render() {
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
+
+				AudioManager::get()->PlaySound(SFX::enterButton1);
 				_changeCameraState(_joinState);
 					cout << "camera state changed" << endl;
 			}
@@ -139,11 +142,14 @@ void MenuScene::_render() {
 			break;
 
 		case 3:
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
+				AudioManager::get()->PlaySound(SFX::backButton1);
 				Level::reset();
 			}
 			if (!_cameraStateChanged) {
+				AudioManager::get()->PlaySound(SFX::enterButton1);
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
 			}
@@ -152,11 +158,12 @@ void MenuScene::_render() {
 
 		case 1:
 
-			cout << "CreditsState" << endl;
+			cout << "Credits" << endl;
 			_creditsState->Update();
 
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
+				AudioManager::get()->PlaySound(SFX::enterButton1);
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;

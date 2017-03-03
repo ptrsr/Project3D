@@ -43,6 +43,8 @@ private:
 	std::vector<PickUp*> _pickups;
 	Board* _board;
 
+	float _currentScore[4] = { 0.0f,0.0f,0.0f,0.0f };
+
 	//timing settings
 	float _totalTime = 0.8f;
 	float _wait		 = 0.5f;

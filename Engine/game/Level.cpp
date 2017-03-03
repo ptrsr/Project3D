@@ -79,6 +79,14 @@ void Level::ApplyPickUp(Player* pPlayer)
 void Level::update(float pStep)
 {
 	_curTime += pStep;
+	
+	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
+
+	if (hightestScorePlayer != -1) 
+	{
+		_currentScore[hightestScorePlayer] += pStep;
+		cout << "Player:" << hightestScorePlayer << " has score: " << _currentScore[hightestScorePlayer] << endl;
+	}
 
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
@@ -94,6 +102,8 @@ void Level::update(float pStep)
 
 		coolDowns();
 		checkCollisions();
+		
+
 
 		_curTime -= _totalTime;
 	}

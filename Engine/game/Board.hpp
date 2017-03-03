@@ -13,6 +13,7 @@ public:
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
 	Id getOwnerOfTile(glm::vec2 boardPos);
+	Id getPlayerWithHighestScore();
 
 	int getScore(Id pPlayerId);
 
@@ -24,6 +25,7 @@ private:
 	glm::vec2 _size = glm::vec2(9, 9);
 
 	Tile* _boardArray[9][9];
+	int _score[4] = { 0,0,0,0 };
 
 	void initializeBoard();
 };

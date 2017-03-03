@@ -41,7 +41,7 @@ void AudioManager::PlaySound(SFX soundEnum) {
 
 void AudioManager::LoadAllSFX() {
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (!_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav")) {
 			cout << "Couldn't load SFX from file" << endl;
 
@@ -55,7 +55,9 @@ void AudioManager::LoadAllSFX() {
 void AudioManager::GetNamesInString() {
 
 	_nameOfSound[0] = "playerJump1";
-	_nameOfSound[1] = "keySwitch";
+	_nameOfSound[1] = "backButton1";
+	_nameOfSound[2] = "enterButton1";
+	_nameOfSound[3] = "switchButton1";
 	
 }
 

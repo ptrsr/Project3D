@@ -11,12 +11,37 @@ Board::Board() : GameObject("Board")
 }
 
 void Board::setOwner(glm::vec2 boardPos, Id player)
-{
+{	
 	if (outOfBounds(boardPos))
 		return;
-
+	Id previousOwner = getOwnerOfTile(boardPos);
 	_boardArray[(int)boardPos.x][(int)boardPos.y]->setOwner(player);
+	if (previousOwner != player && previousOwner != Id::none) {
+		_score[previousOwner - 1]--;
+	}
+	else if (previousOwner == Id::none && previousOwner != player) {
+		_score[player - 1]++;
+	}
+
+
 }
+
+
+Id Board::getPlayerWithHighestScore() {
+	int highestScore = 0;
+	int idToReturn = -1;
+	for (int i = 0; i < 4; i++)
+	{
+		if (highestScore < _score[i]) 
+		{
+			highestScore = _score[i];
+			idToReturn = i + 1;
+			cout << idToReturn << endl;
+		}
+	}
+	return (Id)idToReturn;
+}
+
 
 Id Board::getOwnerOfTile(glm::vec2 boardPos) {
 	if (outOfBounds(boardPos))

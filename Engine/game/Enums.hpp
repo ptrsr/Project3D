@@ -22,7 +22,10 @@ enum Dir {
 };
 
 enum SFX {
-	playerJump1 = 0,
+	playerJump1 = 0, 
+	backButton1 = 1,
+	enterButton1 = 2,
+	switchButton1 = 3
 };
 
 
