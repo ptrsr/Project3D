@@ -26,8 +26,8 @@ private:
 
 	//score floats
 	float _relativeScore = 0.5f;
-	float _minHeight = 0.f;
-	float _maxHeight = 3.f;
+	float _minHeight = -1.f;
+	float _maxHeight = 10.f;
 
 
 	static ShaderProgram* _shader;

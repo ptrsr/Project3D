@@ -24,9 +24,9 @@ Level::Level() :GameObject("level")
 	_board->setParent(this);
 	World::add(this);
 
-	//GameObject* fire = ObjectCache::find("Fire");
+	GameObject* fire = ObjectCache::find("Fire1");
 
-	//fire->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
+	fire->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
 	
 }
 

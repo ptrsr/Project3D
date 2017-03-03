@@ -72,11 +72,13 @@ void main( void )
 {
 	vec3 wNormal = vec3 (modelMatrix * vec4(fNormal, 0));
 	vec3 viewDir = normalize(cameraPos -  fPos);
-	vec3 tColor  = texture(dTexture, tCoord).xyz;
+	//vec3 tColor  = texture(dTexture, tCoord).xyz;
+	
+	vec3 tColor = vec3(1);
 	
 	if(fPos.y < minHeight + maxHeight * score)
 	{
-		tColor *= modelColor;
+		tColor = modelColor;
 	}
 	
 	vec3 color;
