@@ -205,6 +205,12 @@ void MovementBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			_dDir = Dir::left;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && _available)
+		{
+			_activate = true;
+			//_available = false;
+		}
 	}
 }
 
@@ -260,6 +266,12 @@ void MovementBehaviour::fireAbility(bool toggle)
 		_totalTime = _moveTime * 2;
 
 	std::cout << _moveTime * 2;
+}
+
+void MovementBehaviour::earthAbility(bool toggle)
+{
+	_activate = false;
+	_available = false;
 }
 
 glm::vec2 MovementBehaviour::getNextPos()

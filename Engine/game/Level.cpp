@@ -114,7 +114,8 @@ void Level::applyAbility(Player* pPlayer)
 		break;
 
 	case p3:
-
+		pPlayer->_movement->earthAbility(false);
+		Level::getBoard()->earthAbility(pPlayer->getBoardPos());
 		break;
 
 	case p1:
