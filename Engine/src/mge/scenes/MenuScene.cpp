@@ -33,6 +33,7 @@ using namespace std;
 #include "mge/util/DebugHud.hpp"
 #include "mge/util/InputHandler.h"
 #include "mge/auxiliary/LuaParser.hpp"
+#include "mge/auxiliary/GameTimer.hpp"
 
 
 #include "mge/scenes/menuStates/StartState.hpp"
@@ -57,16 +58,23 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(0,1,17));
+    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(-4.5f,2,28));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
+
+
 
 	cout << "Initializing HUD" << endl;
 	_hud = new DebugHud(_window);
 	cout << "HUD initialized." << endl << endl;
 
 
+	_gameTimer = new GameTimer();
+	_gameTimer->_initializeScene();
+	_gameTimer->setTimeLenght(2.5f);
+
+	AudioManager::get();
 
 
 	LuaParser* luaParser = new LuaParser("main.lua");
@@ -107,10 +115,10 @@ void MenuScene::_initializeScene()
 void MenuScene::_render() {
     AbstractGame::_render();
     _updateHud();
-	_text->Update();
 
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
 
+		_text->Update();
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -121,7 +129,6 @@ void MenuScene::_render() {
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
-			cout << "JoinState" << endl;
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -147,11 +154,18 @@ void MenuScene::_render() {
 
 			cout << "CreditsState" << endl;
 			_creditsState->Update();
+
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
+			break;
+
+		case 0:
+			
+			_window->close();
+			
 			break;
 
 	}
@@ -175,7 +189,7 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 }
 void MenuScene::_changeCameraState(Level* level) {
 	GameObject* empty = new GameObject("empty", glm::vec3(0,0,0));
-	GameObject * plane = ObjectCache::find("LevelPlane");
+	GameObject * plane = ObjectCache::find("playPlane");
 	if (plane != NULL) {
 		empty = plane;
 

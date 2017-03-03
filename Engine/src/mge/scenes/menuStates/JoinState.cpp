@@ -47,41 +47,41 @@ void JoinState::_initializeScene()
 	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
 
 
-	GameObject * plane = ObjectCache::find("CreditsPlane");
+	GameObject * plane = ObjectCache::find("creditsPlane");
 	if (plane != NULL) {
 		_plane = plane;
 	}
+	GameObject * backText = ObjectCache::find("back_text1");
+	if (backText != NULL) {
+		_back = backText;
+	}
 
-
-	//GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));
-	//writingStone->rotate(75, glm::vec3(0, 1, 0));
-	//writingStone->scale(glm::vec3(0.2f, 0.2f, 0.5f));
-	//writingStone->setMesh(cubeMesh);
-	//writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	//World::add(writingStone);
-	//_selectableObjs[1] = writingStone;
-	//GameObject* rock = new GameObject("rock1", glm::vec3(2.5f, 0.2f, 19.5f));
-	//rock->rotate(75, glm::vec3(0, 1, 0));
-	//rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	//rock->setMesh(cubeMesh);
-	//rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	//World::add(rock);
-	//_selectableObjs[0] = rock;
-
-	
 }
 //Update called outside of the class
 void JoinState::Update() {
-	_inAnotherState = false;
 	_updateColor();
 }
 
+//Clears and updates the color of the object you are currently on(applies some delay for keyDown like behaviour)
+void JoinState::_updateColor() {
+	_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
+	if (_isKeyPress) {
+		if (_delayCounter >= _delay) {
+			_delayCounter = 0;
+			_isKeyPress = false;
+		}
+		else {
+			_delayCounter++;
+			_delay = 15;
+		}
+	}
+}
 //check if you selected
 int JoinState::CheckSelection() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
 		_inAnotherState = true;
 		_isKeyPress = true;
-
+		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
 		 return -1;
 	}
 	else return 2;
@@ -92,45 +92,10 @@ GameObject* JoinState::getPlane() {
 	return _plane;
 }
 
-//Clears and updates the color of the object you are currently on(applies some delay for keyDown like behaviour)
-void JoinState::_updateColor() {
-	if (_inAnotherState) return;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
-		_isKeyPress = true;
-		_counter--;
-		if (_counter < 0) _counter = 1;
-
-		cout << "Selection: " << _counter << endl;
-		_clearObjectColor();
-		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
-		_isKeyPress = true;
-		_counter++;
-		if (_counter > 1) _counter = 0;
-
-		cout << "Selection: " << _counter << endl;
-		_clearObjectColor();
-		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
-	}
-	else if(_isKeyPress){
-		_delayCounter++;
-		if (_delayCounter == _delay) {
-			_delayCounter = 0;
-			_isKeyPress = false;
-		}
-	}
-}
 
 
 //Clear objectsColor
 void JoinState::_clearObjectColor() {
-	GameObject* gObj = _selectableObjs[0];
-	gObj->getMaterial()->setColor(glm::vec3(1, 0, 1));
-	GameObject* gObj2 = _selectableObjs[1];
-	gObj2->getMaterial()->setColor(glm::vec3(1, 0, 1));
 }
 
 void JoinState::deleteScene() {
@@ -139,10 +104,4 @@ void JoinState::deleteScene() {
 JoinState::~JoinState()
 {
 
-	World::remove(_plane);
-	World::remove(_selectableObjs[0]);
-	World::remove(_selectableObjs[1]);
-	delete _plane;
-	delete _selectableObjs[0];
-	delete _selectableObjs[1];
 }

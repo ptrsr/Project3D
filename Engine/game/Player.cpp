@@ -21,7 +21,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait) : Game
 
 	glm::vec3 color = glm::vec3(1, 0, 0);
 
-	if (playerId == water)
+	if (playerId == Id::p3)
 		color = glm::vec3(0, 0, 1);
 
 	this->setMaterial(new LitMaterial(color));

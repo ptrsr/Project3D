@@ -22,6 +22,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void cancelMove();
 		void jump(float pHeight);
 		void fireAbility(bool toggle);
+		void earthAbility(bool toggle);
 
 		void message(sendMsg::Message) { };
 

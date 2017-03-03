@@ -45,33 +45,20 @@ Text::Text(TextType textType)
 //Sets the scene for the credits
 void Text::_initializeScene()
 {
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
-	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
-
-
 	GameObject * create = ObjectCache::find("create_text");
 	if (create != NULL)
 	{
 		placeToRenderText = create;
 	}
-
-
-	//GameObject* writingStone = new GameObject("writingStone", glm::vec3(3.0f, 0.2f, 18.5f));
-	//writingStone->rotate(75, glm::vec3(0, 1, 0));
-	//writingStone->scale(glm::vec3(0.2f, 0.2f, 0.5f));
-	//writingStone->setMesh(cubeMesh);
-	//writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	//World::add(writingStone);
-	//_selectableObjs[1] = writingStone;
-	//GameObject* rock = new GameObject("rock1", glm::vec3(2.5f, 0.2f, 19.5f));
-	//rock->rotate(75, glm::vec3(0, 1, 0));
-	//rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	//rock->setMesh(cubeMesh);
-	//rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	//World::add(rock);
-	//_selectableObjs[0] = rock;
-
-	
+	if (_textType == TextType::IP) {
+		for (int i = 1; i < 24; i++) {
+			std::string name = "ipNumber" + to_string(i);
+			GameObject* ipSelectable = ObjectCache::find(name);
+			if (ipSelectable != NULL) {
+				posOfObjs[i] = ipSelectable;
+			}
+		}
+	}
 }
 //Update called outside of the class
 void Text::Update() {
@@ -116,15 +103,16 @@ void Text::_updateIP() {
 		_isKeyPress = true;
 		cout << text << endl;
 	}
+	
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) && !_isKeyPress)
 	{
-		
 		_isKeyPress = true;
-		cout << text << endl;
 	}
-
+		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "0";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -132,6 +120,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "1";
 		
 		_isKeyPress = true;
@@ -141,6 +131,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "2";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -148,6 +140,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "3";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -155,6 +149,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "4";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -162,6 +158,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "5";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -169,6 +167,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "6";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -176,6 +176,8 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7) && !_isKeyPress)
 	{
+
+		if (text.size() == 23) return;
 		text += "7";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -184,6 +186,7 @@ void Text::_updateIP() {
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8) && !_isKeyPress)
 	{
+		if (text.size() == 23) return;
 		text += "8";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -192,6 +195,7 @@ void Text::_updateIP() {
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9) && !_isKeyPress)
 	{
+		if (text.size() == 23) return;
 		text += "9";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -199,6 +203,7 @@ void Text::_updateIP() {
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Period) && !_isKeyPress) {
 
+		if (text.size() == 23) return;
 		text += ".";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -208,6 +213,8 @@ void Text::_updateIP() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::SemiColon) &&
 			 (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || 
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) && !_isKeyPress) {
+
+		if (text.size() == 23) return;
 		text += ":";
 		_isKeyPress = true;
 		cout << text << endl;
@@ -215,10 +222,13 @@ void Text::_updateIP() {
 
 	}
 	else if (_isKeyPress) {
-		_delayCounter++;
-		if (_delayCounter == _delay) {
+		if (_delayCounter >= _delay) {
 			_delayCounter = 0;
 			_isKeyPress = false;
+		}
+		else {
+			_delayCounter++;
+			_delay = 7;
 		}
 	}
 
@@ -248,26 +258,18 @@ void Text::_updateDisplay() {
 }
 
 void Text::createObject(char obj) {
-
-	glm::vec3 pos = placeToRenderText->getLocalPosition();
-	pos = glm::vec3(pos.x - 0.5f, pos.y, pos.z - 2);
-
+	if (text.size() == 23) return;
 	GameObject* toBeCreated; 
 	switch (obj) {
 	case '0':
-		toBeCreated = new GameObject("Zero" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "zero.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		break;
 	case '1':
-
-		toBeCreated = new GameObject("One" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "one.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -275,9 +277,7 @@ void Text::createObject(char obj) {
 		cout << "Create 1" << endl;
 		break;
 	case '2':
-		toBeCreated = new GameObject("Two" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "two.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -285,9 +285,7 @@ void Text::createObject(char obj) {
 		cout << "Create 2" << endl;
 		break;
 	case '3':
-		toBeCreated = new GameObject("Three" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "three.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -295,9 +293,7 @@ void Text::createObject(char obj) {
 		cout << "Create 3" << endl;
 		break;
 	case '4':
-		toBeCreated = new GameObject("Four" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "four.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -305,9 +301,7 @@ void Text::createObject(char obj) {
 		cout << "Create 4" << endl;
 		break;
 	case '5':
-		toBeCreated = new GameObject("Five" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "five.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -315,9 +309,7 @@ void Text::createObject(char obj) {
 		cout << "Create 5" << endl;
 		break;
 	case '6':
-		toBeCreated = new GameObject("Six" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "six.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -325,9 +317,7 @@ void Text::createObject(char obj) {
 		cout << "Create 6" << endl;
 		break;
 	case '7':
-		toBeCreated = new GameObject("Seven" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "seven.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -335,9 +325,7 @@ void Text::createObject(char obj) {
 		cout << "Create 7" << endl;
 		break;
 	case '8':
-		toBeCreated = new GameObject("Eight" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "eight.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -345,9 +333,7 @@ void Text::createObject(char obj) {
 		cout << "Create 8" << endl;
 		break;
 	case '9':
-		toBeCreated = new GameObject("Nine" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "nine.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -355,9 +341,7 @@ void Text::createObject(char obj) {
 		cout << "Create 9" << endl;
 		break;
 	case '.':
-		toBeCreated = new GameObject("Dot" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "dot.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -365,9 +349,7 @@ void Text::createObject(char obj) {
 		cout << "Create ." << endl;
 		break;
 	case ':':
-		toBeCreated = new GameObject("DoubleDot" + text.size(), glm::vec3(pos.x - text.size() * 0.2f, pos.y, pos.z));
-		cout << "Create 0" << endl;
-		toBeCreated->rotateDegrees(180, glm::vec3(0, 1, 0));
+		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "doubledot.obj"));
 		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
@@ -385,8 +367,7 @@ void Text::deleteScene() {
 void Text::deleteLastObject() {
 	GameObject* obj = objs.at(objs.size() - 1);
 	objs.pop_back();
-	World::remove(obj);
-	delete obj;
+	obj->setMesh(NULL);
 }
 
 Text::~Text()

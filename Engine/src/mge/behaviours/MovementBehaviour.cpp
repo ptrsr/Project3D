@@ -169,7 +169,7 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
-	if (_player->getId() == fire)
+	if (_player->getId() == p1)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			_dDir = Dir::up;
@@ -190,7 +190,7 @@ void MovementBehaviour::checkKeys()
 
 		}
 	}
-	else if (_player->getId() == water)
+	else if (_player->getId() == p3)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			_dDir = Dir::up;
@@ -203,6 +203,12 @@ void MovementBehaviour::checkKeys()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			_dDir = Dir::left;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && _available)
+		{
+			_activate = true;
+			//_available = false;
+		}
 	}
 }
 
@@ -258,6 +264,12 @@ void MovementBehaviour::fireAbility(bool toggle)
 		_totalTime = _moveTime * 2;
 
 	std::cout << _moveTime * 2;
+}
+
+void MovementBehaviour::earthAbility(bool toggle)
+{
+	_activate = false;
+	_available = false;
 }
 
 glm::vec2 MovementBehaviour::getNextPos()
