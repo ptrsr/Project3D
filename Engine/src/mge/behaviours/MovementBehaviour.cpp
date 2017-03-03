@@ -14,8 +14,6 @@ MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float
 
 void MovementBehaviour::update(float pStep)
 {
-	pStep *= _moveMulti;
-
 	_curTime += pStep;
 
 	checkKeys();

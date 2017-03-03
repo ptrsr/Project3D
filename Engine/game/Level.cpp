@@ -6,6 +6,10 @@
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
 
+#include "mge/auxiliary/ObjectCache.hpp";
+#include "mge/materials/StatueMaterial.hpp";
+#include "mge/auxiliary/TextureCache.hpp";
+
 Level* Level::_level;
 
 Level::Level() :GameObject("level")
@@ -19,6 +23,11 @@ Level::Level() :GameObject("level")
 	_board = new Board();
 	_board->setParent(this);
 	World::add(this);
+
+	//GameObject* fire = ObjectCache::find("Fire");
+
+	//fire->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
+	
 }
 
 Level* Level::get()

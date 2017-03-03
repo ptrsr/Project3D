@@ -62,6 +62,9 @@ glm::vec3 GameObject::getLocalPosition() const
 
 void GameObject::setMaterial(AbstractMaterial* pMaterial)
 {
+	if (_material)
+		delete _material;
+
     _material = pMaterial;
 }
 
