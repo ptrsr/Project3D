@@ -205,6 +205,7 @@
     <ClInclude Include="..\src\mge\behaviours\SpotLight.hpp" />
     <ClInclude Include="..\src\mge\config.hpp" />
     <ClInclude Include="..\src\mge\core\AbstractGame.hpp" />
+    <ClInclude Include="..\src\mge\core\Bloom.hpp" />
     <ClInclude Include="..\src\mge\core\Camera.hpp" />
     <ClInclude Include="..\src\mge\core\GameObject.hpp" />
     <ClInclude Include="..\src\mge\core\lua\lapi.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="..\src\mge\behaviours\RotatingBehaviour.cpp" />
     <ClCompile Include="..\src\mge\behaviours\SpotLight.cpp" />
     <ClCompile Include="..\src\mge\core\AbstractGame.cpp" />
+    <ClCompile Include="..\src\mge\core\Bloom.cpp" />
     <ClCompile Include="..\src\mge\core\Camera.cpp" />
     <ClCompile Include="..\src\mge\core\GameObject.cpp" />
     <ClCompile Include="..\src\mge\core\lua\lapi.c" />
@@ -349,12 +351,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\mge\lua scripts\main.lua" />
+    <None Include="..\assets\mge\shaders\bloom\blend.fs" />
+    <None Include="..\assets\mge\shaders\bloom\blur.fs" />
+    <None Include="..\assets\mge\shaders\bloom\quad.vs" />
     <None Include="..\assets\mge\shaders\color.fs" />
     <None Include="..\assets\mge\shaders\color.vs" />
     <None Include="..\assets\mge\shaders\litFragment.fs" />
     <None Include="..\assets\mge\shaders\litFragment.vs" />
     <None Include="..\assets\mge\shaders\litVertex.fs" />
     <None Include="..\assets\mge\shaders\litVertex.vs" />
+    <None Include="..\assets\mge\shaders\statue.fs" />
+    <None Include="..\assets\mge\shaders\statue.vs" />
     <None Include="..\assets\mge\shaders\terrain.fs" />
     <None Include="..\assets\mge\shaders\terrain.vs" />
     <None Include="..\assets\mge\shaders\texture.fs" />

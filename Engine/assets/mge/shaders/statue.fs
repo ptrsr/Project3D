@@ -18,7 +18,8 @@ in vec2 tCoord;
 in vec3 fNormal;
 in vec3 fPos;
 
-out vec4 fColor;
+layout (location = 0) out vec4 fColor;
+layout (location = 1) out vec4 bColor;
 
 struct DirLight
 {
@@ -79,6 +80,7 @@ void main( void )
 	if(fPos.y < minHeight + maxHeight * score)
 	{
 		tColor = modelColor;
+		bColor = vec4(modelColor, 1);
 	}
 	
 	vec3 color;

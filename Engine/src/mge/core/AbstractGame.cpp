@@ -8,6 +8,7 @@ using namespace std;
 #include "mge/auxiliary/GameTimer.hpp"
 
 #include "mge/util/InputHandler.h"
+#include "Bloom.hpp"
 
 AbstractGame::AbstractGame():_window(NULL),_renderer(NULL),_world(NULL), _fps(0)
 {
@@ -105,6 +106,7 @@ void AbstractGame::run()
 		{
             glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+
 		    while (timeSinceLastUpdate > timePerFrame) {
                 timeSinceLastUpdate -= timePerFrame;
                 _update(timePerFrame.asSeconds());
@@ -112,8 +114,11 @@ void AbstractGame::run()
 			if (InputHandler::GetKeyDown(sf::Keyboard::B)) {
 				cout << "B works" << endl;
 			}
+
+			Bloom::renderToFBO();
             _render();
-            _window->display();
+			Bloom::blur(5);
+			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();
             if (timeSinceLastRender != 0) _fps = 1.0f/timeSinceLastRender;
