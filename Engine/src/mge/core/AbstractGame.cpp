@@ -118,7 +118,7 @@ void AbstractGame::run()
 
 			Bloom::renderToFBO();
             _render();
-			Bloom::blur(8);
+			Bloom::blur(9);
 			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();

@@ -20,6 +20,8 @@ private:
 
 	void setupShaders();
 	void setupQuad();
+	void setupFBO(int screenWidth, int screenHeight);
+	void setupPingPong(int screenWidth, int screenHeight);
 	void renderQuad();
 
 	ShaderProgram* _blurShader;
@@ -35,9 +37,11 @@ private:
 
 	GLuint _uHorizontal;
 	GLuint _uBlur;
+	GLuint _uMultiplier;
 
 	GLuint _finalBlur;
 	GLuint _scene;
+
 
 	//quad
 	GLuint _aQuad;

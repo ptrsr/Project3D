@@ -1,6 +1,4 @@
 #include "Bloom.hpp"
-#include "Camera.hpp"
-
 #include "../config.hpp"
 
 Bloom* Bloom::_bloom;
@@ -10,6 +8,12 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 	setupShaders();
 	setupQuad();
 
+	setupFBO(screenWidth, screenHeight);
+	setupPingPong(screenWidth, screenHeight);
+}
+
+void Bloom::setupFBO(int screenWidth, int screenHeight)
+{
 	// set up framebuffer to render scene to
 	glGenFramebuffers(1, &_renderFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, _renderFBO);
@@ -41,7 +45,7 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
-	
+
 	glClearDepth(1.0f);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
@@ -49,8 +53,10 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 	// tell opengl to render to 2 texturebuffers instead of 1
 	GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 	glDrawBuffers(2, attachments);
+}
 
-	// setup ping pong framebuffers
+void Bloom::setupPingPong(int screenWidth, int screenHeight)
+{
 	glGenFramebuffers(2, _pingpongFBO);
 	glGenTextures(2, _pingpongBuffers);
 
@@ -81,9 +87,9 @@ void Bloom::setupShaders()
 
 	_uHorizontal = _blurShader->getUniformLocation("horizontal");
 	_uBlur		 = _blurShader->getUniformLocation("image");
+	_uMultiplier = _blurShader->getUniformLocation("multiplier");
 
 	//blend
-
 	_blendShader = new ShaderProgram();
 
 	_blendShader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + "bloom/quad.vs");
@@ -127,8 +133,10 @@ void Bloom::blur(int amount)
 	GLboolean horizontal = true, first_iteration = true;
 	for (GLuint i = 0; i < amount; i++)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, bloom->_pingpongFBO[horizontal]);
 		glUniform1i(bloom->_uHorizontal, horizontal);
+		glUniform1f(bloom->_uMultiplier, 1.2f);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, bloom->_pingpongFBO[horizontal]);
 		glBindTexture(GL_TEXTURE_2D, first_iteration ? bloom->_colorBuffers[1] : bloom->_pingpongBuffers[!horizontal]);
 		
 		bloom->renderQuad();
@@ -153,11 +161,6 @@ void Bloom::blur(int amount)
 	bloom->renderQuad();
 }
 
-Bloom* Bloom::get()
-{
-	return _bloom;
-}
-
 void Bloom::renderQuad()
 {
 	//vertex data
@@ -172,14 +175,21 @@ void Bloom::renderQuad()
 
 }
 
+void Bloom::renderToFBO()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, Bloom::get()->_renderFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+//singleton functions
+Bloom* Bloom::get()
+{
+	return _bloom;
+}
+
 void Bloom::initialize(int screenWidth, int screenHeight)
 {
 	if (!_bloom)
 		_bloom = new Bloom(screenWidth, screenHeight);
 }
 
-void Bloom::renderToFBO()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, Bloom::get()->_renderFBO);
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-}
