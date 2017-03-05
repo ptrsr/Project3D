@@ -20,8 +20,6 @@ Renderer::Renderer()
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glClearColor((float)0x2d/0xff, (float)0x6b/0xff, (float)0xce/0xff, 1.0f );
-
-	Bloom::initialize();
 }
 
 Renderer::~Renderer()

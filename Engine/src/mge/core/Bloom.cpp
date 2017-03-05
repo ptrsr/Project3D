@@ -7,7 +7,7 @@ Bloom* Bloom::_bloom;
 
 Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 {
-	setupShader();
+	setupShaders();
 	setupQuad();
 
 	// set up framebuffer to render scene to
@@ -19,8 +19,8 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 	for (GLuint i = 0; i < 2; i++)
 	{
 		glBindTexture(GL_TEXTURE_2D, _colorBuffers[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWidth, screenHeight, 0, GL_RGB, GL_FLOAT, NULL
-		);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWidth, screenHeight, 0, GL_RGB, GL_FLOAT, NULL);
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -28,6 +28,23 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 		// attach texture to framebuffer
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _colorBuffers[i], 0);
 	}
+
+	// gen depthbuffer
+	GLuint depthBuffer;
+	glGenTextures(1, &depthBuffer);
+	glBindTexture(GL_TEXTURE_2D, depthBuffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, screenWidth, screenHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
+	
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_DEPTH_TEST);
 
 	// tell opengl to render to 2 texturebuffers instead of 1
 	GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
@@ -53,7 +70,7 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 	}
 }
 
-void Bloom::setupShader()
+void Bloom::setupShaders()
 {
 	//blur
 	_blurShader = new ShaderProgram();
@@ -73,11 +90,11 @@ void Bloom::setupShader()
 	_blendShader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "bloom/blend.fs");
 	_blendShader->finalize();
 
-	_scene = _blurShader->getUniformLocation("scene");
-	_finalBlur = _blurShader->getUniformLocation("blur");
+	_scene = _blendShader->getUniformLocation("scene");
+	_finalBlur = _blendShader->getUniformLocation("blur");
 
 	//quad
-	_aQuad = _blurShader->getAttribLocation("vertex");
+	_aQuad = _blendShader->getAttribLocation("vertex");
 }
 
 void Bloom::setupQuad()
@@ -105,21 +122,21 @@ void Bloom::blur(int amount)
 	if (!bloom)
 		return;
 
-	//bloom->_blurShader->use();
+	bloom->_blurShader->use();
 
-	//GLboolean horizontal = true, first_iteration = true;
-	//for (GLuint i = 0; i < amount; i++)
-	//{
-	//	glBindFramebuffer(GL_FRAMEBUFFER, bloom->_pingpongFBO[horizontal]);
-	//	glUniform1i(bloom->_uHorizontal, horizontal);
-	//	glBindTexture(GL_TEXTURE_2D, first_iteration ? bloom->_colorBuffers[1] : bloom->_pingpongBuffers[!horizontal]);
-	//	
-	//	bloom->renderQuad();
-	//	
-	//	horizontal = !horizontal;
-	//	if (first_iteration)
-	//		first_iteration = false;
-	//}
+	GLboolean horizontal = true, first_iteration = true;
+	for (GLuint i = 0; i < amount; i++)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, bloom->_pingpongFBO[horizontal]);
+		glUniform1i(bloom->_uHorizontal, horizontal);
+		glBindTexture(GL_TEXTURE_2D, first_iteration ? bloom->_colorBuffers[1] : bloom->_pingpongBuffers[!horizontal]);
+		
+		bloom->renderQuad();
+		
+		horizontal = !horizontal;
+		if (first_iteration)
+			first_iteration = false;
+	}
 
 	bloom->_blendShader->use();
 
@@ -129,8 +146,8 @@ void Bloom::blur(int amount)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, bloom->_colorBuffers[0]);
 
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, bloom->_pingpongBuffers[horizontal]);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, bloom->_pingpongBuffers[!horizontal]);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	bloom->renderQuad();
@@ -147,6 +164,7 @@ void Bloom::renderQuad()
 	glEnableVertexAttribArray(_aQuad);
 	glBindBuffer(GL_ARRAY_BUFFER, _uQuad);
 	glVertexAttribPointer(_aQuad, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -154,13 +172,14 @@ void Bloom::renderQuad()
 
 }
 
-void Bloom::initialize()
+void Bloom::initialize(int screenWidth, int screenHeight)
 {
 	if (!_bloom)
-		_bloom = new Bloom(1280, 720);
+		_bloom = new Bloom(screenWidth, screenHeight);
 }
 
 void Bloom::renderToFBO()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, Bloom::get()->_renderFBO);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }

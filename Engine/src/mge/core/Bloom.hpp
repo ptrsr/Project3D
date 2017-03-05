@@ -8,7 +8,7 @@
 class Bloom
 {
 public:
-	static void initialize();
+	static void initialize(int screenWidth, int screenHeight);
 	static void blur(int amount);
 	static void renderToFBO();
 
@@ -18,7 +18,7 @@ private:
 
 	Bloom(unsigned int screenWidth, unsigned int screenHeight);
 
-	void setupShader();
+	void setupShaders();
 	void setupQuad();
 	void renderQuad();
 

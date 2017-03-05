@@ -5,27 +5,29 @@ in vec2 tCoord;
 uniform sampler2D image;
 uniform bool horizontal;
 
-uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
-void main()
-{             
-    vec2 tex_offset = 1.0 / textureSize(image, 0); // gets size of single texel
-    vec3 result = texture(image, tCoord).rgb * weight[0]; // current fragment's contribution
-    if(horizontal)
-    {
-        for(int i = 1; i < 5; ++i)
-        {
-            result += texture(image, tCoord + vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-            result += texture(image, tCoord - vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-        }
-    }
-    else
-    {
-        for(int i = 1; i < 5; ++i)
-        {
-            result += texture(image, tCoord + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-            result += texture(image, tCoord - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-        }
-    }
-    fColor = vec4(result, 1.0);
+uniform float offset[3] = float[]( 0.0, 1.3846153846, 3.2307692308 );
+uniform float weight[3] = float[]( 0.2270270270, 0.3162162162, 0.0702702703 );
+uniform float multiplier;
+
+void main(void)
+{
+	vec2 size = 1.0 / textureSize(image, 0);
+
+	vec3 result = texture2D( image, vec2(gl_FragCoord) * size ).rgb * weight[0];
+
+	if (horizontal) {   
+		for (int i = 1; i < 3; i++) {
+			result += texture2D( image, (vec2(gl_FragCoord) + vec2(0, offset[i])) * size ).rgb * weight[i];
+			result += texture2D( image, (vec2(gl_FragCoord) - vec2(0, offset[i])) * size ).rgb * weight[i];
+		}
+	}
+	else {
+		for (int i = 1; i < 3; i++) {
+			result += texture2D( image, (vec2(gl_FragCoord) + vec2(offset[i], 0)) * size ).rgb * weight[i];
+			result += texture2D( image, (vec2(gl_FragCoord) - vec2(offset[i], 0)) * size ).rgb * weight[i];
+		}
+	}
+
+    fColor = vec4(result * multiplier, 1.0);
 }

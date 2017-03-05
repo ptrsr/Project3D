@@ -31,6 +31,7 @@ void AbstractGame::initialize(int windowWidth, int windowHeight) {
     _initializeRenderer();
     _initializeWorld();
     _initializeScene();
+	Bloom::initialize(windowWidth, windowHeight);
     cout << endl << "Engine initialized." << endl << endl;
 }
 
@@ -117,7 +118,7 @@ void AbstractGame::run()
 
 			Bloom::renderToFBO();
             _render();
-			Bloom::blur(5);
+			Bloom::blur(8);
 			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();
