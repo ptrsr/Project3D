@@ -5,6 +5,7 @@
 
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
 
 Level* Level::_level;
 
@@ -85,8 +86,11 @@ void Level::update(float pStep)
 	if (hightestScorePlayer != -1) 
 	{
 		_currentScore[hightestScorePlayer] += pStep;
+		_currentScore[hightestScorePlayer] = _currentScore[hightestScorePlayer] / 30;
+		//find statue and pass the score to fill it up(hint: object cache)
 		cout << "Player:" << hightestScorePlayer << " has score: " << _currentScore[hightestScorePlayer] << endl;
 	}
+	
 
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
