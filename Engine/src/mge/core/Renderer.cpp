@@ -11,6 +11,8 @@ using namespace std;
 #include "mge/core/Mesh.hpp"
 #include "mge/materials/AbstractMaterial.hpp"
 
+#include "Bloom.hpp"
+
 Renderer::Renderer()
 {
 	glEnable( GL_DEPTH_TEST );
@@ -28,7 +30,8 @@ void Renderer::setClearColor(int pR, int pG, int pB) {
     glClearColor((float)pR/0xff, (float)pG/0xff, (float)pB/0xff, 1.0f );
 }
 
-void Renderer::render (World* pWorld) {
+void Renderer::render (World* pWorld) 
+{
     Camera* camera = pWorld->getMainCamera();
     render (pWorld, pWorld->getTransform(), glm::inverse(camera->getWorldTransform()), camera->getProjection(), true);
 }

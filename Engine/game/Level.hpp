@@ -45,6 +45,10 @@ private:
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
 	Board* _board;
+	GameObject* _fireStatue;
+	GameObject* _earthStatue;
+	GameObject* _waterStatue;
+	GameObject* _windStatue;
 
 	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };
 

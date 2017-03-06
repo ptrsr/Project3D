@@ -53,6 +53,9 @@
     <Filter Include="game\PickUps">
       <UniqueIdentifier>{c8982027-be65-4650-afa5-da05ac8479b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\shaders\bloom">
+      <UniqueIdentifier>{e5ca6e98-d9f6-4690-9d7d-2b41bc7005cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -316,7 +319,13 @@
     <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\materials\StatueMaterial.hpp">
+      <Filter>MGE Source files\mge\materials</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
+    <ClInclude Include="..\src\mge\core\Bloom.hpp">
+      <Filter>MGE Source files\mge\core</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
@@ -577,8 +586,14 @@
     <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mge\materials\StatueMaterial.cpp">
+      <Filter>MGE Source files\mge\materials</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\GameTimer.cpp">
       <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\core\Bloom.cpp">
+      <Filter>MGE Source files\mge\core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
@@ -626,5 +641,20 @@
     </None>
     <None Include="..\assets\mge\lua scripts\main.lua" />
     <None Include="release_static_exe\GameObject.lua" />
+    <None Include="..\assets\mge\shaders\statue.fs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\statue.vs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\bloom\blend.fs">
+      <Filter>assets\shaders\bloom</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\bloom\blur.fs">
+      <Filter>assets\shaders\bloom</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\bloom\quad.vs">
+      <Filter>assets\shaders\bloom</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -7,6 +7,10 @@
 #include "PickUps/ScoreCube.hpp"
 #include "mge/auxiliary/ObjectCache.hpp"
 
+#include "mge/auxiliary/ObjectCache.hpp";
+#include "mge/materials/StatueMaterial.hpp";
+#include "mge/auxiliary/TextureCache.hpp";
+
 Level* Level::_level;
 
 Level::Level() :GameObject("level")
@@ -20,6 +24,14 @@ Level::Level() :GameObject("level")
 	_board = new Board();
 	_board->setParent(this);
 	World::add(this);
+
+	_fireStatue = ObjectCache::find("Fire1");
+	_earthStatue = ObjectCache::find("Earth1");
+	_waterStatue = ObjectCache::find("Water1");
+	_windStatue = ObjectCache::find("Wind1");
+
+	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
+	
 }
 
 Level* Level::get()
@@ -87,13 +99,11 @@ void Level::update(float pStep)
 	if (hightestScorePlayer != -1) 
 	{
 		_currentScore[hightestScorePlayer] += pStep;
-		//_currentScore[hightestScorePlayer] = _currentScore[hightestScorePlayer] / 30.0f
+		 ((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
 		if (_currentScore[hightestScorePlayer] == 30.0f) {
 
 			_finished = true;
 		}
-		//find statue and pass the score to fill it up(hint: object cache)
-		//cout << "Player:" << hightestScorePlayer << " has score: " << _currentScore[hightestScorePlayer] << endl;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
@@ -143,7 +153,8 @@ void Level::applyAbility(Player* pPlayer)
 		break;
 
 	case p3:
-
+		pPlayer->_movement->earthAbility(false);
+		Level::getBoard()->earthAbility(pPlayer->getBoardPos());
 		break;
 
 	case p1:

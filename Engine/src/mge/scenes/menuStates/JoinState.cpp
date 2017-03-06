@@ -119,20 +119,14 @@ void JoinState::_updateColor() {
 }
 //check if you selected
 int JoinState::CheckSelection() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
-		_inAnotherState = true;
-		_isKeyPress = true;
-		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-		AudioManager::get()->PlaySound(SFX::backButton1);
-		 return -1;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
-		cout << "Going back to start" << endl;
-		_isKeyPress = true;
-		_inAnotherState = true;
-		AudioManager::get()->PlaySound(SFX::backButton1);
-		return -1;
+	if (_counter == 1) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
+			_inAnotherState = true;
+			_isKeyPress = true;
+			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
+			AudioManager::get()->PlaySound(SFX::backButton1);
+			return -1;
+		}
 	}
 	else return 2;
 }

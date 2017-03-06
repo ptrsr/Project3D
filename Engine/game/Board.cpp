@@ -126,7 +126,7 @@ void Board::earthAbility(glm::vec2 pBoardPos)
 				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
 
 				if (tile->getOwner() == none)
-					tile->setOwner(p2);
+					tile->setOwner(p3);
 			}
 		}
 	}
