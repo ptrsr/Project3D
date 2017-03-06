@@ -79,6 +79,7 @@ void Level::ApplyPickUp(Player* pPlayer)
 
 void Level::update(float pStep)
 {
+	if (_finished) return;
 	_curTime += pStep;
 	
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
@@ -86,11 +87,17 @@ void Level::update(float pStep)
 	if (hightestScorePlayer != -1) 
 	{
 		_currentScore[hightestScorePlayer] += pStep;
-		_currentScore[hightestScorePlayer] = _currentScore[hightestScorePlayer] / 30;
+		//_currentScore[hightestScorePlayer] = _currentScore[hightestScorePlayer] / 30.0f
+		if (_currentScore[hightestScorePlayer] == 30.0f) {
+
+			_finished = true;
+		}
 		//find statue and pass the score to fill it up(hint: object cache)
-		cout << "Player:" << hightestScorePlayer << " has score: " << _currentScore[hightestScorePlayer] << endl;
+		//cout << "Player:" << hightestScorePlayer << " has score: " << _currentScore[hightestScorePlayer] << endl;
 	}
-	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+		_finished = true;
+	}
 
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
@@ -111,6 +118,14 @@ void Level::update(float pStep)
 
 		_curTime -= _totalTime;
 	}
+}
+
+bool Level::checkIfFinished() {
+	return _finished;
+}
+
+float Level::getScoreOfId(int index) {
+	return _currentScore[index];
 }
 
 

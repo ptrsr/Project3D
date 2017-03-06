@@ -57,20 +57,6 @@ void CreditsState::_initializeScene()
 		_selectableObj = back;
 	}
 
-	//_writingStone = new GameObject("writingStone", glm::vec3(-2.5f, 0.2f, 18.5f));
-	//_writingStone->rotate(-75, glm::vec3(0, 1, 0));
-	//_writingStone->scale(glm::vec3(0.2f, 0.3f, 0.3f));
-	//_writingStone->setMesh(cubeMesh);
-	//_writingStone->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-	//World::add(_writingStone);
-
-	//_selectableObj = new GameObject("rock1", glm::vec3(-2.5f, 0.2f, 19.5f));
-	//_selectableObj->rotate(-75, glm::vec3(0, 1, 0));
-	//_selectableObj->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	//_selectableObj->setMesh(cubeMesh);
-	//_selectableObj->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 1, 1)));
-	//World::add(_selectableObj);
-
 	
 }
 
@@ -88,7 +74,45 @@ void CreditsState::Update() {
 	}
 }
 
-void CreditsState::_updateColor() {}
+void CreditsState::_updateColor() {
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
+		_isKeyPress = true;
+		if (_counter == 0) {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+			_counter = 1;
+		}
+		else {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_counter = 0;
+			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
+		_isKeyPress = true;
+		if (_counter == 0) {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+			_counter = 1;
+		}
+		else {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_counter = 0;
+			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		}
+	}
+	if (_isKeyPress) {
+		if (_delayCounter >= _delay) {
+			_delayCounter = 0;
+			_isKeyPress = false;
+		}
+		else {
+			_delayCounter++;
+			_delay = 15;
+		}
+	}
+}
 
 int CreditsState::CheckSelection() {
 

@@ -39,6 +39,7 @@ using namespace std;
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
+#include "mge/scenes/menuStates/WinState.hpp"
 
 #include "mge/config.hpp"
 #include "mge/scenes/MenuScene.hpp"
@@ -99,8 +100,9 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-	_text = new Text(TextType::IP);
-	_text->_initializeScene();
+	_winState = new WinState();
+	_winState->_initializeScene();
+
 
 
 	Level::get();
@@ -118,7 +120,6 @@ void MenuScene::_render() {
 
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
 
-		_text->Update();
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -142,7 +143,9 @@ void MenuScene::_render() {
 			break;
 
 		case 3:
-
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
+			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
 				AudioManager::get()->PlaySound(SFX::backButton1);
@@ -175,7 +178,15 @@ void MenuScene::_render() {
 			
 			break;
 
-	}
+		case 4:
+			_winState->Update();
+			_currentState = _winState->CheckSelection();
+			if (!_cameraStateChanged) {
+
+				_changeCameraState(_winState);
+			}
+			if (_currentState != 4) _cameraStateChanged = false;
+		}
 	}
 	
 

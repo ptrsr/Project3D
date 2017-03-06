@@ -251,6 +251,7 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\JoinState.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\StartState.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp" />
     <ClInclude Include="..\src\mge\scenes\TerrainScene.hpp" />
     <ClInclude Include="..\src\mge\scenes\ObjectViewer.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
@@ -339,6 +340,7 @@
     <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\JoinState.cpp" />
     <ClCompile Include="..\src\mge\scenes\menuStates\StartState.cpp" />
+    <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp" />
     <ClCompile Include="..\src\mge\scenes\TerrainScene.cpp" />
     <ClCompile Include="..\src\mge\scenes\ObjectViewer.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />

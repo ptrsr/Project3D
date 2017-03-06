@@ -30,7 +30,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait) : Game
 void Player::addScore(int pScore)
 {
 	_score += pScore;
-	std::cout << "Player " << _id << " scored: " << pScore << std::endl;
+	//std::cout << "Player " << _id << " scored: " << pScore << std::endl;
 }
 
 int Player::getScore()

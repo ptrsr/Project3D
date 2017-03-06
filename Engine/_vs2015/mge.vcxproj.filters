@@ -316,6 +316,10 @@
     <ClInclude Include="..\src\mge\behaviours\MovementBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -572,6 +576,12 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\GameTimer.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,9 @@ public:
 	virtual void update(float pStep);
 
 	static bool checkAvailable(Player* pPlayer);
+	bool	    checkIfFinished();
+	float		getScoreOfId(int index);
+
 
 private:
 	static Level* _level;
@@ -43,7 +46,7 @@ private:
 	std::vector<PickUp*> _pickups;
 	Board* _board;
 
-	float _currentScore[4] = { 0.0f,0.0f,0.0f,0.0f };
+	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };
 
 	//timing settings
 	float _totalTime = 0.8f;
@@ -51,7 +54,7 @@ private:
 
 	//time variable
 	float _curTime;
-
+	bool _finished = false;
 
 	glm::vec2 _size;
 

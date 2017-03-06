@@ -56,6 +56,13 @@ void JoinState::_initializeScene()
 	if (backText != NULL) {
 		_back = backText;
 	}
+	GameObject * enterIp = ObjectCache::find("enterip_text");
+	if (enterIp != NULL) {
+		_enterIp = enterIp;
+	}
+
+	_text = new Text(TextType::IP);
+	_text->_initializeScene();
 
 }
 //Update called outside of the class
@@ -65,7 +72,40 @@ void JoinState::Update() {
 
 //Clears and updates the color of the object you are currently on(applies some delay for keyDown like behaviour)
 void JoinState::_updateColor() {
-	_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
+	
+	if (_counter == 0) {
+		_text->Update();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
+		_isKeyPress = true;
+		if (_counter == 0) {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0)); 
+			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
+			_counter = 1;
+		}
+		else {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_counter = 0;
+			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
+			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
+		_isKeyPress = true;
+		if (_counter == 0) {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0));
+			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
+			_counter = 1;
+		}
+		else {
+			AudioManager::get()->PlaySound(SFX::switchButton1);
+			_counter = 0;
+			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
+			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		}
+	}
 	if (_isKeyPress) {
 		if (_delayCounter >= _delay) {
 			_delayCounter = 0;
