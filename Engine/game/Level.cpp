@@ -301,6 +301,23 @@ void Level::update(float pStep)
 			_effectQueue.erase(_effectQueue.begin());
 		}
 	}
+
+
+	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
+
+	if (hightestScorePlayer != -1)
+	{
+		_currentScore[hightestScorePlayer] += pStep;
+		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
+		if (_currentScore[hightestScorePlayer] == 30.0f) {
+
+			_finished = true;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+		_finished = true;
+	}
+
 	
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
