@@ -130,7 +130,6 @@ void AbstractGame::run()
 
 void AbstractGame::_update(float pStep) {
     _world->update(pStep);
-	_gameTimer->Update(pStep);
 	
 }
 

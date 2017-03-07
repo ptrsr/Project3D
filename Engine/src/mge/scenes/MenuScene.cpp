@@ -93,7 +93,7 @@ void MenuScene::_initializeScene()
 
 	Level::get();
 
-	_currentState = 3;
+	_currentState = -1;
 	_world->add(center);
 	_world->add(holder);
 
@@ -173,7 +173,7 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 }
 void MenuScene::_changeCameraState(Level* level) {
 	GameObject* empty = new GameObject("empty", glm::vec3(0,0,0));
-	GameObject * plane = ObjectCache::find("LevelPlane");
+	GameObject * plane = ObjectCache::find("playPlane");
 	if (plane != NULL) {
 		empty = plane;
 

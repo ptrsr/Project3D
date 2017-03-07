@@ -6,7 +6,8 @@
 #include "../game/Player.hpp"
 #include "Tile.hpp"
 #include "Board.hpp"
-
+#include "mge/auxiliary/ObjectCache.hpp"
+#include "mge/materials/StatueMaterial.hpp";
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
@@ -26,6 +27,13 @@ Level::Level() :GameObject("level")
 
 	_board = new Board();
 	_board->setParent(this);
+
+	_fireStatue = ObjectCache::find("Fire1");
+	_earthStatue = ObjectCache::find("Earth1");
+	_waterStatue = ObjectCache::find("Water1");
+	_windStatue = ObjectCache::find("Wind1");
+
+	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
 	World::add(this);
 }
 
@@ -303,6 +311,7 @@ void Level::update(float pStep)
 	}
 
 
+	if (_finished) return;
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
 
 	if (hightestScorePlayer != -1)
@@ -338,7 +347,13 @@ void Level::update(float pStep)
 	}
 }
 
+bool Level::checkIfFinished() {
+	return _finished;
+}
 
+float Level::getScoreOfId(int index) {
+	return _currentScore[index];
+}
 
 void Level::applyAbility(Player* pPlayer)
 {
