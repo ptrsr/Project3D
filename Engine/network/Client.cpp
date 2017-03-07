@@ -1,6 +1,7 @@
 #include "../network/Client.hpp"
 
-#include "../network/scene/SyncScene.hpp"
+#include "../game/Level.hpp"
+#include "../game/PickUps/ScoreCube.hpp"
 
 Client::Client()
 {
@@ -12,7 +13,7 @@ Client::~Client()
 
 }
 
-int Client::Connect(char* IP, int port)
+int Client::Connect(const char* IP, int port)
 {
 	cout << "Setting up client.." << endl;
 	cout << "Creating socket.." << endl;
@@ -58,52 +59,8 @@ int Client::Connect(char* IP, int port)
 	//Receive server NetCMD
 	ReceiveResponse();
 
-	DataType dataType = DataType::PLAYERDATA;
-	DataType dataType2 = DataType::TESTDATA;
-
 	//Start a thread for handling data
 	thread receiveData(&Client::ReceiveData, this);
-
-	if (!_connected)
-	{
-		receiveData.join();
-		return 0;
-	}
-
-	TestData testData;
-	testData.t = 512;
-	testData.r = 0.15f;
-	testData.g = 0.30f;
-	testData.b = 0.60f;
-	testData.a = 0.075f;
-	string input = "Testing a very long message to see if it receives correctly on the other side";
-	strcpy(testData.input, input.c_str());
-
-	TestData testData2;
-	testData2.t = 0;
-	testData2.r = 0;
-	testData2.g = 0;
-	testData2.b = 0;
-	testData2.a = 0;
-	string input2 = "Here is another string";
-	strcpy(testData2.input, input2.c_str());
-
-	PlayerData playerData;
-	playerData.direction = Dir::up;
-	PlayerData playerData2;
-	playerData2.direction = Dir::down;
-	PlayerData playerData3;
-	playerData3.direction = Dir::left;
-	PlayerData playerData4;
-	playerData4.direction = Dir::right;
-
-	PacketHelper::Send(dataType2, (char*)&testData, _sock);
-	PacketHelper::Send(dataType2, (char*)&testData2, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData2, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData3, _sock);
-	PacketHelper::Send(dataType, (char*)&playerData4, _sock);
-
 	receiveData.join();
 
 	return 0;
@@ -112,6 +69,7 @@ int Client::Connect(char* IP, int port)
 int Client::Disconnect()
 {
 	cout << "Closing socket.." << endl;
+	_playerId == Id::empty; //Reset player id
 	_connected = false; //Stop the data loop
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
@@ -122,6 +80,11 @@ int Client::Disconnect()
 void Client::Send(DataType type, char* data)
 {
 	PacketHelper::Send(type, data, _sock);
+}
+
+Id Client::GetId()
+{
+	return _playerId;
 }
 
 void Client::ReceiveResponse()
@@ -167,30 +130,35 @@ void Client::HandlePacket(DataType type, char* buf)
 		}
 	}
 		break;
-	case DataType::TESTDATA:
-		TestData testData = *reinterpret_cast<TestData*>(buf);
-		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
-		cout << testData.pX << " " << testData.pY << " " << testData.pZ << " " << testData.rX << " " << testData.rY << " " << testData.rZ << endl;
-
-		SyncScene::instance->gCube->setLocalPosition(glm::vec3(testData.pX, testData.pY, testData.pZ));
-		break;
 	case DataType::PLAYERDATA:
-		PlayerData playerData = *reinterpret_cast<PlayerData*>(buf);
-		switch (playerData.direction)
+		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
+		if (_playerId == pData.playerId || pData.playerId <= Level::get()->getPlayers().size())
+			return; //Data already exist
+		cout << pData.playerId << " p ID" << endl;
+		if (_playerId == Id::empty && pData.controlled)
 		{
-		case Dir::up:
-			cout << "up" << endl;
-			break;
-		case Dir::down:
-			cout << "down" << endl;
-			break;
-		case Dir::left:
-			cout << "left" << endl;
-			break;
-		case Dir::right:
-			cout << "right" << endl;
-			break;
+			_playerId = pData.playerId; //Assign player id
+			cout << _playerId << " my ID" << endl;
 		}
-	break;
+		Level::get()->AddSpawn(pData);
+		break;
+	case DataType::STARTDATA:
+		StartData startData = *reinterpret_cast<StartData*>(buf);
+		Level::get()->Start(startData.start);
+		break;
+	case DataType::MOVEDATA:
+		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
+		if (moveData.playerId > Level::get()->getPlayers().size())
+			return; //Invalid player
+		Level::get()->AddMove(moveData); //Add move to spawn queue
+		break;
+	case DataType::PICKUPDATA:
+		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);
+		Level::get()->AddPickUp(pickupData);
+		break;
+	case DataType::SCOREDATA:
+		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
+		Level::get()->AddScore(scoreData);
+		break;
 	}
 }

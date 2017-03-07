@@ -2,10 +2,15 @@
 
 int PacketHelper::Send(DataType dataType, char* data, SOCKET client)
 {
-	//Send DataType
-	SendData((char*)&dataType, sizeof(DataType), client);
-	//Send the actual data
-	SendData(data, SizeOfData(dataType), client);
+	char* buf = new char[sizeof(DataType) + SizeOfData(dataType)]; //Packet array
+	char* type = (char*)&dataType; //DataType array
+
+	copy(type, type + sizeof(DataType), buf); //Copy DataType into packet array
+	copy(data, data + SizeOfData(dataType), buf + sizeof(DataType)); //Copy Data into packet array
+
+	SendData(buf, sizeof(DataType) + SizeOfData(dataType), client); //Send the entire packet
+
+	delete[] buf; //Clean-up resources
 
 	return 0;
 }
@@ -18,6 +23,8 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 	ReceiveData(dataType, 4, client);
 
 	DataType type = *reinterpret_cast<DataType*>(dataType);
+
+	//cout << type << endl;
 
 	//Receive actual data using the buffer
 	ReceiveData(buffer, SizeOfData(type), client);
@@ -49,10 +56,24 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(NetWorkCommand);
 	case DataType::TESTDATA:
 		return sizeof(TestData);
+	case DataType::TIMEDATA:
+		return sizeof(TimeData);
+	case DataType::STARTDATA:
+		return sizeof(StartData);
 	case DataType::PLAYERDATA:
 		return sizeof(PlayerData);
+	case DataType::MOVEDATA:
+		return sizeof(MoveData);
+	case DataType::SCOREDATA:
+		return sizeof(ScoreData);
+	case DataType::TILEDATA:
+		return sizeof(TileData);
+	case DataType::PICKUPDATA:
+		return sizeof(PickupData);
+	case DataType::EFFECTDATA:
+		return sizeof(EffectData);
 	default:
-		cout << "ERROR: Could not match a DataType" << endl;
+		cout << "ERROR: Could not match a DataType, id " << type << endl;
 		return -1;
 	}
 }

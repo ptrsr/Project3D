@@ -19,14 +19,16 @@ public:
 
 	bool _checked = false;
 
-	Player(Id playerId, glm::vec2 boardPos, float pMoveTime, float pWait);
+	Player(Id playerId, glm::vec2 boardPos, float pMoveTime, float pWait, bool controlled);
 	glm::vec2 getBoardPos();
+	void setBoardPos(glm::vec2 pos);
+	glm::vec2 getNextPos();
 
 	void addScore(int pScore);
 	void enableAbility();
-	int  getScore();
-	glm::vec2 getNextPos();
+	int getScore();
 	Id getId();
+	bool IsControlled();
 };
 
 #endif

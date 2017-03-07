@@ -1,8 +1,7 @@
 #include "../network/Server.hpp"
 
 #include "../network/PacketHelper.hpp"
-
-#include "mge/core/GameObject.hpp"
+#include "../game/Level.hpp"
 
 Server::Server(int port, int maxClients) : _port(port), _maxClients(maxClients)
 {
@@ -93,9 +92,20 @@ int Server::StopServer()
 	return 1;
 }
 
-void Server::Send(DataType type, char* data)
+//
+//Send
+//
+void Server::SendAll(DataType type, char* data)
 {
-	NotifyClients(type, data, _sock);
+	NotifyClients(type, data);
+}
+
+//
+//Connected Count
+//
+int Server::ConnectedCount()
+{
+	return _connectedClients;
 }
 
 //
@@ -135,6 +145,16 @@ void Server::AcceptClients()
 
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
+
+				if (_connectedClients == 1)
+				{
+					Sleep(7500);
+					StartData sd;
+					sd.start = true;
+					NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
+
+					Level::get()->Start(sd.start); //Start our game too
+				}
 			}
 			else
 			{
@@ -156,10 +176,12 @@ void Server::AcceptClients()
 
 void Server::HandleClients(SOCKET client)
 {
+	SendGameState(client); //Send game state to client
+
 	while (_running)
 	{
 		//Check if the client is still connected
-		if (!PacketHelper::Connected(client))
+		if (!PacketHelper::Connected( client))
 		{
 			cout << "Client id: " << client << endl;
 			CloseClientConnection(client);
@@ -178,46 +200,65 @@ void Server::HandlePacket(DataType type, char* buf)
 {
 	switch (type)
 	{
-	case DataType::TESTDATA:
-		TestData testData = *reinterpret_cast<TestData*>(buf);
-		cout << testData.t << " " << testData.r << " " << testData.g << " " << testData.b << " " << testData.a << endl;
-		cout << testData.input << endl;
-		break;
-	case DataType::PLAYERDATA:
+	case DataType::MOVEDATA:
+		MoveData moveData = *reinterpret_cast<MoveData*>(buf);
 		{
-			PlayerData* playerData = reinterpret_cast<PlayerData*>(buf);
-			switch (playerData->direction)
-			{
-			case Dir::up:
-				cout << "up" << endl;
-				break;
-			case Dir::down:
-				cout << "down" << endl;
-				break;
-			case Dir::left:
-				cout << "left" << endl;
-				break;
-			case Dir::right:
-				cout << "right" << endl;
-				break;
-			}
+			Level* level = Level::get();
+			Player* player = level->getPlayers()[moveData.playerId - 1];
+			player->_movement->SetDDir(moveData.direction);
+			glm::vec2 curPos = player->_movement->getBoardPos();
+			
+			moveData.boardX = curPos.x;
+			moveData.boardY = curPos.y;
+
+			NotifyClients(DataType::MOVEDATA, (char*)&moveData);
 		}
 		break;
 	}
 }
 
-void Server::NotifyClients(DataType type, char* data, SOCKET sourceClient)
+void Server::NotifyClients(DataType type, char* data)
 {
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
-		//Check if we're not sending data to ourself
-		SOCKET client = _sockClients[i];
-		if (client == sourceClient)
-			continue;
-
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
 	}
+}
+
+//
+//Send Game State
+//
+void Server::SendGameState(SOCKET client)
+{
+	Level* level = Level::get();
+
+	vector<Player*> players = level->getPlayers();
+
+	//Send current player positions
+	for (int i = 0; i < players.size(); i++)
+	{
+		Player* player = players[i];
+		PlayerData pData;
+		pData.playerId = player->getId();
+		pData.controlled = false;
+		pData.boardX = player->getBoardPos().x;
+		pData.boardY = player->getBoardPos().y;
+		SendAll(DataType::PLAYERDATA, (char*)&pData);
+	}
+
+	//Send client player id and pos
+	PlayerData cData;
+	cData.playerId = static_cast<Id>(players.size() + 1);
+	pair<int, int> spawnPos = level->GetSpawnPosition(cData.playerId);
+	cData.controlled = true;
+	cData.boardX = spawnPos.first;
+	cData.boardY = spawnPos.second;
+
+	PacketHelper::Send(DataType::PLAYERDATA, (char*)&cData, client);
+	cData.controlled = false;
+	NotifyClients(DataType::PLAYERDATA, (char*)&cData);
+	level->AddSpawn(cData);
 }
 
 //

@@ -2,13 +2,11 @@
 #define TILE_H
 
 #include "mge/core/GameObject.hpp"
-#include "mge/materials/TextureMaterial.hpp"
+#include "mge/materials/LitMaterial.hpp"
 #include "Enums.hpp"
 
 class Tile : public GameObject
 {
-
-
 public:
 	Tile(glm::vec3 pPosition, Mesh* pMesh);
 
@@ -18,7 +16,7 @@ public:
 	LitMaterial* _material;
 
 private:
-	Id _owner = Id::none;
+	Id _owner = Id::empty;
 
 };
 

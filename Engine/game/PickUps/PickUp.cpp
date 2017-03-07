@@ -57,9 +57,21 @@ void PickUp::spawn()
 	setLocalPosition(glm::vec3(_boardPos.x, _spawnHeight, _boardPos.y));
 }
 
+void PickUp::spawn(glm::vec2 pos)
+{
+	_countDown = -1;
+	_boardPos = pos;
+	setLocalPosition(glm::vec3(pos.x, 1, pos.y));
+}
+
 glm::vec2 PickUp::getBoardPos()
 {
 	return _boardPos;
+}
+
+Effect PickUp::GetType()
+{
+	return _type;
 }
 
 void PickUp::reset()
@@ -80,6 +92,7 @@ void PickUp::step()
 	if (_countDown == 0)
 	{
 		spawn();
+		Level::get()->CreatePacket(_type, _boardPos, glm::vec2(-1 - 1));
 		std::cout << "spawn" << std::endl;
 	}
 }

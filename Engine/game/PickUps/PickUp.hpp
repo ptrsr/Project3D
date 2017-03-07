@@ -3,6 +3,7 @@
 
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/materials/LitMaterial.hpp"
+
 #include "../game/Player.hpp"
 
 #include <vector>
@@ -16,14 +17,15 @@ public:
 	~PickUp();
 
 	virtual inline void update(float pStep) { };
-	virtual void applyPickUp(Player* pPlayer) = 0;
+	virtual glm::vec2 applyPickUp(Player* pPlayer) = 0;
 
 	virtual void step();
 
 	void hover(float pStep);
 
 	glm::vec2 getBoardPos();
-
+	Effect GetType();
+	void spawn(glm::vec2 pos);
 
 protected:
 	void reset();
@@ -31,6 +33,7 @@ protected:
 	int _minDelay = 0;
 	int _maxDelay = 0;
 
+	Effect _type;
 
 private:
 	void spawn();

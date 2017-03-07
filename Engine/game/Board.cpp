@@ -10,16 +10,29 @@ Board::Board() : GameObject("Board")
 	initializeBoard();
 }
 
+void Board::ResetBoard()
+{
+	for (int i = 0; i < _size.x; i++)
+	{
+		for (int j = 0; j < _size.y; j++)
+		{
+			Tile* tile = _boardArray[j][i];
+			tile->setOwner(Id::empty);
+			tile->getMaterial()->setColor(glm::vec3(1));
+		}
+	}
+}
+
 void Board::setOwner(glm::vec2 boardPos, Id player)
-{	
+{
 	if (outOfBounds(boardPos))
 		return;
 	Id previousOwner = getOwnerOfTile(boardPos);
 	_boardArray[(int)boardPos.x][(int)boardPos.y]->setOwner(player);
-	if (previousOwner != player && previousOwner != Id::none) {
+	if (previousOwner != player && previousOwner != Id::empty) {
 		_score[previousOwner - 1]--;
 	}
-	else if (previousOwner == Id::none && previousOwner != player) {
+	else if (previousOwner == Id::empty && previousOwner != player) {
 		_score[player - 1]++;
 	}
 
@@ -32,7 +45,7 @@ Id Board::getPlayerWithHighestScore() {
 	int idToReturn = -1;
 	for (int i = 0; i < 4; i++)
 	{
-		if (highestScore < _score[i]) 
+		if (highestScore < _score[i])
 		{
 			highestScore = _score[i];
 			idToReturn = i + 1;
@@ -42,10 +55,9 @@ Id Board::getPlayerWithHighestScore() {
 	return (Id)idToReturn;
 }
 
-
 Id Board::getOwnerOfTile(glm::vec2 boardPos) {
 	if (outOfBounds(boardPos))
-		return Id::none;
+		return Id::empty;
 
 	return _boardArray[(int)boardPos.x][(int)boardPos.y]->getOwner();
 }
@@ -91,14 +103,14 @@ int Board::getScore(Id pPlayerId)
 			if (tile->getOwner() == pPlayerId)
 			{
 				score++;
-				tile->setOwner(none);
+				tile->setOwner(Id::empty);
 			}
 		}
 	}
 	return score;
 }
 
-void Board::fireAbility(glm::vec2 pBoardPos)
+void Board::splash(Id playerId, glm::vec2 pBoardPos)
 {
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j <= 1; j++) {
@@ -108,25 +120,7 @@ void Board::fireAbility(glm::vec2 pBoardPos)
 			{
 				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
 
-				if (tile->getOwner() != none)
-					tile->setOwner(p1);
-			}
-		}
-	}
-}
-
-void Board::earthAbility(glm::vec2 pBoardPos)
-{
-	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {
-			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
-
-			if (!outOfBounds(pos))
-			{
-				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
-
-				if (tile->getOwner() == none)
-					tile->setOwner(p3);
+				tile->setOwner(playerId);
 			}
 		}
 	}

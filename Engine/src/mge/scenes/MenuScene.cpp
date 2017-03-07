@@ -33,13 +33,11 @@ using namespace std;
 #include "mge/util/DebugHud.hpp"
 #include "mge/util/InputHandler.h"
 #include "mge/auxiliary/LuaParser.hpp"
-#include "mge/auxiliary/GameTimer.hpp"
 
 
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
-#include "mge/scenes/menuStates/WinState.hpp"
 
 #include "mge/config.hpp"
 #include "mge/scenes/MenuScene.hpp"
@@ -59,23 +57,16 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(-4.5f,2,28));
+    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(0,1,17));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
-
-
 
 	cout << "Initializing HUD" << endl;
 	_hud = new DebugHud(_window);
 	cout << "HUD initialized." << endl << endl;
 
 
-	_gameTimer = new GameTimer();
-	_gameTimer->_initializeScene();
-	_gameTimer->setTimeLenght(2.5f);
-
-	AudioManager::get();
 
 
 	LuaParser* luaParser = new LuaParser("main.lua");
@@ -100,14 +91,9 @@ void MenuScene::_initializeScene()
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
 
-	_winState = new WinState();
-	_winState->_initializeScene();
-
-
-
 	Level::get();
 
-	_currentState = -1;
+	_currentState = 3;
 	_world->add(center);
 	_world->add(holder);
 
@@ -125,17 +111,15 @@ void MenuScene::_render() {
 			_startState->Update();
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
-
 				_changeCameraState(_startState);
 			}
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
+			cout << "JoinState" << endl;
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
-
-				AudioManager::get()->PlaySound(SFX::enterButton1);
 				_changeCameraState(_joinState);
 					cout << "camera state changed" << endl;
 			}
@@ -143,50 +127,32 @@ void MenuScene::_render() {
 			break;
 
 		case 3:
-			if (Level::get()->checkIfFinished()) {
-				_currentState = 4;
-			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
-				AudioManager::get()->PlaySound(SFX::backButton1);
 				Level::reset();
 			}
 			if (!_cameraStateChanged) {
-				AudioManager::get()->PlaySound(SFX::enterButton1);
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
+
+				Level::get()->Host();
+				//Level::get()->Join("127.0.0.1", 8888);
+
 			}
 			if (_currentState != 3) _cameraStateChanged = false;
 			break;
 
 		case 1:
-
-			cout << "Credits" << endl;
+			cout << "CreditsState" << endl;
 			_creditsState->Update();
-
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
-				AudioManager::get()->PlaySound(SFX::enterButton1);
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
 			break;
 
-		case 0:
-			
-			_window->close();
-			
-			break;
-
-		case 4:
-			_winState->Update();
-			_currentState = _winState->CheckSelection();
-			if (!_cameraStateChanged) {
-
-				_changeCameraState(_winState);
-			}
-			if (_currentState != 4) _cameraStateChanged = false;
-		}
+	}
 	}
 	
 
@@ -207,7 +173,7 @@ void MenuScene::_changeCameraState(AbstactState* state) {
 }
 void MenuScene::_changeCameraState(Level* level) {
 	GameObject* empty = new GameObject("empty", glm::vec3(0,0,0));
-	GameObject * plane = ObjectCache::find("playPlane");
+	GameObject * plane = ObjectCache::find("LevelPlane");
 	if (plane != NULL) {
 		empty = plane;
 
@@ -222,8 +188,8 @@ void MenuScene::_updateHud() {
 
 	string debugInfo = "";
 	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
-	debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
-	debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
+	//debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
+	//debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
 
 	_hud->setDebugInfo(debugInfo);
 	_hud->draw();

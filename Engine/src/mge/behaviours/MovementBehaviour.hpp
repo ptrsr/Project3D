@@ -10,7 +10,7 @@ class Player;
 class MovementBehaviour : public AbstractBehaviour
 {
 	public:
-		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait);
+		MovementBehaviour(Player* pPlayer, glm::vec2 boardPos, float pJumpHeight, float pTime, float pWait, bool controlled);
 		virtual ~MovementBehaviour();
 
 		virtual inline void update(float pStep);
@@ -27,8 +27,12 @@ class MovementBehaviour : public AbstractBehaviour
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
+		void setBoardPos(glm::vec2 pos);
 		glm::vec2 getNextPos();
 		void enableAbility();
+		bool IsControlled();
+		Dir GetDDir();
+		void SetDDir(Dir dir);
 
 	private:
 		void inverseDirection();
@@ -37,6 +41,7 @@ class MovementBehaviour : public AbstractBehaviour
 		void translate(float pTime, float pMoveTime, float pStep);
 		
 		Player* _player;
+		bool _controlled;
 
 		//settings
 		float _dJumpHeight  = 1;
@@ -59,8 +64,8 @@ class MovementBehaviour : public AbstractBehaviour
 
 		float _lastHeight   = 0;
 
-		Dir _cDir = emtpy;
-		Dir _dDir = emtpy;
+		Dir _cDir = Dir::none;
+		Dir _dDir = Dir::none;
 
 		bool _canceled = false;
 		bool _activate = false;
