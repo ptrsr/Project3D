@@ -18,8 +18,7 @@ public:
 
 	int getScore(Id pPlayerId);
 
-	void fireAbility(glm::vec2 pBoardPos);
-	void earthAbility(glm::vec2 pBoardPos);
+	void splash(Id playerId, glm::vec2 pBoardPos);
 
 
 private:

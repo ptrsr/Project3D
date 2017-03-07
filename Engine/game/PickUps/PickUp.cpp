@@ -69,6 +69,11 @@ glm::vec2 PickUp::getBoardPos()
 	return _boardPos;
 }
 
+Effect PickUp::GetType()
+{
+	return _type;
+}
+
 void PickUp::reset()
 {
 	_boardPos = glm::vec2(-1);
@@ -87,7 +92,7 @@ void PickUp::step()
 	if (_countDown == 0)
 	{
 		spawn();
-		Level::get()->CreatePacket(_boardPos, glm::vec2(-1 - 1));
+		Level::get()->CreatePacket(_type, _boardPos, glm::vec2(-1 - 1));
 		std::cout << "spawn" << std::endl;
 	}
 }

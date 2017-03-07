@@ -17,6 +17,7 @@
 #include "../network/packets/MoveData.hpp"
 #include "../network/packets/PickupData.hpp"
 #include "../network/packets/ScoreData.hpp"
+#include "../network/packets/EffectData.hpp"
 
 class Client;
 class Server;
@@ -50,21 +51,22 @@ public:
 	void AddMove(MoveData move);
 	void AddPickUp(PickupData pickUp);
 	void AddScore(ScoreData score);
+	void AddEffect(EffectData effect);
 
-	void spawnPickUp(PickUp* pPickUp, glm::vec2 pos);
+	void spawnPickUp(Effect type, glm::vec2 pos);
 	void removePickUp(glm::vec2 pos);
 
-	void CreatePacket(DataType type);
-	void CreatePacket(Id playerId, Dir dir, glm::vec2 pos);
-	void CreatePacket(glm::vec2 pos, glm::vec2 oldPos);
-	void CreatePacket(Id playerId, int score);
+	void CreatePacket(Id playerId, Dir dir, glm::vec2 pos); //Create Player packet
+	void CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos); //Create PickUp packet
+	void CreatePacket(Id playerId, int score); //Create Score packet
+	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
 	
 private:
 	static Level* _level;
 
 	void RemovePlayers();
 	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
-	void spawnPickUp(PickUp* pPickUp);
+	void spawnPickUp();
 
 	void coolDowns();
 	void checkCollisions();
@@ -84,6 +86,7 @@ private:
 	std::vector<MoveData> _moveQueue;
 	std::vector<PickupData> _pickUpQueue;
 	std::vector<ScoreData> _scoreQueue;
+	std::vector<EffectData> _effectQueue;
 	
 	bool _start = false;
 	bool _send = false;

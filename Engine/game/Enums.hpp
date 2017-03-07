@@ -25,6 +25,10 @@ enum SFX {
 	playerJump1 = 0,
 };
 
-
+enum Effect {
+	splash,
+	speed,
+	slow
+};
 
 #endif // !ENUMS_H

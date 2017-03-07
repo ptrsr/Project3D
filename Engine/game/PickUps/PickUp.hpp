@@ -24,6 +24,7 @@ public:
 	void hover(float pStep);
 
 	glm::vec2 getBoardPos();
+	Effect GetType();
 	void spawn(glm::vec2 pos);
 
 protected:
@@ -32,6 +33,7 @@ protected:
 	int _minDelay = 0;
 	int _maxDelay = 0;
 
+	Effect _type;
 
 private:
 	void spawn();

@@ -2,11 +2,10 @@
 
 #include "../game/Enums.hpp"
 
-struct PickupData
+struct EffectData
 {
-	Effect type;
+	Id playerId;
+	Effect effect;
 	int boardX;
 	int boardY;
-	int oldX;
-	int oldY;
 };

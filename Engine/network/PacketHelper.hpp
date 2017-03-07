@@ -13,6 +13,7 @@
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/TestData.hpp"
 #include "../network/packets/PickupData.hpp"
+#include "../network/packets/EffectData.hpp"
 
 using namespace std;
 

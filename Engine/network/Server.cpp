@@ -146,7 +146,7 @@ void Server::AcceptClients()
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
 
-				if (_connectedClients == 3)
+				if (_connectedClients == 1)
 				{
 					Sleep(7500);
 					StartData sd;

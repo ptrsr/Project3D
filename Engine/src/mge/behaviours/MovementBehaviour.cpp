@@ -40,9 +40,6 @@ void MovementBehaviour::update(float pStep)
 		//apply pickups
 		Level::get()->ApplyPickUp(_player);
 
-		//apply ability
-
-
 		_lastMoveTime = 0;
 	}
 
