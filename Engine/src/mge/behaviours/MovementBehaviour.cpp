@@ -52,14 +52,14 @@ void MovementBehaviour::update(float pStep)
 
 	if (_curTime >= _totalTime)
 	{
-		handleSpeed();
-
 		//set next move direction to desired direction
 		setDirection();
 
 		//reset time for next step
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
+
+		handleSpeed();
 	}
 }
 
@@ -245,7 +245,7 @@ void MovementBehaviour::jump(float pHeight)
 void MovementBehaviour::activateSpeed()
 {
 	_speedDuration = 4;
-	_totalTime = _moveTime * 2;
+	_totalTime = _moveTime;
 }
 
 void MovementBehaviour::handleSpeed()
@@ -254,7 +254,7 @@ void MovementBehaviour::handleSpeed()
 		_speedDuration--;
 	else if (_speedDuration == 0)
 	{
-		_moveMulti = 1;
+		_totalTime = _moveTime * 2;
 		_speedDuration--;
 	}
 }
