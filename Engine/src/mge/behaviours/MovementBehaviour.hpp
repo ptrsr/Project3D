@@ -62,9 +62,10 @@ class MovementBehaviour : public AbstractBehaviour
 		Dir _cDir = emtpy;
 		Dir _dDir = emtpy;
 
-		bool _canceled = false;
-		bool _activate = false;
-		bool _available = true;
+		bool _canceled		= false;
+		bool _wasCanceled	= false;
+		bool _activate		= false;
+		bool _available		= true;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

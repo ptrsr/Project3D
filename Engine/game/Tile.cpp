@@ -51,9 +51,13 @@ void Tile::setOwner(Id pPlayer)
 			{
 				Tile* tile = Level::getBoard()->getTile(_boardPos + glm::vec2(i, j));
 
-				if (tile)
+				if (tile && tile->getOwner() == _owner)
+					Level::getBoard()->checkTile(tile);
 			}
+
+		std::cout << PathFinder::canReach(this, Level::getBoard()->getTile(Level::getPlayer(_owner)->getBoardPos()));
 	}
+
 
 	_owner = pPlayer;
 
@@ -79,8 +83,6 @@ void Tile::setOwner(Id pPlayer)
 		_material->setColor(glm::vec3(0.87f, 0.72f, 0.53f));
 		break;
 	}
-
-	area = 1;
 }
 
 Id Tile::getOwner()

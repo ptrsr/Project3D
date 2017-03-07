@@ -11,6 +11,7 @@ public:
 	~PathFinder();
 
 	static vector<Tile*> findPath(Tile* pStartNode, Tile* pEndNode);
+	static bool canReach(Tile* pStartNode, Tile* pEndNode);
 
 private:
 	static PathFinder* _pathFinder;

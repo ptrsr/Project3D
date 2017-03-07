@@ -7,8 +7,6 @@
 
 class Tile : public GameObject
 {
-
-
 public:
 	Tile(glm::vec3 pPosition, Mesh* pMesh);
 
@@ -22,13 +20,13 @@ public:
 	LitMaterial* _material;
 
 	//loop fill
-	bool connected = false;
+	bool _connected = false;
 
 	//pathfinding
-	float costCurrent;
-	float costEstimate;
+	float _costCurrent;
+	float _costEstimate;
 
-	Tile* parent = NULL;
+	Tile* _parentTile = NULL;
 
 private:
 	glm::vec2 _boardPos;

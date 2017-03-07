@@ -82,9 +82,8 @@ void MovementBehaviour::move(float pStep)
 		rotate(step / _moveTime);
 		translate(_curTime, _moveTime, step);
 
-		_boardPos -= glm::vec2(_trans.x, _trans.z);
-
 		_canceled = false;
+		_wasCanceled = true;
 	}
 	else
 	{
@@ -98,7 +97,11 @@ void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 	rotate(1 - pLastMoveTime / pMoveTime);
 	translate(pMoveTime, pMoveTime, pMoveTime - pLastMoveTime);
 
-	_boardPos += glm::vec2(_trans.x, _trans.z);
+	if (!_wasCanceled)
+		_boardPos += glm::vec2(_trans.x, _trans.z);
+
+	_wasCanceled = false;
+
 	_cJumpHeight = _dJumpHeight;
 }
 
@@ -242,6 +245,7 @@ void MovementBehaviour::inverseDirection()
 void MovementBehaviour::cancelMove()
 {
 	_canceled = true;
+	_boardPos -= glm::vec2(_trans.x, _trans.z);
 }
 
 void MovementBehaviour::jump(float pHeight)
