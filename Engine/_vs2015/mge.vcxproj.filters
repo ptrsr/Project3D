@@ -252,7 +252,6 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\Tile.hpp" />
     <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
@@ -325,6 +324,12 @@
     <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
     <ClInclude Include="..\src\mge\core\Bloom.hpp">
       <Filter>MGE Source files\mge\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\Tile.hpp">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -538,9 +543,6 @@
     <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\Tile.cpp">
-      <Filter>MGE Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
@@ -591,6 +593,12 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\core\Bloom.cpp">
       <Filter>MGE Source files\mge\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\Tile.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

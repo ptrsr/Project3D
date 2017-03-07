@@ -5,24 +5,45 @@
 #include "mge/config.hpp"
 #include "mge/auxiliary/MeshCache.hpp"
 
+#include "Player.hpp"
+#include "Level.hpp"
+
 Board::Board() : GameObject("Board")
 {
 	initializeBoard();
 }
 
-void Board::setOwner(glm::vec2 boardPos, Id player)
+void Board::setOwner(glm::vec2 pBoardPos, Id player)
 {
-	if (outOfBounds(boardPos))
+	if (outOfBounds(pBoardPos))
 		return;
 
-	_boardArray[(int)boardPos.x][(int)boardPos.y]->setOwner(player);
+	_boardArray[(int)pBoardPos.x][(int)pBoardPos.y]->setOwner(player);
 }
 
-Id Board::getOwnerOfTile(glm::vec2 boardPos) {
-	if (outOfBounds(boardPos))
+Id Board::getOwnerOfTile(glm::vec2 pBoardPos) {
+	if (outOfBounds(pBoardPos))
 		return Id::none;
 
-	return _boardArray[(int)boardPos.x][(int)boardPos.y]->getOwner();
+	return _boardArray[(int)pBoardPos.x][(int)pBoardPos.y]->getOwner();
+}
+
+void Board::checkTile(Tile* pTile)
+{
+	tilesToBeChecked.push_back(pTile);
+}
+
+void Board::resolveAreas()
+{
+
+}
+
+Tile* Board::getTile(glm::vec2 pBoardPos)
+{
+	if (outOfBounds(pBoardPos))
+		return nullptr;
+
+	return _boardArray[(int)pBoardPos.x][(int)pBoardPos.y];
 }
 
 void Board::initializeBoard() 

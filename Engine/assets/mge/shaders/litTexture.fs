@@ -15,6 +15,7 @@ in vec3 fNormal;
 in vec3 fPos;
 
 out vec4 fColor;
+out vec4 bColor;
 
 struct DirLight
 {
@@ -82,6 +83,10 @@ void main( void )
 		color += CalcSpotLight(spotLight[i], wNormal, viewDir, tColor);
 	
 	fColor = vec4(color, 1);
+	
+	//float brightness = dot(fColor.rgb, vec3(0.2126, 0.7152, 0.0722) * 0.6);
+    //if(brightness > 1.0)
+    //    bColor = vec4(fColor.rgb, 1.0);
 }
 
 

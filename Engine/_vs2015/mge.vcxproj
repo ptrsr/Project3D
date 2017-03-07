@@ -191,6 +191,7 @@
     <ClInclude Include="..\src\mge\auxiliary\LuaParser.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\MeshCache.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\ObjectCache.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\Text.hpp" />
     <ClInclude Include="..\src\mge\auxiliary\TextureCache.hpp" />
     <ClInclude Include="..\src\mge\behaviours\AbstractBehaviour.hpp" />
@@ -276,6 +277,7 @@
     <ClCompile Include="..\src\mge\auxiliary\LuaParser.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\MeshCache.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\ObjectCache.cpp" />
+    <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\Text.cpp" />
     <ClCompile Include="..\src\mge\auxiliary\TextureCache.cpp" />
     <ClCompile Include="..\src\mge\behaviours\AbstractBehaviour.cpp" />

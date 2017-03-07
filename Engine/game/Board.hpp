@@ -12,15 +12,21 @@ public:
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
-	Id getOwnerOfTile(glm::vec2 boardPos);
+	Id getOwnerOfTile(glm::vec2 pBoardPos);
 
 	int getScore(Id pPlayerId);
 
 	void fireAbility(glm::vec2 pBoardPos);
 	void earthAbility(glm::vec2 pBoardPos);
 
+	Tile* getTile(glm::vec2 pBoardPos);
+	void resolveAreas();
+
+	void checkTile(Tile* pTile);
 
 private:
+	vector<Tile*> tilesToBeChecked;
+
 	glm::vec2 _size = glm::vec2(9, 9);
 
 	Tile* _boardArray[9][9];

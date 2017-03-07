@@ -58,7 +58,7 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(-4.5f,2,28));
+    Camera* camera = new Camera (glm::vec2(1280, 720),"camera", glm::vec3(-4.5f,2,28));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);

@@ -15,9 +15,23 @@ public:
 	void setOwner(Id pPlayer);
 	Id getOwner();
 
+	glm::vec2 getBoardPos();
+
+	vector<Tile*> getConnections();
+
 	LitMaterial* _material;
 
+	//loop fill
+	bool connected = false;
+
+	//pathfinding
+	float costCurrent;
+	float costEstimate;
+
+	Tile* parent = NULL;
+
 private:
+	glm::vec2 _boardPos;
 	Id _owner = Id::none;
 
 };

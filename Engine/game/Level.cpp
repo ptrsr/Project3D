@@ -49,6 +49,16 @@ std::vector<Player*> Level::getPlayers()
 	return Level::get()->_players;
 }
 
+Player* Level::getPlayer(Id pPlayerId)
+{
+	for each (Player* player in Level::getPlayers())
+		if (player->getId() == pPlayerId)
+			return player;
+
+	return NULL;
+}
+
+
 std::vector<PickUp*> Level::getPickUps()
 {
 	return Level::get()->_pickups;

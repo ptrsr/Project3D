@@ -19,6 +19,7 @@ public:
 
 	static Level* get();
 	static std::vector<Player*> getPlayers();
+	static Player*				getPlayer(Id pPlayerId);
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
 	static void					reset();
