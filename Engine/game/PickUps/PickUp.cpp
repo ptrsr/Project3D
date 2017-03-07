@@ -93,7 +93,6 @@ void PickUp::step()
 	{
 		spawn();
 		Level::get()->CreatePacket(_type, _boardPos, glm::vec2(-1 - 1));
-		std::cout << "spawn" << std::endl;
 	}
 }
 
@@ -119,6 +118,6 @@ void PickUp::hover(float pStep)
 
 PickUp::~PickUp()
 {
-	std::vector<PickUp*>& pickUps = Level::getPickUps();
-	pickUps.erase(std::remove(pickUps.begin(), pickUps.end(), this), pickUps.end());
+	//std::vector<PickUp*>& pickUps = Level::getPickUps();
+	//pickUps.erase(std::remove(pickUps.begin(), pickUps.end(), this), pickUps.end());
 }

@@ -1,8 +1,12 @@
 #include "../game/Player.hpp"
 
+#include "../game/Level.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
 #include "mge/materials/LitMaterial.hpp"
+#include "PickUps/PickUp.hpp"
+#include "PickUps/Splash.hpp"
+#include "PickUps/Speed.hpp"
 
 #include "Enums.hpp"
 
@@ -26,6 +30,36 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 
 	this->setMaterial(new LitMaterial(color));
 };
+
+void Player::StorePickUp(PickUp* pickUp)
+{
+	if (_pickUp == NULL)
+	{
+		switch (pickUp->GetType())
+		{
+		case Effect::splash:
+			_pickUp = new Splash(0);
+			break;
+		case Effect::speed:
+			_pickUp = new Speed(0);
+			break;
+		}
+	}
+}
+
+void Player::UsePickUp()
+{
+	if (_pickUp != NULL)
+	{
+		Level* level = Level::get();
+		if (level->GetServer() != NULL)
+		{
+			_pickUp->applyPickUp(this);
+		}
+		delete _pickUp;
+		_pickUp = NULL;
+	}
+}
 
 void Player::addScore(int pScore)
 {
@@ -57,11 +91,6 @@ glm::vec2 Player::getNextPos()
 Id Player::getId()
 {
 	return _id;
-}
-
-void Player::enableAbility()
-{
-	_movement->enableAbility();
 }
 
 bool Player::IsControlled()

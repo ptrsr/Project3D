@@ -20,17 +20,14 @@ ScoreCube::ScoreCube(float moveTime) : PickUp("ScoreCube", moveTime)
 	reset();
 }
 
-glm::vec2 ScoreCube::applyPickUp(Player* pPlayer)
+void ScoreCube::applyPickUp(Player* pPlayer)
 {
-	glm::vec2 oldPos = getBoardPos();
 	int score = Level::getBoard()->getScore(pPlayer->getId());
 	pPlayer->addScore(score);
 	Level::get()->CreatePacket(pPlayer->getId(), score);
 	
 	for each (Player* player in Level::getPlayers())
-		player->enableAbility();
+		//player->enableAbility();
 	
 	reset();
-	
-	return oldPos;
 }

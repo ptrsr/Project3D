@@ -328,9 +328,6 @@
     <ClInclude Include="..\network\packets\DataType.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\PickUps\Slow.hpp">
-      <Filter>game\PickUps</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\PickUps\Speed.hpp">
       <Filter>game\PickUps</Filter>
     </ClInclude>
@@ -338,6 +335,12 @@
       <Filter>game\PickUps</Filter>
     </ClInclude>
     <ClInclude Include="..\network\packets\EffectData.hpp">
+      <Filter>network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\packets\UseData.hpp">
+      <Filter>network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\packets\StoreData.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
   </ItemGroup>
@@ -596,9 +599,6 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClCompile>
-    <ClCompile Include="..\game\PickUps\Slow.cpp">
-      <Filter>game\PickUps</Filter>
     </ClCompile>
     <ClCompile Include="..\game\PickUps\Speed.cpp">
       <Filter>game\PickUps</Filter>

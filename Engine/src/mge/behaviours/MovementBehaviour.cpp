@@ -40,23 +40,26 @@ void MovementBehaviour::update(float pStep)
 		//apply pickups
 		Level::get()->ApplyPickUp(_player);
 
+		//use pickup
+		if (activate)
+		{
+			_player->UsePickUp();
+			activate = false;
+		}
+
 		_lastMoveTime = 0;
 	}
 
 	if (_curTime >= _totalTime)
 	{
+		handleSpeed();
+
 		//set next move direction to desired direction
 		setDirection();
 
 		//reset time for next step
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
-
-		if (_activate)
-		{
-			_activate = false;
-			Level::applyAbility(_player);
-		}
 	}
 }
 
@@ -184,16 +187,27 @@ void MovementBehaviour::checkKeys()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		_dDir = Dir::left;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		_activate = true;
-		//_available = false;
-	}
-}
+		if (Level::get()->GetStart())
+		{
+			if (!activate)
+			{
+				//Activate pickup
+				activate = true;
 
-void MovementBehaviour::enableAbility()
-{
-	_available = true;
+				Level* level = Level::get();
+				if (level->GetClient() != NULL)
+				{
+					level->CreatePacket(_player->getId());
+				}
+			}
+		}
+		else
+		{
+			//Ready up
+		}
+	}
 }
 
 void MovementBehaviour::inverseDirection()
@@ -228,6 +242,23 @@ void MovementBehaviour::jump(float pHeight)
 	_cJumpHeight = pHeight;
 }
 
+void MovementBehaviour::activateSpeed()
+{
+	_speedDuration = 4;
+	_moveMulti = 2;
+}
+
+void MovementBehaviour::handleSpeed()
+{
+	if (_speedDuration > 0)
+		_speedDuration--;
+	else if (_speedDuration == 0)
+	{
+		_moveMulti = 1;
+		_speedDuration--;
+	}
+}
+
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
@@ -236,16 +267,6 @@ glm::vec2 MovementBehaviour::getBoardPos()
 void MovementBehaviour::setBoardPos(glm::vec2 pos)
 {
 	_boardPos = pos;
-}
-
-void MovementBehaviour::fireAbility(bool toggle)
-{
-	if (toggle)
-		_totalTime = _moveTime;
-	else
-		_totalTime = _moveTime * 2;
-
-	std::cout << _moveTime * 2;
 }
 
 bool MovementBehaviour::IsControlled()

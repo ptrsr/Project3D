@@ -1,7 +1,6 @@
 #include "../network/Client.hpp"
 
 #include "../game/Level.hpp"
-#include "../game/PickUps/ScoreCube.hpp"
 
 Client::Client()
 {
@@ -159,6 +158,14 @@ void Client::HandlePacket(DataType type, char* buf)
 	case DataType::SCOREDATA:
 		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
 		Level::get()->AddScore(scoreData);
+		break;
+	case DataType::EFFECTDATA:
+		EffectData effectData = *reinterpret_cast<EffectData*>(buf);
+		Level::get()->AddEffect(effectData);
+		break;
+	case DataType::STOREDATA:
+		StoreData storeData = *reinterpret_cast<StoreData*>(buf);
+		Level::get()->AddStore(storeData);
 		break;
 	}
 }

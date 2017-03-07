@@ -11,12 +11,13 @@
 #include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
 #include "PickUps/Speed.hpp"
-#include "PickUps/Slow.hpp"
 
 Level* Level::_level;
 
 Level::Level() :GameObject("level")
 {
+	srand(time(NULL));
+
 	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
@@ -123,9 +124,24 @@ pair<int, int> Level::GetSpawnPosition(Id playerId)
 	return _spawnPos[playerId - 1];
 }
 
+Client* Level::GetClient()
+{
+	return _client;
+}
+
+Server* Level::GetServer()
+{
+	return _server;
+}
+
 void Level::Start(bool value)
 {
 	_start = value;
+}
+
+bool Level::GetStart()
+{
+	return _start;
 }
 
 void Level::AddSpawn(PlayerData player)
@@ -151,6 +167,11 @@ void Level::AddScore(ScoreData score)
 void Level::AddEffect(EffectData effect)
 {
 	_effectQueue.push_back(effect);
+}
+
+void Level::AddStore(StoreData store)
+{
+	_storeQueue.push_back(store);
 }
 
 void Level::CreatePacket(Id playerId, Dir dir, glm::vec2 pos)
@@ -193,6 +214,24 @@ void Level::CreatePacket(Id playerId, Effect effect, glm::vec2 pos)
 	ed.boardY = pos.y;
 
 	Send(DataType::EFFECTDATA, (char*)&ed);
+	AddEffect(ed);
+}
+
+void Level::CreatePacket(Id playerId, Effect pickUp)
+{
+	StoreData sd;
+	sd.playerId = playerId;
+	sd.pickUp = pickUp;
+
+	Send(DataType::STOREDATA, (char*)&sd);
+}
+
+void Level::CreatePacket(Id playerId)
+{
+	UseData ud;
+	ud.playerId = playerId;
+
+	Send(DataType::USEDATA, (char*)&ud);
 }
 
 void Level::Send(DataType type, char* data)
@@ -211,20 +250,27 @@ void Level::ApplyPickUp(Player* pPlayer)
 			if (pickUp->getBoardPos() == pPlayer->getBoardPos())
 				if (pickUp->getBoardPos() == pPlayer->getBoardPos())
 				{
-					glm::vec2 oldPos = pickUp->applyPickUp(pPlayer);
-					CreatePacket(pickUp->GetType(), pickUp->getBoardPos(), oldPos);
+					pPlayer->StorePickUp(pickUp);
+
+					//Send who picked it up
+					CreatePacket(pPlayer->getId(), pickUp->GetType());
+
+					//Delete pickup
+					PickupData pd;
+					pd.boardX - 1;
+					pd.boardY = -1;
+					pd.oldX = pickUp->getBoardPos().x;
+					pd.oldY = pickUp->getBoardPos().y;
+					AddPickUp(pd);
+
+					CreatePacket(pickUp->GetType(), glm::vec2(-1,-1), pickUp->getBoardPos());
 				}
-		//Add pickup to delete list
 	}
 }
 
 void Level::update(float pStep)
 {
 	//
-	// - Server tells where the clients are going
-	// - Add time stamp to data packets
-	// - Send Move packets frame-independent
-	// - More testing with 4 players
 	// - Clean up queues
 	// - Handle client/host leaving
 	// - Remember to set client/server to NULL on leaving
@@ -242,6 +288,28 @@ void Level::update(float pStep)
 		if (pData.boardX != -1 && pData.boardY != -1)
 			spawnPickUp(pData.type, glm::vec2(pData.boardX, pData.boardY));
 		_pickUpQueue.erase(_pickUpQueue.begin());
+	}
+	while (_scoreQueue.size() > 0)
+	{
+		ScoreData sData = _scoreQueue[0];
+		_board->getScore(sData.playerId);
+		_players[sData.playerId - 1]->addScore(sData.score);
+		_scoreQueue.erase(_scoreQueue.begin());
+	}
+	while (_storeQueue.size() > 0)
+	{
+		StoreData sData = _storeQueue[0];
+		Player* player = _players[sData.playerId - 1];
+		switch (sData.pickUp)
+		{
+		case Effect::splash:
+			player->StorePickUp(new Splash(0));
+			break;
+		case Effect::speed:
+			player->StorePickUp(new Speed(0));
+			break;
+		}
+		_storeQueue.erase(_storeQueue.begin());
 	}
 
 	//Wait till all players are ready
@@ -282,24 +350,6 @@ void Level::update(float pStep)
 
 			_moveQueue.erase(_moveQueue.begin());
 		}
-		while (_scoreQueue.size() > 0)
-		{
-			ScoreData sData = _scoreQueue[0];
-			_board->getScore(sData.playerId);
-			_players[sData.playerId - 1]->addScore(sData.score);
-			_scoreQueue.erase(_scoreQueue.begin());
-		}
-		while (_effectQueue.size() > 0)
-		{
-			EffectData eData = _effectQueue[0];
-			switch (eData.effect)
-			{
-			case Effect::splash:
-				_board->splash(eData.playerId, glm::vec2(eData.boardX, eData.boardY));
-				break;
-			}
-			_effectQueue.erase(_effectQueue.begin());
-		}
 	}
 	
 	for each (PickUp* pickUp in _pickups)
@@ -311,68 +361,27 @@ void Level::update(float pStep)
 	//If animation is done
 	if (_curTime >= _totalTime)
 	{
+		while (_effectQueue.size() > 0)
+		{
+			EffectData eData = _effectQueue[0];
+			switch (eData.effect)
+			{
+			case Effect::splash:
+				_board->splash(eData.playerId, glm::vec2(eData.boardX, eData.boardY));
+				break;
+			case Effect::speed:
+				_players[eData.playerId - 1]->_movement->activateSpeed();
+				break;
+			}
+			_effectQueue.erase(_effectQueue.begin());
+		}
+
 		for each (PickUp* pickUp in _pickups)
 			pickUp->step();
 
-		coolDowns();
 		checkCollisions();
 
 		_curTime -= _totalTime;
-	}
-}
-
-
-
-void Level::applyAbility(Player* pPlayer)
-{
-	switch (pPlayer->getId())
-	{
-	case p4:
-		//Level::getBoard()->fireAbility(pPlayer->getBoardPos());
-		break;
-
-	case p2:
-		//Level::getBoard()->earthAbility(pPlayer->getBoardPos());
-		break;
-
-	case p3:
-
-		break;
-
-	case p1:
-		pPlayer->_movement->fireAbility(true);
-		Level::get()->_windCooldown = 4;
-		break;
-	}
-}
-
-void Level::coolDowns()
-{
-	if (_windCooldown > 0)
-	{
-		_windCooldown--;
-
-		if (_windCooldown == 0)
-			for each (Player* player in _players)
-				if (player->getId() == p1)
-				{
-					player->_movement->fireAbility(false);
-					break;
-				}
-	}
-
-	if (_waterCooldown > 0)
-	{
-		_waterCooldown--;
-
-		if (_waterCooldown == 0)
-			for each (Player* player in _players)
-			{
-				if (player->getId() == p3)
-					continue;
-
-				player->_movement->fireAbility(2.0f);
-			}
 	}
 }
 
@@ -448,16 +457,29 @@ void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 	_players.push_back(player);
 }
 
+//Server spawn function
 void Level::spawnPickUp()
 {
 	PickUp* pickUp;
 
-	pickUp = new Splash(_totalTime);
+	int rng = rand() % 2;
+
+	switch (rng)
+	{
+	case 0:
+		pickUp = new Splash(_totalTime);
+		break;
+	case 1:
+		pickUp = new Speed(_totalTime);
+		break;
+	}
+	pickUp->reset();
 
 	_pickups.push_back(pickUp);
 	pickUp->setParent(this);
 }
 
+//Client spawn function
 void Level::spawnPickUp(Effect type, glm::vec2 pos)
 {
 	PickUp* pickUp;
@@ -468,8 +490,7 @@ void Level::spawnPickUp(Effect type, glm::vec2 pos)
 		pickUp = new Splash(_totalTime);
 		break;
 	case speed:
-		break;
-	case slow:
+		pickUp = new Speed(_totalTime);
 		break;
 	}
 	_pickups.push_back(pickUp);
