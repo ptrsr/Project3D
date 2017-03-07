@@ -59,7 +59,7 @@ class MovementBehaviour : public AbstractBehaviour
 		float _lastMoveTime = 0;
 		float _totalTime	= 0;
 		float _moveMulti	= 1;
-		int _speedDuration = 0;
+		int _speedDuration  = 0;
 
 		float _moveTime		= 0;
 

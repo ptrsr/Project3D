@@ -245,7 +245,7 @@ void MovementBehaviour::jump(float pHeight)
 void MovementBehaviour::activateSpeed()
 {
 	_speedDuration = 4;
-	_moveMulti = 2;
+	_totalTime = _moveTime * 2;
 }
 
 void MovementBehaviour::handleSpeed()
