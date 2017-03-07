@@ -79,7 +79,6 @@ glm::vec2 Player::getBoardPos()
 
 void Player::setBoardPos(glm::vec2 pos)
 {
-	this->setLocalPosition(glm::vec3(pos.x, 1.0f, pos.y));
 	_movement->setBoardPos(pos);
 }
 

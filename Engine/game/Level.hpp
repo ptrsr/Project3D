@@ -68,7 +68,8 @@ public:
 	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
 	void CreatePacket(Id playerId, Effect pickUp); //Create Store packet
 	void CreatePacket(Id playerId); //Create Use packet
-	
+
+	void SendMoveData();
 private:
 	static Level* _level;
 

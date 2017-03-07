@@ -234,6 +234,14 @@ void Level::CreatePacket(Id playerId)
 	Send(DataType::USEDATA, (char*)&ud);
 }
 
+void Level::SendMoveData()
+{
+	if (_server != NULL)
+		CreatePacket(Id::p1, _players[0]->_movement->GetDDir(), _players[0]->_movement->getBoardPos());
+	if (_client != NULL)
+		CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir(), _players[_client->GetId() - 1]->getBoardPos());
+}
+
 void Level::Send(DataType type, char* data)
 {
 	if (_client != NULL)
@@ -311,6 +319,16 @@ void Level::update(float pStep)
 		}
 		_storeQueue.erase(_storeQueue.begin());
 	}
+	while (_moveQueue.size() > 0)
+	{
+		MoveData move = _moveQueue[0];
+
+		Player* player = getPlayers()[move.playerId - 1];
+		player->_movement->SetDDir(move.direction);
+		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+		_moveQueue.erase(_moveQueue.begin());
+	}
 
 	//Wait till all players are ready
 	if (!_start)
@@ -323,34 +341,6 @@ void Level::update(float pStep)
 	}
 
 	_curTime += pStep;
-
-	if (_curTime < 0.65f) //Wait for cube to land
-	{
-		_send = false;
-	}
-	else
-	{
-		if (!_send)
-		{
-			//Send move data
-			if (_server != NULL)
-				CreatePacket(Id::p1, _players[0]->_movement->GetDDir(), _players[0]->_movement->getBoardPos());
-			if (_client != NULL)
-				CreatePacket(_client->GetId(), _players[_client->GetId() - 1]->_movement->GetDDir(), _players[_client->GetId() - 1]->getBoardPos());
-		}
-		_send = true;
-
-		while (_moveQueue.size() > 0)
-		{
-			MoveData move = _moveQueue[0];
-
-			Player* player = getPlayers()[move.playerId - 1];
-			player->_movement->SetDDir(move.direction);
-			player->setBoardPos(glm::vec2(move.boardX, move.boardY));
-
-			_moveQueue.erase(_moveQueue.begin());
-		}
-	}
 	
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
@@ -361,7 +351,7 @@ void Level::update(float pStep)
 	//If animation is done
 	if (_curTime >= _totalTime)
 	{
-		while (_effectQueue.size() > 0)
+		for (int i = 0; i < _effectQueue.size(); i++)
 		{
 			EffectData eData = _effectQueue[0];
 			switch (eData.effect)
@@ -370,6 +360,9 @@ void Level::update(float pStep)
 				_board->splash(eData.playerId, glm::vec2(eData.boardX, eData.boardY));
 				break;
 			case Effect::speed:
+				if (_players[eData.playerId - 1]->_movement->SpeedActive())
+					continue;
+
 				_players[eData.playerId - 1]->_movement->activateSpeed();
 				break;
 			}

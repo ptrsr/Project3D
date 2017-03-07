@@ -6,6 +6,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "../game/Enums.hpp"
 
+#include "../network/Client.hpp"
+
 #include <algorithm>
 
 MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait, bool controlled) :
@@ -18,8 +20,26 @@ void MovementBehaviour::update(float pStep)
 
 	_curTime += pStep;
 
-	if (_curTime < 0.65f)
+	if (_curTime < (_totalTime * 0.8f))
+	{
 		checkKeys();
+		_send = false;
+	}
+	else
+	{
+		if (!_send)
+		{
+			Level::get()->SendMoveData();
+
+			//use pickup
+			if (activate)
+			{
+				_player->UsePickUp();
+				activate = false;
+			}
+		}
+		_send = true;
+	}
 
 	if (_curTime < _moveTime)
 	{
@@ -34,18 +54,14 @@ void MovementBehaviour::update(float pStep)
 		//finish player animation
 		finishMove(_moveTime, _lastMoveTime);
 
+		//move to actual position
+		_player->setLocalPosition(glm::vec3(_boardPos.x, 1.0f, _boardPos.y));
+
 		//set tiles to new owner
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
 
 		//apply pickups
 		Level::get()->ApplyPickUp(_player);
-
-		//use pickup
-		if (activate)
-		{
-			_player->UsePickUp();
-			activate = false;
-		}
 
 		_lastMoveTime = 0;
 	}
@@ -244,7 +260,8 @@ void MovementBehaviour::jump(float pHeight)
 
 void MovementBehaviour::activateSpeed()
 {
-	_speedDuration = 4;
+	_speedActive = true;
+	_speedDuration = 5;
 	_totalTime = _moveTime;
 }
 
@@ -254,6 +271,7 @@ void MovementBehaviour::handleSpeed()
 		_speedDuration--;
 	else if (_speedDuration == 0)
 	{
+		_speedActive = false;
 		_totalTime = _moveTime * 2;
 		_speedDuration--;
 	}
@@ -272,6 +290,11 @@ void MovementBehaviour::setBoardPos(glm::vec2 pos)
 bool MovementBehaviour::IsControlled()
 {
 	return _controlled;
+}
+
+bool MovementBehaviour::SpeedActive()
+{
+	return _speedActive;
 }
 
 Dir MovementBehaviour::GetDDir()

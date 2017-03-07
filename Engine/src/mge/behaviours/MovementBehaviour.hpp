@@ -31,6 +31,7 @@ class MovementBehaviour : public AbstractBehaviour
 		bool IsControlled();
 		Dir GetDDir();
 		void SetDDir(Dir dir);
+		bool SpeedActive();
 		bool activate = false;
 
 	private:
@@ -69,6 +70,8 @@ class MovementBehaviour : public AbstractBehaviour
 		Dir _dDir = Dir::none;
 
 		bool _canceled = false;
+		bool _send = false;
+		bool _speedActive = false;
 };
 
 #endif // ROTATINGBEHAVIOUR_H
