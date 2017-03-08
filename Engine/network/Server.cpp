@@ -214,6 +214,10 @@ void Server::HandlePacket(DataType type, char* buf)
 			NotifyClients(DataType::MOVEDATA, (char*)&moveData);
 		}
 		break;
+	case DataType::USEDATA:
+		UseData useData = *reinterpret_cast<UseData*>(buf);
+		Level::getPlayer(useData.playerId)->_movement->activate = true;
+		break;
 	}
 }
 

@@ -7,7 +7,7 @@ class Splash : public PickUp
 public:
 	Splash(float moveTime);
 
-	virtual glm::vec2 applyPickUp(Player* pPlayer);
+	virtual void applyPickUp(Player* pPlayer);
 private:
 
 };

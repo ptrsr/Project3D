@@ -8,11 +8,14 @@
 
 #include "Enums.hpp"
 
+class PickUp;
+
 class Player : public GameObject
 {
 private:
 	Id _id;
 	int _score = 0;
+	PickUp* _pickUp = NULL;
 
 public:
 	MovementBehaviour* _movement;
@@ -24,8 +27,9 @@ public:
 	void setBoardPos(glm::vec2 pos);
 	glm::vec2 getNextPos();
 
+	void StorePickUp(PickUp* pickUp);
+	void UsePickUp();
 	void addScore(int pScore);
-	void enableAbility();
 	int getScore();
 	Id getId();
 	bool IsControlled();

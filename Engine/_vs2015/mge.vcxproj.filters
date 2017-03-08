@@ -328,9 +328,6 @@
     <ClInclude Include="..\network\packets\DataType.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\PickUps\Slow.hpp">
-      <Filter>game\PickUps</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\PickUps\Speed.hpp">
       <Filter>game\PickUps</Filter>
     </ClInclude>
@@ -340,6 +337,7 @@
     <ClInclude Include="..\network\packets\EffectData.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
     <ClInclude Include="..\src\mge\core\Bloom.hpp" />
     <ClInclude Include="..\src\mge\materials\StatueMaterial.hpp" />
@@ -348,6 +346,13 @@
     </ClInclude>
     <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
+=======
+    <ClInclude Include="..\network\packets\UseData.hpp">
+      <Filter>network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\packets\StoreData.hpp">
+      <Filter>network\packets</Filter>
+>>>>>>> dd8bac09783f3e036a205cbd07b805bd9a304a38
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -605,9 +610,6 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\MovementBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
-    </ClCompile>
-    <ClCompile Include="..\game\PickUps\Slow.cpp">
-      <Filter>game\PickUps</Filter>
     </ClCompile>
     <ClCompile Include="..\game\PickUps\Speed.cpp">
       <Filter>game\PickUps</Filter>

@@ -21,12 +21,7 @@ Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 	reset();
 }
 
-glm::vec2 Splash::applyPickUp(Player* pPlayer)
+void Splash::applyPickUp(Player* pPlayer)
 {
-	glm::vec2 oldPos = getBoardPos();
-
-	Level::getBoard()->splash(pPlayer->getId(), pPlayer->getBoardPos());
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::splash, pPlayer->getBoardPos());
-
-	return oldPos;
 }

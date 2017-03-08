@@ -18,7 +18,11 @@
 #include "../network/packets/PickupData.hpp"
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/EffectData.hpp"
+<<<<<<< HEAD
 #include "mge/scenes/menuStates/LobbyState.hpp"
+=======
+#include "../network/packets/StoreData.hpp"
+>>>>>>> dd8bac09783f3e036a205cbd07b805bd9a304a38
 
 class Client;
 class Server;
@@ -49,12 +53,17 @@ public:
 	void SetupLevel();
 	pair<int, int> GetSpawnPosition(Id playerId);
 	
+	Client* GetClient();
+	Server* GetServer();
+
 	void Start(bool value);
+	bool GetStart();
 	void AddSpawn(PlayerData player);
 	void AddMove(MoveData move);
 	void AddPickUp(PickupData pickUp);
 	void AddScore(ScoreData score);
 	void AddEffect(EffectData effect);
+	void AddStore(StoreData store);
 
 	void spawnPickUp(Effect type, glm::vec2 pos);
 	void removePickUp(glm::vec2 pos);
@@ -63,7 +72,10 @@ public:
 	void CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos); //Create PickUp packet
 	void CreatePacket(Id playerId, int score); //Create Score packet
 	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
-	
+	void CreatePacket(Id playerId, Effect pickUp); //Create Store packet
+	void CreatePacket(Id playerId); //Create Use packet
+
+	void SendMoveData();
 private:
 	static Level* _level;
 
@@ -71,7 +83,6 @@ private:
 	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp();
 
-	void coolDowns();
 	void checkCollisions();
 
 	void Send(DataType type, char* data);
@@ -90,6 +101,7 @@ private:
 	std::vector<PickupData> _pickUpQueue;
 	std::vector<ScoreData> _scoreQueue;
 	std::vector<EffectData> _effectQueue;
+	std::vector<StoreData> _storeQueue;
 	
 	bool _start = false;
 	bool _send = false;
@@ -113,10 +125,6 @@ private:
 	bool _finished = false;
 
 	glm::vec2 _size;
-
-	//player abilities
-	int _waterCooldown = 0;
-	int _windCooldown  = 0;
 
 	Level();
 

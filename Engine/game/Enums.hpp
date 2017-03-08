@@ -36,8 +36,7 @@ enum SFX {
 
 enum Effect {
 	splash,
-	speed,
-	slow
+	speed
 };
 
 #endif // !ENUMS_H
