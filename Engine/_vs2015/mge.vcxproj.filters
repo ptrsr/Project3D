@@ -277,9 +277,6 @@
     <ClInclude Include="..\game\PickUps\PickUp.hpp">
       <Filter>game\PickUps</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\PickUps\ScoreCube.hpp">
-      <Filter>game\PickUps</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\Board.hpp">
       <Filter>game</Filter>
     </ClInclude>
@@ -580,9 +577,6 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\game\PickUps\PickUp.cpp">
-      <Filter>game\PickUps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\game\PickUps\ScoreCube.cpp">
       <Filter>game\PickUps</Filter>
     </ClCompile>
     <ClCompile Include="..\game\Board.cpp">
