@@ -6,6 +6,7 @@
 #include "mge/core/GameObject.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/materials/LitMaterial.hpp"
+#include "mge/scenes/menuStates/LobbyState.hpp"
 #include "mge/config.hpp"
 
 #include "Player.hpp"
@@ -37,6 +38,8 @@ public:
 	static void					reset();
 	void						ApplyPickUp(Player* pPlayer);
 	static void					applyAbility(Player* pPlayer);
+	bool						checkIfFinished();
+	float						getScoreOfId(int index);
 
 	void Host();
 	void Join(const char* IP, int port);
@@ -102,6 +105,16 @@ private:
 	
 	bool _start = false;
 	bool _send = false;
+	bool _finished = false;
+
+	GameObject* _fireStatue;
+	GameObject* _earthStatue;
+	GameObject* _waterStatue;
+	GameObject* _windStatue;
+	LobbyState * _lobbyState;
+
+
+	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };
 	
 	//timing settings
 	float _totalTime = 0.8f;

@@ -105,8 +105,21 @@ void Text::_updateIP() {
 	
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress)
 	{
-		cout << text << endl;
 		_isKeyPress = true;
+		size_t pos = 0;
+		std::string token;
+		std::string delimiter = ":";
+		std::string ip = "";
+		int port = 0;
+		while ((pos = text.find(delimiter)) != std::string::npos) {
+			token = text.substr(0, pos);
+			text.erase(0, pos + delimiter.length());
+			ip = token;
+			std::cout <<"IP:" <<ip << std::endl;
+
+		}
+		port = atoi(text.c_str());
+		cout <<"Port(int):" <<port<<endl;
 	}
 		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !_isKeyPress)

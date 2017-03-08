@@ -4,6 +4,8 @@
 #include "../network/Server.hpp"
 
 #include "../game/Player.hpp"
+#include "mge/auxiliary/ObjectCache.hpp"
+#include "mge/auxiliary/AudioManager.h"
 #include "Tile.hpp"
 #include "Board.hpp"
 
@@ -27,6 +29,16 @@ Level::Level() :GameObject("level")
 
 	_board = new Board();
 	_board->setParent(this);
+
+	_fireStatue = ObjectCache::find("Fire1");
+	_earthStatue = ObjectCache::find("Earth1");
+	_waterStatue = ObjectCache::find("Water1");
+	_windStatue = ObjectCache::find("Wind1");
+
+	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
+	_waterStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0, 0, 1)));
+	_earthStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0.5f, 0.5f, 0)));
+	_windStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 1, 1)));
 	World::add(this);
 }
 
@@ -281,6 +293,14 @@ void Level::ApplyPickUp(Player* pPlayer)
 	}
 }
 
+bool Level::checkIfFinished() {
+	return _finished;
+}
+
+float Level::getScoreOfId(int index) {
+	return _currentScore[index];
+}
+
 void Level::update(float pStep)
 {
 	//
@@ -343,10 +363,28 @@ void Level::update(float pStep)
 		_moveQueue.erase(_moveQueue.begin());
 	}
 
+	//cant get player correctly
+	/*if (_lobbyState != NULL)
+	{
+	_lobbyState->Update();
+	}
+	else {
+	_lobbyState = new LobbyState(getPlayer(Id::p3));
+	_lobbyState->_initializeScene();
+	}*/
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
+		Start(true);
+	}
+
 	//Wait till all players are ready
 	if (!_start)
 		return;
-	
+
+	//has a bool check so it happens only once
+	AudioManager::get()->startLevelMusic();
+
+
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
 	{
@@ -354,6 +392,23 @@ void Level::update(float pStep)
 	}
 
 	_curTime += pStep;
+
+
+	if (_finished) return;
+	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
+
+	if (hightestScorePlayer != -1)
+	{
+		_currentScore[hightestScorePlayer] += pStep;
+		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
+		if (_currentScore[hightestScorePlayer] == 30.0f) {
+
+			_finished = true;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+		_finished = true;
+	}
 	
 	for each (PickUp* pickUp in _pickups)
 		pickUp->hover(pStep);
