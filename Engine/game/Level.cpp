@@ -34,6 +34,9 @@ Level::Level() :GameObject("level")
 	_windStatue = ObjectCache::find("Wind1");
 
 	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
+	_waterStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0, 0, 1)));
+	_earthStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0.5f, 0.5f, 0)));
+	_windStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 1, 1)));
 	World::add(this);
 }
 
