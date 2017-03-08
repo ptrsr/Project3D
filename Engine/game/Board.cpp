@@ -8,6 +8,10 @@
 #include "Player.hpp"
 #include "Level.hpp"
 
+#include "mge/auxiliary/PathFinder.hpp"
+#include "mge/auxiliary/BreathFirst.hpp"
+
+
 Board::Board() : GameObject("Board")
 {
 	initializeBoard();
@@ -30,12 +34,24 @@ Id Board::getOwnerOfTile(glm::vec2 pBoardPos) {
 
 void Board::checkTile(Tile* pTile)
 {
-	tilesToBeChecked.push_back(pTile);
+	_tilesToBeChecked.push_back(pTile);
 }
 
 void Board::resolveAreas()
 {
+	BreathFirst breathFirst;
 
+	while (_tilesToBeChecked.size() != 0)
+	{
+		Tile* tile = _tilesToBeChecked[0];
+		std::cout << !PathFinder::canReach(tile, Level::getBoard()->getTile(Level::getPlayer(tile->getOwner())->getBoardPos())) << std::endl;
+
+
+		if (tile->_connected == true && !PathFinder::canReach(tile, Level::getBoard()->getTile(Level::getPlayer(tile->getOwner())->getBoardPos())))
+			breathFirst.disconnect(tile);
+
+		_tilesToBeChecked.erase(_tilesToBeChecked.begin());
+	}
 }
 
 Tile* Board::getTile(glm::vec2 pBoardPos)

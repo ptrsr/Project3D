@@ -23,8 +23,9 @@ public:
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
 	static void					reset();
-	static void					ApplyPickUp(Player* pPlayer);
+	static void					applyPickUp(Player* pPlayer);
 	static void					applyAbility(Player* pPlayer);
+	static void					moveDone();
 
 	virtual void update(float pStep);
 
@@ -51,13 +52,13 @@ private:
 	//time variable
 	float _curTime;
 
-
 	glm::vec2 _size;
 
 	//player abilities
 	int _waterCooldown = 0;
 	int _windCooldown  = 0;
 
+	bool checkAreas = false;
 
 	Level();
 

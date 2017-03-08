@@ -3,12 +3,13 @@
 
 #include "../game/Tile.hpp"
 #include "../game/Enums.hpp"
+
 class Board : public GameObject
 {
 	
 public:
 	Board();
-	
+
 	bool outOfBounds(glm::vec2);
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
@@ -25,7 +26,7 @@ public:
 	void checkTile(Tile* pTile);
 
 private:
-	vector<Tile*> tilesToBeChecked;
+	vector<Tile*> _tilesToBeChecked;
 
 	glm::vec2 _size = glm::vec2(9, 9);
 

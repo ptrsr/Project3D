@@ -46,16 +46,9 @@ void Tile::setOwner(Id pPlayer)
 {
 	if (_owner != Id::none && _owner != pPlayer)
 	{
-		for (int j = -1; j <= 1; j++)
-			for (int i = -1; i <= 1; i++)
-			{
-				Tile* tile = Level::getBoard()->getTile(_boardPos + glm::vec2(i, j));
-
-				if (tile && tile->getOwner() == _owner)
-					Level::getBoard()->checkTile(tile);
-			}
-
-		std::cout << PathFinder::canReach(this, Level::getBoard()->getTile(Level::getPlayer(_owner)->getBoardPos()));
+		for each (Tile* tile in getConnections())
+			if (tile->getOwner() == _owner)
+				Level::getBoard()->checkTile(tile);
 	}
 
 

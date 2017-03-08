@@ -20,7 +20,7 @@ public:
 	LitMaterial* _material;
 
 	//loop fill
-	bool _connected = false;
+	bool _connected = true;
 
 	//pathfinding
 	float _costCurrent;

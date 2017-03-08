@@ -331,6 +331,9 @@
     <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\BreathFirst.hpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -598,6 +601,9 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp">
+      <Filter>MGE Source files\mge\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\BreathFirst.cpp">
       <Filter>MGE Source files\mge\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>

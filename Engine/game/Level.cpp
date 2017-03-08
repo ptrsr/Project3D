@@ -88,7 +88,7 @@ bool Level::checkAvailable(Player* pPlayer)
 	return true;
 }
 
-void Level::ApplyPickUp(Player* pPlayer)
+void Level::applyPickUp(Player* pPlayer)
 {
 	for each (PickUp* pickUp in Level::getPickUps())
 		if (pickUp->getBoardPos() == pPlayer->getBoardPos())
@@ -111,8 +111,12 @@ void Level::update(float pStep)
 		for each (PickUp* pickUp in _pickups)
 			pickUp->step();
 
+		_board->resolveAreas();
+
 		coolDowns();
 		checkCollisions();
+
+
 
 		_curTime -= _totalTime;
 	}

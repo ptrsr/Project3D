@@ -35,7 +35,7 @@ void MovementBehaviour::update(float pStep)
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
 
 		//apply pickups
-		Level::ApplyPickUp(_player);
+		Level::applyPickUp(_player);
 
 		//apply ability
 
