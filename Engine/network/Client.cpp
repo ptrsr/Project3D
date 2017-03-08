@@ -131,7 +131,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::PLAYERDATA:
 		PlayerData pData = *reinterpret_cast<PlayerData*>(buf);
-		if (_playerId == pData.playerId || pData.playerId <= Level::get()->getPlayers().size())
+		if (_playerId == pData.playerId || Level::getPlayer(pData.playerId) != NULL)
 			return; //Data already exist
 		cout << pData.playerId << " p ID" << endl;
 		if (_playerId == Id::empty && pData.controlled)
@@ -164,6 +164,10 @@ void Client::HandlePacket(DataType type, char* buf)
 	case DataType::STOREDATA:
 		StoreData storeData = *reinterpret_cast<StoreData*>(buf);
 		Level::get()->AddStore(storeData);
+		break;
+	case DataType::LEAVEDATA:
+		LeaveData leaveData = *reinterpret_cast<LeaveData*>(buf);
+		Level::get()->AddLeave(leaveData);
 		break;
 	}
 }

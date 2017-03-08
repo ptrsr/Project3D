@@ -180,6 +180,7 @@
     <ClInclude Include="..\network\PacketHelper.hpp" />
     <ClInclude Include="..\network\packets\DataType.hpp" />
     <ClInclude Include="..\network\packets\EffectData.hpp" />
+    <ClInclude Include="..\network\packets\LeaveData.hpp" />
     <ClInclude Include="..\network\packets\MoveData.hpp" />
     <ClInclude Include="..\network\packets\PickupData.hpp" />
     <ClInclude Include="..\network\packets\PlayerData.hpp" />

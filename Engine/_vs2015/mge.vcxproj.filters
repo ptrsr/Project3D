@@ -343,6 +343,9 @@
     <ClInclude Include="..\network\packets\StoreData.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
+    <ClInclude Include="..\network\packets\LeaveData.hpp">
+      <Filter>network\packets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">

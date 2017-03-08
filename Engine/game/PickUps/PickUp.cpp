@@ -30,6 +30,9 @@ void PickUp::spawn()
 
 			for each (Player* player in Level::getPlayers())
 			{
+				if (player == NULL)
+					continue;
+
 				glm::vec2 dif = player->getBoardPos() - pos;
 
 				if (std::abs(dif.x) <= 1 && std::abs(dif.y) <= 1 && ((!dif.x && !dif.y) || (dif.x && !dif.y) || (!dif.x && dif.y)))

@@ -45,7 +45,7 @@ void Level::Host()
 	pair<int, int> spawnPos = GetSpawnPosition(Id::p1);
 	spawnPlayer(Id::p1, glm::vec2(spawnPos.first, spawnPos.second), true); //Spawn player
 
-	_server = new Server(8888, 3); //Create a server
+	_server = new Server(56789, 3); //Create a server
 	thread server(&Server::StartServer, _server); //Create a thread for the server
 	server.detach(); //Let it run seperately from the main thread
 }
@@ -78,7 +78,7 @@ Player* Level::getPlayer(Id playerId)
 
 	for (int i = 0; i < players.size(); i++)
 	{
-		if (players[i]->getId() == playerId)
+		if (players[i] != NULL && players[i]->getId() == playerId)
 			return players[i]; //Return player with matching id
 	}
 
@@ -110,7 +110,7 @@ bool Level::checkAvailable(Player* pPlayer)
 
 	for each (Player* player in level->_players)
 	{
-		if (pPlayer == player)
+		if (player == NULL || pPlayer == player)
 			continue;
 
 		if (player->getNextPos() == nextPos)
@@ -172,6 +172,11 @@ void Level::AddEffect(EffectData effect)
 void Level::AddStore(StoreData store)
 {
 	_storeQueue.push_back(store);
+}
+
+void Level::AddLeave(LeaveData leave)
+{
+	_leaveQueue.push_back(leave);
 }
 
 void Level::CreatePacket(Id playerId, Dir dir, glm::vec2 pos)
@@ -283,6 +288,14 @@ void Level::update(float pStep)
 	// - Handle client/host leaving
 	// - Remember to set client/server to NULL on leaving
 	//
+	while (_leaveQueue.size() > 0)
+	{
+		LeaveData leave = _leaveQueue[0];
+		_board->getScore(leave.playerId); //Reset all player's tiles
+		delete _players[leave.playerId - 1]; //Delete player
+		_players[leave.playerId - 1] = NULL; //Set value to NULL for future use
+		_leaveQueue.erase(_leaveQueue.begin());
+	}
 	while (_spawnQueue.size() > 0)
 	{
 		PlayerData pData = _spawnQueue[0];
@@ -346,7 +359,10 @@ void Level::update(float pStep)
 		pickUp->hover(pStep);
 
 	for each (Player* player in _players)
-		player->update(pStep);
+	{
+		if (player != NULL)
+			player->update(pStep);
+	}
 
 	//If animation is done
 	if (_curTime >= _totalTime)
@@ -382,6 +398,9 @@ void Level::checkCollisions()
 {
 	for each (Player* player in _players)
 	{
+		if (player == NULL)
+			continue;
+
 		if (_board->outOfBounds(player->getNextPos()))
 		{
 			player->_movement->cancelMove();
@@ -391,12 +410,12 @@ void Level::checkCollisions()
 
 	for each (Player* player1 in _players)
 	{
-		if (player1->_checked)
+		if (player1 == NULL || player1->_checked)
 			continue;
 
 		for each (Player* player2 in _players)
 		{
-			if (player2->_checked || player1 == player2)
+			if (player2 == NULL || player2->_checked || player1 == player2)
 				continue;
 
 			if (player1->getNextPos() == player2->getNextPos())
@@ -423,7 +442,12 @@ void Level::checkCollisions()
 		}
 	}
 	for each (Player* player in _players)
+	{
+		if (player == NULL)
+			continue;
+
 		player->_checked = false;
+	}
 }
 
 void Level::RemovePlayers()
@@ -437,17 +461,29 @@ void Level::RemovePlayers()
 
 void Level::spawnPlayer(Id pPlayerId, glm::vec2 pBoardPos, bool controlled)
 {
-	for each (Player* player in _players)
+	//Id for a previously left player spot
+	int spot = -1;
+
+	for (int i = 0; i < _players.size(); i++)
 	{
-		if (player->getId() == pPlayerId)
+		if (_players[i] != NULL && _players[i]->getId() == pPlayerId)
 		{
-			std::cout << "Error: Player already exists" << std::endl;
+			std::cout << "ERROR: Player already exists" << std::endl;
 			return;
+		}
+		if (_players[i] == NULL && pPlayerId - 1 == i)
+		{
+			spot = i;
+			break;
 		}
 	}
 	Player* player = new Player(pPlayerId, pBoardPos, _totalTime, _wait, controlled);
 	player->setParent(this);
-	_players.push_back(player);
+
+	if (spot == -1)
+		_players.push_back(player);
+	else
+		_players[spot] = player;
 }
 
 //Server spawn function

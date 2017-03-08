@@ -19,6 +19,7 @@
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/EffectData.hpp"
 #include "../network/packets/StoreData.hpp"
+#include "../network/packets/LeaveData.hpp"
 
 class Client;
 class Server;
@@ -58,6 +59,7 @@ public:
 	void AddScore(ScoreData score);
 	void AddEffect(EffectData effect);
 	void AddStore(StoreData store);
+	void AddLeave(LeaveData leave);
 
 	void spawnPickUp(Effect type, glm::vec2 pos);
 	void removePickUp(glm::vec2 pos);
@@ -96,6 +98,7 @@ private:
 	std::vector<ScoreData> _scoreQueue;
 	std::vector<EffectData> _effectQueue;
 	std::vector<StoreData> _storeQueue;
+	std::vector<LeaveData> _leaveQueue;
 	
 	bool _start = false;
 	bool _send = false;

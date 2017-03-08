@@ -35,6 +35,8 @@ private:
 	bool _running = false; //Indication if the server is running
 	int _timeOut = 120000; //Time-out in mili-seconds
 
+	void SaveSocket(SOCKET client); //Saves socket to the client list
+	int GetClientId(SOCKET client); //Gets the id on which spot the client is in the client list
 	void AcceptClients(); //Attempts to accept incoming clients
 	void HandleClients(SOCKET client); //Receives data from all clients
 	void HandlePacket(DataType type, char* buf); //Handles received packages

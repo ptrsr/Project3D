@@ -76,6 +76,8 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(StoreData);
 	case DataType::USEDATA:
 		return sizeof(UseData);
+	case DataType::LEAVEDATA:
+		return sizeof(LeaveData);
 	default:
 		cout << "ERROR: Could not match a DataType, id " << type << endl;
 		return -1;
