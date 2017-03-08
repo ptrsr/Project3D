@@ -161,6 +161,7 @@ void MenuScene::_render() {
 			break;
 		case 4:
 			_winState->Update();
+			_winState->CheckSelection();
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_winState);
