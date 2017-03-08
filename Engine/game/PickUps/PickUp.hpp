@@ -17,7 +17,7 @@ public:
 	~PickUp();
 
 	virtual inline void update(float pStep) { };
-	virtual glm::vec2 applyPickUp(Player* pPlayer) = 0;
+	virtual void applyPickUp(Player* pPlayer) = 0;
 
 	virtual void step();
 
@@ -26,9 +26,9 @@ public:
 	glm::vec2 getBoardPos();
 	Effect GetType();
 	void spawn(glm::vec2 pos);
+	void reset();
 
 protected:
-	void reset();
 
 	int _minDelay = 0;
 	int _maxDelay = 0;

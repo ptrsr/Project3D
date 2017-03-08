@@ -1,11 +1,12 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
-#include "mge/auxiliary/AudioManager.h"
 
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
 #include "../game/Enums.hpp"
+
+#include "../network/Client.hpp"
 
 #include <algorithm>
 
@@ -19,8 +20,26 @@ void MovementBehaviour::update(float pStep)
 
 	_curTime += pStep;
 
-	if (_curTime < 0.65f)
+	if (_curTime < (_totalTime * 0.8f))
+	{
 		checkKeys();
+		_send = false;
+	}
+	else
+	{
+		if (!_send)
+		{
+			Level::get()->SendMoveData();
+
+			//use pickup
+			if (activate)
+			{
+				_player->UsePickUp();
+				activate = false;
+			}
+		}
+		_send = true;
+	}
 
 	if (_curTime < _moveTime)
 	{
@@ -35,8 +54,8 @@ void MovementBehaviour::update(float pStep)
 		//finish player animation
 		finishMove(_moveTime, _lastMoveTime);
 
-		//playing player landing sound
-		AudioManager::get()->PlaySound(SFX::playerJump1);
+		//move to actual position
+		_player->setLocalPosition(glm::vec3(_boardPos.x, 1.0f, _boardPos.y));
 
 		//set tiles to new owner
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
@@ -56,11 +75,7 @@ void MovementBehaviour::update(float pStep)
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
 
-		if (_activate)
-		{
-			_activate = false;
-			Level::applyAbility(_player);
-		}
+		handleSpeed();
 	}
 }
 
@@ -188,16 +203,27 @@ void MovementBehaviour::checkKeys()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		_dDir = Dir::left;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		_activate = true;
-		//_available = false;
-	}
-}
+		if (Level::get()->GetStart())
+		{
+			if (!activate)
+			{
+				//Activate pickup
+				activate = true;
 
-void MovementBehaviour::enableAbility()
-{
-	_available = true;
+				Level* level = Level::get();
+				if (level->GetClient() != NULL)
+				{
+					level->CreatePacket(_player->getId());
+				}
+			}
+		}
+		else
+		{
+			//Ready up
+		}
+	}
 }
 
 void MovementBehaviour::inverseDirection()
@@ -232,6 +258,25 @@ void MovementBehaviour::jump(float pHeight)
 	_cJumpHeight = pHeight;
 }
 
+void MovementBehaviour::activateSpeed()
+{
+	_speedActive = true;
+	_speedDuration = 5;
+	_totalTime = _moveTime;
+}
+
+void MovementBehaviour::handleSpeed()
+{
+	if (_speedDuration > 0)
+		_speedDuration--;
+	else if (_speedDuration == 0)
+	{
+		_speedActive = false;
+		_totalTime = _moveTime * 2;
+		_speedDuration--;
+	}
+}
+
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
@@ -242,19 +287,14 @@ void MovementBehaviour::setBoardPos(glm::vec2 pos)
 	_boardPos = pos;
 }
 
-void MovementBehaviour::fireAbility(bool toggle)
-{
-	if (toggle)
-		_totalTime = _moveTime;
-	else
-		_totalTime = _moveTime * 2;
-
-	std::cout << _moveTime * 2;
-}
-
 bool MovementBehaviour::IsControlled()
 {
 	return _controlled;
+}
+
+bool MovementBehaviour::SpeedActive()
+{
+	return _speedActive;
 }
 
 Dir MovementBehaviour::GetDDir()

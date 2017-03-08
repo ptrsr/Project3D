@@ -36,7 +36,7 @@ int Server::StartServer()
 
 	cout << "Assigning socket info.." << endl;
 	_iSock.sin_family = AF_INET; //Family type to IPv4
-	_iSock.sin_addr.s_addr = inet_addr("127.0.0.1");// htonl(INADDR_ANY); //Set the server to our IP
+	_iSock.sin_addr.s_addr = /*inet_addr("127.0.0.1");*/ htonl(INADDR_ANY); //Set the server to our IP
 	_iSock.sin_port = htons(_port); //Set the server port
 
 	cout << "Applied socket info" << endl;
@@ -72,6 +72,7 @@ int Server::StartServer()
 	cout << "Socket listening succesful" << endl;
 
 	cout << "Server succesfully started" << endl;
+	cout << "Server IP: " << inet_ntoa(_iSock.sin_addr) << ":" << _port << endl;
 	_running = true;
 
 	thread acceptClients(&Server::AcceptClients, this); //Start thread for accepting clients
@@ -109,6 +110,43 @@ int Server::ConnectedCount()
 }
 
 //
+//Saving client to the list
+//
+void Server::SaveSocket(SOCKET client)
+{
+	for (int i = 0; i < _sockClients.size(); i++)
+	{
+		//Check if there is a empty slot from a leaver
+		if (_sockClients[i] == 0)
+		{
+			//Overwrite the spot with the new client
+			_sockClients[i] = client;
+			return;
+		}
+	}
+
+	//Add client to the list
+	_sockClients.push_back(client);
+}
+
+//
+//Returns id of client in the client list
+//
+int Server::GetClientId(SOCKET client)
+{
+	for (int i = 0; i < _sockClients.size(); i++)
+	{
+		if (_sockClients[i] == client)
+		{
+			return i; //Client found
+		}
+	}
+
+	cout << "ERROR: Client not found" << endl;
+	return -1; //Client not found
+}
+
+//
 //Accept Clients
 //
 void Server::AcceptClients()
@@ -138,7 +176,7 @@ void Server::AcceptClients()
 			if (PacketHelper::Send(DataType::NETWORKCMD, (char*)&netCode, client) != 1)
 			{
 				cout << "Client has succesfully connected" << endl;
-				_sockClients.push_back(client); //Save the socket
+				SaveSocket(client); //Save the socket
 				
 				thread handleClient(&Server::HandleClients, this, client); //Start thread for handling the client
 				handleClient.detach(); //Let the thread live on it's own
@@ -146,7 +184,7 @@ void Server::AcceptClients()
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
 
-				if (_connectedClients == 1)
+				if (_connectedClients == 3)
 				{
 					Sleep(7500);
 					StartData sd;
@@ -214,6 +252,10 @@ void Server::HandlePacket(DataType type, char* buf)
 			NotifyClients(DataType::MOVEDATA, (char*)&moveData);
 		}
 		break;
+	case DataType::USEDATA:
+		UseData useData = *reinterpret_cast<UseData*>(buf);
+		Level::getPlayer(useData.playerId)->_movement->activate = true;
+		break;
 	}
 }
 
@@ -221,6 +263,9 @@ void Server::NotifyClients(DataType type, char* data)
 {
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
+		if (_sockClients[i] == 0)
+			continue;
+
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
 	}
@@ -238,6 +283,9 @@ void Server::SendGameState(SOCKET client)
 	//Send current player positions
 	for (int i = 0; i < players.size(); i++)
 	{
+		if (players[i] == NULL)
+			continue;
+
 		Player* player = players[i];
 		PlayerData pData;
 		pData.playerId = player->getId();
@@ -249,7 +297,7 @@ void Server::SendGameState(SOCKET client)
 
 	//Send client player id and pos
 	PlayerData cData;
-	cData.playerId = static_cast<Id>(players.size() + 1);
+	cData.playerId = static_cast<Id>(GetClientId(client) + 2);
 	pair<int, int> spawnPos = level->GetSpawnPosition(cData.playerId);
 	cData.controlled = true;
 	cData.boardX = spawnPos.first;
@@ -272,6 +320,20 @@ void Server::CloseConnection(SOCKET client)
 void Server::CloseClientConnection(SOCKET client)
 {
 	closesocket(client); //Closes a client's connection
-	_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
+	for (int i = 0; i < _sockClients.size(); i++)
+	{
+		if (_sockClients[i] == client)
+		{
+			//Mark left player for deletion and notify clients
+			LeaveData ld;
+			ld.playerId = static_cast<Id>(i + 2);
+			Level::get()->AddLeave(ld);
+			NotifyClients(DataType::LEAVEDATA, (char*)&ld);
+
+			_sockClients[i] = 0; //Overwrite the socket to 0 for future use
+			break;
+		}
+	}
+	//_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
 	_connectedClients--; //Update current connected clients
 }

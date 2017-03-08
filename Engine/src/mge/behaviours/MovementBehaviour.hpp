@@ -21,24 +21,25 @@ class MovementBehaviour : public AbstractBehaviour
 		void setDirection();
 		void cancelMove();
 		void jump(float pHeight);
-		void fireAbility(bool toggle);
-		void earthAbility(bool toggle);
+		void activateSpeed();
 
 		void message(sendMsg::Message) { };
 
 		glm::vec2 getBoardPos();
 		void setBoardPos(glm::vec2 pos);
 		glm::vec2 getNextPos();
-		void enableAbility();
 		bool IsControlled();
 		Dir GetDDir();
 		void SetDDir(Dir dir);
+		bool SpeedActive();
+		bool activate = false;
 
 	private:
 		void inverseDirection();
 
 		void rotate(float pStep);
 		void translate(float pTime, float pMoveTime, float pStep);
+		void handleSpeed();
 		
 		Player* _player;
 		bool _controlled;
@@ -59,6 +60,7 @@ class MovementBehaviour : public AbstractBehaviour
 		float _lastMoveTime = 0;
 		float _totalTime	= 0;
 		float _moveMulti	= 1;
+		int _speedDuration  = 0;
 
 		float _moveTime		= 0;
 
@@ -68,8 +70,8 @@ class MovementBehaviour : public AbstractBehaviour
 		Dir _dDir = Dir::none;
 
 		bool _canceled = false;
-		bool _activate = false;
-		bool _available = true;
+		bool _send = false;
+		bool _speedActive = false;
 };
 
 #endif // ROTATINGBEHAVIOUR_H

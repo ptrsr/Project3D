@@ -30,6 +30,9 @@ void PickUp::spawn()
 
 			for each (Player* player in Level::getPlayers())
 			{
+				if (player == NULL)
+					continue;
+
 				glm::vec2 dif = player->getBoardPos() - pos;
 
 				if (std::abs(dif.x) <= 1 && std::abs(dif.y) <= 1 && ((!dif.x && !dif.y) || (dif.x && !dif.y) || (!dif.x && dif.y)))
@@ -93,7 +96,6 @@ void PickUp::step()
 	{
 		spawn();
 		Level::get()->CreatePacket(_type, _boardPos, glm::vec2(-1 - 1));
-		std::cout << "spawn" << std::endl;
 	}
 }
 
@@ -119,6 +121,6 @@ void PickUp::hover(float pStep)
 
 PickUp::~PickUp()
 {
-	std::vector<PickUp*>& pickUps = Level::getPickUps();
-	pickUps.erase(std::remove(pickUps.begin(), pickUps.end(), this), pickUps.end());
+	//std::vector<PickUp*>& pickUps = Level::getPickUps();
+	//pickUps.erase(std::remove(pickUps.begin(), pickUps.end(), this), pickUps.end());
 }

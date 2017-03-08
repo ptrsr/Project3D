@@ -14,6 +14,9 @@
 #include "../network/packets/TestData.hpp"
 #include "../network/packets/PickupData.hpp"
 #include "../network/packets/EffectData.hpp"
+#include "../network/packets/StoreData.hpp"
+#include "../network/packets/UseData.hpp"
+#include "../network/packets/LeaveData.hpp"
 
 using namespace std;
 

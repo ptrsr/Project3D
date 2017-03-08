@@ -171,7 +171,6 @@
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\PickUps\PickUp.hpp" />
     <ClInclude Include="..\game\PickUps\ScoreCube.hpp" />
-    <ClInclude Include="..\game\PickUps\Slow.hpp" />
     <ClInclude Include="..\game\PickUps\Speed.hpp" />
     <ClInclude Include="..\game\PickUps\Splash.hpp" />
     <ClInclude Include="..\game\Player.hpp" />
@@ -181,14 +180,17 @@
     <ClInclude Include="..\network\PacketHelper.hpp" />
     <ClInclude Include="..\network\packets\DataType.hpp" />
     <ClInclude Include="..\network\packets\EffectData.hpp" />
+    <ClInclude Include="..\network\packets\LeaveData.hpp" />
     <ClInclude Include="..\network\packets\MoveData.hpp" />
     <ClInclude Include="..\network\packets\PickupData.hpp" />
     <ClInclude Include="..\network\packets\PlayerData.hpp" />
     <ClInclude Include="..\network\packets\ScoreData.hpp" />
     <ClInclude Include="..\network\packets\StartData.hpp" />
+    <ClInclude Include="..\network\packets\StoreData.hpp" />
     <ClInclude Include="..\network\packets\TestData.hpp" />
     <ClInclude Include="..\network\packets\TileData.hpp" />
     <ClInclude Include="..\network\packets\TimeData.hpp" />
+    <ClInclude Include="..\network\packets\UseData.hpp" />
     <ClInclude Include="..\network\scene\SyncScene.hpp" />
     <ClInclude Include="..\network\Server.hpp" />
     <ClInclude Include="..\src\glm.hpp" />
@@ -273,7 +275,6 @@
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\PickUps\PickUp.cpp" />
     <ClCompile Include="..\game\PickUps\ScoreCube.cpp" />
-    <ClCompile Include="..\game\PickUps\Slow.cpp" />
     <ClCompile Include="..\game\PickUps\Speed.cpp" />
     <ClCompile Include="..\game\PickUps\Splash.cpp" />
     <ClCompile Include="..\game\Player.cpp" />
