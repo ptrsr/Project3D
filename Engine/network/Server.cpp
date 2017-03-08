@@ -36,7 +36,7 @@ int Server::StartServer()
 
 	cout << "Assigning socket info.." << endl;
 	_iSock.sin_family = AF_INET; //Family type to IPv4
-	_iSock.sin_addr.s_addr = /*inet_addr("127.0.0.1");*/ htonl(INADDR_ANY); //Set the server to our IP
+	_iSock.sin_addr.s_addr = htonl(INADDR_ANY); //Set the server to our IP
 	_iSock.sin_port = htons(_port); //Set the server port
 
 	cout << "Applied socket info" << endl;
