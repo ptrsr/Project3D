@@ -252,6 +252,17 @@ void Level::update(float pStep)
 		_pickUpQueue.erase(_pickUpQueue.begin());
 	}
 
+	
+	//cant get player correctly
+	/*if (_lobbyState != NULL) 
+	{ 
+		_lobbyState->Update(); 
+	}
+	else {
+		_lobbyState = new LobbyState(getPlayer(Id::p3));
+		_lobbyState->_initializeScene();
+	}
+*/
 	//Wait till all players are ready
 	if (!_start)
 		return;

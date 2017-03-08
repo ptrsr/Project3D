@@ -18,6 +18,7 @@
 #include "../network/packets/PickupData.hpp"
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/EffectData.hpp"
+#include "mge/scenes/menuStates/LobbyState.hpp"
 
 class Client;
 class Server;
@@ -103,6 +104,8 @@ private:
 	GameObject* _earthStatue;
 	GameObject* _waterStatue;
 	GameObject* _windStatue;
+	LobbyState * _lobbyState;
+	
 
 	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };
 

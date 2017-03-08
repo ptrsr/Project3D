@@ -340,6 +340,15 @@
     <ClInclude Include="..\network\packets\EffectData.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
+    <ClInclude Include="..\src\mge\core\Bloom.hpp" />
+    <ClInclude Include="..\src\mge\materials\StatueMaterial.hpp" />
+    <ClInclude Include="..\src\mge\scenes\menuStates\LobbyState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -606,6 +615,21 @@
     <ClCompile Include="..\game\PickUps\Splash.cpp">
       <Filter>game\PickUps</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\GameTimer.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\core\Bloom.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\materials\StatueMaterial.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\LobbyState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp">
+      <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\mge\core\lua\Makefile">
@@ -649,5 +673,10 @@
     </None>
     <None Include="..\assets\mge\lua scripts\main.lua" />
     <None Include="release_static_exe\GameObject.lua" />
+    <None Include="..\assets\mge\shaders\bloom\blend.fs" />
+    <None Include="..\assets\mge\shaders\bloom\blur.fs" />
+    <None Include="..\assets\mge\shaders\bloom\quad.vs" />
+    <None Include="..\assets\mge\shaders\statue.fs" />
+    <None Include="..\assets\mge\shaders\statue.vs" />
   </ItemGroup>
 </Project>
