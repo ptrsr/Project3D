@@ -36,6 +36,7 @@ public:
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
 	static void					reset();
+	static void					checkAreas();
 	void						ApplyPickUp(Player* pPlayer);
 	bool						checkIfFinished();
 	float						getScoreOfId(int index);
@@ -105,6 +106,7 @@ private:
 	bool _start = false;
 	bool _send = false;
 	bool _finished = false;
+	bool _checkAreas = false;
 
 	GameObject* _fireStatue;
 	GameObject* _earthStatue;

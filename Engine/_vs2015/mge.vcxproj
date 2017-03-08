@@ -249,11 +249,13 @@
     <ClInclude Include="..\src\mge\core\Message.hpp" />
     <ClInclude Include="..\src\mge\core\Renderer.hpp" />
     <ClInclude Include="..\src\mge\core\ShaderProgram.hpp" />
+    <ClInclude Include="..\src\mge\core\Skybox.hpp" />
     <ClInclude Include="..\src\mge\core\Texture.hpp" />
     <ClInclude Include="..\src\mge\core\World.hpp" />
     <ClInclude Include="..\src\mge\materials\AbstractMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\ColorMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\LitMaterial.hpp" />
+    <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\StatueMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\TextureMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\WobbleMaterial.hpp" />
@@ -345,11 +347,13 @@
     <ClCompile Include="..\src\mge\core\Mesh.cpp" />
     <ClCompile Include="..\src\mge\core\Renderer.cpp" />
     <ClCompile Include="..\src\mge\core\ShaderProgram.cpp" />
+    <ClCompile Include="..\src\mge\core\Skybox.cpp" />
     <ClCompile Include="..\src\mge\core\Texture.cpp" />
     <ClCompile Include="..\src\mge\core\World.cpp" />
     <ClCompile Include="..\src\mge\materials\AbstractMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\ColorMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\LitMaterial.cpp" />
+    <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\StatueMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\TextureMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\WobbleMaterial.cpp" />
@@ -379,6 +383,8 @@
     <None Include="..\assets\mge\shaders\litFragment.vs" />
     <None Include="..\assets\mge\shaders\litVertex.fs" />
     <None Include="..\assets\mge\shaders\litVertex.vs" />
+    <None Include="..\assets\mge\shaders\skybox.fs" />
+    <None Include="..\assets\mge\shaders\skybox.vs" />
     <None Include="..\assets\mge\shaders\statue.fs" />
     <None Include="..\assets\mge\shaders\statue.vs" />
     <None Include="..\assets\mge\shaders\terrain.fs" />

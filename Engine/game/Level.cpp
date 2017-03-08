@@ -419,6 +419,12 @@ void Level::update(float pStep)
 			player->update(pStep);
 	}
 
+	if (_checkAreas)
+	{
+		_board->resolveAreas();
+		_checkAreas = false;
+	}
+
 	//If animation is done
 	if (_curTime >= _totalTime)
 	{
@@ -580,6 +586,11 @@ void Level::spawnPickUp(Effect type, glm::vec2 pos)
 	_pickups.push_back(pickUp);
 	pickUp->setParent(this);
 	pickUp->spawn(pos);
+}
+
+void Level::checkAreas()
+{
+	Level::get()->_checkAreas = true;
 }
 
 void Level::removePickUp(glm::vec2 pos)

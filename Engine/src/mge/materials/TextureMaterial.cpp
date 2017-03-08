@@ -83,9 +83,7 @@ void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const g
 
 	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _texture->getId());
-	glUniform1i(_uTexture, 0);
+	renderTexture();
 
 	renderLights();
 	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);

@@ -120,7 +120,6 @@ void Board::resolveAreas()
 			if (tile->getOwner() == player->getId())
 				connections++;
 
-
 		if (connections >= 2)
 		{
 			glm::vec4 bounds = breathFirst.getBounds(playerTile);
@@ -131,7 +130,7 @@ void Board::resolveAreas()
 					for (int i = -1; i <= 1; i++)
 					{
 						Tile* tile = getTile(playerTile->getBoardPos() + glm::vec2(i, j));
-						if (tile && tile->getOwner() == playerTile->getOwner())
+						if (tile && tile->getOwner() != playerTile->getOwner())
 							breathFirst.fill(tile, player->getId(), bounds);
 					}
 			}

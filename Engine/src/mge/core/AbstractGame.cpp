@@ -9,6 +9,7 @@ using namespace std;
 
 #include "mge/util/InputHandler.h"
 #include "Bloom.hpp"
+#include "Skybox.hpp"
 
 AbstractGame::AbstractGame():_window(NULL),_renderer(NULL),_world(NULL), _fps(0)
 {
@@ -116,6 +117,7 @@ void AbstractGame::run()
 				cout << "B works" << endl;
 			}
 
+			Skybox::render();
 			Bloom::renderToFBO();
             _render();
 			Bloom::blur(2);
