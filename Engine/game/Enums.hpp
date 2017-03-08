@@ -2,7 +2,7 @@
 #define ENUMS_H
 
 enum Id {
-	none,
+	empty,
 	p1,
 	p2,
 	p3,
@@ -14,7 +14,7 @@ enum PType {
 };
 
 enum Dir {
-	emtpy,
+	none,
 	up,
 	down,
 	left,
@@ -22,9 +22,21 @@ enum Dir {
 };
 
 enum SFX {
-	playerJump1 = 0,
+	playerJump1 = 0, 
+	backButton1 = 1,
+	enterButton1 = 2,
+	switchButton1 = 3,
+	grabPickup1 = 4,
+	usespeedPickup1 = 5,
+	usesplashPickup1 = 6,
+	connectionFailed1 = 7,
+	connectionSucces1 = 8
+
 };
 
-
+enum Effect {
+	splash,
+	speed
+};
 
 #endif // !ENUMS_H

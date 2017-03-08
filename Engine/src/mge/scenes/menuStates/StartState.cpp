@@ -10,6 +10,7 @@ using namespace std;
 
 #include "mge/core/Camera.hpp"
 #include "mge/auxiliary/ObjectCache.hpp"
+#include "mge/auxiliary/AudioManager.h"
 
 #include "mge/materials/AbstractMaterial.hpp"
 
@@ -130,6 +131,7 @@ void StartState::_updateColor() {
 		if (_counter == 0) _counter = 2;
 		if (_counter == 1) _counter = 3;
 
+		AudioManager::get()->PlaySound(SFX::switchButton1);
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
@@ -141,7 +143,7 @@ void StartState::_updateColor() {
 
 		if (_counter == 2) _counter = 0;
 		if (_counter == 3) _counter = 1;
-
+		AudioManager::get()->PlaySound(SFX::switchButton1);
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
@@ -153,6 +155,7 @@ void StartState::_updateColor() {
 
 		if (_counter == 1) _counter = 0;
 		if (_counter == 3) _counter = 2;
+		AudioManager::get()->PlaySound(SFX::switchButton1);
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
@@ -163,6 +166,7 @@ void StartState::_updateColor() {
 		_isKeyPress = true;
 		if (_counter == 2) _counter++;
 		if (_counter == 0) _counter++;
+		AudioManager::get()->PlaySound(SFX::switchButton1);
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];

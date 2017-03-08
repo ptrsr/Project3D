@@ -130,7 +130,6 @@ void AbstractGame::run()
 
 void AbstractGame::_update(float pStep) {
     _world->update(pStep);
-	_gameTimer->Update(pStep);
 	
 }
 
@@ -153,11 +152,11 @@ void AbstractGame::_processEvents()
             case sf::Event::Closed:
                 exit = true;
                 break;
-            //case sf::Event::KeyPressed:
-            //    if (event.key.code == sf::Keyboard::Escape) {
-            //        exit = true;
-            //    }
-            //    break;
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Escape) {
+                    exit = true;
+                }
+                break;
             case sf::Event::Resized:
                 //would be better to move this to the renderer
                 //this version implements nonconstrained match viewport scaling

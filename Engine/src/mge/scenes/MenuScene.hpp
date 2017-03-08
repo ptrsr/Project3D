@@ -32,8 +32,8 @@ class MenuScene : public AbstractGame
 		AbstactState * _startState;
 		AbstactState * _joinState;
 		AbstactState * _creditsState;
+		AbstactState * _winState;
 		AbstactState* _newState = nullptr;
-		Text * _text;
 		Level* _level;
 		AudioManager* _audioManager;
 		int _currentState = -1;

@@ -47,23 +47,28 @@ void Tile::setOwner(Id pPlayer)
 {
 	BreathFirst breathFirst;
 
-	if (_owner != Id::none && _owner != pPlayer)
+	if (_owner != Id::empty)
 	{
-		for each (Tile* tile in getConnections())
-		{
-			if (tile->getOwner() == _owner)
-				Level::getBoard()->checkTile(tile);
+		Level::getBoard()->changeScore(_owner, -1);
 
-			if (tile->getOwner() == pPlayer && tile->_connected == false)
-				breathFirst.connect(tile, true);
+		if (_owner != pPlayer)
+		{
+			for each (Tile* tile in getConnections())
+			{
+				if (tile->getOwner() == _owner)
+					Level::getBoard()->checkTile(tile);
+
+				if (tile->getOwner() == pPlayer && tile->_connected == false)
+					breathFirst.connect(tile, true);
+			}
 		}
 	}
-
 	_owner = pPlayer;
+	Level::getBoard()->changeScore(_owner, 1);
 
 	switch (pPlayer)
 	{
-	case emtpy:
+	case Id::empty:
 		_material->setColor(glm::vec3(1));
 		break;
 

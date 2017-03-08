@@ -3,6 +3,7 @@
 
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/materials/LitMaterial.hpp"
+
 #include "../game/Player.hpp"
 
 #include <vector>
@@ -23,14 +24,16 @@ public:
 	void hover(float pStep);
 
 	glm::vec2 getBoardPos();
-
+	Effect GetType();
+	void spawn(glm::vec2 pos);
+	void reset();
 
 protected:
-	void reset();
 
 	int _minDelay = 0;
 	int _maxDelay = 0;
 
+	Effect _type;
 
 private:
 	void spawn();

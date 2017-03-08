@@ -41,7 +41,7 @@ void AudioManager::PlaySound(SFX soundEnum) {
 
 void AudioManager::LoadAllSFX() {
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 9; i++) {
 		if (!_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav")) {
 			cout << "Couldn't load SFX from file" << endl;
 
@@ -55,8 +55,30 @@ void AudioManager::LoadAllSFX() {
 void AudioManager::GetNamesInString() {
 
 	_nameOfSound[0] = "playerJump1";
-	_nameOfSound[1] = "keySwitch";
+	_nameOfSound[1] = "backButton1";
+	_nameOfSound[2] = "enterButton1";
+	_nameOfSound[3] = "switchButton1";
+	_nameOfSound[4] = "grabPickup1";
+	_nameOfSound[5] = "usespeedPickup1";
+	_nameOfSound[6] = "usesplashPickup1";
+	_nameOfSound[7] = "connectionFailed1";
+	_nameOfSound[8] = "connectionSucces1";
 	
+}
+
+void AudioManager::startLevelMusic() {
+	if (_levelIsPlaying) return;
+	_backgroundMusic->stop();
+	_backgroundMusic = new Music();
+	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav");
+		_backgroundMusic->play();
+		_levelIsPlaying = true;
+	}
 }
 
 AudioManager::~AudioManager()

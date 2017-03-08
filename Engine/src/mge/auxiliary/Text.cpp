@@ -77,8 +77,7 @@ void Text::Update() {
 int Text::CheckSelection() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress) {
 		_isKeyPress = true;
-
-		 return -1;
+		
 	}
 	else return 2;
 }
@@ -104,9 +103,23 @@ void Text::_updateIP() {
 		cout << text << endl;
 	}
 	
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) && !_isKeyPress)
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress)
 	{
 		_isKeyPress = true;
+		size_t pos = 0;
+		std::string token;
+		std::string delimiter = ":";
+		std::string ip = "";
+		int port = 0;
+		while ((pos = text.find(delimiter)) != std::string::npos) {
+			token = text.substr(0, pos);
+			text.erase(0, pos + delimiter.length());
+			ip = token;
+			std::cout <<"IP:" <<ip << std::endl;
+
+		}
+		port = atoi(text.c_str());
+		cout <<"Port(int):" <<port<<endl;
 	}
 		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !_isKeyPress)
@@ -125,7 +138,6 @@ void Text::_updateIP() {
 		text += "1";
 		
 		_isKeyPress = true;
-		cout << text << endl;
 
 		createObject('1');
 	}
@@ -135,7 +147,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "2";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('2');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !_isKeyPress)
@@ -144,7 +155,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "3";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('3');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !_isKeyPress)
@@ -153,7 +163,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "4";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('4');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && !_isKeyPress)
@@ -162,7 +171,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "5";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('5');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6) && !_isKeyPress)
@@ -171,7 +179,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "6";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('6');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7) && !_isKeyPress)
@@ -180,7 +187,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "7";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('7');
 	}
 
@@ -189,7 +195,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "8";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('8');
 	}
 
@@ -198,7 +203,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += "9";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('9');
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Period) && !_isKeyPress) {
@@ -206,7 +210,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += ".";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject('.');
 	}
 
@@ -217,7 +220,6 @@ void Text::_updateIP() {
 		if (text.size() == 23) return;
 		text += ":";
 		_isKeyPress = true;
-		cout << text << endl;
 		createObject(':');
 
 	}

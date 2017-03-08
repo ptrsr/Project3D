@@ -5,6 +5,7 @@
 
 #include "mge/core/GameObject.hpp"
 #include "mge/scenes/menuStates/AbstactState.hpp"
+#include "mge/auxiliary/Text.hpp"
 class DebugHud;
 
 class JoinState : public AbstactState
@@ -24,6 +25,8 @@ class JoinState : public AbstactState
 	private:
 		GameObject* _back;
 		GameObject* _plane;
+		GameObject* _enterIp;
+		Text * _text;
 		int _counter = 0;
 		void _updateColor();
 		void _clearObjectColor();

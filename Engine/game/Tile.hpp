@@ -30,7 +30,7 @@ public:
 
 private:
 	glm::vec2 _boardPos;
-	Id _owner = Id::none;
+	Id _owner = Id::empty;
 
 };
 

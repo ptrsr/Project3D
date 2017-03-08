@@ -22,10 +22,12 @@ ScoreCube::ScoreCube(float moveTime) : PickUp("ScoreCube", moveTime)
 
 void ScoreCube::applyPickUp(Player* pPlayer)
 {
-	pPlayer->addScore(Level::getBoard()->getScore(pPlayer->getId()));
+	int score = Level::getBoard()->getScore(pPlayer->getId());
+	pPlayer->addScore(score);
+	Level::get()->CreatePacket(pPlayer->getId(), score);
 	
 	for each (Player* player in Level::getPlayers())
-		player->enableAbility();
+		//player->enableAbility();
 	
 	reset();
 }

@@ -33,12 +33,12 @@ using namespace std;
 #include "mge/util/DebugHud.hpp"
 #include "mge/util/InputHandler.h"
 #include "mge/auxiliary/LuaParser.hpp"
-#include "mge/auxiliary/GameTimer.hpp"
 
 
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
+#include "mge/scenes/menuStates/WinState.hpp"
 
 #include "mge/config.hpp"
 #include "mge/scenes/MenuScene.hpp"
@@ -58,23 +58,16 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera (glm::vec2(1280, 720),"camera", glm::vec3(-4.5f,2,28));
+    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(-4.5f, 2,28));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
-
-
 
 	cout << "Initializing HUD" << endl;
 	_hud = new DebugHud(_window);
 	cout << "HUD initialized." << endl << endl;
 
 
-	_gameTimer = new GameTimer();
-	_gameTimer->_initializeScene();
-	_gameTimer->setTimeLenght(2.5f);
-
-	AudioManager::get();
 
 
 	LuaParser* luaParser = new LuaParser("main.lua");
@@ -98,9 +91,10 @@ void MenuScene::_initializeScene()
 
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
-
-	_text = new Text(TextType::IP);
-	_text->_initializeScene();
+	
+	
+	_winState = new WinState();
+	_winState->_initializeScene();
 
 
 	Level::get();
@@ -118,7 +112,6 @@ void MenuScene::_render() {
 
 	if (_startState != nullptr && _joinState != nullptr && _creditsState != nullptr) {
 
-		_text->Update();
 		switch (_currentState) {
 		case -1:
 			_startState->Update();
@@ -146,28 +139,35 @@ void MenuScene::_render() {
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
+
+				Level::get()->Host();
+				//Level::get()->Join("127.0.0.1", 56789);
+
+			}
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
 			}
 			if (_currentState != 3) _cameraStateChanged = false;
 			break;
 
 		case 1:
-
 			cout << "CreditsState" << endl;
 			_creditsState->Update();
-
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
 			break;
-
-		case 0:
-			
-			_window->close();
-			
+		case 4:
+			_winState->Update();
+			_winState->CheckSelection();
+			if (!_cameraStateChanged) {
+				cout << "camera state changed" << endl;
+				_changeCameraState(_winState);
+			}
+			if (_currentState != 4) _cameraStateChanged = false;
 			break;
-
 	}
 	}
 	
@@ -204,8 +204,8 @@ void MenuScene::_updateHud() {
 
 	string debugInfo = "";
 	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
-	debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
-	debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
+	//debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
+	//debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
 
 	_hud->setDebugInfo(debugInfo);
 	_hud->draw();

@@ -6,17 +6,40 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "../game/Enums.hpp"
 
+#include "../network/Client.hpp"
+
 #include <algorithm>
 
-MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait) :
-	_player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight), _totalTime(pTime), _moveTime(glm::clamp(pTime * ( 1 - pWait), 0.f, 1.f))
+MovementBehaviour::MovementBehaviour(Player* pPlayer, glm::vec2 pBoardPos, float pJumpHeight, float const pTime, float pWait, bool controlled) :
+	_player(pPlayer), _boardPos(pBoardPos), _cJumpHeight(pJumpHeight), _totalTime(pTime), _moveTime(glm::clamp(pTime * ( 1 - pWait), 0.f, 1.f)), _controlled(controlled)
 { }
 
 void MovementBehaviour::update(float pStep)
 {
+	pStep *= _moveMulti;
+
 	_curTime += pStep;
 
-	checkKeys();
+	if (_curTime < (_totalTime * 0.8f))
+	{
+		checkKeys();
+		_send = false;
+	}
+	else
+	{
+		if (!_send)
+		{
+			Level::get()->SendMoveData();
+
+			//use pickup
+			if (activate)
+			{
+				_player->UsePickUp();
+				activate = false;
+			}
+		}
+		_send = true;
+	}
 
 	if (_curTime < _moveTime)
 	{
@@ -31,14 +54,14 @@ void MovementBehaviour::update(float pStep)
 		//finish player animation
 		finishMove(_moveTime, _lastMoveTime);
 
+		//move to actual position
+		_player->setLocalPosition(glm::vec3(_boardPos.x, 1.0f, _boardPos.y));
+
 		//set tiles to new owner
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
 
 		//apply pickups
-		Level::applyPickUp(_player);
-
-		//apply areas
-		Level::checkArea();
+		Level::get()->ApplyPickUp(_player);
 
 		_lastMoveTime = 0;
 	}
@@ -52,11 +75,7 @@ void MovementBehaviour::update(float pStep)
 		_curTime -= _totalTime;
 		_deltaTime = _curTime;
 
-		if (_activate)
-		{
-			_activate = false;
-			Level::applyAbility(_player);
-		}
+		handleSpeed();
 	}
 }
 
@@ -82,8 +101,9 @@ void MovementBehaviour::move(float pStep)
 		rotate(step / _moveTime);
 		translate(_curTime, _moveTime, step);
 
+		_boardPos -= glm::vec2(_trans.x, _trans.z);
+
 		_canceled = false;
-		_wasCanceled = true;
 	}
 	else
 	{
@@ -97,11 +117,7 @@ void MovementBehaviour::finishMove(float pMoveTime, float pLastMoveTime)
 	rotate(1 - pLastMoveTime / pMoveTime);
 	translate(pMoveTime, pMoveTime, pMoveTime - pLastMoveTime);
 
-	if (!_wasCanceled)
-		_boardPos += glm::vec2(_trans.x, _trans.z);
-
-	_wasCanceled = false;
-
+	_boardPos += glm::vec2(_trans.x, _trans.z);
 	_cJumpHeight = _dJumpHeight;
 }
 
@@ -122,7 +138,7 @@ void MovementBehaviour::translate(float pTime, float pMoveTime, float pStep)
 
 	glm::mat4 tMat;
 
-	if (_cDir == emtpy)
+	if (_cDir == Dir::none)
 		tMat = glm::translate(glm::mat4(), glm::vec3(0, difference, 0));
 	else
 		tMat = glm::translate(glm::mat4(), (pStep * (_distance / pMoveTime) * _trans + glm::vec3(0, difference, 0)));
@@ -135,7 +151,7 @@ void MovementBehaviour::setDirection()
 {
 	_cDir = _dDir;
 
-	if (_cDir == Dir::emtpy)
+	if (_cDir == Dir::none)
 		return;
 
 	glm::mat4 worldMat = _player->getWorldTransform();
@@ -172,52 +188,42 @@ void MovementBehaviour::setDirection()
 
 void MovementBehaviour::checkKeys()
 {
-	if (_player->getId() == p1)
+	if (!_controlled)
+	return;
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		_dDir = Dir::up;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		_dDir = Dir::down;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		_dDir = Dir::right;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		_dDir = Dir::left;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-			_dDir = Dir::up;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-			_dDir = Dir::down;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			_dDir = Dir::right;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			_dDir = Dir::left;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _available)
+		if (Level::get()->GetStart())
 		{
-			_activate = true;
-			//_available = false;
+			if (!activate)
+			{
+				//Activate pickup
+				activate = true;
 
+				Level* level = Level::get();
+				if (level->GetClient() != NULL)
+				{
+					level->CreatePacket(_player->getId());
+				}
+			}
+		}
+		else
+		{
+			//Ready up
 		}
 	}
-	else if (_player->getId() == p3)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			_dDir = Dir::up;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			_dDir = Dir::down;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			_dDir = Dir::right;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			_dDir = Dir::left;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && _available)
-		{
-			_activate = true;
-			//_available = false;
-		}
-	}
-}
-
-void MovementBehaviour::enableAbility()
-{
-	_available = true;
 }
 
 void MovementBehaviour::inverseDirection()
@@ -245,7 +251,6 @@ void MovementBehaviour::inverseDirection()
 void MovementBehaviour::cancelMove()
 {
 	_canceled = true;
-	_boardPos -= glm::vec2(_trans.x, _trans.z);
 }
 
 void MovementBehaviour::jump(float pHeight)
@@ -253,27 +258,53 @@ void MovementBehaviour::jump(float pHeight)
 	_cJumpHeight = pHeight;
 }
 
+void MovementBehaviour::activateSpeed()
+{
+	_speedActive = true;
+	_speedDuration = 5;
+	_totalTime = _moveTime;
+}
 
+void MovementBehaviour::handleSpeed()
+{
+	if (_speedDuration > 0)
+		_speedDuration--;
+	else if (_speedDuration == 0)
+	{
+		_speedActive = false;
+		_totalTime = _moveTime * 2;
+		_speedDuration--;
+	}
+}
 
 glm::vec2 MovementBehaviour::getBoardPos()
 {
 	return _boardPos;
 }
 
-void MovementBehaviour::fireAbility(bool toggle)
+void MovementBehaviour::setBoardPos(glm::vec2 pos)
 {
-	if (toggle)
-		_totalTime = _moveTime;
-	else
-		_totalTime = _moveTime * 2;
-
-	std::cout << _moveTime * 2;
+	_boardPos = pos;
 }
 
-void MovementBehaviour::earthAbility(bool toggle)
+bool MovementBehaviour::IsControlled()
 {
-	_activate = false;
-	_available = false;
+	return _controlled;
+}
+
+bool MovementBehaviour::SpeedActive()
+{
+	return _speedActive;
+}
+
+Dir MovementBehaviour::GetDDir()
+{
+	return _dDir;
+}
+
+void MovementBehaviour::SetDDir(Dir dir)
+{
+	_dDir = dir;
 }
 
 glm::vec2 MovementBehaviour::getNextPos()

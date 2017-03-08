@@ -11,11 +11,15 @@ public:
 	Board();
 
 	bool outOfBounds(glm::vec2);
+	void ResetBoard();
+	void splash(Id playerId, glm::vec2 pBoardPos);
 
 	void setOwner(glm::vec2 pBoardPos, Id pPlayer);
 	Id getOwnerOfTile(glm::vec2 pBoardPos);
 
 	int getScore(Id pPlayerId);
+	void changeScore(Id pPlayerId, int change);
+	Id getPlayerWithHighestScore();
 
 	void fireAbility(glm::vec2 pBoardPos);
 	void earthAbility(glm::vec2 pBoardPos);
@@ -28,6 +32,8 @@ public:
 
 private:
 	vector<Tile*> _tilesToBeChecked;
+
+	int _score[4] = { 0,0,0,0 };
 
 	glm::vec2 _size = glm::vec2(9, 9);
 
