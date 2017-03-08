@@ -8,7 +8,6 @@
 #include "Board.hpp"
 
 #include "Enums.hpp"
-#include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
 #include "PickUps/Speed.hpp"
 
