@@ -25,7 +25,7 @@ public:
 	static void					reset();
 	static void					applyPickUp(Player* pPlayer);
 	static void					applyAbility(Player* pPlayer);
-	static void					moveDone();
+	static void					checkArea();
 
 	virtual void update(float pStep);
 
@@ -58,7 +58,7 @@ private:
 	int _waterCooldown = 0;
 	int _windCooldown  = 0;
 
-	bool checkAreas = false;
+	bool _checkAreas = false;
 
 	Level();
 

@@ -21,6 +21,7 @@ public:
 	void earthAbility(glm::vec2 pBoardPos);
 
 	Tile* getTile(glm::vec2 pBoardPos);
+	void resolveConnections();
 	void resolveAreas();
 
 	void checkTile(Tile* pTile);

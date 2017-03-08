@@ -7,6 +7,7 @@
 #include "Level.hpp"
 
 #include "mge/auxiliary/PathFinder.hpp"
+#include "mge/auxiliary/BreathFirst.hpp"
 #include "Player.hpp"
 
 Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
@@ -44,13 +45,19 @@ vector<Tile*> Tile::getConnections()
 
 void Tile::setOwner(Id pPlayer)
 {
+	BreathFirst breathFirst;
+
 	if (_owner != Id::none && _owner != pPlayer)
 	{
 		for each (Tile* tile in getConnections())
+		{
 			if (tile->getOwner() == _owner)
 				Level::getBoard()->checkTile(tile);
-	}
 
+			if (tile->getOwner() == pPlayer && tile->_connected == false)
+				breathFirst.connect(tile, true);
+		}
+	}
 
 	_owner = pPlayer;
 

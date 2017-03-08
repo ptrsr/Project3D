@@ -37,20 +37,51 @@ void Board::checkTile(Tile* pTile)
 	_tilesToBeChecked.push_back(pTile);
 }
 
-void Board::resolveAreas()
+void Board::resolveConnections()
 {
 	BreathFirst breathFirst;
 
 	while (_tilesToBeChecked.size() != 0)
 	{
 		Tile* tile = _tilesToBeChecked[0];
-		std::cout << !PathFinder::canReach(tile, Level::getBoard()->getTile(Level::getPlayer(tile->getOwner())->getBoardPos())) << std::endl;
-
 
 		if (tile->_connected == true && !PathFinder::canReach(tile, Level::getBoard()->getTile(Level::getPlayer(tile->getOwner())->getBoardPos())))
-			breathFirst.disconnect(tile);
+			breathFirst.connect(tile, false);
 
 		_tilesToBeChecked.erase(_tilesToBeChecked.begin());
+	}
+}
+
+void Board::resolveAreas()
+{
+	int connections = 0;
+
+	BreathFirst breathFirst;
+
+	for each (Player* player in Level::getPlayers())
+	{
+		Tile* playerTile = getTile(player->getBoardPos());
+
+		for each (Tile* tile in playerTile->getConnections())
+			if (tile->getOwner() == player->getId())
+				connections++;
+
+
+		if (connections >= 2)
+		{
+			glm::vec4 bounds = breathFirst.getBounds(playerTile);
+
+			if (bounds != glm::vec4(0))
+			{
+				for (int j = -1; j <= 1; j++)
+					for (int i = -1; i <= 1; i++)
+					{
+						Tile* tile = getTile(playerTile->getBoardPos() + glm::vec2(i, j));
+						if (tile && tile->getOwner() == playerTile->getOwner())
+							breathFirst.fill(tile, player->getId(), bounds);
+					}
+			}
+		}
 	}
 }
 

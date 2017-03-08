@@ -30,6 +30,40 @@ Level::Level() :GameObject("level")
 	
 }
 
+void Level::update(float pStep)
+{
+	_curTime += pStep;
+
+	for each (PickUp* pickUp in _pickups)
+		pickUp->hover(pStep);
+
+	for each (Player* player in _players)
+		player->update(pStep);
+
+	if (_checkAreas)
+	{
+		_board->resolveConnections();
+		_board->resolveAreas();
+		_checkAreas = false;
+	}
+
+	//If animation is done
+	if (_curTime >= _totalTime)
+	{
+		for each (PickUp* pickUp in _pickups)
+			pickUp->step();
+
+		_board->resolveConnections();
+
+		coolDowns();
+		checkCollisions();
+
+
+
+		_curTime -= _totalTime;
+	}
+}
+
 Level* Level::get()
 {
 	if (!_level)
@@ -95,34 +129,12 @@ void Level::applyPickUp(Player* pPlayer)
 			pickUp->applyPickUp(pPlayer);
 }
 
-void Level::update(float pStep)
+
+
+void Level::checkArea()
 {
-	_curTime += pStep;
-
-	for each (PickUp* pickUp in _pickups)
-		pickUp->hover(pStep);
-
-	for each (Player* player in _players)
-		player->update(pStep);
-
-	//If animation is done
-	if (_curTime >= _totalTime)
-	{
-		for each (PickUp* pickUp in _pickups)
-			pickUp->step();
-
-		_board->resolveAreas();
-
-		coolDowns();
-		checkCollisions();
-
-
-
-		_curTime -= _totalTime;
-	}
+	Level::get()->_checkAreas = true;
 }
-
-
 
 void Level::applyAbility(Player* pPlayer)
 {
