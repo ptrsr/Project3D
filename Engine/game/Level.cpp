@@ -8,6 +8,7 @@
 #include "Board.hpp"
 #include "mge/auxiliary/ObjectCache.hpp"
 #include "mge/materials/StatueMaterial.hpp";
+#include "mge/auxiliary/AudioManager.h"
 #include "Enums.hpp"
 #include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
@@ -266,9 +267,18 @@ void Level::update(float pStep)
 		_lobbyState->_initializeScene();
 	}
 */
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
+		Start(true);
+	}
+	
 	//Wait till all players are ready
 	if (!_start)
 		return;
+
+	//has a bool check so it happens only once
+	AudioManager::get()->startLevelMusic();
+
+	
 	
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)

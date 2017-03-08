@@ -1,4 +1,5 @@
 #include "mge/behaviours/MovementBehaviour.hpp"
+#include "mge/auxiliary/AudioManager.h"
 
 #include "../game/Level.hpp"
 #include "../game/Player.hpp"
@@ -33,6 +34,9 @@ void MovementBehaviour::update(float pStep)
 	{
 		//finish player animation
 		finishMove(_moveTime, _lastMoveTime);
+
+		//playing player landing sound
+		AudioManager::get()->PlaySound(SFX::playerJump1);
 
 		//set tiles to new owner
 		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
