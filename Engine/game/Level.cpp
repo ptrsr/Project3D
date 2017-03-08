@@ -265,8 +265,8 @@ void Level::update(float pStep)
 	else {
 		_lobbyState = new LobbyState(getPlayer(Id::p3));
 		_lobbyState->_initializeScene();
-	}
-*/
+	}*/
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
 		Start(true);
 	}

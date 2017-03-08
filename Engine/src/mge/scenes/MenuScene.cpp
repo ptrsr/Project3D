@@ -38,6 +38,7 @@ using namespace std;
 #include "mge/scenes/menuStates/StartState.hpp"
 #include "mge/scenes/menuStates/JoinState.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
+#include "mge/scenes/menuStates/WinState.hpp"
 
 #include "mge/config.hpp"
 #include "mge/scenes/MenuScene.hpp"
@@ -90,6 +91,11 @@ void MenuScene::_initializeScene()
 
 	_creditsState = new CreditsState();
 	_creditsState->_initializeScene();
+	
+	
+	_winState = new WinState();
+	_winState->_initializeScene();
+
 
 	Level::get();
 
@@ -139,6 +145,9 @@ void MenuScene::_render() {
 				//Level::get()->Join("127.0.0.1", 8888);
 
 			}
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
+			}
 			if (_currentState != 3) _cameraStateChanged = false;
 			break;
 
@@ -151,7 +160,14 @@ void MenuScene::_render() {
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
 			break;
-
+		case 4:
+			_winState->Update();
+			if (!_cameraStateChanged) {
+				cout << "camera state changed" << endl;
+				_changeCameraState(_winState);
+			}
+			if (_currentState != 4) _cameraStateChanged = false;
+			break;
 	}
 	}
 	
