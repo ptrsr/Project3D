@@ -19,7 +19,9 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 
 	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait, controlled);
 	this->setBehaviour(_movement);
-
+	if (!controlled) {
+		_visualization = new VisualPickup();
+	}
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "elementcube.obj"));
 
@@ -39,8 +41,10 @@ void Player::StorePickUp(PickUp* pickUp)
 		{
 		case Effect::splash:
 			_pickUp = new Splash(0);
+			_visualization->visualizeSplash();
 			break;
 		case Effect::speed:
+			_visualization->visualizeSpeed();
 			_pickUp = new Speed(0);
 			break;
 		}
@@ -56,6 +60,8 @@ void Player::UsePickUp()
 		{
 			_pickUp->applyPickUp(this);
 		}
+
+		_visualization->clear();
 		delete _pickUp;
 		_pickUp = NULL;
 	}

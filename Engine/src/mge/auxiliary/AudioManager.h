@@ -11,6 +11,7 @@ private:
 	sf::Music* _backgroundMusic;
 	sf::Sound _sound;
 	bool _levelIsPlaying = false;
+	bool _menuIsPlaying = false;
 	AudioManager();
 
 	static AudioManager* _audioManager;
@@ -21,6 +22,7 @@ public:
 	void LoadAllSFX();
 	void GetNamesInString();
 	void startLevelMusic();
+	void startMenuMusic();
 	~AudioManager();
 };
 

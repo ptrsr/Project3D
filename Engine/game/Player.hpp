@@ -4,6 +4,7 @@
 #include <iostream>
 #include "mge/behaviours/MovementBehaviour.hpp"
 #include "mge/core/GameObject.hpp"
+#include "PickUps/VisualPickup.hpp"
 #include "Tile.hpp"
 
 #include "Enums.hpp"
@@ -19,7 +20,7 @@ private:
 
 public:
 	MovementBehaviour* _movement;
-
+	VisualPickup* _visualization;
 	bool _checked = false;
 
 	Player(Id playerId, glm::vec2 boardPos, float pMoveTime, float pWait, bool controlled);

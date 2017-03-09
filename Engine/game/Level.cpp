@@ -19,7 +19,10 @@ Level* Level::_level;
 Level::Level() :GameObject("level")
 {
 	srand(time(NULL));
-
+	_finished = false;
+	for (int i = 0; i < 4; i++) {
+		_currentScore[i] = 0;
+	}
 	setLocalPosition(glm::vec3(-8.5f, 0, 0.5f));
 
 	_spawnPos.push_back(make_pair<int, int>(0, 0));
@@ -382,7 +385,6 @@ void Level::update(float pStep)
 		return;
 
 	//has a bool check so it happens only once
-	AudioManager::get()->startLevelMusic();
 
 
 	//Spawns random pick up
@@ -395,16 +397,18 @@ void Level::update(float pStep)
 
 
 	if (_finished) return;
+
+	AudioManager::get()->startLevelMusic();
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
 
 	if (hightestScorePlayer != -1)
 	{
 		_currentScore[hightestScorePlayer] += pStep;
-		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
 		if (_currentScore[hightestScorePlayer] == 30.0f) {
 
 			_finished = true;
 		}
+		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
