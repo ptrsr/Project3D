@@ -76,6 +76,8 @@ void MenuScene::_initializeScene()
 	GameObject* holder = new GameObject("holder");
 	GameObject* light = new GameObject("light");
 
+	AudioManager::get();
+
 	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
@@ -143,8 +145,8 @@ void MenuScene::_render() {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
 
-				//Level::get()->Host();
-				Level::get()->Join("192.168.1.103", 56789);
+				Level::get()->Host();
+				//Level::get()->Join("192.168.1.103", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {

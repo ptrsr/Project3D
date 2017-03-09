@@ -284,8 +284,6 @@ void Server::CountReady()
 {
 	if (_readyCount == 2)
 	{
-		Sleep(7500);
-
 		Level::get()->ResetStatues();
 
 		StartData sd;
