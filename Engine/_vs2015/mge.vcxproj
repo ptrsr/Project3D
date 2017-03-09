@@ -184,6 +184,7 @@
     <ClInclude Include="..\network\packets\MoveData.hpp" />
     <ClInclude Include="..\network\packets\PickupData.hpp" />
     <ClInclude Include="..\network\packets\PlayerData.hpp" />
+    <ClInclude Include="..\network\packets\ReadyData.hpp" />
     <ClInclude Include="..\network\packets\ScoreData.hpp" />
     <ClInclude Include="..\network\packets\StartData.hpp" />
     <ClInclude Include="..\network\packets\StoreData.hpp" />

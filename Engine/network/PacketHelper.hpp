@@ -17,6 +17,7 @@
 #include "../network/packets/StoreData.hpp"
 #include "../network/packets/UseData.hpp"
 #include "../network/packets/LeaveData.hpp"
+#include "../network/packets/ReadyData.hpp"
 
 using namespace std;
 

@@ -23,6 +23,7 @@ public:
 	void SendAll(DataType type, char* data);
 
 	int ConnectedCount();
+	void AddReadyCount(bool value); //Changes the ready count
 private:
 	SOCKET _sock; //Our socket that client's use to connect
 	vector<SOCKET> _sockClients; //Sockets to send/receive clients
@@ -34,6 +35,7 @@ private:
 	int _maxClients = 3; //Max amount of clients we will accept : 3, because we count as 1 as well : limit of players = 4
 	bool _running = false; //Indication if the server is running
 	int _timeOut = 120000; //Time-out in mili-seconds
+	int _readyCount = 0; //Ready count for clients
 
 	void SaveSocket(SOCKET client); //Saves socket to the client list
 	int GetClientId(SOCKET client); //Gets the id on which spot the client is in the client list
@@ -41,6 +43,7 @@ private:
 	void HandleClients(SOCKET client); //Receives data from all clients
 	void HandlePacket(DataType type, char* buf); //Handles received packages
 	void NotifyClients(DataType type, char* data); //Sends data to all other clients
+	void CountReady(); //Check if all clients are ready
 
 	void SendGameState(SOCKET client);
 

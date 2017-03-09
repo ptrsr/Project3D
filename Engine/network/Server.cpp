@@ -110,6 +110,19 @@ int Server::ConnectedCount()
 }
 
 //
+//Changes the ready count
+//
+void Server::AddReadyCount(bool value)
+{
+	if (value)
+		_readyCount++;
+	else
+		_readyCount--;
+
+	CountReady();
+}
+
+//
 //Saving client to the list
 //
 void Server::SaveSocket(SOCKET client)
@@ -183,16 +196,6 @@ void Server::AcceptClients()
 
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
-
-				if (_connectedClients == 3)
-				{
-					Sleep(7500);
-					StartData sd;
-					sd.start = true;
-					NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
-
-					Level::get()->Start(sd.start); //Start our game too
-				}
 			}
 			else
 			{
@@ -256,6 +259,12 @@ void Server::HandlePacket(DataType type, char* buf)
 		UseData useData = *reinterpret_cast<UseData*>(buf);
 		Level::getPlayer(useData.playerId)->_movement->activate = true;
 		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
+		NotifyClients(DataType::READYDATA, (char*)&readyData);
+		AddReadyCount(readyData.ready);
+		break;
 	}
 }
 
@@ -268,6 +277,19 @@ void Server::NotifyClients(DataType type, char* data)
 
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
+	}
+}
+
+void Server::CountReady()
+{
+	if (_readyCount == 4)
+	{
+		Sleep(7500);
+		StartData sd;
+		sd.start = true;
+		NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
+
+		Level::get()->Start(sd.start); //Start our game too
 	}
 }
 

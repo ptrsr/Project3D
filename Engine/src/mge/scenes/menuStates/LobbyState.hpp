@@ -24,6 +24,7 @@ class LobbyState : public AbstactState
 		virtual void deleteScene();
 		bool isReady();
 		void setReady(bool value);
+		void UpdateVisual(Id playerId, bool value);
 
 	private:
 		Player* _player;
@@ -32,11 +33,12 @@ class LobbyState : public AbstactState
 
 		int _counter = 0;
 		bool _ready = false;
-		void _updateVisual();
 
 		bool _isKeyPress = true;
 		int _delay = 15;
 		int _delayCounter = 0;
+
+		GameObject* GetStatue(Id playerId);
 
 		LobbyState(const LobbyState&);
 		LobbyState& operator=(const LobbyState&);

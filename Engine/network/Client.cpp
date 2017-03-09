@@ -169,5 +169,10 @@ void Client::HandlePacket(DataType type, char* buf)
 		LeaveData leaveData = *reinterpret_cast<LeaveData*>(buf);
 		Level::get()->AddLeave(leaveData);
 		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		if (readyData.playerId == _playerId) return; //Ignore myself
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
+		break;
 	}
 }

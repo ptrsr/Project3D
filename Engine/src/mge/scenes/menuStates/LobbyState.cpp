@@ -47,54 +47,58 @@ void LobbyState::_initializeScene()
 	cout << "Lobby initialized" << endl;
 	_playerMaterial = (StatueMaterial*)_player->getMaterial();
 	Id playerId = _player->getId();
+}
+
+GameObject* LobbyState::GetStatue(Id playerId)
+{
 	if (playerId == 1) {
-		_playerStatue = ObjectCache::find("Fire1");
+		return ObjectCache::find("Fire1");
 	}
 	else if (playerId == 2) {
-		_playerStatue = ObjectCache::find("Earth1");
+		return ObjectCache::find("Earth1");
 	}
 	else if (playerId == 3) {
-		_playerStatue = ObjectCache::find("Water1");
+		return ObjectCache::find("Water1");
 	}
 	else if (playerId == 4) {
-		_playerStatue = ObjectCache::find("Wind1");
+		return ObjectCache::find("Wind1");
 	}
 	else {
-		_playerStatue = NULL;
+		return NULL;
 	}
-	
 }
 
-void LobbyState::Update() {
+void LobbyState::Update()
+{
+	if (_delayCounter >= _delay)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			_ready = !_ready;
+			UpdateVisual(_player->getId(), _ready);
 
-	cout << "Lobby updated" << endl;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		if (_ready) _ready = false;
-		else { _ready = true; }
-		_updateVisual();
-	}
-
-	if (_isKeyPress) {
-		if (_delayCounter >= _delay) {
 			_delayCounter = 0;
-			_isKeyPress = false;
+
+			Level::get()->CreatePacket(_player->getId(), _ready);
 		}
-		else {
-			_delayCounter++;
-			_delay = 15;
-		}
+	}
+	else
+	{
+		_delayCounter++;
+		_delay = 15;
 	}
 }
 
-void LobbyState::_updateVisual() {
+void LobbyState::UpdateVisual(Id playerId, bool value)
+{
 	cout << "Changing visuals for:" << _player->getId() << endl;
-	if (_ready) {
+	if (value) {
 		//_playerMaterial->setScore(1);
-		((StatueMaterial*)(_playerStatue->getMaterial()))->setScore(1);
+		((StatueMaterial*)(GetStatue(playerId)->getMaterial()))->setScore(1);
 	}
 	else {
 		//_playerMaterial->setScore(0);
-		((StatueMaterial*)(_playerStatue->getMaterial()))->setScore(0);
+		((StatueMaterial*)(GetStatue(playerId)->getMaterial()))->setScore(0);
 	}
 }
 

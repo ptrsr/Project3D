@@ -37,7 +37,6 @@ public:
 	static Board*				getBoard();
 	static void					reset();
 	void						ApplyPickUp(Player* pPlayer);
-	static void					applyAbility(Player* pPlayer);
 	bool						checkIfFinished();
 	float						getScoreOfId(int index);
 
@@ -53,6 +52,7 @@ public:
 	
 	Client* GetClient();
 	Server* GetServer();
+	LobbyState* GetLobbyState();
 
 	void Start(bool value);
 	bool GetStart();
@@ -73,6 +73,7 @@ public:
 	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
 	void CreatePacket(Id playerId, Effect pickUp); //Create Store packet
 	void CreatePacket(Id playerId); //Create Use packet
+	void CreatePacket(Id playerId, bool value); //Create Ready packet
 
 	void SendMoveData();
 private:
@@ -111,7 +112,7 @@ private:
 	GameObject* _earthStatue;
 	GameObject* _waterStatue;
 	GameObject* _windStatue;
-	LobbyState * _lobbyState;
+	LobbyState * _lobbyState = NULL;
 
 
 	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };

@@ -219,10 +219,6 @@ void MovementBehaviour::checkKeys()
 				}
 			}
 		}
-		else
-		{
-			//Ready up
-		}
 	}
 }
 

@@ -146,6 +146,11 @@ Server* Level::GetServer()
 	return _server;
 }
 
+LobbyState* Level::GetLobbyState()
+{
+	return _lobbyState;
+}
+
 void Level::Start(bool value)
 {
 	_start = value;
@@ -251,6 +256,16 @@ void Level::CreatePacket(Id playerId)
 	Send(DataType::USEDATA, (char*)&ud);
 }
 
+void Level::CreatePacket(Id playerId, bool value)
+{
+	ReadyData rd;
+	rd.playerId = playerId;
+	rd.ready = value;
+
+	Send(DataType::READYDATA, (char*)&rd);
+	if (_server != NULL) { _server->AddReadyCount(value); }
+}
+
 void Level::SendMoveData()
 {
 	if (_server != NULL)
@@ -305,7 +320,7 @@ void Level::update(float pStep)
 {
 	//
 	// - Clean up queues
-	// - Handle client/host leaving
+	// - Handle host leaving
 	// - Remember to set client/server to NULL on leaving
 	//
 	while (_leaveQueue.size() > 0)
@@ -363,15 +378,22 @@ void Level::update(float pStep)
 		_moveQueue.erase(_moveQueue.begin());
 	}
 
-	//cant get player correctly
-	/*if (_lobbyState != NULL)
+
+	if (!_start)
 	{
-	_lobbyState->Update();
+		if (_lobbyState != NULL)
+		{
+			_lobbyState->Update();
+		}
+		else
+		{
+			if (_server != NULL || _client != NULL)
+			{
+				_lobbyState = new LobbyState(getPlayer(_server != NULL ? Id::p1 : _client->GetId()));
+				_lobbyState->_initializeScene();
+			}
+		}
 	}
-	else {
-	_lobbyState = new LobbyState(getPlayer(Id::p3));
-	_lobbyState->_initializeScene();
-	}*/
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
 		Start(true);
