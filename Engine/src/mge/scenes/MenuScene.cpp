@@ -139,7 +139,6 @@ void MenuScene::_render() {
 		case 3:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
-				Level::reset();
 			}
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
@@ -154,6 +153,9 @@ void MenuScene::_render() {
 			}
 			if (_currentState != 3) {
 				_cameraStateChanged = false;
+				Level::get()->LeaveClient();
+				Level::get()->LeaveHost();
+				Level::get()->reset();
 			}
 			break;
 
