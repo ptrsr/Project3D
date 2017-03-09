@@ -419,7 +419,9 @@ void Level::update(float pStep)
 	if (!_start)
 		return;
 
-	//has a bool check so it happens only once
+	//Check if match is over
+	if (_finished)
+		return;
 
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
@@ -428,9 +430,6 @@ void Level::update(float pStep)
 	}
 
 	_curTime += pStep;
-
-
-	if (_finished) return;
 
 	AudioManager::get()->startLevelMusic();
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
