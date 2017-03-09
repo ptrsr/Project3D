@@ -282,7 +282,7 @@ void Server::NotifyClients(DataType type, char* data)
 
 void Server::CountReady()
 {
-	if (_readyCount == 4)
+	if (_readyCount == 2)
 	{
 		Sleep(7500);
 		StartData sd;
