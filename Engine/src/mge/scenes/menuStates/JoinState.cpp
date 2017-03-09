@@ -128,7 +128,10 @@ int JoinState::CheckSelection() {
 			return -1;
 		}
 	}
-	else return 2;
+	else if (_text->CheckState() == 5)
+		return 5;
+	else
+		return 2;
 }
 
 //Gets the object to use as the LookAt object of the camera

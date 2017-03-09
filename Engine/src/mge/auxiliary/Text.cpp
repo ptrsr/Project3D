@@ -109,17 +109,18 @@ void Text::_updateIP() {
 		size_t pos = 0;
 		std::string token;
 		std::string delimiter = ":";
-		std::string ip = "";
+		ip = "";
 		int port = 0;
 		while ((pos = text.find(delimiter)) != std::string::npos) {
 			token = text.substr(0, pos);
 			text.erase(0, pos + delimiter.length());
 			ip = token;
-			std::cout <<"IP:" <<ip << std::endl;
+			std::cout << "IP:" << ip << std::endl;
 
 		}
-		port = atoi(text.c_str());
-		cout <<"Port(int):" <<port<<endl;
+		port = stoi(text);
+		Level::get()->Join(ip.c_str(), port);
+		cout << "Port(int):" << port << endl;
 	}
 		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !_isKeyPress)
@@ -370,6 +371,12 @@ void Text::deleteLastObject() {
 	GameObject* obj = objs.at(objs.size() - 1);
 	objs.pop_back();
 	obj->setMesh(NULL);
+}
+
+int Text::CheckState()
+{
+	if (ip != "")
+		return 5;
 }
 
 Text::~Text()

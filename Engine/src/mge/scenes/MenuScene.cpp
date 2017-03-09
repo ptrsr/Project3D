@@ -102,7 +102,7 @@ void MenuScene::_initializeScene()
 
 	Level::get();
 
-	_currentState = 3;
+	_currentState = -1;
 	_world->add(center);
 	_world->add(holder);
 
@@ -140,6 +140,7 @@ void MenuScene::_render() {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
 				Level::get()->LeaveHost();
+				Level::get()->LeaveClient();
 				Level::get()->reset();
 			}
 			if (!_cameraStateChanged) {
@@ -182,6 +183,24 @@ void MenuScene::_render() {
 				_winState->deleteScene();
 				Level::get()->LeaveHost();
 				Level::get()->reset();
+			}
+			break;
+		case 5:
+			if (!_cameraStateChanged) {
+				_changeCameraState(_startState);
+			}
+			if (_cameraStateChanged)
+			{
+				if (_counter == _delay)
+					_changeCameraState(_level);
+				else
+					_counter++;
+			}
+			if (_currentState != 5)
+			{
+				Level::get()->LeaveClient();
+				Level::get()->reset();
+				_cameraStateChanged = false;
 			}
 			break;
 	}
