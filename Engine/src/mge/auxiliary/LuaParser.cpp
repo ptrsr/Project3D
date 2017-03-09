@@ -259,6 +259,38 @@ int setMesh(lua_State* lua)
 	return 0;
 }
 
+int setLight(lua_State* lua) {
+	int size = lua_gettop(lua);
+
+	if (size == 0)
+	{
+		std::cout << "error: setLight parameters" << std::endl;
+		return 0;
+	}
+
+
+	GameObject* obj = ObjectCache::find(lua_tostring(lua, -size));
+
+	if (!obj)
+	{
+		std::cout << "error: object doesn't exist(at setLight)" << std::endl;
+		return 0;
+	}
+
+	if (size == 2 && lua_isstring(lua, -size + 1))
+	{
+		AbstractLight* light;
+		bool tName = lua_toboolean(lua, -size + 1);
+		if (!tName) {
+			obj->getMaterial()->setLight(0);
+		}
+		else {
+			obj->getMaterial()->setLight(1);
+		}
+	}
+	return 0;
+}
+
 int orbit(lua_State* lua)
 {
 	int size = -lua_gettop(lua);
@@ -344,6 +376,13 @@ LuaParser::LuaParser(std::string fileName)
 
 		lua_pushcfunction(lua, setTexture);
 		lua_setglobal(lua, "setTexture");
+
+		lua_pushcfunction(lua, setLight);
+		lua_setglobal(lua, "setLight");
+
+		lua_pushcfunction(lua, setSpecular);
+		lua_setglobal(lua, "setSpecular");
+
 
 		lua_pushcfunction(lua, orbit);
 		lua_setglobal(lua, "orbit");

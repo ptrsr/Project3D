@@ -28,6 +28,7 @@ class AbstractMaterial
         virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pPerspectiveMatrix) = 0;
 		virtual glm::vec3 getColor() = 0;
 		virtual void setColor(glm::vec3 newColor) = 0;
+		virtual void setLight(bool outside) = 0;
 };
 
 #endif // ABSTRACTMATERIAL_H
