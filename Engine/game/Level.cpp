@@ -35,10 +35,12 @@ Level::Level() :GameObject("level")
 	_waterStatue = ObjectCache::find("Water1");
 	_windStatue = ObjectCache::find("Wind1");
 
-	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
-	_waterStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0, 0, 1)));
-	_earthStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0.5f, 0.5f, 0)));
-	_windStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 1, 1)));
+	std::string path = config::MGE_TEXTURE_PATH + "statues/";
+
+	_fireStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(1, 0, 0)));
+	_waterStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_water_diffuse.png"), Texture::load(path + "statue_water_emission2.png"), glm::vec3(0, 0, 1)));
+	_earthStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(0.5f, 0.5f, 0)));
+	_windStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(1, 1, 1)));
 	World::add(this);
 }
 

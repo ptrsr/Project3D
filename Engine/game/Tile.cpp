@@ -15,9 +15,7 @@ Tile::Tile(glm::vec3 pPosition, Mesh* pMesh) : GameObject("tile")
 	this->setLocalPosition(pPosition);
 	_boardPos = glm::vec2(pPosition.x, pPosition.z);
 
-	Texture * texture = Texture::load(config::MGE_TEXTURE_PATH + "playfield_tile_sg_Ambient_occlusion.png");
-	//_material = new TextureMaterial(texture);
-	_material = new LitMaterial();
+	_material = new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "tile_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "tile_highlight.png"));
 	this->setMaterial(_material);
 	this->setMesh(pMesh);
 }
@@ -71,7 +69,7 @@ void Tile::setOwner(Id pPlayer)
 	switch (pPlayer)
 	{
 	case Id::empty:
-		_material->setColor(glm::vec3(1));
+		_material->setColor(glm::vec3(0));
 		break;
 
 	case Id::p1:

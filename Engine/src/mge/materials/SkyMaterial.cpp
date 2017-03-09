@@ -5,6 +5,9 @@
 #include "mge/core/GameObject.hpp"
 #include "mge/core/Mesh.hpp"
 
+#include "mge/core/World.hpp"
+#include "mge/core/Camera.hpp"
+
 SkyMaterial::SkyMaterial(Texture* pTexture) : _texture(pTexture)
 {
 	_shader = new ShaderProgram();
@@ -14,8 +17,8 @@ SkyMaterial::SkyMaterial(Texture* pTexture) : _texture(pTexture)
 
 	//attributes
 	_aVertex = _shader->getAttribLocation("vertex");
-	_aNormal = _shader->getAttribLocation("normal");
-	_aUV	 = _shader->getAttribLocation("uv");
+	//_aNormal = _shader->getAttribLocation("normal");
+	_aUV = _shader->getAttribLocation("uv");
 
 	//uniforms
 	_uMVmatrix = _shader->getUniformLocation("MVmatrix");
@@ -32,7 +35,8 @@ void SkyMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::
 	glDepthMask(GL_FALSE);
 	_shader->use();
 
-	glm::mat4 mvMatrix = pProjectionMatrix * pViewMatrix;
+
+	glm::mat4 mvMatrix = pProjectionMatrix * glm::mat4(glm::mat3(World::getMainCamera()->getWorldTransform()));
 	glUniformMatrix4fv(_uMVmatrix, 1, GL_FALSE, glm::value_ptr(mvMatrix));
 
 	glActiveTexture(GL_TEXTURE0);

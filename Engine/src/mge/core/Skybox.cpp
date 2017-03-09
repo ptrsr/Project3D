@@ -9,7 +9,6 @@
 
 Skybox* Skybox::_skybox = NULL;
 
-
 Skybox::Skybox() : GameObject("skybox")
 {
 	setMesh(Mesh::load(config::MGE_MODEL_PATH + "skybox_cube.obj"));

@@ -25,7 +25,6 @@ void Board::ResetBoard()
 		{
 			Tile* tile = _boardArray[j][i];
 			tile->setOwner(Id::empty);
-			tile->getMaterial()->setColor(glm::vec3(1));
 		}
 	}
 }

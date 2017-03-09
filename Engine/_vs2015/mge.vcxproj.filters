@@ -368,6 +368,9 @@
     <ClInclude Include="..\src\mge\core\Skybox.hpp">
       <Filter>MGE Source files\mge\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\materials\ChangeColorMaterial.hpp">
+      <Filter>MGE Source files\mge\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -658,6 +661,9 @@
     <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp">
       <Filter>MGE Source files\mge\materials</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mge\materials\ChangeColorMaterial.cpp">
+      <Filter>MGE Source files\mge\materials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\mge\core\lua\Makefile">
@@ -710,6 +716,18 @@
       <Filter>assets\shaders</Filter>
     </None>
     <None Include="..\assets\mge\shaders\skybox.vs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\litTexture.fs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\litTexture.vs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\litColorChange.fs">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="..\assets\mge\shaders\litColorChange.vs">
       <Filter>assets\shaders</Filter>
     </None>
   </ItemGroup>

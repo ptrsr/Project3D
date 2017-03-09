@@ -120,7 +120,7 @@ void AbstractGame::run()
 			//Bloom::renderToFBO();
 			Skybox::render();
             _render();
-			//Bloom::blur(2);
+			//Bloom::blur(4);
 			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();

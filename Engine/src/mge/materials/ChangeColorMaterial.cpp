@@ -1,4 +1,4 @@
-#include "mge/materials/StatueMaterial.hpp"
+#include "mge/materials/ChangeColorMaterial.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/core/GameObject.hpp"
 #include "mge/config.hpp"
@@ -8,93 +8,70 @@
 #include "mge/behaviours/SpotLight.hpp"
 
 #include <string>
-#include "SFML/Window/Keyboard.hpp"
 
 //shader
-ShaderProgram* StatueMaterial::_shader = NULL;
-
-//vertex attributes
-GLint StatueMaterial::_aVertex = 0;
-GLint StatueMaterial::_aNormal = 0;
-GLint StatueMaterial::_aUV	   = 0;
+ShaderProgram* ChangeColorMaterial::_shader = NULL;
 
 //vertex uniforms
-GLint StatueMaterial::_uMVPMatrix	= 0;
-GLint StatueMaterial::_uModelMatrix	= 0;
+GLint ChangeColorMaterial::_uMVPMatrix	 = 0;
+GLint ChangeColorMaterial::_uModelMatrix = 0;
 
 //fragment uniforms
-GLint StatueMaterial::_uHighlight	= 0;
-GLint StatueMaterial::_uTexture		= 0;
-GLint StatueMaterial::_uShininess	= 0;
-GLint StatueMaterial::_uCameraPos	= 0;
+GLint ChangeColorMaterial::_uModelColor = 0;
+GLint ChangeColorMaterial::_uShininess	= 0;
+GLint ChangeColorMaterial::_uCameraPos	= 0;
+GLint ChangeColorMaterial::_uTexture	= 0;
+GLint ChangeColorMaterial::_uHighlight  = 0;
 
-//statue uniforms
-GLint StatueMaterial::_uScore     = 0;
-GLint StatueMaterial::_uMinHeight = 0;
-GLint StatueMaterial::_uMaxHeight = 0;
+//vertex attributes
+GLint ChangeColorMaterial::_aVertex = 0;
+GLint ChangeColorMaterial::_aNormal = 0;
+GLint ChangeColorMaterial::_aUv     = 0;
 
-StatueMaterial::StatueMaterial(Texture* pTexture, Texture* pHighLight, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
-	: _texture(pTexture), _highLight(pHighLight), _shininess(pShininess), _lights(pLights)
+ChangeColorMaterial::ChangeColorMaterial(Texture* pTexture, Texture* pHighlight, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
+	: _texture(pTexture), _highlight(pHighlight), _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
 {
 	_lazyInitializeShader();
-
-	_relativeScore = 0.f;
-	_minHeight = 2.7f;
-	_maxHeight = 2.17f;
 }
 
-void StatueMaterial::_lazyInitializeShader()
+void ChangeColorMaterial::_lazyInitializeShader()
 {
 	if (!_shader)
 	{
 		_shader = new ShaderProgram();
 
-		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + "statue.vs");
-		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "statue.fs");
+		_shader->addShader(GL_VERTEX_SHADER, config::MGE_SHADER_PATH + "litColorChange.vs");
+		_shader->addShader(GL_FRAGMENT_SHADER, config::MGE_SHADER_PATH + "litColorChange.fs");
 		_shader->finalize();
+
+		//vertex uniforms
+		_uMVPMatrix = _shader->getUniformLocation("mvpMatrix");
+		_uModelMatrix = _shader->getUniformLocation("modelMatrix");
+
+		//fragment uniforms
+		_uModelColor = _shader->getUniformLocation("modelColor");
+		_uShininess  = _shader->getUniformLocation("shininess");
+		_uCameraPos  = _shader->getUniformLocation("cameraPos");
+		_uTexture    = _shader->getUniformLocation("dTexture");
+		_uHighlight  = _shader->getUniformLocation("highlight");
 
 		//vertex attributes
 		_aVertex = _shader->getAttribLocation("vertex");
 		_aNormal = _shader->getAttribLocation("normal");
-		_aUV = _shader->getAttribLocation("uv");
-
-		//vertex uniforms
-		_uMVPMatrix	  = _shader->getUniformLocation("mvpMatrix");
-		_uModelMatrix = _shader->getUniformLocation("modelMatrix");
-
-		//fragment uniforms
-		_uTexture	 = _shader->getUniformLocation("dTexture");
-		_uHighlight = _shader->getUniformLocation("highlight");
-		_uShininess  = _shader->getUniformLocation("shininess");
-		_uCameraPos  = _shader->getUniformLocation("cameraPos");
-
-		//statue uniforms
-		_uScore = _shader->getUniformLocation("score");
-		_uMinHeight = _shader->getUniformLocation("minHeight");
-		_uMaxHeight = _shader->getUniformLocation("maxHeight");
+		_aUv	 = _shader->getAttribLocation("uv");
 	}
 }
 
-void StatueMaterial::setTexture(Texture* pTexture)
-{
-	_texture = pTexture;
+glm::vec3 ChangeColorMaterial::getColor() {
+	return _modelColor;
 }
-void StatueMaterial::setHighLight(Texture* pHighLight)
-{
-	_highLight = pHighLight;
+void ChangeColorMaterial::setColor(glm::vec3 newColor) {
+	_modelColor = newColor;
 }
 
-void StatueMaterial::setScore(float pScore)
-{
-	_relativeScore = pScore;
-}
-
-void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
+void ChangeColorMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
 {
 	_shader->use();
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
-		_relativeScore += 0.005f;
 
 	//uniforms
 	glm::mat4 mvpMatrix = pProjectionMatrix * pViewMatrix * pModelMatrix;
@@ -103,38 +80,25 @@ void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const gl
 
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);
-
-	//statue uniforms
-	glUniform1f(_uMinHeight, _minHeight);
-	glUniform1f(_uMaxHeight, _maxHeight);
-	glUniform1f(_uScore, _relativeScore);
-
-	if (_texture && _highLight)
-		renderTextures();
+	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
 
 	renderLights();
-	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
+	renderTextures();
+	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUv);
 }
 
-void StatueMaterial::renderTextures()
+void ChangeColorMaterial::renderTextures()
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture->getId());
 	glUniform1i(_uTexture, 0);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, _highLight->getId());
+	glBindTexture(GL_TEXTURE_2D, _highlight->getId());
 	glUniform1i(_uHighlight, 1);
 }
 
-glm::vec3 StatueMaterial::getColor() {
-	return _modelColor;
-}
-void StatueMaterial::setColor(glm::vec3 newColor) {
-	_modelColor = newColor;
-}
-
-void StatueMaterial::renderLights()
+void ChangeColorMaterial::renderLights()
 {
 	int dLights = 0;
 	int pLights = 0;
@@ -196,3 +160,4 @@ void StatueMaterial::renderLights()
 	glUniform3fv(_shader->getUniformLocation("lightCount"), 1, glm::value_ptr(glm::vec3(dLights, pLights, sLights)));
 }
 
+ChangeColorMaterial::~ChangeColorMaterial() { }
