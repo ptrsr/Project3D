@@ -388,17 +388,11 @@ float Level::getScoreOfId(int index) {
 
 void Level::update(float pStep)
 {
-	//
-	// - Clean up queues
-	// - Handle host leaving
-	// - Remember to set client/server to NULL on leaving
-	//
-	//Check if match is over
-	if (_finished)
-		return;
-
 	while (_leaveQueue.size() > 0)
 	{
+		if (_finished)
+			return;
+
 		LeaveData leave = _leaveQueue[0];
 		_board->getScore(leave.playerId); //Reset all player's tiles
 		delete _players[leave.playerId - 1]; //Delete player
@@ -462,6 +456,10 @@ void Level::update(float pStep)
 
 	//Wait till all players are ready
 	if (!_start)
+		return;
+
+	//Check if match is over
+	if (_finished)
 		return;
 
 	//Spawns random pick up
