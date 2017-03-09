@@ -358,12 +358,6 @@ void Level::update(float pStep)
 			spawnPickUp(pData.type, glm::vec2(pData.boardX, pData.boardY));
 		_pickUpQueue.erase(_pickUpQueue.begin());
 	}
-	while (_tileQueue.size() > 0)
-	{
-		TileData tData = _tileQueue[0];
-		_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
-		_tileQueue.erase(_tileQueue.begin());
-	}
 	while (_storeQueue.size() > 0)
 	{
 		StoreData sData = _storeQueue[0];
@@ -465,6 +459,12 @@ void Level::update(float pStep)
 	//If animation is done
 	if (_curTime >= _totalTime)
 	{
+		while (_tileQueue.size() > 0)
+		{
+			TileData tData = _tileQueue[0];
+			_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
+			_tileQueue.erase(_tileQueue.begin());
+		}
 		for (int i = 0; i < _effectQueue.size(); i++)
 		{
 			EffectData eData = _effectQueue[0];
