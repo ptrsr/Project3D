@@ -32,7 +32,7 @@ void AbstractGame::initialize(int windowWidth, int windowHeight) {
     _initializeRenderer();
     _initializeWorld();
     _initializeScene();
-	Bloom::initialize(windowWidth, windowHeight);
+	//Bloom::initialize(windowWidth, windowHeight);
     cout << endl << "Engine initialized." << endl << endl;
 }
 
@@ -117,10 +117,10 @@ void AbstractGame::run()
 				cout << "B works" << endl;
 			}
 
+			//Bloom::renderToFBO();
 			Skybox::render();
-			Bloom::renderToFBO();
             _render();
-			Bloom::blur(2);
+			//Bloom::blur(2);
 			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();

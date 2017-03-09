@@ -20,6 +20,8 @@ SkyMaterial::SkyMaterial(Texture* pTexture) : _texture(pTexture)
 	//uniforms
 	_uMVmatrix = _shader->getUniformLocation("MVmatrix");
 	_uTexture   = _shader->getUniformLocation("skybox");
+
+	std::cout << "CHECK THIS: " << _aUV << std::endl;
 }
 
 
