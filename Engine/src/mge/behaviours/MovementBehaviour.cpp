@@ -20,6 +20,11 @@ void MovementBehaviour::update(float pStep)
 
 	_curTime += pStep;
 
+	if (_curTime > (_totalTime * 0.6f))
+	{
+		Level::get()->HandleMoveData();
+		Level::get()->HandleTileData();
+	}
 	if (_curTime < (_totalTime * 0.8f))
 	{
 		checkKeys();

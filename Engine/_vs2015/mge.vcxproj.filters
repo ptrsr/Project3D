@@ -277,9 +277,6 @@
     <ClInclude Include="..\game\PickUps\PickUp.hpp">
       <Filter>game\PickUps</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\PickUps\ScoreCube.hpp">
-      <Filter>game\PickUps</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\Board.hpp">
       <Filter>game</Filter>
     </ClInclude>
@@ -352,6 +349,11 @@
     <ClInclude Include="..\network\packets\ReadyData.hpp">
       <Filter>network\packets</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\PickUps\VisualPickup.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\BreathFirst.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp" />
+    <ClInclude Include="..\src\mge\core\Skybox.hpp" />
+    <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -588,9 +590,6 @@
     <ClCompile Include="..\game\PickUps\PickUp.cpp">
       <Filter>game\PickUps</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\PickUps\ScoreCube.cpp">
-      <Filter>game\PickUps</Filter>
-    </ClCompile>
     <ClCompile Include="..\game\Board.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -629,6 +628,21 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\PickUps\VisualPickup.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\BreathFirst.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\core\Skybox.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp">
+      <Filter>MGE Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -678,5 +692,7 @@
     <None Include="..\assets\mge\shaders\bloom\quad.vs" />
     <None Include="..\assets\mge\shaders\statue.fs" />
     <None Include="..\assets\mge\shaders\statue.vs" />
+    <None Include="..\assets\mge\shaders\skybox.fs" />
+    <None Include="..\assets\mge\shaders\skybox.vs" />
   </ItemGroup>
 </Project>

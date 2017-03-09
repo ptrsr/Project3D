@@ -5,5 +5,5 @@
 struct ScoreData
 {
 	Id playerId;
-	int score;
+	float score;
 };

@@ -158,6 +158,10 @@ void Client::HandlePacket(DataType type, char* buf)
 		TileData tileData = *reinterpret_cast<TileData*>(buf);
 		Level::get()->AddTile(tileData);
 		break;
+	case DataType::SCOREDATA:
+		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
+		Level::get()->SetScore(scoreData.playerId, scoreData.score);
+		break;
 	case DataType::EFFECTDATA:
 		EffectData effectData = *reinterpret_cast<EffectData*>(buf);
 		Level::get()->AddEffect(effectData);

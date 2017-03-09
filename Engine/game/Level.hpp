@@ -73,12 +73,18 @@ public:
 	void CreatePacket(Id playerId, Dir dir, glm::vec2 pos); //Create Player packet
 	void CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos); //Create PickUp packet
 	void CreatePacket(Id playerId, glm::vec2 tilePos); //Create Tile packet
+	void CreatePacket(Id playerId, float score); //Create Score packet
 	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
 	void CreatePacket(Id playerId, Effect pickUp); //Create Store packet
 	void CreatePacket(Id playerId); //Create Use packet
 	void CreatePacket(Id playerId, bool value); //Create Ready packet
 
 	void SendMoveData();
+
+	void HandleMoveData();
+	void HandleTileData();
+	void SetScore(Id playerId, float score);
+
 private:
 	static Level* _level;
 

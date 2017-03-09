@@ -182,7 +182,7 @@ int Board::getScore(Id pPlayerId)
 
 
 Id Board::getPlayerWithHighestScore() {
-	int highestScore = 0;
+	int highestScore = 1;
 	int idToReturn = -1;
 	for (int i = 0; i < 4; i++)
 	{

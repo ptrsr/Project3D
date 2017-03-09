@@ -10,7 +10,6 @@
 #include "Board.hpp"
 
 #include "Enums.hpp"
-#include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
 #include "PickUps/Speed.hpp"
 
@@ -240,6 +239,15 @@ void Level::CreatePacket(Id playerId, glm::vec2 tilePos)
 	Send(DataType::TILEDATA, (char*)&td);
 }
 
+void Level::CreatePacket(Id playerId, float score)
+{
+	ScoreData sd;
+	sd.playerId = playerId;
+	sd.score = score;
+
+	Send(DataType::SCOREDATA, (char*)&sd);
+}
+
 void Level::CreatePacket(Id playerId, Effect effect, glm::vec2 pos)
 {
 	EffectData ed;
@@ -293,6 +301,35 @@ void Level::Send(DataType type, char* data)
 		_client->Send(type, data);
 	if (_server != NULL)
 		_server->SendAll(type, data);
+}
+
+void Level::HandleMoveData()
+{
+	while (_moveQueue.size() > 0)
+	{
+		MoveData move = _moveQueue[0];
+
+		Player* player = getPlayers()[move.playerId - 1];
+		player->_movement->SetDDir(move.direction);
+		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+		_moveQueue.erase(_moveQueue.begin());
+	}
+}
+
+void Level::HandleTileData()
+{
+	while (_tileQueue.size() > 0)
+	{
+		TileData tData = _tileQueue[0];
+		_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
+		_tileQueue.erase(_tileQueue.begin());
+	}
+}
+
+void Level::SetScore(Id playerId, float score)
+{
+	_currentScore[playerId - 1] = score;
 }
 
 void Level::ApplyPickUp(Player* pPlayer)
@@ -373,16 +410,6 @@ void Level::update(float pStep)
 		}
 		_storeQueue.erase(_storeQueue.begin());
 	}
-	while (_moveQueue.size() > 0)
-	{
-		MoveData move = _moveQueue[0];
-
-		Player* player = getPlayers()[move.playerId - 1];
-		player->_movement->SetDDir(move.direction);
-		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
-
-		_moveQueue.erase(_moveQueue.begin());
-	}
 
 	//Lobby state
 	if (!_start)
@@ -430,7 +457,11 @@ void Level::update(float pStep)
 
 	if (hightestScorePlayer != -1)
 	{
-		_currentScore[hightestScorePlayer - 1] += pStep;
+		if (_server != NULL)
+		{
+			_currentScore[hightestScorePlayer - 1] += pStep;
+			CreatePacket(hightestScorePlayer, _currentScore[hightestScorePlayer - 1]);
+		}
 		if (_currentScore[hightestScorePlayer - 1] >= 30.0f)
 		{
 			_finished = true;
@@ -459,12 +490,6 @@ void Level::update(float pStep)
 	//If animation is done
 	if (_curTime >= _totalTime)
 	{
-		while (_tileQueue.size() > 0)
-		{
-			TileData tData = _tileQueue[0];
-			_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
-			_tileQueue.erase(_tileQueue.begin());
-		}
 		for (int i = 0; i < _effectQueue.size(); i++)
 		{
 			EffectData eData = _effectQueue[0];
