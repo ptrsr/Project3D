@@ -42,13 +42,13 @@ void Player::StorePickUp(PickUp* pickUp)
 		{
 		case Effect::splash:
 			_pickUp = new Splash(0);
-			AudioManager::get()->PlaySound(SFX::grabPickup1);
+			AudioManager::get()->PlaySoundW(SFX::grabPickup1);
 			_visualization->visualizeSplash();
 			break;
 		case Effect::speed:
 			_visualization->visualizeSpeed();
 			_pickUp = new Speed(0);
-			AudioManager::get()->PlaySound(SFX::grabPickup1);
+			AudioManager::get()->PlaySoundW(SFX::grabPickup1);
 			break;
 		}
 	}

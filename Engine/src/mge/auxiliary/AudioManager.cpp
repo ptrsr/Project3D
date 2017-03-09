@@ -36,7 +36,7 @@ AudioManager* AudioManager::get() {
 }
 
 //Used to play the shooting sound
-void AudioManager::PlaySound(SFX soundEnum) {
+void AudioManager::PlaySoundW(SFX soundEnum) {
 	_sound.setBuffer(_buffer[soundEnum]);
 	_sound.setLoop(false);
 	if (_sound.getStatus() != sf::Sound::Playing)

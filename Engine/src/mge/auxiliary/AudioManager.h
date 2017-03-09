@@ -19,7 +19,7 @@ private:
 public:
 
 	static AudioManager* get();
-	void PlaySound(SFX soundEnum);
+	void PlaySoundW(SFX soundEnum);
 	void LoadAllSFX();
 	void GetNamesInString();
 	void startLevelMusic();
