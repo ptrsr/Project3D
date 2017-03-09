@@ -16,8 +16,9 @@ class StatueMaterial : public AbstractMaterial
 		void setSpecular(Texture* pSpecularTexture);
 
 		glm::vec3 getColor();
-		void setColor(glm::vec3 pColor);
-		void setScore(float pScore);
+		virtual void setColor(glm::vec3 pColor);
+		void setScore(float pScore); 
+		virtual void setLight(bool outside);
 
 private:
 	static void _lazyInitializeShader();

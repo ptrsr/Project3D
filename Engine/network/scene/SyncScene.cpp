@@ -55,7 +55,7 @@ void SyncScene::_initializeScene()
 	_world->setMainCamera(camera);
 
 	Mesh* mCube = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
-	ColorMaterial* cMat = new ColorMaterial(glm::vec3(1, 1, 1));
+	LitMaterial* cMat = new LitMaterial(glm::vec3(1, 1, 1));
 
 	gCube = new GameObject("Cube", glm::vec3(0, 0, 0));
 	gCube->setMesh(mCube);

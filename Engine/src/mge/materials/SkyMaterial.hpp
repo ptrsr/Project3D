@@ -17,6 +17,7 @@ public:
 
 	virtual inline glm::vec3 getColor() { return glm::vec3(0); }
 	virtual inline void setColor(glm::vec3 newColor) { };
+	virtual void setLight(bool outside);
 
 private:
 	ShaderProgram* _shader;

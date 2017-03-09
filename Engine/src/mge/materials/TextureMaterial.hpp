@@ -16,7 +16,8 @@ class TextureMaterial : public AbstractMaterial
 		void setSpecular(Texture* pSpecularTexture);
 
 		glm::vec3 getColor();
-		void setColor(glm::vec3 pColor);
+		virtual void setColor(glm::vec3 pColor);
+		virtual void setLight(bool outside);
 
 private:
 	static void _lazyInitializeShader();
