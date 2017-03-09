@@ -389,8 +389,12 @@ void Level::update(float pStep)
 		{
 			if (_server != NULL || _client != NULL)
 			{
-				_lobbyState = new LobbyState(getPlayer(_server != NULL ? Id::p1 : _client->GetId()));
-				_lobbyState->_initializeScene();
+				Player* player = getPlayer(_server != NULL ? Id::p1 : _client->GetId());
+				if (player != NULL)
+				{
+					_lobbyState = new LobbyState(player);
+					_lobbyState->_initializeScene();
+				}
 			}
 		}
 	}
