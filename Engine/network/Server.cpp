@@ -222,9 +222,6 @@ void Server::HandleClients(SOCKET client)
 
 	while (_running)
 	{
-		if (Level::get()->checkIfFinished())
-			continue;
-
 		//Check if the client is still connected
 		if (!PacketHelper::Connected( client))
 		{
