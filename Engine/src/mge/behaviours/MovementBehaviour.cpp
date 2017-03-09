@@ -57,8 +57,13 @@ void MovementBehaviour::update(float pStep)
 		//move to actual position
 		_player->setLocalPosition(glm::vec3(_boardPos.x, 1.0f, _boardPos.y));
 
-		//set tiles to new owner
-		Level::getBoard()->setOwner(getBoardPos(), _player->getId());
+		if (Level::get()->GetServer() != NULL)
+		{
+			//set tiles to new owner
+			Level::getBoard()->setOwner(getBoardPos(), _player->getId());
+
+			Level::get()->CreatePacket(_player->getId(), getBoardPos());
+		}
 
 		//apply pickups
 		Level::get()->ApplyPickUp(_player);

@@ -143,6 +143,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::STARTDATA:
 		StartData startData = *reinterpret_cast<StartData*>(buf);
+		Level::get()->ResetStatues();
 		Level::get()->Start(startData.start);
 		break;
 	case DataType::MOVEDATA:
@@ -153,9 +154,9 @@ void Client::HandlePacket(DataType type, char* buf)
 		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);
 		Level::get()->AddPickUp(pickupData);
 		break;
-	case DataType::SCOREDATA:
-		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
-		Level::get()->AddScore(scoreData);
+	case DataType::TILEDATA:
+		TileData tileData = *reinterpret_cast<TileData*>(buf);
+		Level::get()->AddTile(tileData);
 		break;
 	case DataType::EFFECTDATA:
 		EffectData effectData = *reinterpret_cast<EffectData*>(buf);

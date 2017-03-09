@@ -55,6 +55,9 @@ void Tile::setOwner(Id pPlayer)
 		{
 			for each (Tile* tile in getConnections())
 			{
+				if (tile == NULL)
+					continue;
+
 				if (tile->getOwner() == _owner)
 					Level::getBoard()->checkTile(tile);
 

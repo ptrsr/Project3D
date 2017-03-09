@@ -17,6 +17,7 @@
 #include "../network/packets/PlayerData.hpp"
 #include "../network/packets/MoveData.hpp"
 #include "../network/packets/PickupData.hpp"
+#include "../network/packets/TileData.hpp"
 #include "../network/packets/ScoreData.hpp"
 #include "../network/packets/EffectData.hpp"
 #include "../network/packets/StoreData.hpp"
@@ -60,17 +61,18 @@ public:
 	void AddSpawn(PlayerData player);
 	void AddMove(MoveData move);
 	void AddPickUp(PickupData pickUp);
-	void AddScore(ScoreData score);
+	void AddTile(TileData tile);
 	void AddEffect(EffectData effect);
 	void AddStore(StoreData store);
 	void AddLeave(LeaveData leave);
 
 	void spawnPickUp(Effect type, glm::vec2 pos);
 	void removePickUp(glm::vec2 pos);
+	void ResetStatues();
 
 	void CreatePacket(Id playerId, Dir dir, glm::vec2 pos); //Create Player packet
 	void CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos); //Create PickUp packet
-	void CreatePacket(Id playerId, int score); //Create Score packet
+	void CreatePacket(Id playerId, glm::vec2 tilePos); //Create Tile packet
 	void CreatePacket(Id playerId, Effect effect, glm::vec2 pos); //Create Effect packet
 	void CreatePacket(Id playerId, Effect pickUp); //Create Store packet
 	void CreatePacket(Id playerId); //Create Use packet
@@ -100,7 +102,7 @@ private:
 	std::vector<PlayerData> _spawnQueue;
 	std::vector<MoveData> _moveQueue;
 	std::vector<PickupData> _pickUpQueue;
-	std::vector<ScoreData> _scoreQueue;
+	std::vector<TileData> _tileQueue;
 	std::vector<EffectData> _effectQueue;
 	std::vector<StoreData> _storeQueue;
 	std::vector<LeaveData> _leaveQueue;
@@ -117,7 +119,7 @@ private:
 	LobbyState * _lobbyState = NULL;
 
 
-	float _currentScore[4] = { 1.01f,0.01f,0.01f,0.01f };
+	float _currentScore[4] = { 0.01f,0.01f,0.01f,0.01f };
 	
 	//timing settings
 	float _totalTime = 0.8f;

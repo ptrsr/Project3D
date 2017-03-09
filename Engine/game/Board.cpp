@@ -35,24 +35,7 @@ void Board::changeScore(Id pPlayerId, int change)
 	if (pPlayerId == Id::empty)
 		return;
 
-	switch (pPlayerId)
-	{
-	case Id::p1:
-		_score[0] += change;
-		break;
-
-	case Id::p2:
-		_score[1] += change;
-		break;
-
-	case Id::p3:
-		_score[2] += change;
-		break;
-
-	case Id::p4:
-		_score[3] += change;
-		break;
-	}
+	_score[pPlayerId - 1] += change;
 }
 
 void Board::splash(Id playerId, glm::vec2 pBoardPos)
@@ -114,10 +97,13 @@ void Board::resolveAreas()
 
 	for each (Player* player in Level::getPlayers())
 	{
+		if (player == NULL)
+			continue;
+
 		Tile* playerTile = getTile(player->getBoardPos());
 
 		for each (Tile* tile in playerTile->getConnections())
-			if (tile->getOwner() == player->getId())
+			if (tile != NULL && tile->getOwner() == player->getId())
 				connections++;
 
 		if (connections >= 2)

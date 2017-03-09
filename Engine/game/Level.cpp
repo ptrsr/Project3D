@@ -164,6 +164,14 @@ bool Level::GetStart()
 	return _start;
 }
 
+void Level::ResetStatues()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		_lobbyState->UpdateVisual(static_cast<Id>(i + 1), false);
+	}
+}
+
 void Level::AddSpawn(PlayerData player)
 {
 	_spawnQueue.push_back(player);
@@ -179,9 +187,9 @@ void Level::AddPickUp(PickupData pickUp)
 	_pickUpQueue.push_back(pickUp);
 }
 
-void Level::AddScore(ScoreData score)
+void Level::AddTile(TileData tile)
 {
-	_scoreQueue.push_back(score);
+	_tileQueue.push_back(tile);
 }
 
 void Level::AddEffect(EffectData effect)
@@ -218,16 +226,18 @@ void Level::CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos)
 	pd.boardY = pos.y;
 	pd.oldX = oldPos.x;
 	pd.oldY = oldPos.y;
+
 	Send(DataType::PICKUPDATA, (char*)&pd);
 }
 
-void Level::CreatePacket(Id playerId, int score)
+void Level::CreatePacket(Id playerId, glm::vec2 tilePos)
 {
-	ScoreData sd;
-	sd.playerId = playerId;
-	sd.score = score;
+	TileData td;
+	td.playerId = playerId;
+	td.boardX = tilePos.x;
+	td.boardY = tilePos.y;
 
-	Send(DataType::SCOREDATA, (char*)&sd);
+	Send(DataType::TILEDATA, (char*)&td);
 }
 
 void Level::CreatePacket(Id playerId, Effect effect, glm::vec2 pos)
@@ -348,12 +358,11 @@ void Level::update(float pStep)
 			spawnPickUp(pData.type, glm::vec2(pData.boardX, pData.boardY));
 		_pickUpQueue.erase(_pickUpQueue.begin());
 	}
-	while (_scoreQueue.size() > 0)
+	while (_tileQueue.size() > 0)
 	{
-		ScoreData sData = _scoreQueue[0];
-		_board->getScore(sData.playerId);
-		_players[sData.playerId - 1]->addScore(sData.score);
-		_scoreQueue.erase(_scoreQueue.begin());
+		TileData tData = _tileQueue[0];
+		_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
+		_tileQueue.erase(_tileQueue.begin());
 	}
 	while (_storeQueue.size() > 0)
 	{
@@ -381,7 +390,7 @@ void Level::update(float pStep)
 		_moveQueue.erase(_moveQueue.begin());
 	}
 
-
+	//Lobby state
 	if (!_start)
 	{
 		if (_lobbyState != NULL)
@@ -412,7 +421,6 @@ void Level::update(float pStep)
 
 	//has a bool check so it happens only once
 
-
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
 	{
@@ -434,7 +442,7 @@ void Level::update(float pStep)
 
 			_finished = true;
 		}
-		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
+		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
