@@ -32,12 +32,12 @@ void AudioManager::PlaySound(SFX soundEnum) {
 void AudioManager::LoadAllSFX() {
 
 	for (int i = 0; i < 9; i++) {
-		if (!_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav")) {
+		if (!_buffer[i].loadFromFile(config::MGE_SOUND_PATH + _nameOfSound[i] + ".wav")) {
 			cout << "Couldn't load SFX from file" << endl;
 
 		}
 		else {
-			_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav");
+			_buffer[i].loadFromFile(config::MGE_SOUND_PATH + _nameOfSound[i] + ".wav");
 		}
 	}
 }

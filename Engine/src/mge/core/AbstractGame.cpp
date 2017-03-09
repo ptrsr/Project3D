@@ -117,7 +117,7 @@ void AbstractGame::run()
 				cout << "B works" << endl;
 			}
 
-			Skybox::render();
+			//Skybox::render();
 			Bloom::renderToFBO();
             _render();
 			Bloom::blur(2);
