@@ -81,6 +81,7 @@ void MenuScene::_initializeScene()
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
+	AudioManager::get();
 
 
 	_startState = new StartState();
