@@ -19,6 +19,7 @@ public:
 
 	virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
+	virtual void setLight(bool outside) { };
 	glm::vec3 getColor();
 	void setColor(glm::vec3 pColor);
 

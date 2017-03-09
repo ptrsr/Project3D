@@ -3,7 +3,7 @@
 #include "../game/Level.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "mge/materials/ChangeColorMaterial.hpp"
 #include "mge/auxiliary/AudioManager.h"
 #include "PickUps/PickUp.hpp"
 #include "PickUps/Splash.hpp"
@@ -31,7 +31,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 		playerId == Id::p2 ? 1 : playerId == Id::p4 ? 0.72f : 0,
 		playerId == p3 ? 1 : playerId == Id::p4 ? 0.53f : 0);
 
-	this->setMaterial(new LitMaterial(color));
+	this->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "player.png"), Texture::load(config::MGE_TEXTURE_PATH + "player_highlight.png"), color));
 };
 
 void Player::StorePickUp(PickUp* pickUp)
