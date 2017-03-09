@@ -143,6 +143,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::STARTDATA:
 		StartData startData = *reinterpret_cast<StartData*>(buf);
+		Level::get()->ResetStatues();
 		Level::get()->Start(startData.start);
 		break;
 	case DataType::MOVEDATA:
@@ -153,9 +154,13 @@ void Client::HandlePacket(DataType type, char* buf)
 		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);
 		Level::get()->AddPickUp(pickupData);
 		break;
+	case DataType::TILEDATA:
+		TileData tileData = *reinterpret_cast<TileData*>(buf);
+		Level::get()->AddTile(tileData);
+		break;
 	case DataType::SCOREDATA:
 		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
-		Level::get()->AddScore(scoreData);
+		Level::get()->SetScore(scoreData.playerId, scoreData.score);
 		break;
 	case DataType::EFFECTDATA:
 		EffectData effectData = *reinterpret_cast<EffectData*>(buf);
@@ -168,6 +173,11 @@ void Client::HandlePacket(DataType type, char* buf)
 	case DataType::LEAVEDATA:
 		LeaveData leaveData = *reinterpret_cast<LeaveData*>(buf);
 		Level::get()->AddLeave(leaveData);
+		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		if (readyData.playerId == _playerId) return; //Ignore myself
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
 		break;
 	}
 }

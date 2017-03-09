@@ -8,7 +8,8 @@ private:
 	sf::SoundBuffer _buffer[9];
 	std::string _nameOfSound[9];
 	std::string _path;
-	sf::Music* _backgroundMusic;
+	sf::Music* _backgroundMusiclevel;
+	sf::Music* _backgroundMusicMenu;
 	sf::Sound _sound;
 	bool _levelIsPlaying = false;
 	bool _menuIsPlaying = false;

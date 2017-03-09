@@ -27,6 +27,7 @@ class Text
 		void setText(string textToDislpay);
 		virtual GameObject* getPlane();
 		virtual void deleteScene();
+		int CheckState();
 
 	private:
 		GameObject * placeToRenderText;
@@ -38,7 +39,8 @@ class Text
 		void deleteLastObject();
 		string _textToDislplay;
 		TextType _textType;
-		string text;
+		string text = "";
+		string ip;
 		string copyForCompare;
 		std::vector<GameObject*> objs;
 		GameObject* posOfObjs[23];

@@ -30,15 +30,17 @@ glm::vec2 Tile::getBoardPos()
 vector<Tile*> Tile::getConnections()
 {
 	vector<Tile*> connections;
+	vector<glm::vec2> positions;
 
-	connections.push_back(Level::getBoard()->getTile(_boardPos + glm::vec2(0, -1))); //up
-	connections.push_back(Level::getBoard()->getTile(_boardPos + glm::vec2(0, 1)));  //down
-	connections.push_back(Level::getBoard()->getTile(_boardPos + glm::vec2(-1, 0))); //left
-	connections.push_back(Level::getBoard()->getTile(_boardPos + glm::vec2(1, 0)));  //right
+	positions.push_back(_boardPos + glm::vec2(0, -1));
+	positions.push_back(_boardPos + glm::vec2(0, 1));
+	positions.push_back(_boardPos + glm::vec2(-1, 0));
+	positions.push_back(_boardPos + glm::vec2(1, 0));
 
-	for (int i = 0; i < connections.size(); i++)
-		if (!connections[i])
-			connections.erase(connections.begin() + i);
+
+	for each (glm::vec2 pos in positions)
+		if (!Level::getBoard()->outOfBounds(pos))
+			connections.push_back(Level::getBoard()->getTile(pos));
 
 	return connections;
 }
@@ -55,6 +57,9 @@ void Tile::setOwner(Id pPlayer)
 		{
 			for each (Tile* tile in getConnections())
 			{
+				if (tile == NULL)
+					continue;
+
 				if (tile->getOwner() == _owner)
 					Level::getBoard()->checkTile(tile);
 

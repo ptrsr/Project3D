@@ -87,6 +87,7 @@ int Server::StartServer()
 int Server::StopServer()
 {
 	cout << "Stopping server.." << endl;
+	_running = false; //Stop all loops
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
 	cout << "Server stopped" << endl;
@@ -107,6 +108,19 @@ void Server::SendAll(DataType type, char* data)
 int Server::ConnectedCount()
 {
 	return _connectedClients;
+}
+
+//
+//Changes the ready count
+//
+void Server::AddReadyCount(bool value)
+{
+	if (value)
+		_readyCount++;
+	else
+		_readyCount--;
+
+	CountReady();
 }
 
 //
@@ -183,16 +197,6 @@ void Server::AcceptClients()
 
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
-
-				if (_connectedClients == 3)
-				{
-					Sleep(7500);
-					StartData sd;
-					sd.start = true;
-					NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
-
-					Level::get()->Start(sd.start); //Start our game too
-				}
 			}
 			else
 			{
@@ -256,6 +260,12 @@ void Server::HandlePacket(DataType type, char* buf)
 		UseData useData = *reinterpret_cast<UseData*>(buf);
 		Level::getPlayer(useData.playerId)->_movement->activate = true;
 		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
+		NotifyClients(DataType::READYDATA, (char*)&readyData);
+		AddReadyCount(readyData.ready);
+		break;
 	}
 }
 
@@ -268,6 +278,20 @@ void Server::NotifyClients(DataType type, char* data)
 
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
+	}
+}
+
+void Server::CountReady()
+{
+	if (_readyCount == 2)
+	{
+		Level::get()->ResetStatues();
+
+		StartData sd;
+		sd.start = true;
+		NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
+
+		Level::get()->Start(sd.start); //Start our game too
 	}
 }
 
@@ -334,6 +358,6 @@ void Server::CloseClientConnection(SOCKET client)
 			break;
 		}
 	}
-	//_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
+
 	_connectedClients--; //Update current connected clients
 }

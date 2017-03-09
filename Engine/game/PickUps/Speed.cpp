@@ -1,6 +1,7 @@
 #include "../game/PickUps/Speed.hpp"
 
 #include "mge/materials/LitMaterial.hpp"
+#include "mge/auxiliary/AudioManager.h"
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
 
@@ -23,5 +24,6 @@ Speed::Speed(float moveTime) : PickUp("Speed", moveTime)
 
 void Speed::applyPickUp(Player* pPlayer)
 {
+	AudioManager::get()->PlaySound(SFX::usespeedPickup1);
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::speed, pPlayer->getBoardPos());
 }

@@ -2,8 +2,8 @@
 
 #include "../game/Enums.hpp"
 
-struct ScoreData
+struct ReadyData
 {
 	Id playerId;
-	float score;
+	bool ready;
 };

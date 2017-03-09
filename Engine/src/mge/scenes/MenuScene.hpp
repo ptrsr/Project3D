@@ -44,6 +44,9 @@ class MenuScene : public AbstractGame
 		void _changeCameraState(Level* level);
 		void _deleteScene();
 
+		int _delay = 80;
+		int _counter = 0;
+
 		MenuScene(const MenuScene&);
 		MenuScene& operator=(const MenuScene&);
 };

@@ -56,9 +56,6 @@
     <Filter Include="network\packets">
       <UniqueIdentifier>{f03234b6-3f7f-4e34-8cd8-e204998d6243}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MGE Source files\mge\rendering">
-      <UniqueIdentifier>{b4b177c2-9f52-476b-ba8c-353aabba6279}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -255,6 +252,7 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\CreditsState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\Tile.hpp" />
     <ClInclude Include="..\src\mge\behaviours\CameraBehaviour.hpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
@@ -277,9 +275,6 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\game\PickUps\PickUp.hpp">
-      <Filter>game\PickUps</Filter>
-    </ClInclude>
-    <ClInclude Include="..\game\PickUps\ScoreCube.hpp">
       <Filter>game\PickUps</Filter>
     </ClInclude>
     <ClInclude Include="..\game\Board.hpp">
@@ -340,6 +335,7 @@
       <Filter>network\packets</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mge\auxiliary\GameTimer.hpp" />
+    <ClInclude Include="..\src\mge\core\Bloom.hpp" />
     <ClInclude Include="..\src\mge\materials\StatueMaterial.hpp" />
     <ClInclude Include="..\src\mge\scenes\menuStates\LobbyState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
@@ -347,27 +343,17 @@
     <ClInclude Include="..\src\mge\scenes\menuStates\WinState.hpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClInclude>
-    <ClInclude Include="..\game\Tile.hpp">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp">
-      <Filter>MGE Source files\mge\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mge\auxiliary\BreathFirst.hpp">
-      <Filter>MGE Source files\mge\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\network\packets\LeaveData.hpp" />
     <ClInclude Include="..\network\packets\StoreData.hpp" />
     <ClInclude Include="..\network\packets\UseData.hpp" />
-    <ClInclude Include="..\src\mge\core\Bloom.hpp">
-      <Filter>MGE Source files\mge\rendering</Filter>
+    <ClInclude Include="..\network\packets\ReadyData.hpp">
+      <Filter>network\packets</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp">
-      <Filter>MGE Source files\mge\materials</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mge\core\Skybox.hpp">
-      <Filter>MGE Source files\mge\rendering</Filter>
-    </ClInclude>
+    <ClInclude Include="..\game\PickUps\VisualPickup.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\BreathFirst.hpp" />
+    <ClInclude Include="..\src\mge\auxiliary\PathFinder.hpp" />
+    <ClInclude Include="..\src\mge\core\Skybox.hpp" />
+    <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -580,6 +566,9 @@
     <ClCompile Include="..\src\mge\scenes\menuStates\CreditsState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\Tile.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\CameraBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClCompile>
@@ -599,9 +588,6 @@
       <Filter>MGE Source files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\game\PickUps\PickUp.cpp">
-      <Filter>game\PickUps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\game\PickUps\ScoreCube.cpp">
       <Filter>game\PickUps</Filter>
     </ClCompile>
     <ClCompile Include="..\game\Board.cpp">
@@ -631,6 +617,9 @@
     <ClCompile Include="..\src\mge\auxiliary\GameTimer.cpp">
       <Filter>MGE Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mge\core\Bloom.cpp">
+      <Filter>MGE Source files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\mge\materials\StatueMaterial.cpp">
       <Filter>MGE Source files</Filter>
     </ClCompile>
@@ -640,23 +629,20 @@
     <ClCompile Include="..\src\mge\scenes\menuStates\WinState.cpp">
       <Filter>MGE Source files\scenes\menuStates</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\Tile.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp">
-      <Filter>MGE Source files\mge\auxiliary</Filter>
+    <ClCompile Include="..\game\PickUps\VisualPickup.cpp">
+      <Filter>MGE Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\auxiliary\BreathFirst.cpp">
-      <Filter>MGE Source files\mge\auxiliary</Filter>
+      <Filter>MGE Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mge\core\Bloom.cpp">
-      <Filter>MGE Source files\mge\rendering</Filter>
+    <ClCompile Include="..\src\mge\auxiliary\PathFinder.cpp">
+      <Filter>MGE Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\core\Skybox.cpp">
-      <Filter>MGE Source files\mge\rendering</Filter>
+      <Filter>MGE Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp">
-      <Filter>MGE Source files\mge\materials</Filter>
+      <Filter>MGE Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -706,11 +692,7 @@
     <None Include="..\assets\mge\shaders\bloom\quad.vs" />
     <None Include="..\assets\mge\shaders\statue.fs" />
     <None Include="..\assets\mge\shaders\statue.vs" />
-    <None Include="..\assets\mge\shaders\skybox.fs">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="..\assets\mge\shaders\skybox.vs">
-      <Filter>assets\shaders</Filter>
-    </None>
+    <None Include="..\assets\mge\shaders\skybox.fs" />
+    <None Include="..\assets\mge\shaders\skybox.vs" />
   </ItemGroup>
 </Project>
