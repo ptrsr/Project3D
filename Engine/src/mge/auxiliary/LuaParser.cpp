@@ -281,12 +281,7 @@ int setLight(lua_State* lua) {
 	{
 		AbstractLight* light;
 		bool tName = lua_toboolean(lua, -size + 1);
-		if (!tName) {
-			obj->getMaterial()->setLight(0);
-		}
-		else {
-			obj->getMaterial()->setLight(1);
-		}
+		obj->getMaterial()->setLight(tName);
 	}
 	return 0;
 }

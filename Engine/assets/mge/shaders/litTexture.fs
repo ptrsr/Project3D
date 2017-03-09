@@ -117,9 +117,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 tColor)
     float attenuation = 1.0f / (light.constant + light.linear * distance + 
   			     light.quadratic * (distance * distance));
 				 
-    vec3 ambient  = light.ambient  * modelColor;
-    vec3 diffuse  = light.diffuse  * diff * modelColor * attenuation;
-    vec3 specular = light.specular * spec * modelColor * attenuation;
+    vec3 ambient  = light.ambient  * tColor;
+    vec3 diffuse  = light.diffuse  * diff * tColor * 1;
+    vec3 specular = light.specular * spec * tColor * 1;
 
 	return (ambient + diffuse + specular);
 }

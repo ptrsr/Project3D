@@ -69,7 +69,33 @@ void TextureMaterial::setSpecular(Texture* pSpecularTexture)
 	_specular = pSpecularTexture;
 }
 void TextureMaterial::setLight(bool outside) {
+	_useLights = new vector<AbstractLight*>();
+	if (outside) {
+		for each (AbstractLight* abstractLight in *_lights)
+		{
 
+			if (typeid(*abstractLight) == typeid(DirectionalLight))
+			{
+				_useLights->push_back(abstractLight);
+			}
+			else {
+				continue;
+			}
+		}
+	}
+	else{
+		for each (AbstractLight* abstractLight in *_lights)
+		{
+
+			if (typeid(*abstractLight) == typeid(PointLight))
+			{
+				_useLights->push_back(abstractLight);
+			}
+			else {
+				continue;
+			}
+		}
+	}
 }
 
 void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
@@ -112,7 +138,7 @@ void TextureMaterial::renderLights()
 	int pLights = 0;
 	int sLights = 0;
 
-	for each (AbstractLight* abstractLight in *_lights)
+	for each (AbstractLight* abstractLight in *_useLights)
 	{
 		std::string lType = "";
 		std::string num = "";

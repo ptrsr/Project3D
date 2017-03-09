@@ -69,18 +69,18 @@ void MenuScene::_initializeScene()
 
 
 
-
-	LuaParser* luaParser = new LuaParser("main.lua");
-
 	GameObject* center = new GameObject("center");
 	GameObject* holder = new GameObject("holder");
 	GameObject* light = new GameObject("light");
+	GameObject* pointLight = new GameObject("pointLight", glm::vec3(-4.5, 7.5f, 4.5f));
 
 	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
-	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
+	//light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
+	light->setBehaviour(new PointLight(glm::vec3(1), glm::vec3(0.1f),glm::vec3(1),0.001f,0,0));
 
+	LuaParser* luaParser = new LuaParser("main.lua");
 
 
 	_startState = new StartState();

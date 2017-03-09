@@ -43,6 +43,7 @@ private:
 
 	//lights
 	std::vector<AbstractLight*>* _lights;
+	std::vector<AbstractLight*>* _useLights;
 
 	//settings
 	glm::vec3 _modelColor;
