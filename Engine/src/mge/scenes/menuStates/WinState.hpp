@@ -27,10 +27,7 @@ class WinState : public AbstactState
 		Mesh * _twoBig;
 		Mesh * _threeBig;
 		Mesh * _fourBig;
-		GameObject * _firstPos;
-		GameObject * _secondPos;
-		GameObject * _thirdPos;
-		GameObject * _forthPos;
+		std::vector<GameObject*> _numbers;
 		GameObject* _plane;
 		int _counter = 0;
 		int _waitTime = 500;
@@ -39,7 +36,11 @@ class WinState : public AbstactState
 
 
 		void spawnRanking();
-		glm::vec3 getStatue(int playerId);
+		GameObject* getStatue(int playerId);
+
+		Id GetHighestScore(float* scores);
+		void AddNumberObj(Id playerId, int place);
+		Mesh* GetNumberMesh(int place);
 
 		WinState(const WinState&);
 		WinState& operator=(const WinState&);

@@ -82,134 +82,94 @@ int WinState::CheckSelection() {
 		return -1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+		_finished = false;
+		_counter = 0;
+		_spawned = false;
 		return -1;
 	}
 	else { return 4; };
 	
 }
 
-void WinState::spawnRanking() {
-
-	float _score[4];
-	_score[0]= Level::get()->getScoreOfId(0);
-	_score[1] = Level::get()->getScoreOfId(1);
-	_score[2] = Level::get()->getScoreOfId(2);
-	_score[3] = Level::get()->getScoreOfId(3);
-	float highestScore = 0;
+Id WinState::GetHighestScore(float* scores)
+{
+	float highestScore = -1;
 	int id = -1;
 
-	//Setting first Position
 	for (int i = 0; i < 4; i++)
 	{
-		if (highestScore < _score[i])
+		if (highestScore < scores[i])
 		{
-			highestScore = _score[i];
+			highestScore = scores[i];
 			id = i + 1;
 		}
 	}
-	_score[id - 1] = 0;
-	highestScore = 0;
-	_firstPos = new GameObject("one", getStatue(id));
-	if (_firstPos == NULL) {
-		cout << "Couldn't find statue to set rank" << endl;
-		return;
-	}
-	id = -1;
-	_firstPos->setMesh(_oneBig);
-	_firstPos->translate(glm::vec3(0, 1.5f, 0));
-	_firstPos->rotateDegrees(180, glm::vec3(0, 1, 0));
-	_firstPos->setMaterial(new LitMaterial());
-	World::add(_firstPos);
+	scores[id - 1] = -1;
 
-	//Setting Second Position
-	for (int i = 0; i < 4; i++)
-	{
-		if (highestScore < _score[i])
-		{
-			highestScore = _score[i];
-			id = i + 1;
-		}
-	}
-	_score[id - 1] = 0;
-	highestScore = 0;
-	_secondPos = new GameObject("two", getStatue(id));
-	if (_secondPos == NULL) {
-		cout << "Couldn't find statue to set rank" << endl;
-		return;
-	}
-	id = -1;
-	_secondPos->setMesh(_twoBig);
-	_secondPos->translate(glm::vec3(0, 1.5f, 0));
-	_secondPos->rotateDegrees(180,glm::vec3(0, 1, 0));
-	_secondPos->setMaterial(new LitMaterial());
-	World::add(_secondPos);
-
-	//Setting Third Position
-	for (int i = 0; i < 4; i++)
-	{
-		if (highestScore < _score[i])
-		{
-			highestScore = _score[i];
-			id = i + 1;
-		}
-	}
-	_score[id - 1] = 0;
-	highestScore = 0;
-	_thirdPos = new GameObject("three", getStatue(id));
-	if (_thirdPos == NULL) {
-		cout << "Couldn't find statue to set rank" << endl;
-		return;
-	}
-	id = -1;
-	_thirdPos->setMesh(_threeBig);
-	_thirdPos->translate(glm::vec3(0, 1.5f, 0));
-	_thirdPos->rotateDegrees(180, glm::vec3(0, 1, 0));
-	_thirdPos->setMaterial(new LitMaterial());
-	World::add(_thirdPos);
-
-	//Setting Fourth Position
-	for (int i = 0; i < 4; i++)
-	{
-		if (highestScore < _score[i])
-		{
-			highestScore = _score[i];
-			id = i + 1;
-		}
-	}
-	_score[id - 1] = 0;
-	highestScore = 0;
-	_forthPos = new GameObject("four",getStatue(id));
-	if (_forthPos == NULL) {
-		cout << "Couldn't find statue to set rank" << endl;
-		return;
-	}
-
-	id = -1;
-	_forthPos->setMesh(_fourBig);
-	_forthPos->translate(glm::vec3(0, 1.5f, 0));
-	_forthPos->rotateDegrees(180, glm::vec3(0, 1, 0));
-	_forthPos->setMaterial(new LitMaterial());
-	World::add(_forthPos);
-	
-	_spawned = true;
-	
+	return (Id)id;
 }
 
-glm::vec3 WinState::getStatue(int playerId) {
-	if (playerId == 1) {
-		return ObjectCache::find("Fire1")->getLocalPosition();
+void WinState::AddNumberObj(Id playerId, int place)
+{
+	GameObject* placeNumber = new GameObject("placeNumber" + place, glm::vec3(0, 0, 0));
+	placeNumber->setMesh(GetNumberMesh(place));
+	placeNumber->translate(glm::vec3(0, 1.5f, 0));
+	placeNumber->setMaterial(new LitMaterial());
+	placeNumber->setParent(getStatue(playerId));
+	_numbers.push_back(placeNumber);
+}
+
+Mesh* WinState::GetNumberMesh(int place)
+{
+	switch (place)
+	{
+	case 1:
+		return _oneBig;
+	case 2:
+		return _twoBig;
+	case 3:
+		return _threeBig;
+	case 4:
+		return _fourBig;
 	}
-	else if (playerId == 2) {
-		return ObjectCache::find("Earth1")->getLocalPosition();
+}
+
+void WinState::spawnRanking()
+{
+	float scores[4];
+	for (int i = 0; i < 4; i++)
+	{
+		scores[i] = Level::get()->getScoreOfId(i);
 	}
-	else if (playerId == 3) {
-		return ObjectCache::find("Water1")->getLocalPosition();
+
+	Id first = GetHighestScore(scores);
+	Id second = GetHighestScore(scores);
+	Id third = GetHighestScore(scores);
+	Id fourth = GetHighestScore(scores);
+
+	AddNumberObj(first, 1);
+	AddNumberObj(second, 2);
+	AddNumberObj(third, 3);
+	AddNumberObj(fourth, 4);
+	
+	_spawned = true;
+}
+
+GameObject* WinState::getStatue(int playerId) {
+	if (playerId == Id::p1) {
+		return ObjectCache::find("Fire1");
 	}
-	else if (playerId == 4) {
-		return ObjectCache::find("Wind1")->getLocalPosition();
+	else if (playerId == Id::p2) {
+		return ObjectCache::find("Earth1");
+	}
+	else if (playerId == Id::p3) {
+		return ObjectCache::find("Water1");
+	}
+	else if (playerId == Id::p4) {
+		return ObjectCache::find("Wind1");
 	}
 	else {
-		return glm::vec3(0,0,0);
+		return NULL;
 	}
 
 }
@@ -219,10 +179,16 @@ GameObject* WinState::getPlane() {
 	return _plane;
 }
 
-void WinState::deleteScene() {
+void WinState::deleteScene()
+{
+	while (_numbers.size() > 0)
+	{
+		delete _numbers[0];
+		_numbers.erase(_numbers.begin());
+	}
 }
 
 WinState::~WinState()
 {
-
+	
 }

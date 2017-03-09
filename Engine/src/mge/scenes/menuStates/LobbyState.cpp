@@ -123,6 +123,5 @@ void LobbyState::deleteScene() {
 
 LobbyState::~LobbyState()
 {
-	
-	//dtor
+
 }

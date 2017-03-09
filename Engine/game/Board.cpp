@@ -190,7 +190,6 @@ Id Board::getPlayerWithHighestScore() {
 		{
 			highestScore = _score[i];
 			idToReturn = i + 1;
-			//cout << idToReturn << endl;
 		}
 	}
 	return (Id)idToReturn;

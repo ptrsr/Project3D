@@ -147,7 +147,6 @@ void MenuScene::_render() {
 
 			}
 			if (Level::get()->checkIfFinished()) {
-				Level::reset();
 				_currentState = 4;
 			}
 			if (_currentState != 3) {
@@ -172,7 +171,12 @@ void MenuScene::_render() {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_winState);
 			}
-			if (_currentState != 4) _cameraStateChanged = false;
+			if (_currentState != 4)
+			{
+				_cameraStateChanged = false;
+				_winState->deleteScene();
+				Level::get()->reset();
+			}
 			break;
 	}
 	}

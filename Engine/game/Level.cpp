@@ -436,12 +436,12 @@ void Level::update(float pStep)
 
 	if (hightestScorePlayer != -1)
 	{
-		_currentScore[hightestScorePlayer] += pStep;
-		if (_currentScore[hightestScorePlayer] == 30.0f) {
-
+		_currentScore[hightestScorePlayer - 1] += pStep;
+		if (_currentScore[hightestScorePlayer - 1] >= 30.0f)
+		{
 			_finished = true;
 		}
-		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
+		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer - 1] / 30.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
