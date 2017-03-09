@@ -18,4 +18,3 @@ Camera::~Camera()
 glm::mat4& Camera::getProjection() {
     return _projection;
 }
-

@@ -63,6 +63,9 @@ void MovementBehaviour::update(float pStep)
 		//apply pickups
 		Level::get()->ApplyPickUp(_player);
 
+		//resolve areas
+		Level::checkAreas();
+
 		_lastMoveTime = 0;
 	}
 

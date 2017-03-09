@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include "mge/core/GameObject.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "mge/materials/TextureMaterial.hpp"
 #include "Enums.hpp"
 
 class Tile : public GameObject
@@ -13,9 +13,23 @@ public:
 	void setOwner(Id pPlayer);
 	Id getOwner();
 
+	glm::vec2 getBoardPos();
+
+	vector<Tile*> getConnections();
+
 	LitMaterial* _material;
 
+	//loop fill
+	bool _connected = true;
+
+	//pathfinding
+	float _costCurrent;
+	float _costEstimate;
+
+	Tile* _parentTile = NULL;
+
 private:
+	glm::vec2 _boardPos;
 	Id _owner = Id::empty;
 
 };

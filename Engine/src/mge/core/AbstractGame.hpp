@@ -29,7 +29,7 @@ class AbstractGame
         virtual ~AbstractGame();
 
         //creates a window, initializes glew, a renderer and a world instance
-        virtual void initialize(int windowWidth = 1920, int windowHeight = 1080);
+        virtual void initialize(int windowWidth = 1280, int windowHeight = 720);
         //run the actual process of updating all objects, rendering them and processing events
         virtual void run();
     protected:

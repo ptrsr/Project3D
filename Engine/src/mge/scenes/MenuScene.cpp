@@ -99,7 +99,7 @@ void MenuScene::_initializeScene()
 
 	Level::get();
 
-	_currentState = 3;
+	_currentState = -1;
 	_world->add(center);
 	_world->add(holder);
 
@@ -114,6 +114,7 @@ void MenuScene::_render() {
 
 		switch (_currentState) {
 		case -1:
+			AudioManager::get()->startMenuMusic();
 			_startState->Update();
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -122,6 +123,7 @@ void MenuScene::_render() {
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
+			AudioManager::get()->startMenuMusic();
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -141,16 +143,20 @@ void MenuScene::_render() {
 				_changeCameraState(_level);
 
 				Level::get()->Host();
-				//Level::get()->Join("192.168.1.100", 56789);
+				//Level::get()->Join("145.76.113.138", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {
+				Level::reset();
 				_currentState = 4;
 			}
-			if (_currentState != 3) _cameraStateChanged = false;
+			if (_currentState != 3) {
+				_cameraStateChanged = false;
+			}
 			break;
 
 		case 1:
+			AudioManager::get()->startMenuMusic();
 			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
@@ -161,7 +167,7 @@ void MenuScene::_render() {
 			break;
 		case 4:
 			_winState->Update();
-			_winState->CheckSelection();
+			_currentState = _winState->CheckSelection();
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_winState);

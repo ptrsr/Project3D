@@ -65,14 +65,25 @@ void WinState::Update() {
 	if (!_spawned)
 		spawnRanking();
 
-	_counter++;
 	if (_counter >= _waitTime) {
 		_finished = true;
+	}
+	else {
+		_counter++;
+		_waitTime = 500;
 	}
 }
 //check if you selected
 int WinState::CheckSelection() {
-	if (_finished) return -1;
+	if (_finished) {
+		_finished = false;
+		_counter = 0;
+		_spawned = false;
+		return -1;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+		return -1;
+	}
 	else { return 4; };
 	
 }

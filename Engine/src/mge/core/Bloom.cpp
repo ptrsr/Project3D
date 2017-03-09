@@ -10,6 +10,8 @@ Bloom::Bloom(unsigned int screenWidth, unsigned int screenHeight)
 
 	setupFBO(screenWidth, screenHeight);
 	setupPingPong(screenWidth, screenHeight);
+
+	glBindBuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Bloom::setupFBO(int screenWidth, int screenHeight)
