@@ -44,6 +44,8 @@ public:
 
 	void Host();
 	void Join(const char* IP, int port);
+	void LeaveHost();
+	void LeaveClient();
 	
 	virtual void update(float pStep);
 

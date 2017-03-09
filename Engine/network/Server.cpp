@@ -87,6 +87,7 @@ int Server::StartServer()
 int Server::StopServer()
 {
 	cout << "Stopping server.." << endl;
+	_running = false; //Stop all loops
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
 	cout << "Server stopped" << endl;
@@ -221,6 +222,9 @@ void Server::HandleClients(SOCKET client)
 
 	while (_running)
 	{
+		if (Level::get()->checkIfFinished())
+			continue;
+
 		//Check if the client is still connected
 		if (!PacketHelper::Connected( client))
 		{
@@ -357,6 +361,6 @@ void Server::CloseClientConnection(SOCKET client)
 			break;
 		}
 	}
-	//_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
+
 	_connectedClients--; //Update current connected clients
 }

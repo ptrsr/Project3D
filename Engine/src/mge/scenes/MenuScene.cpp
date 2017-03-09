@@ -145,7 +145,7 @@ void MenuScene::_render() {
 				_changeCameraState(_level);
 
 				Level::get()->Host();
-				//Level::get()->Join("192.168.1.103", 56789);
+				//Level::get()->Join("127.0.0.1", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {
@@ -168,6 +168,7 @@ void MenuScene::_render() {
 			break;
 		case 4:
 			_winState->Update();
+			Level::get()->LeaveClient();
 			_currentState = _winState->CheckSelection();
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
@@ -177,6 +178,7 @@ void MenuScene::_render() {
 			{
 				_cameraStateChanged = false;
 				_winState->deleteScene();
+				Level::get()->LeaveHost();
 				Level::get()->reset();
 			}
 			break;

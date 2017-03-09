@@ -73,6 +73,26 @@ void Level::Join(const char* IP, int port)
 	client.detach(); //Let it run seperately from the main thread
 }
 
+void Level::LeaveHost()
+{
+	if (_server != NULL)
+	{
+		_server->StopServer();
+		delete _server;
+		_server = NULL;
+	}
+}
+
+void Level::LeaveClient()
+{
+	if (_client != NULL)
+	{
+		_client->Disconnect();
+		delete _client;
+		_client = NULL;
+	}
+}
+
 void Level::reset()
 {
 	delete _level;
@@ -373,6 +393,10 @@ void Level::update(float pStep)
 	// - Handle host leaving
 	// - Remember to set client/server to NULL on leaving
 	//
+	//Check if match is over
+	if (_finished)
+		return;
+
 	while (_leaveQueue.size() > 0)
 	{
 		LeaveData leave = _leaveQueue[0];
@@ -438,10 +462,6 @@ void Level::update(float pStep)
 
 	//Wait till all players are ready
 	if (!_start)
-		return;
-
-	//Check if match is over
-	if (_finished)
 		return;
 
 	//Spawns random pick up

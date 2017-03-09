@@ -97,6 +97,9 @@ void Client::ReceiveData()
 {
 	while (_connected)
 	{
+		if (Level::get()->checkIfFinished())
+			continue;
+
 		//Check if we are still connected
 		if (!PacketHelper::Connected(_sock))
 		{
