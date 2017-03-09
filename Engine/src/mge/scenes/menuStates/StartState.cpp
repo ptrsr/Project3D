@@ -43,29 +43,12 @@ StartState::StartState()
 //build the game _world
 void StartState::_initializeScene()
 {
-	Mesh* planeMesh = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
-	Mesh* cubeMesh = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
-
-	//GameObject* spotLight = new GameObject("dirL", glm::vec3(0, 1.3f, -1));
-	//spotLight->setBehaviour(new DirectionalLight());
-	//spotLight->rotate(90, glm::vec3(1, 0, 0));
-	//World::add(spotLight);
-
 
 	GameObject * plane = ObjectCache::find("mainPlane");
 	if (plane != NULL) {
 		_plane = plane;
 		
 	}
-
-	/*for (int i = 0; i < 4; i++) {
-		GameObject* rock = new GameObject("rock1", glm::vec3((i * 0.5f) - 0.75f, 0.2f, 20));
-		rock->scale(glm::vec3(0.2f, 0.2f, 0.2f));
-		rock->setMesh(cubeMesh);
-		rock->setMaterial(new LitMaterial(LitMaterial::Lit::fragment, glm::vec3(1, 0, 1)));
-		World::add(rock);
-		_selectableObjs[i] = rock;
-	}*/
 	GameObject * create = ObjectCache::find("create_text");
 	if (create != NULL)
 	{

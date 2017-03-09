@@ -27,14 +27,13 @@ class StartState : public AbstactState
 		int _counter = 1;
 		void _updateColor();
 		void _clearObjectColor();
-		string pathCreateWhite;
-		string pathCreateRed;
-		string pathCreditsWhite;
-		string pathCreditsRed;
-		Texture * createWhite;
-		Texture * createRed;
-		Texture * creditsWhite;
-		Texture * creditsRed;
+		string _path;
+		Texture * createEmpty;
+		Texture * createHighlighted;
+		Texture * creditsEmpty;
+		Texture * creditsHighlighted;
+		Texture * joinEmpty;
+		Texture * joinHighlighted;
 
 		bool _isKeyPress = true;
 		int _delay = 15;
