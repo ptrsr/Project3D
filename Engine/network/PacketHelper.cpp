@@ -24,8 +24,6 @@ pair<DataType, char*> PacketHelper::Receive(char* buffer, SOCKET client)
 
 	DataType type = *reinterpret_cast<DataType*>(dataType);
 
-	//cout << type << endl;
-
 	//Receive actual data using the buffer
 	ReceiveData(buffer, SizeOfData(type), client);
 
@@ -78,6 +76,8 @@ int PacketHelper::SizeOfData(DataType type)
 		return sizeof(UseData);
 	case DataType::LEAVEDATA:
 		return sizeof(LeaveData);
+	case DataType::READYDATA:
+		return sizeof(ReadyData);
 	default:
 		cout << "ERROR: Could not match a DataType, id " << type << endl;
 		return -1;

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glm.hpp>
+#include "../game/Enums.hpp"
 
 struct TileData
 {
-	int xGrid;
-	int zGrid;
-	glm::vec3 color;
+	Id playerId;
+	int boardX;
+	int boardY;
 };

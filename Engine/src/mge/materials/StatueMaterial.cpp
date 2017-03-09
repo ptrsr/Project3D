@@ -89,6 +89,10 @@ void StatueMaterial::setScore(float pScore)
 	_relativeScore = pScore;
 }
 
+void StatueMaterial::setLight(bool outside) {
+
+}
+
 void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
 {
 	_shader->use();

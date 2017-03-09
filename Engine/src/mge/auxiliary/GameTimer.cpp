@@ -77,22 +77,22 @@ void GameTimer::_initializeScene()
 		_firstDigid = new GameObject("FirstDigid", glm::vec3(localPos.x + 1 , localPos.y, localPos.z + 2.0f));
 		_firstDigid->rotateDegrees(180, glm::vec3(0, 1, 0));
 		_firstDigid->setMesh(MeshCache::find(config::MGE_MODEL_PATH + "zero.obj"));
-		_firstDigid->setMaterial(new ColorMaterial(glm::vec3(1)));
+		_firstDigid->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(_firstDigid);
 		_doubleDots = new GameObject("DoubleDots", glm::vec3(localPos.x + 1.2f, localPos.y, localPos.z - 2.0f));
 		_doubleDots->rotateDegrees(180, glm::vec3(0, 1, 0));
 		_doubleDots->setMesh(MeshCache::find(config::MGE_MODEL_PATH + "doubledot.obj"));
-		_doubleDots->setMaterial(new ColorMaterial(glm::vec3(1)));
+		_doubleDots->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(_doubleDots);
 		_secondDigid = new GameObject("SecondDigid", glm::vec3(localPos.x + 1.4f, localPos.y, localPos.z - 2.0f));
 		_secondDigid->rotateDegrees(180, glm::vec3(0, 1, 0));
 		_secondDigid->setMesh(MeshCache::find(config::MGE_MODEL_PATH + "zero.obj"));
-		_secondDigid->setMaterial(new ColorMaterial(glm::vec3(1)));
+		_secondDigid->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(_secondDigid);
 		_thirdDigid = new GameObject("ThirdDigid", glm::vec3(localPos.x + 1.4f, localPos.y, localPos.z - 2.0f));
 		_thirdDigid->rotateDegrees(180, glm::vec3(0, 1, 0));
 		_thirdDigid->setMesh(MeshCache::find(config::MGE_MODEL_PATH + "zero.obj"));
-		_thirdDigid->setMaterial(new ColorMaterial(glm::vec3(1)));
+		_thirdDigid->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(_thirdDigid);
 	}
 

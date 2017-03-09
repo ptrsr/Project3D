@@ -7,16 +7,22 @@ using namespace std;
 AudioManager* AudioManager::_audioManager;
 AudioManager::AudioManager()
 {
-	_backgroundMusic = new Music();
-
-	_path = config::MGE_SOUND_PATH;
-	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav")) {
+	_backgroundMusiclevel = new Music();
+	if (!_backgroundMusiclevel->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav")) {
 		cout << "Couldn't load sound from file" << endl;
 	}
 	else {
 		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav");
-		_backgroundMusic->play();
+		_backgroundMusiclevel->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav");
+	}
+
+	_backgroundMusicMenu = new Music();
+	if (!_backgroundMusicMenu->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusicMenu->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav");
 	}
 	GetNamesInString();
 	LoadAllSFX();
@@ -42,12 +48,12 @@ void AudioManager::PlaySound(SFX soundEnum) {
 void AudioManager::LoadAllSFX() {
 
 	for (int i = 0; i < 9; i++) {
-		if (!_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav")) {
+		if (!_buffer[i].loadFromFile(config::MGE_SOUND_PATH + _nameOfSound[i] + ".wav")) {
 			cout << "Couldn't load SFX from file" << endl;
 
 		}
 		else {
-			_buffer[i].loadFromFile(_path + _nameOfSound[i] + ".wav");
+			_buffer[i].loadFromFile(config::MGE_SOUND_PATH + _nameOfSound[i] + ".wav");
 		}
 	}
 }
@@ -68,22 +74,24 @@ void AudioManager::GetNamesInString() {
 
 void AudioManager::startLevelMusic() {
 	if (_levelIsPlaying) return;
-	_backgroundMusic->stop();
-	_backgroundMusic = new Music();
-	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav")) {
-		cout << "Couldn't load sound from file" << endl;
-	}
-	else {
-		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav");
-		_backgroundMusic->play();
-		_levelIsPlaying = true;
-	}
+	_backgroundMusicMenu->stop();
+	_backgroundMusiclevel->play();
+	_levelIsPlaying = true;
+	_menuIsPlaying = false;
+	
+}
+void AudioManager::startMenuMusic() {
+	if (_menuIsPlaying) return;
+	_backgroundMusicMenu->play();
+	_backgroundMusiclevel->stop();
+	_levelIsPlaying = false;
+	_menuIsPlaying = true;
 }
 
 AudioManager::~AudioManager()
 {
-	delete _backgroundMusic;
+	delete _backgroundMusicMenu;
+	delete _backgroundMusiclevel;
 }
 
 

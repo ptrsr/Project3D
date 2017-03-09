@@ -1,6 +1,7 @@
 #include "../game/PickUps/Splash.hpp"
 
 #include "mge/materials/LitMaterial.hpp"
+#include "mge/auxiliary/AudioManager.h"
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
 
@@ -23,5 +24,6 @@ Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 
 void Splash::applyPickUp(Player* pPlayer)
 {
+	AudioManager::get()->PlaySound(SFX::usesplashPickup1);
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::splash, pPlayer->getBoardPos());
 }

@@ -76,11 +76,14 @@ void MenuScene::_initializeScene()
 	GameObject* holder = new GameObject("holder");
 	GameObject* light = new GameObject("light");
 
+	AudioManager::get();
+
 	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
 	light->setParent(holder);
 
+	AudioManager::get();
 
 
 	_startState = new StartState();
@@ -114,6 +117,7 @@ void MenuScene::_render() {
 
 		switch (_currentState) {
 		case -1:
+			AudioManager::get()->startMenuMusic();
 			_startState->Update();
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -122,6 +126,7 @@ void MenuScene::_render() {
 			if (_currentState != -1) _cameraStateChanged = false;
 			break;
 		case 2:
+			AudioManager::get()->startMenuMusic();
 			_joinState->Update();
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
@@ -134,7 +139,9 @@ void MenuScene::_render() {
 		case 3:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
-				Level::reset();
+				Level::get()->LeaveHost();
+				Level::get()->LeaveClient();
+				Level::get()->reset();
 			}
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
@@ -147,10 +154,13 @@ void MenuScene::_render() {
 			if (Level::get()->checkIfFinished()) {
 				_currentState = 4;
 			}
-			if (_currentState != 3) _cameraStateChanged = false;
+			if (_currentState != 3) {
+				_cameraStateChanged = false;
+			}
 			break;
 
 		case 1:
+			AudioManager::get()->startMenuMusic();
 			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
@@ -161,12 +171,40 @@ void MenuScene::_render() {
 			break;
 		case 4:
 			_winState->Update();
-			_winState->CheckSelection();
+			Level::get()->LeaveClient();
+			_currentState = _winState->CheckSelection();
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_winState);
 			}
-			if (_currentState != 4) _cameraStateChanged = false;
+			if (_currentState != 4)
+			{
+				_cameraStateChanged = false;
+				_winState->deleteScene();
+				Level::get()->LeaveHost();
+				Level::get()->reset();
+			}
+			break;
+		case 5:
+			if (!_cameraStateChanged) {
+				_changeCameraState(_startState);
+			}
+			if (_cameraStateChanged)
+			{
+				if (_counter == _delay)
+					_changeCameraState(_level);
+				else
+					_counter++;
+			}
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
+			}
+			if (_currentState != 5)
+			{
+				Level::get()->LeaveClient();
+				Level::get()->reset();
+				_cameraStateChanged = false;
+			}
 			break;
 	}
 	}

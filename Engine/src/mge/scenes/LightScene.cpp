@@ -108,10 +108,10 @@ void LightScene::_initializeScene()
 	point->setParent(rotor);
 	_world->add(rotor);
 
-	point->setMesh(Mesh::load(config::MGE_MODEL_PATH + "sphere_flat.obj", 0.1f));
-	point->setMaterial(new ColorMaterial(pointColor));
-	point->setBehaviour(new PointLight(pointColor, glm::vec3(0.1f), glm::vec3(1), 0.4f, 0.5f, 0.7f));
-	point->translate(glm::vec3(0, 0, 1));
+	//point->setMesh(Mesh::load(config::MGE_MODEL_PATH + "sphere_flat.obj", 0.1f));
+	//point->setMaterial(new ColorMaterial(pointColor));
+	//point->setBehaviour(new PointLight(pointColor, glm::vec3(0.1f), glm::vec3(1), 0.4f, 0.5f, 0.7f));
+	//point->translate(glm::vec3(0, 0, 1));
 
 	///POINT LIGHT 2
 	glm::vec3 pointColor2 = glm::vec3(0, 0, 1);
@@ -122,11 +122,11 @@ void LightScene::_initializeScene()
 	point2->setParent(rotor2);
 	_world->add(rotor2);
 
-	point2->setMesh(Mesh::load(config::MGE_MODEL_PATH + "sphere_flat.obj", 0.1f));
+	/*point2->setMesh(Mesh::load(config::MGE_MODEL_PATH + "sphere_flat.obj", 0.1f));
 	point2->setMaterial(new ColorMaterial(pointColor2));
 	point2->setBehaviour(new PointLight(pointColor2, glm::vec3(0.1f), glm::vec3(1), 0.4f, 0.5f, 0.7f));
 	point2->translate(glm::vec3(0, 0, -1));
-	rotor2->rotate(180.0f, glm::vec3(1, 0, 0));
+	rotor2->rotate(180.0f, glm::vec3(1, 0, 0));*/
 }
 
 void LightScene::_render() {

@@ -109,17 +109,18 @@ void Text::_updateIP() {
 		size_t pos = 0;
 		std::string token;
 		std::string delimiter = ":";
-		std::string ip = "";
+		ip = "";
 		int port = 0;
 		while ((pos = text.find(delimiter)) != std::string::npos) {
 			token = text.substr(0, pos);
 			text.erase(0, pos + delimiter.length());
 			ip = token;
-			std::cout <<"IP:" <<ip << std::endl;
+			std::cout << "IP:" << ip << std::endl;
 
 		}
-		port = atoi(text.c_str());
-		cout <<"Port(int):" <<port<<endl;
+		port = stoi(text);
+		Level::get()->Join(ip.c_str(), port);
+		cout << "Port(int):" << port << endl;
 	}
 		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !_isKeyPress)
@@ -266,14 +267,14 @@ void Text::createObject(char obj) {
 	case '0':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "zero.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		break;
 	case '1':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "one.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 1" << endl;
@@ -281,7 +282,7 @@ void Text::createObject(char obj) {
 	case '2':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "two.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 2" << endl;
@@ -289,7 +290,7 @@ void Text::createObject(char obj) {
 	case '3':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "three.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 3" << endl;
@@ -297,7 +298,7 @@ void Text::createObject(char obj) {
 	case '4':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "four.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 4" << endl;
@@ -305,7 +306,7 @@ void Text::createObject(char obj) {
 	case '5':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "five.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 5" << endl;
@@ -313,7 +314,7 @@ void Text::createObject(char obj) {
 	case '6':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "six.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 6" << endl;
@@ -321,7 +322,7 @@ void Text::createObject(char obj) {
 	case '7':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "seven.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 7" << endl;
@@ -329,7 +330,7 @@ void Text::createObject(char obj) {
 	case '8':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "eight.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 8" << endl;
@@ -337,7 +338,7 @@ void Text::createObject(char obj) {
 	case '9':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "nine.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create 9" << endl;
@@ -345,7 +346,7 @@ void Text::createObject(char obj) {
 	case '.':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "dot.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create ." << endl;
@@ -353,7 +354,7 @@ void Text::createObject(char obj) {
 	case ':':
 		toBeCreated = posOfObjs[text.size()];
 		toBeCreated->setMesh(Mesh::load(config::MGE_MODEL_PATH + "doubledot.obj"));
-		toBeCreated->setMaterial(new ColorMaterial(glm::vec3(1)));
+		toBeCreated->setMaterial(new LitMaterial(glm::vec3(1)));
 		World::add(toBeCreated);
 		objs.push_back(toBeCreated);
 		cout << "Create :" << endl;
@@ -370,6 +371,12 @@ void Text::deleteLastObject() {
 	GameObject* obj = objs.at(objs.size() - 1);
 	objs.pop_back();
 	obj->setMesh(NULL);
+}
+
+int Text::CheckState()
+{
+	if (ip != "")
+		return 5;
 }
 
 Text::~Text()
