@@ -20,10 +20,13 @@ void MovementBehaviour::update(float pStep)
 
 	_curTime += pStep;
 
+	if (_curTime > (_totalTime * 0.5f))
+	{
+		Level::get()->HandleTileQueue();
+	}
 	if (_curTime > (_totalTime * 0.6f))
 	{
-		Level::get()->HandleMoveData();
-		Level::get()->HandleTileData();
+		Level::get()->HandleMoveQueue(_player->getId());
 	}
 	if (_curTime < (_totalTime * 0.8f))
 	{

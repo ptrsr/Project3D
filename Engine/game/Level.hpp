@@ -36,7 +36,7 @@ public:
 	static std::vector<Player*> getPlayers();
 	static std::vector<PickUp*> getPickUps();
 	static Board*				getBoard();
-	static void					reset();
+	void						reset();
 	static void					checkAreas();
 	void						ApplyPickUp(Player* pPlayer);
 	bool						checkIfFinished();
@@ -83,14 +83,15 @@ public:
 
 	void SendMoveData();
 
-	void HandleMoveData();
-	void HandleTileData();
+	void HandleMoveQueue(Id playerId);
+	void HandleTileQueue();
 	void SetScore(Id playerId, float score);
 
 private:
 	static Level* _level;
 
 	void RemovePlayers();
+	void RemovePickUps();
 	void spawnPlayer(Id, glm::vec2 pBoardPos, bool controlled);
 	void spawnPickUp();
 
@@ -104,7 +105,7 @@ private:
 
 	Client* _client = NULL;
 	Server* _server = NULL;
-	
+
 	std::vector<pair<int, int>> _spawnPos;
 	
 	std::vector<PlayerData> _spawnQueue;
@@ -135,6 +136,9 @@ private:
 
 	//time variable
 	float _curTime = 0;
+
+	//count down
+	int _countDown;
 
 	glm::vec2 _size;
 

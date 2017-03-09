@@ -50,7 +50,6 @@ int Client::Connect(const char* IP, int port)
 	int connection = connect(_sock, (struct sockaddr*)&_iSock, sizeof(_iSock)); //Connect to the server given the info from out socket and size of our socket
 	if (connection != 0)
 	{
-		AudioManager::get()->PlaySoundW(SFX::connectionFailed1);
 		PacketHelper::ErrorHandler();
 		Disconnect();
 		return 0;
@@ -71,6 +70,7 @@ int Client::Connect(const char* IP, int port)
 
 int Client::Disconnect()
 {
+	AudioManager::get()->PlaySoundW(SFX::connectionFailed1);
 	cout << "Closing socket.." << endl;
 	_playerId == Id::empty; //Reset player id
 	_connected = false; //Stop the data loop

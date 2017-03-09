@@ -24,6 +24,5 @@ Speed::Speed(float moveTime) : PickUp("Speed", moveTime)
 
 void Speed::applyPickUp(Player* pPlayer)
 {
-	AudioManager::get()->PlaySoundW(SFX::usespeedPickup1);
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::speed, pPlayer->getBoardPos());
 }

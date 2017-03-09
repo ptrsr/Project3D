@@ -24,6 +24,5 @@ Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 
 void Splash::applyPickUp(Player* pPlayer)
 {
-	AudioManager::get()->PlaySoundW(SFX::usesplashPickup1);
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::splash, pPlayer->getBoardPos());
 }

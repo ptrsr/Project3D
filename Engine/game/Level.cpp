@@ -18,7 +18,10 @@ Level* Level::_level;
 Level::Level() :GameObject("level")
 {
 	srand(time(NULL));
+
 	_finished = false;
+	_countDown = 4;
+
 	for (int i = 0; i < 4; i++) {
 		_currentScore[i] = 0;
 	}
@@ -95,15 +98,37 @@ void Level::LeaveClient()
 
 void Level::reset()
 {
+	//SetupLevel();
 	delete _level;
 	_level = new Level();
 }
 
 void Level::SetupLevel()
 {
+	//Reset values
+	_start = false;
+	_finished = false;
+	_countDown = 4;
+
+	fill(begin(_currentScore), end(_currentScore), 0.01f); //Reset scores
+
+	delete _lobbyState;
+	_lobbyState = NULL;
+
+	//Empty queues
+	_spawnQueue.empty();
+	_moveQueue.empty();
+	_pickUpQueue.empty();
+	_tileQueue.empty();
+	_effectQueue.empty();
+	_storeQueue.empty();
+	_leaveQueue.empty();
+
 	_board->ResetBoard(); //Reset the board
 
-	RemovePlayers(); //Reset the players
+	RemovePlayers(); //Remove the players
+	RemovePickUps(); //Remove the pickups
+	//ResetStatues(); //Reset statues
 }
 
 Player* Level::getPlayer(Id playerId)
@@ -185,6 +210,9 @@ bool Level::GetStart()
 
 void Level::ResetStatues()
 {
+	if (_lobbyState == NULL)
+		return;
+
 	for (int i = 0; i < 4; i++)
 	{
 		_lobbyState->UpdateVisual(static_cast<Id>(i + 1), false);
@@ -323,21 +351,34 @@ void Level::Send(DataType type, char* data)
 		_server->SendAll(type, data);
 }
 
-void Level::HandleMoveData()
+void Level::HandleMoveQueue(Id playerId)
 {
-	while (_moveQueue.size() > 0)
+	for (int i = _moveQueue.size() - 1; i >= 0; i--)
 	{
-		MoveData move = _moveQueue[0];
+		MoveData move = _moveQueue[i];
+
+		if (move.playerId != playerId)
+			continue;
 
 		Player* player = getPlayers()[move.playerId - 1];
 		player->_movement->SetDDir(move.direction);
 		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
 
-		_moveQueue.erase(_moveQueue.begin());
+		_moveQueue.erase(_moveQueue.begin() + i);
 	}
+	//while (_moveQueue.size() > 0)
+	//{
+	//	MoveData move = _moveQueue[0];
+
+	//	Player* player = getPlayers()[move.playerId - 1];
+	//	player->_movement->SetDDir(move.direction);
+	//	player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+	//	_moveQueue.erase(_moveQueue.begin());
+	//}
 }
 
-void Level::HandleTileData()
+void Level::HandleTileQueue()
 {
 	while (_tileQueue.size() > 0)
 	{
@@ -390,9 +431,6 @@ void Level::update(float pStep)
 {
 	while (_leaveQueue.size() > 0)
 	{
-		if (_finished)
-			return;
-
 		LeaveData leave = _leaveQueue[0];
 		_board->getScore(leave.playerId); //Reset all player's tiles
 		delete _players[leave.playerId - 1]; //Delete player
@@ -458,6 +496,9 @@ void Level::update(float pStep)
 	if (!_start)
 		return;
 
+	//Hit the music!
+	AudioManager::get()->startLevelMusic();
+
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
 	{
@@ -466,7 +507,18 @@ void Level::update(float pStep)
 
 	_curTime += pStep;
 
-	AudioManager::get()->startLevelMusic();
+	//Game countdown
+	if (_countDown >= 0)
+	{
+		if (_curTime >= _totalTime)
+		{
+			_curTime -= _totalTime;
+			_countDown--;
+		}
+
+		return;
+	}
+
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
 
 	if (hightestScorePlayer != -1)
@@ -515,12 +567,14 @@ void Level::update(float pStep)
 			switch (eData.effect)
 			{
 			case Effect::splash:
+				AudioManager::get()->PlaySoundW(SFX::usesplashPickup1);
 				_board->splash(eData.playerId, glm::vec2(eData.boardX, eData.boardY));
 				break;
 			case Effect::speed:
 				if (_players[eData.playerId - 1]->_movement->SpeedActive())
 					continue;
 
+				AudioManager::get()->PlaySoundW(SFX::usespeedPickup1);
 				_players[eData.playerId - 1]->_movement->activateSpeed();
 				break;
 			}
@@ -594,10 +648,21 @@ void Level::checkCollisions()
 
 void Level::RemovePlayers()
 {
-	for (int i = _players.size() - 1; i > 0; i--)
+	while (_players.size() > 0)
 	{
-		delete _players[i];
-		_players.pop_back();
+		Player* player = _players[0];
+		if (player != NULL)
+			delete player;
+		_players.erase(_players.begin());
+	}
+}
+
+void Level::RemovePickUps()
+{
+	while (_pickups.size() > 0)
+	{
+		delete _pickups[0];
+		_pickups.erase(_pickups.begin());
 	}
 }
 

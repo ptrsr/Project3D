@@ -19,6 +19,8 @@ Board::Board() : GameObject("Board")
 
 void Board::ResetBoard()
 {
+	fill(begin(_score), end(_score), 0);
+
 	for (int i = 0; i < _size.x; i++)
 	{
 		for (int j = 0; j < _size.y; j++)
