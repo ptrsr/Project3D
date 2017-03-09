@@ -133,7 +133,7 @@ int JoinState::CheckSelection() {
 		_inAnotherState = true;
 		_isKeyPress = true;
 		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-		AudioManager::get()->PlaySound(SFX::backButton1);
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
 		return -1;
 	}
 	else if (_text->CheckState() == 5)
