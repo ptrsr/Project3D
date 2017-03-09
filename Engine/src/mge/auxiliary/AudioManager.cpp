@@ -8,16 +8,6 @@ AudioManager* AudioManager::_audioManager;
 AudioManager::AudioManager()
 {
 	_backgroundMusic = new Music();
-
-	_path = config::MGE_SOUND_PATH;
-	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav")) {
-		cout << "Couldn't load sound from file" << endl;
-	}
-	else {
-		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(_path + "backgroundMusic1.wav");
-		_backgroundMusic->play();
-	}
 	GetNamesInString();
 	LoadAllSFX();
 }
@@ -70,14 +60,30 @@ void AudioManager::startLevelMusic() {
 	if (_levelIsPlaying) return;
 	_backgroundMusic->stop();
 	_backgroundMusic = new Music();
-	if (!_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav")) {
+	if (!_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav")) {
 		cout << "Couldn't load sound from file" << endl;
 	}
 	else {
 		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(_path + "backgroundMusic3.wav");
+		_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav");
 		_backgroundMusic->play();
 		_levelIsPlaying = true;
+		_menuIsPlaying = false;
+	}
+}
+void AudioManager::startMenuMusic() {
+	if (_menuIsPlaying) return;
+	_backgroundMusic->stop();
+	_backgroundMusic = new Music();
+	if (!_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav");
+		_backgroundMusic->play();
+		_menuIsPlaying = true;
+		_levelIsPlaying = false;
 	}
 }
 
