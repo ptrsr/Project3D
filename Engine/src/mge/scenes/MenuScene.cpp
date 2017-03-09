@@ -161,13 +161,15 @@ void MenuScene::_render() {
 
 		case 1:
 			AudioManager::get()->startMenuMusic();
-			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
+			break; 
+		case 0:
+			_window->close();
 			break;
 		case 4:
 			_winState->Update();
