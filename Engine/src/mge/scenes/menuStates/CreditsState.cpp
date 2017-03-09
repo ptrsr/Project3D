@@ -79,12 +79,12 @@ void CreditsState::_updateColor() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 		}
@@ -92,12 +92,12 @@ void CreditsState::_updateColor() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 		}
@@ -121,14 +121,14 @@ int CreditsState::CheckSelection() {
 		_isKeyPress = true;
 		_inAnotherState = true;
 
-		AudioManager::get()->PlaySound(SFX::backButton1);
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
 		return -1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;
-		AudioManager::get()->PlaySound(SFX::backButton1);
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
 		return -1;
 	}
 	

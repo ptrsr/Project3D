@@ -1,6 +1,8 @@
 #include "../network/Client.hpp"
 
 #include "../game/Level.hpp"
+#include "../game/Enums.hpp"
+#include "mge/auxiliary/AudioManager.h"
 
 Client::Client()
 {
@@ -48,11 +50,13 @@ int Client::Connect(const char* IP, int port)
 	int connection = connect(_sock, (struct sockaddr*)&_iSock, sizeof(_iSock)); //Connect to the server given the info from out socket and size of our socket
 	if (connection != 0)
 	{
+		AudioManager::get()->PlaySoundW(SFX::connectionFailed1);
 		PacketHelper::ErrorHandler();
 		Disconnect();
 		return 0;
 	}
 
+	AudioManager::get()->PlaySoundW(SFX::connectionSucces1);
 	_connected = true;
 
 	//Receive server NetCMD
