@@ -68,6 +68,9 @@ void TextureMaterial::setSpecular(Texture* pSpecularTexture)
 {
 	_specular = pSpecularTexture;
 }
+void TextureMaterial::setLight(bool outside) {
+
+}
 
 void TextureMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
 {

@@ -22,7 +22,7 @@ SkyMaterial::SkyMaterial(Texture* pTexture) : _texture(pTexture)
 	_uTexture   = _shader->getUniformLocation("skybox");
 }
 
-
+void SkyMaterial::setLight(bool outside){}
 
 
 void SkyMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) 
