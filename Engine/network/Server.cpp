@@ -282,9 +282,8 @@ void Server::NotifyClients(DataType type, char* data)
 
 void Server::CountReady()
 {
-	if (_readyCount == 2)
+	if (_readyCount == 3)
 	{
-		Sleep(7500);
 		StartData sd;
 		sd.start = true;
 		NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
