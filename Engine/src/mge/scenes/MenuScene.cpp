@@ -196,6 +196,9 @@ void MenuScene::_render() {
 				else
 					_counter++;
 			}
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
+			}
 			if (_currentState != 5)
 			{
 				Level::get()->LeaveClient();
