@@ -458,10 +458,6 @@ void Level::update(float pStep)
 	if (!_start)
 		return;
 
-	//Check if match is over
-	if (_finished)
-		return;
-
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
 	{
@@ -486,6 +482,11 @@ void Level::update(float pStep)
 		}
 		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer - 1] / 30.0f);
 	}
+
+	//Check if match is over
+	if (_finished)
+		return;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
 	}
