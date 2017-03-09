@@ -171,7 +171,6 @@ void MenuScene::_render() {
 			break;
 		case 4:
 			_winState->Update();
-			Level::get()->LeaveClient();
 			_currentState = _winState->CheckSelection();
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
@@ -202,7 +201,6 @@ void MenuScene::_render() {
 			if (_currentState != 5)
 			{
 				Level::get()->LeaveClient();
-				Level::get()->reset();
 				_cameraStateChanged = false;
 			}
 			break;
