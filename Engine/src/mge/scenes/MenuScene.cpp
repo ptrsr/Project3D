@@ -102,7 +102,7 @@ void MenuScene::_initializeScene()
 
 	Level::get();
 
-	_currentState = 3;
+	_currentState = -1;
 	_world->add(center);
 	_world->add(holder);
 
