@@ -74,7 +74,8 @@ void StartState::_initializeScene()
 	}
 
 	GameObject * join = ObjectCache::find("join_text");
-	if (join != NULL) {
+	if (join != NULL)
+	{
 		_selectableObjs[1] = join;
 		join->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "join_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "join.png"), glm::vec3(0)));
 	}
