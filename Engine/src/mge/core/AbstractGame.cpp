@@ -40,7 +40,7 @@ void AbstractGame::initialize(int windowWidth, int windowHeight) {
 
 void AbstractGame::_initializeWindow(int windowWidth, int windowHeight) {
 	cout << "Initializing window..." << endl;
-	_window = new sf::RenderWindow( sf::VideoMode(windowWidth, windowHeight), "My Game!", sf::Style::Default, sf::ContextSettings(24,8,0,3,3));
+	_window = new sf::RenderWindow( sf::VideoMode(windowWidth, windowHeight), "My Game!", sf::Style::Fullscreen, sf::ContextSettings(24,8,0,3,3));
 	_windowSize = glm::vec2(windowWidth, windowHeight);
 	//_window->setVerticalSyncEnabled(true);
     cout << "Window initialized." << endl << endl;
