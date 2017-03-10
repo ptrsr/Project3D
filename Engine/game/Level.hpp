@@ -100,6 +100,7 @@ private:
 	
 	std::vector<Player*> _players;
 	std::vector<PickUp*> _pickups;
+	std::vector<AbstractMaterial*> _pillars;
 	Board* _board;
 
 	Client* _client = NULL;

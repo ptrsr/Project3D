@@ -25,20 +25,7 @@ bool TextureCache::exists(std::string pName)
 
 void TextureCache::push(Texture* obj)
 {
-	Texture* image = nullptr;
-	std::map<std::string, Texture> * images = TextureCache::get()->objects;
-
-	if (images->count(fileName) != 0)
-		image = &(*images)[fileName];
-	else
-	{
-		sf::Texture temp;
-		temp.loadFromFile("sprites/" + fileName);
-		image = &temp;
-		(*images)[fileName] = temp;
-	}
-
-	return image;
+	TextureCache::get()->objects.insert(std::pair<std::string, Texture*>(obj->getName(), obj));
 }
 
 Texture* TextureCache::find(std::string pName)

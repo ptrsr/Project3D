@@ -39,11 +39,25 @@ Level::Level() :GameObject("level")
 
 	std::string path = config::MGE_TEXTURE_PATH + "statues/";
 
-	_fireStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(1, 0, 0)));
-	_waterStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_water_diffuse.png"), Texture::load(path + "statue_water_emission2.png"), glm::vec3(0, 0, 1)));
-	_earthStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(0.5f, 0.5f, 0)));
-	_windStatue->setMaterial(new StatueMaterial(nullptr, nullptr, glm::vec3(1, 1, 1)));
+	_fireStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_fire_diffuse.png"), Texture::load(path + "statue_fire_emission4.png")));
+	_waterStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_water_diffuse.png"), Texture::load(path + "statue_water_emission2.png")));
+	_earthStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_earth_diffuse.png"), Texture::load(path + "statue_earth_emission3.png")));
+	_windStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_wind_diffuse.png"), Texture::load(path + "WindScore.png")));
 	World::add(this);
+
+	vector<GameObject*> temp;
+
+	//ObjectCache::find("pillar_score0")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "FireScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score1")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "WaterScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score2")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "EarthScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score3")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "WindScore.png"), glm::vec3(0)));
+
+	//_pillars.push_back(ObjectCache::find("pillar_score0")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score1")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score2")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score3")->getMaterial());
+
+
 }
 
 Level* Level::get()
@@ -482,6 +496,13 @@ void Level::update(float pStep)
 		{
 			_finished = true;
 		}
+			
+		//for each (AbstractMaterial* material in _pillars)
+		//	material->setColor(glm::vec3(0));
+
+		//_pillars[hightestScorePlayer]->setColor(glm::vec3(1));
+
+
 		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer - 1] / 30.0f);
 	}
 

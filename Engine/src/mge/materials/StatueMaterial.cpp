@@ -97,8 +97,8 @@ void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const gl
 {
 	_shader->use();
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
-		_relativeScore += 0.005f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
+	//	_relativeScore += 0.005f;
 
 	//uniforms
 	glm::mat4 mvpMatrix = pProjectionMatrix * pViewMatrix * pModelMatrix;

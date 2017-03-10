@@ -12,7 +12,7 @@
 Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 {
 	_type = Effect::splash;
-	this->setMaterial(new TextureMaterial(Texture::load(config::MGE_TEXTURE_PATH + "SplashSpecial.png")));
+	this->setMaterial(new TextureMaterial(Texture::load(config::MGE_TEXTURE_PATH + "splashcube.png")));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "special_cube.obj"));
 	this->scale(glm::vec3(0.5f));
 
@@ -24,6 +24,5 @@ Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 
 void Splash::applyPickUp(Player* pPlayer)
 {
-	AudioManager::get()->PlaySound(SFX::usesplashPickup1);
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::splash, pPlayer->getBoardPos());
 }

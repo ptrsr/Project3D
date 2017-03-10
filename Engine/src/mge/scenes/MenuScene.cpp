@@ -78,10 +78,10 @@ void MenuScene::_initializeScene()
 
 	AudioManager::get();
 
-	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
+	//holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
 	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
-	light->setParent(holder);
+	light->rotate(1.2f, glm::vec3(1, 0, 0));
 
 	AudioManager::get();
 

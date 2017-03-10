@@ -21,9 +21,6 @@ public:
 	void changeScore(Id pPlayerId, int change);
 	Id getPlayerWithHighestScore();
 
-	void fireAbility(glm::vec2 pBoardPos);
-	void earthAbility(glm::vec2 pBoardPos);
-
 	Tile* getTile(glm::vec2 pBoardPos);
 	void resolveConnections();
 	void resolveAreas();
