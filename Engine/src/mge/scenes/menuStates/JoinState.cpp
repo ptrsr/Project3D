@@ -133,15 +133,10 @@ int JoinState::CheckSelection() {
 		}
 	
 	}	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
-		_inAnotherState = true;
-		_isKeyPress = true;
-		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-		AudioManager::get()->PlaySoundW(SFX::backButton1);
-		return -1;
-	}
-	else if (_text->CheckState() == 5)
+	else if (_text->CheckState() == 5) {
+		_text->reset();
 		return 5;
+	}
 	else
 		return 2;
 }

@@ -379,6 +379,11 @@ int Text::CheckState()
 		return 5;
 }
 
+void Text::reset() {
+	text = "";
+	ip = "";
+}
+
 Text::~Text()
 {
 
