@@ -202,6 +202,14 @@ void MenuScene::_render() {
 			if (Level::get()->checkIfFinished()) {
 				_currentState = 4;
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+				cout << "Going back to start" << endl;
+				AudioManager::get()->PlaySoundW(SFX::backButton1); 
+				Level::get()->LeaveClient();
+				Level::get()->reset();
+
+				_currentState = -1;
+			}
 			if (_currentState != 5)
 			{
 				_cameraStateChanged = false;

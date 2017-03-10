@@ -87,7 +87,7 @@ void StartState::_initializeScene()
 	GameObject * quit = ObjectCache::find("quit");
 	if (quit != NULL) {
 		_selectableObjs[3] = quit;
-		credits->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "quit_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "quit.png"), glm::vec3(0)));
+		quit->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "quit_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "quit.png"), glm::vec3(0)));
 	}
 
 	

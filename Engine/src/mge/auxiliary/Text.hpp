@@ -28,6 +28,7 @@ class Text
 		virtual GameObject* getPlane();
 		virtual void deleteScene();
 		int CheckState();
+		void reset();
 
 	private:
 		GameObject * placeToRenderText;

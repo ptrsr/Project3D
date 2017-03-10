@@ -106,6 +106,7 @@ void Text::_updateIP() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !_isKeyPress)
 	{
 		_isKeyPress = true;
+		if (text.size() == 0) return;
 		size_t pos = 0;
 		std::string token;
 		std::string delimiter = ":";
@@ -119,6 +120,7 @@ void Text::_updateIP() {
 
 		}
 		port = stoi(text);
+		if (ip.size() == 0)return;
 		Level::get()->Join(ip.c_str(), port);
 		cout << "Port(int):" << port << endl;
 	}
@@ -379,13 +381,20 @@ int Text::CheckState()
 		return 5;
 }
 
-Text::~Text()
-{
+void Text::reset() {
+	while (text.size() != 0) {
+		deleteLastObject();
+		text.erase(text.size() - 1);
+	}	
+	while (ip.size() != 0) {
+		deleteLastObject();
+		ip.erase(ip.size() - 1);
+	}
+	deleteLastObject();
+	ip = "";
+	text = "";
+}
 
-	//World::remove(_plane);
-	//World::remove(_selectableObjs[0]);
-	//World::remove(_selectableObjs[1]);
-	//delete _plane;
-	//delete _selectableObjs[0];
-	//delete _selectableObjs[1];
+Text::~Text() {
+
 }
