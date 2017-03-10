@@ -74,7 +74,8 @@ void StartState::_initializeScene()
 	}
 
 	GameObject * join = ObjectCache::find("join_text");
-	if (join != NULL) {
+	if (join != NULL)
+	{
 		_selectableObjs[1] = join;
 		join->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "join_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "join.png"), glm::vec3(0)));
 	}
@@ -87,7 +88,7 @@ void StartState::_initializeScene()
 	GameObject * quit = ObjectCache::find("quit");
 	if (quit != NULL) {
 		_selectableObjs[3] = quit;
-		credits->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "quit_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "quit.png"), glm::vec3(0)));
+		quit->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "quit_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "quit.png"), glm::vec3(0)));
 	}
 
 	

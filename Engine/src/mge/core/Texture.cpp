@@ -32,7 +32,7 @@ Texture* Texture::load(std::string pName)
 		if (texture)
 		{
 			texture->setName(pName);
-			std::cout << "Texture " << pName << " with id " << texture->getId() << " loaded." << std::endl;
+			std::cout << "Texture " << texture->getName() << " with id " << texture->getId() << " loaded." << std::endl;
 			std::cout << "Caching texture." << std::endl;
 			_textures[pName] = texture;
 		}
