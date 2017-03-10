@@ -80,36 +80,6 @@ void JoinState::_updateColor() {
 	if (_counter == 0) {
 		_text->Update();
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
-		_isKeyPress = true;
-		if (_counter == 0) {
-			AudioManager::get()->PlaySoundW(SFX::switchButton1);
-			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0)); 
-			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-			_counter = 1;
-		}
-		else {
-			AudioManager::get()->PlaySoundW(SFX::switchButton1);
-			_counter = 0;
-			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
-			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
-		}
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
-		_isKeyPress = true;
-		if (_counter == 0) {
-			AudioManager::get()->PlaySoundW(SFX::switchButton1);
-			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0));
-			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-			_counter = 1;
-		}
-		else {
-			AudioManager::get()->PlaySoundW(SFX::switchButton1);
-			_counter = 0;
-			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
-			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
-		}
-	}
 	if (_isKeyPress) {
 		if (_delayCounter >= _delay) {
 			_delayCounter = 0;
@@ -131,17 +101,12 @@ int JoinState::CheckSelection() {
 			AudioManager::get()->PlaySoundW(SFX::backButton1);
 			return -1;
 		}
-	
 	}	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
-		_inAnotherState = true;
-		_isKeyPress = true;
-		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-		AudioManager::get()->PlaySoundW(SFX::backButton1);
-		return -1;
-	}
 	else if (_text->CheckState() == 5)
+	{
+		_text->reset();
 		return 5;
+	}
 	else
 		return 2;
 }
