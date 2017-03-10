@@ -213,6 +213,7 @@ void MenuScene::_render() {
 			if (_currentState != 5)
 			{
 				_cameraStateChanged = false;
+				_counter = 0;
 			}
 			break;
 	}
