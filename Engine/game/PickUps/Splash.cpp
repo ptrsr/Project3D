@@ -25,4 +25,5 @@ Splash::Splash(float moveTime) : PickUp("Splash", moveTime)
 void Splash::applyPickUp(Player* pPlayer)
 {
 	Level::get()->CreatePacket(pPlayer->getId(), Effect::splash, pPlayer->getBoardPos());
+	Level::checkAreas();
 }
