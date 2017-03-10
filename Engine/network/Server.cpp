@@ -173,6 +173,8 @@ void Server::AcceptClients()
 
 	while (_running)
 	{
+		Sleep(2000); //Wait a bit
+
 		int clientInfoSize = sizeof(_iSockClient);
 		SOCKET client = accept(_sock, (sockaddr*)&_iSockClient, &clientInfoSize); //Accept clients, getting their socket info and socket info size
 
@@ -292,7 +294,7 @@ void Server::NotifyClients(DataType type, char* data)
 
 void Server::CountReady()
 {
-	if (_readyCount == 4)
+	if (_readyCount == 2)
 	{
 		Level::get()->ResetStatues();
 
