@@ -10,7 +10,6 @@
 #include "Board.hpp"
 
 #include "Enums.hpp"
-#include "PickUps/ScoreCube.hpp"
 #include "PickUps/Splash.hpp"
 #include "PickUps/Speed.hpp"
 
@@ -19,7 +18,10 @@ Level* Level::_level;
 Level::Level() :GameObject("level")
 {
 	srand(time(NULL));
+
 	_finished = false;
+	_countDown = 4;
+
 	for (int i = 0; i < 4; i++) {
 		_currentScore[i] = 0;
 	}
@@ -38,11 +40,27 @@ Level::Level() :GameObject("level")
 	_waterStatue = ObjectCache::find("Water1");
 	_windStatue = ObjectCache::find("Wind1");
 
-	_fireStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 0, 0)));
-	_waterStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0, 0, 1)));
-	_earthStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(0.5f, 0.5f, 0)));
-	_windStatue->setMaterial(new StatueMaterial(nullptr, glm::vec3(1, 1, 1)));
+	std::string path = config::MGE_TEXTURE_PATH + "statues/";
+
+	_fireStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_fire_diffuse.png"), Texture::load(path + "statue_fire_emission4.png")));
+	_waterStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_water_diffuse.png"), Texture::load(path + "statue_water_emission2.png")));
+	_earthStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_earth_diffuse.png"), Texture::load(path + "statue_earth_emission3.png")));
+	_windStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_wind_diffuse.png"), Texture::load(path + "WindScore.png")));
 	World::add(this);
+
+	vector<GameObject*> temp;
+
+	//ObjectCache::find("pillar_score0")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "FireScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score1")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "WaterScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score2")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "EarthScore.png"), glm::vec3(0)));
+	//ObjectCache::find("pillar_score3")->setMaterial(new StatueMaterial(Texture::load(path + "pillar_score_diffuse.png"), Texture::load(path + "WindScore.png"), glm::vec3(0)));
+
+	//_pillars.push_back(ObjectCache::find("pillar_score0")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score1")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score2")->getMaterial());
+	//_pillars.push_back(ObjectCache::find("pillar_score3")->getMaterial());
+
+
 }
 
 Level* Level::get()
@@ -74,17 +92,59 @@ void Level::Join(const char* IP, int port)
 	client.detach(); //Let it run seperately from the main thread
 }
 
+void Level::LeaveHost()
+{
+	if (_server != NULL)
+	{
+		_server->StopServer();
+		delete _server;
+		_server = NULL;
+	}
+}
+
+void Level::LeaveClient()
+{
+	if (_client != NULL)
+	{
+		_client->Disconnect();
+		delete _client;
+		_client = NULL;
+	}
+}
+
 void Level::reset()
 {
+	//SetupLevel();
 	delete _level;
 	_level = new Level();
 }
 
 void Level::SetupLevel()
 {
+	//Reset values
+	_start = false;
+	_finished = false;
+	_countDown = 4;
+
+	fill(begin(_currentScore), end(_currentScore), 0.01f); //Reset scores
+
+	delete _lobbyState;
+	_lobbyState = NULL;
+
+	//Empty queues
+	_spawnQueue.empty();
+	_moveQueue.empty();
+	_pickUpQueue.empty();
+	_tileQueue.empty();
+	_effectQueue.empty();
+	_storeQueue.empty();
+	_leaveQueue.empty();
+
 	_board->ResetBoard(); //Reset the board
 
-	RemovePlayers(); //Reset the players
+	RemovePlayers(); //Remove the players
+	RemovePickUps(); //Remove the pickups
+	//ResetStatues(); //Reset statues
 }
 
 Player* Level::getPlayer(Id playerId)
@@ -149,6 +209,11 @@ Server* Level::GetServer()
 	return _server;
 }
 
+LobbyState* Level::GetLobbyState()
+{
+	return _lobbyState;
+}
+
 void Level::Start(bool value)
 {
 	_start = value;
@@ -157,6 +222,17 @@ void Level::Start(bool value)
 bool Level::GetStart()
 {
 	return _start;
+}
+
+void Level::ResetStatues()
+{
+	if (_lobbyState == NULL)
+		return;
+
+	for (int i = 0; i < 4; i++)
+	{
+		_lobbyState->UpdateVisual(static_cast<Id>(i + 1), false);
+	}
 }
 
 void Level::AddSpawn(PlayerData player)
@@ -174,9 +250,9 @@ void Level::AddPickUp(PickupData pickUp)
 	_pickUpQueue.push_back(pickUp);
 }
 
-void Level::AddScore(ScoreData score)
+void Level::AddTile(TileData tile)
 {
-	_scoreQueue.push_back(score);
+	_tileQueue.push_back(tile);
 }
 
 void Level::AddEffect(EffectData effect)
@@ -213,10 +289,21 @@ void Level::CreatePacket(Effect type, glm::vec2 pos, glm::vec2 oldPos)
 	pd.boardY = pos.y;
 	pd.oldX = oldPos.x;
 	pd.oldY = oldPos.y;
+
 	Send(DataType::PICKUPDATA, (char*)&pd);
 }
 
-void Level::CreatePacket(Id playerId, int score)
+void Level::CreatePacket(Id playerId, glm::vec2 tilePos)
+{
+	TileData td;
+	td.playerId = playerId;
+	td.boardX = tilePos.x;
+	td.boardY = tilePos.y;
+
+	Send(DataType::TILEDATA, (char*)&td);
+}
+
+void Level::CreatePacket(Id playerId, float score)
 {
 	ScoreData sd;
 	sd.playerId = playerId;
@@ -254,6 +341,16 @@ void Level::CreatePacket(Id playerId)
 	Send(DataType::USEDATA, (char*)&ud);
 }
 
+void Level::CreatePacket(Id playerId, bool value)
+{
+	ReadyData rd;
+	rd.playerId = playerId;
+	rd.ready = value;
+
+	Send(DataType::READYDATA, (char*)&rd);
+	if (_server != NULL) { _server->AddReadyCount(value); }
+}
+
 void Level::SendMoveData()
 {
 	if (_server != NULL)
@@ -268,6 +365,48 @@ void Level::Send(DataType type, char* data)
 		_client->Send(type, data);
 	if (_server != NULL)
 		_server->SendAll(type, data);
+}
+
+void Level::HandleMoveQueue(Id playerId)
+{
+	for (int i = _moveQueue.size() - 1; i >= 0; i--)
+	{
+		MoveData move = _moveQueue[i];
+
+		if (move.playerId != playerId)
+			continue;
+
+		Player* player = getPlayers()[move.playerId - 1];
+		player->_movement->SetDDir(move.direction);
+		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+		_moveQueue.erase(_moveQueue.begin() + i);
+	}
+	//while (_moveQueue.size() > 0)
+	//{
+	//	MoveData move = _moveQueue[0];
+
+	//	Player* player = getPlayers()[move.playerId - 1];
+	//	player->_movement->SetDDir(move.direction);
+	//	player->setBoardPos(glm::vec2(move.boardX, move.boardY));
+
+	//	_moveQueue.erase(_moveQueue.begin());
+	//}
+}
+
+void Level::HandleTileQueue()
+{
+	while (_tileQueue.size() > 0)
+	{
+		TileData tData = _tileQueue[0];
+		_board->setOwner(glm::vec2(tData.boardX, tData.boardY), tData.playerId);
+		_tileQueue.erase(_tileQueue.begin());
+	}
+}
+
+void Level::SetScore(Id playerId, float score)
+{
+	_currentScore[playerId - 1] = score;
 }
 
 void Level::ApplyPickUp(Player* pPlayer)
@@ -306,11 +445,6 @@ float Level::getScoreOfId(int index) {
 
 void Level::update(float pStep)
 {
-	//
-	// - Clean up queues
-	// - Handle client/host leaving
-	// - Remember to set client/server to NULL on leaving
-	//
 	while (_leaveQueue.size() > 0)
 	{
 		LeaveData leave = _leaveQueue[0];
@@ -333,13 +467,6 @@ void Level::update(float pStep)
 			spawnPickUp(pData.type, glm::vec2(pData.boardX, pData.boardY));
 		_pickUpQueue.erase(_pickUpQueue.begin());
 	}
-	while (_scoreQueue.size() > 0)
-	{
-		ScoreData sData = _scoreQueue[0];
-		_board->getScore(sData.playerId);
-		_players[sData.playerId - 1]->addScore(sData.score);
-		_scoreQueue.erase(_scoreQueue.begin());
-	}
 	while (_storeQueue.size() > 0)
 	{
 		StoreData sData = _storeQueue[0];
@@ -355,26 +482,27 @@ void Level::update(float pStep)
 		}
 		_storeQueue.erase(_storeQueue.begin());
 	}
-	while (_moveQueue.size() > 0)
+
+	//Lobby state
+	if (!_start)
 	{
-		MoveData move = _moveQueue[0];
-
-		Player* player = getPlayers()[move.playerId - 1];
-		player->_movement->SetDDir(move.direction);
-		player->setBoardPos(glm::vec2(move.boardX, move.boardY));
-
-		_moveQueue.erase(_moveQueue.begin());
+		if (_lobbyState != NULL)
+		{
+			_lobbyState->Update();
+		}
+		else
+		{
+			if (_server != NULL || _client != NULL)
+			{
+				Player* player = getPlayer(_server != NULL ? Id::p1 : _client->GetId());
+				if (player != NULL)
+				{
+					_lobbyState = new LobbyState(player);
+					_lobbyState->_initializeScene();
+				}
+			}
+		}
 	}
-
-	//cant get player correctly
-	/*if (_lobbyState != NULL)
-	{
-	_lobbyState->Update();
-	}
-	else {
-	_lobbyState = new LobbyState(getPlayer(Id::p3));
-	_lobbyState->_initializeScene();
-	}*/
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
 		Start(true);
@@ -384,8 +512,8 @@ void Level::update(float pStep)
 	if (!_start)
 		return;
 
-	//has a bool check so it happens only once
-
+	//Hit the music!
+	AudioManager::get()->startLevelMusic();
 
 	//Spawns random pick up
 	if (_server != NULL && _pickups.size() < 2)
@@ -395,21 +523,45 @@ void Level::update(float pStep)
 
 	_curTime += pStep;
 
+	//Game countdown
+	if (_countDown >= 0)
+	{
+		if (_curTime >= _totalTime)
+		{
+			_curTime -= _totalTime;
+			_countDown--;
+		}
 
-	if (_finished) return;
+		return;
+	}
 
-	AudioManager::get()->startLevelMusic();
 	Id hightestScorePlayer = _board->getPlayerWithHighestScore();
 
 	if (hightestScorePlayer != -1)
 	{
-		_currentScore[hightestScorePlayer] += pStep;
-		if (_currentScore[hightestScorePlayer] == 30.0f) {
-
+		if (_server != NULL)
+		{
+			_currentScore[hightestScorePlayer - 1] += pStep;
+			CreatePacket(hightestScorePlayer, _currentScore[hightestScorePlayer - 1]);
+		}
+		if (_currentScore[hightestScorePlayer - 1] >= 30.0f)
+		{
 			_finished = true;
 		}
-		((StatueMaterial*)_fireStatue->getMaterial())->setScore(_currentScore[hightestScorePlayer] / 30.0f);
+			
+		//for each (AbstractMaterial* material in _pillars)
+		//	material->setColor(glm::vec3(0));
+
+		//_pillars[hightestScorePlayer]->setColor(glm::vec3(1));
+
+
+		((StatueMaterial*)_lobbyState->GetStatue(hightestScorePlayer)->getMaterial())->setScore(_currentScore[hightestScorePlayer - 1] / 30.0f);
 	}
+
+	//Check if match is over
+	if (_finished)
+		return;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		_finished = true;
 	}
@@ -438,12 +590,14 @@ void Level::update(float pStep)
 			switch (eData.effect)
 			{
 			case Effect::splash:
+				AudioManager::get()->PlaySoundW(SFX::usesplashPickup1);
 				_board->splash(eData.playerId, glm::vec2(eData.boardX, eData.boardY));
 				break;
 			case Effect::speed:
 				if (_players[eData.playerId - 1]->_movement->SpeedActive())
 					continue;
 
+				AudioManager::get()->PlaySoundW(SFX::usespeedPickup1);
 				_players[eData.playerId - 1]->_movement->activateSpeed();
 				break;
 			}
@@ -517,10 +671,21 @@ void Level::checkCollisions()
 
 void Level::RemovePlayers()
 {
-	for (int i = _players.size() - 1; i > 0; i--)
+	while (_players.size() > 0)
 	{
-		delete _players[i];
-		_players.pop_back();
+		Player* player = _players[0];
+		if (player != NULL)
+			delete player;
+		_players.erase(_players.begin());
+	}
+}
+
+void Level::RemovePickUps()
+{
+	while (_pickups.size() > 0)
+	{
+		delete _pickups[0];
+		_pickups.erase(_pickups.begin());
 	}
 }
 

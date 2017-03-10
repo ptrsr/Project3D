@@ -8,6 +8,7 @@
 #include "mge/behaviours/SpotLight.hpp"
 
 #include <string>
+#include "SFML/Window/Keyboard.hpp"
 
 //shader
 ShaderProgram* StatueMaterial::_shader = NULL;
@@ -22,7 +23,7 @@ GLint StatueMaterial::_uMVPMatrix	= 0;
 GLint StatueMaterial::_uModelMatrix	= 0;
 
 //fragment uniforms
-GLint StatueMaterial::_uModelColor	= 0;
+GLint StatueMaterial::_uHighlight	= 0;
 GLint StatueMaterial::_uTexture		= 0;
 GLint StatueMaterial::_uShininess	= 0;
 GLint StatueMaterial::_uCameraPos	= 0;
@@ -32,10 +33,14 @@ GLint StatueMaterial::_uScore     = 0;
 GLint StatueMaterial::_uMinHeight = 0;
 GLint StatueMaterial::_uMaxHeight = 0;
 
-StatueMaterial::StatueMaterial(Texture* pTexture, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
-	: _texture(pTexture), _modelColor(pModelColor), _shininess(pShininess), _lights(pLights)
+StatueMaterial::StatueMaterial(Texture* pTexture, Texture* pHighLight, glm::vec3 pModelColor, float pShininess, std::vector<AbstractLight*>* pLights)
+	: _texture(pTexture), _highLight(pHighLight), _shininess(pShininess), _lights(pLights)
 {
 	_lazyInitializeShader();
+
+	_relativeScore = 0.f;
+	_minHeight = 2.7f;
+	_maxHeight = 2.17f;
 }
 
 void StatueMaterial::_lazyInitializeShader()
@@ -58,8 +63,8 @@ void StatueMaterial::_lazyInitializeShader()
 		_uModelMatrix = _shader->getUniformLocation("modelMatrix");
 
 		//fragment uniforms
-		_uModelColor = _shader->getUniformLocation("modelColor");
 		_uTexture	 = _shader->getUniformLocation("dTexture");
+		_uHighlight = _shader->getUniformLocation("highlight");
 		_uShininess  = _shader->getUniformLocation("shininess");
 		_uCameraPos  = _shader->getUniformLocation("cameraPos");
 
@@ -74,9 +79,9 @@ void StatueMaterial::setTexture(Texture* pTexture)
 {
 	_texture = pTexture;
 }
-void StatueMaterial::setSpecular(Texture* pSpecularTexture)
+void StatueMaterial::setHighLight(Texture* pHighLight)
 {
-	_specular = pSpecularTexture;
+	_highLight = pHighLight;
 }
 
 void StatueMaterial::setScore(float pScore)
@@ -91,6 +96,9 @@ void StatueMaterial::setLight(bool outside) {
 void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix)
 {
 	_shader->use();
+	
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
+	//	_relativeScore += 0.005f;
 
 	//uniforms
 	glm::mat4 mvpMatrix = pProjectionMatrix * pViewMatrix * pModelMatrix;
@@ -100,25 +108,27 @@ void StatueMaterial::render(Mesh* pMesh, const glm::mat4& pModelMatrix, const gl
 	glUniform3fv(_uCameraPos, 1, glm::value_ptr(((GameObject*)(World::get()->getMainCamera()))->getWorldPosition()));
 	glUniform1f(_uShininess, _shininess);
 
-	glUniform3fv(_uModelColor, 1, glm::value_ptr(_modelColor));
-	
 	//statue uniforms
 	glUniform1f(_uMinHeight, _minHeight);
 	glUniform1f(_uMaxHeight, _maxHeight);
 	glUniform1f(_uScore, _relativeScore);
 
-	if (_texture)
-		renderTexture();
+	if (_texture && _highLight)
+		renderTextures();
 
 	renderLights();
 	pMesh->streamToOpenGL(_aVertex, _aNormal, _aUV);
 }
 
-void StatueMaterial::renderTexture()
+void StatueMaterial::renderTextures()
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _texture->getId());
 	glUniform1i(_uTexture, 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, _highLight->getId());
+	glUniform1i(_uHighlight, 1);
 }
 
 glm::vec3 StatueMaterial::getColor() {

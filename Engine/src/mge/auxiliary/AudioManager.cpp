@@ -7,7 +7,23 @@ using namespace std;
 AudioManager* AudioManager::_audioManager;
 AudioManager::AudioManager()
 {
-	_backgroundMusic = new Music();
+	_backgroundMusiclevel = new Music();
+	if (!_backgroundMusiclevel->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusiclevel->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav");
+	}
+
+	_backgroundMusicMenu = new Music();
+	if (!_backgroundMusicMenu->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav")) {
+		cout << "Couldn't load sound from file" << endl;
+	}
+	else {
+		cout << " Playing background music" << endl;
+		_backgroundMusicMenu->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav");
+	}
 	GetNamesInString();
 	LoadAllSFX();
 }
@@ -20,7 +36,7 @@ AudioManager* AudioManager::get() {
 }
 
 //Used to play the shooting sound
-void AudioManager::PlaySound(SFX soundEnum) {
+void AudioManager::PlaySoundW(SFX soundEnum) {
 	_sound.setBuffer(_buffer[soundEnum]);
 	_sound.setLoop(false);
 	if (_sound.getStatus() != sf::Sound::Playing)
@@ -58,38 +74,24 @@ void AudioManager::GetNamesInString() {
 
 void AudioManager::startLevelMusic() {
 	if (_levelIsPlaying) return;
-	_backgroundMusic->stop();
-	_backgroundMusic = new Music();
-	if (!_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav")) {
-		cout << "Couldn't load sound from file" << endl;
-	}
-	else {
-		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic3.wav");
-		_backgroundMusic->play();
-		_levelIsPlaying = true;
-		_menuIsPlaying = false;
-	}
+	_backgroundMusicMenu->stop();
+	_backgroundMusiclevel->play();
+	_levelIsPlaying = true;
+	_menuIsPlaying = false;
+	
 }
 void AudioManager::startMenuMusic() {
 	if (_menuIsPlaying) return;
-	_backgroundMusic->stop();
-	_backgroundMusic = new Music();
-	if (!_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav")) {
-		cout << "Couldn't load sound from file" << endl;
-	}
-	else {
-		cout << " Playing background music" << endl;
-		_backgroundMusic->openFromFile(config::MGE_SOUND_PATH + "backgroundMusic1.wav");
-		_backgroundMusic->play();
-		_menuIsPlaying = true;
-		_levelIsPlaying = false;
-	}
+	_backgroundMusicMenu->play();
+	_backgroundMusiclevel->stop();
+	_levelIsPlaying = false;
+	_menuIsPlaying = true;
 }
 
 AudioManager::~AudioManager()
 {
-	delete _backgroundMusic;
+	delete _backgroundMusicMenu;
+	delete _backgroundMusiclevel;
 }
 
 

@@ -1,6 +1,8 @@
 #include "../network/Client.hpp"
 
 #include "../game/Level.hpp"
+#include "../game/Enums.hpp"
+#include "mge/auxiliary/AudioManager.h"
 
 Client::Client()
 {
@@ -53,6 +55,7 @@ int Client::Connect(const char* IP, int port)
 		return 0;
 	}
 
+	AudioManager::get()->PlaySoundW(SFX::connectionSucces1);
 	_connected = true;
 
 	//Receive server NetCMD
@@ -67,6 +70,7 @@ int Client::Connect(const char* IP, int port)
 
 int Client::Disconnect()
 {
+	AudioManager::get()->PlaySoundW(SFX::connectionFailed1);
 	cout << "Closing socket.." << endl;
 	_playerId == Id::empty; //Reset player id
 	_connected = false; //Stop the data loop
@@ -143,6 +147,7 @@ void Client::HandlePacket(DataType type, char* buf)
 		break;
 	case DataType::STARTDATA:
 		StartData startData = *reinterpret_cast<StartData*>(buf);
+		Level::get()->ResetStatues();
 		Level::get()->Start(startData.start);
 		break;
 	case DataType::MOVEDATA:
@@ -153,9 +158,13 @@ void Client::HandlePacket(DataType type, char* buf)
 		PickupData pickupData = *reinterpret_cast<PickupData*>(buf);
 		Level::get()->AddPickUp(pickupData);
 		break;
+	case DataType::TILEDATA:
+		TileData tileData = *reinterpret_cast<TileData*>(buf);
+		Level::get()->AddTile(tileData);
+		break;
 	case DataType::SCOREDATA:
 		ScoreData scoreData = *reinterpret_cast<ScoreData*>(buf);
-		Level::get()->AddScore(scoreData);
+		Level::get()->SetScore(scoreData.playerId, scoreData.score);
 		break;
 	case DataType::EFFECTDATA:
 		EffectData effectData = *reinterpret_cast<EffectData*>(buf);
@@ -168,6 +177,11 @@ void Client::HandlePacket(DataType type, char* buf)
 	case DataType::LEAVEDATA:
 		LeaveData leaveData = *reinterpret_cast<LeaveData*>(buf);
 		Level::get()->AddLeave(leaveData);
+		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		if (readyData.playerId == _playerId) return; //Ignore myself
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
 		break;
 	}
 }

@@ -58,7 +58,7 @@ void MenuScene::initialize() {
 void MenuScene::_initializeScene()
 {
 	_renderer->setClearColor(0, 0, 0);
-    Camera* camera = new Camera (glm::vec2(1200, 720),"camera", glm::vec3(-4.5f, 2,28));
+    Camera* camera = new Camera (glm::vec2(1280, 720),"camera", glm::vec3(-4.5f, 2,28));
 	camera->rotateDegrees(180, glm::vec3(0, 1, 0));
     _world->add(camera);
     _world->setMainCamera(camera);
@@ -69,18 +69,22 @@ void MenuScene::_initializeScene()
 
 
 
+
+	LuaParser* luaParser = new LuaParser("main.lua");
+
 	GameObject* center = new GameObject("center");
 	GameObject* holder = new GameObject("holder");
 	GameObject* light = new GameObject("light");
-	GameObject* pointLight = new GameObject("pointLight", glm::vec3(-4.5, 7.5f, 4.5f));
 
-	holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
+	AudioManager::get();
 
-	//light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
-	light->setParent(holder);
-	light->setBehaviour(new PointLight(glm::vec3(1), glm::vec3(0.1f),glm::vec3(1),0.001f,0,0));
+	//holder->setBehaviour(new OrbitBehaviour(center, 1, sf::Mouse::Button::Right));
 
-	LuaParser* luaParser = new LuaParser("main.lua");
+	light->setBehaviour(new DirectionalLight(glm::vec3(1), glm::vec3(0.1f)));
+	light->rotate(1.2f, glm::vec3(1, 0, 0));
+	light->rotate(0.3f, glm::vec3(0,1, 0));
+
+	AudioManager::get();
 
 
 	_startState = new StartState();
@@ -136,18 +140,19 @@ void MenuScene::_render() {
 		case 3:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 				_currentState = -1;
-				Level::reset();
+				Level::get()->LeaveClient();
+				Level::get()->LeaveHost();
+				Level::get()->reset();
 			}
 			if (!_cameraStateChanged) {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_level);
 
 				Level::get()->Host();
-				//Level::get()->Join("145.76.113.138", 56789);
+				//Level::get()->Join("192.168.0.150", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {
-				Level::reset();
 				_currentState = 4;
 			}
 			if (_currentState != 3) {
@@ -157,13 +162,15 @@ void MenuScene::_render() {
 
 		case 1:
 			AudioManager::get()->startMenuMusic();
-			cout << "CreditsState" << endl;
 			_creditsState->Update();
 			_currentState = _creditsState->CheckSelection();
 			if (!_cameraStateChanged) {
 				_changeCameraState(_creditsState);
 			}
 			if (_currentState != 1) _cameraStateChanged = false;
+			break; 
+		case 0:
+			_window->close();
 			break;
 		case 4:
 			_winState->Update();
@@ -172,7 +179,33 @@ void MenuScene::_render() {
 				cout << "camera state changed" << endl;
 				_changeCameraState(_winState);
 			}
-			if (_currentState != 4) _cameraStateChanged = false;
+			if (_currentState != 4)
+			{
+				_cameraStateChanged = false;
+				_winState->deleteScene();
+				Level::get()->LeaveClient();
+				Level::get()->LeaveHost();
+				Level::get()->reset();
+			}
+			break;
+		case 5:
+			if (!_cameraStateChanged) {
+				_changeCameraState(_startState);
+			}
+			if (_cameraStateChanged)
+			{
+				if (_counter == _delay)
+					_changeCameraState(_level);
+				else
+					_counter++;
+			}
+			if (Level::get()->checkIfFinished()) {
+				_currentState = 4;
+			}
+			if (_currentState != 5)
+			{
+				_cameraStateChanged = false;
+			}
 			break;
 	}
 	}

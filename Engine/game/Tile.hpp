@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include "mge/core/GameObject.hpp"
-#include "mge/materials/TextureMaterial.hpp"
+#include "mge/materials/ChangeColorMaterial.hpp"
 #include "Enums.hpp"
 
 class Tile : public GameObject
@@ -17,7 +17,7 @@ public:
 
 	vector<Tile*> getConnections();
 
-	LitMaterial* _material;
+	AbstractMaterial* _material;
 
 	//loop fill
 	bool _connected = true;

@@ -55,10 +55,14 @@ void JoinState::_initializeScene()
 	GameObject * backText = ObjectCache::find("back_text1");
 	if (backText != NULL) {
 		_back = backText;
+		backText->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "back_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "back.png"), glm::vec3(1)));
+
 	}
 	GameObject * enterIp = ObjectCache::find("enterip_text");
 	if (enterIp != NULL) {
 		_enterIp = enterIp;
+		_enterIp->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "enterip_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "enterip.png"), glm::vec3(1)));
+
 	}
 
 	_text = new Text(TextType::IP);
@@ -79,13 +83,13 @@ void JoinState::_updateColor() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0)); 
 			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
 			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
@@ -94,13 +98,13 @@ void JoinState::_updateColor() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_enterIp->getMaterial()->setColor(glm::vec3(1, 0, 0));
 			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_enterIp->getMaterial()->setColor(glm::vec3(1, 1, 1));
 			_back->getMaterial()->setColor(glm::vec3(1, 0, 0));
@@ -124,11 +128,22 @@ int JoinState::CheckSelection() {
 			_inAnotherState = true;
 			_isKeyPress = true;
 			_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
-			AudioManager::get()->PlaySound(SFX::backButton1);
+			AudioManager::get()->PlaySoundW(SFX::backButton1);
 			return -1;
 		}
+	
+	}	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
+		_inAnotherState = true;
+		_isKeyPress = true;
+		_back->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
+		return -1;
 	}
-	else return 2;
+	else if (_text->CheckState() == 5)
+		return 5;
+	else
+		return 2;
 }
 
 //Gets the object to use as the LookAt object of the camera

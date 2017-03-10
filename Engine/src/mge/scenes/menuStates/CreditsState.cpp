@@ -14,9 +14,7 @@ using namespace std;
 
 #include "mge/materials/AbstractMaterial.hpp"
 
-#include "mge/materials/ColorMaterial.hpp"
 #include "mge/materials/TextureMaterial.hpp"
-#include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
@@ -34,7 +32,7 @@ using namespace std;
 
 #include "mge/config.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
-
+#include "mge/materials/ChangeColorMaterial.hpp"
 
 //construct the game class into _window, _renderer and hud (other parts are initialized by build)
 CreditsState::CreditsState()
@@ -55,6 +53,7 @@ void CreditsState::_initializeScene()
 	if (back != NULL)
 	{
 		_selectableObj = back;
+		back->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "back_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "back.png"), glm::vec3(1)));
 	}
 
 	
@@ -79,12 +78,12 @@ void CreditsState::_updateColor() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 		}
@@ -92,12 +91,12 @@ void CreditsState::_updateColor() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
 		_isKeyPress = true;
 		if (_counter == 0) {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
 			_counter = 1;
 		}
 		else {
-			AudioManager::get()->PlaySound(SFX::switchButton1);
+			AudioManager::get()->PlaySoundW(SFX::switchButton1);
 			_counter = 0;
 			_selectableObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
 		}
@@ -121,14 +120,14 @@ int CreditsState::CheckSelection() {
 		_isKeyPress = true;
 		_inAnotherState = true;
 
-		AudioManager::get()->PlaySound(SFX::backButton1);
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
 		return -1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !_isKeyPress) {
 		cout << "Going back to start" << endl;
 		_isKeyPress = true;
 		_inAnotherState = true;
-		AudioManager::get()->PlaySound(SFX::backButton1);
+		AudioManager::get()->PlaySoundW(SFX::backButton1);
 		return -1;
 	}
 	

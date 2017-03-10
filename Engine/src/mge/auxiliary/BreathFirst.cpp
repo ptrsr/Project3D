@@ -49,8 +49,13 @@ glm::vec4 BreathFirst::getBounds(Tile* pTile)
 		_doneList.push_back(tile);
 
 		for each (Tile* connectedTile in tile->getConnections())
+		{
+			if (connectedTile == NULL)
+				continue;
+
 			if (connectedTile->getOwner() == tile->getOwner() && std::find(_doneList.begin(), _doneList.end(), connectedTile) == _doneList.end())
 				_todoList.push_back(connectedTile);
+		}
 
 		//calculate bounds
 		glm::vec2 boardPos = tile->getBoardPos();

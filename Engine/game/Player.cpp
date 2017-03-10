@@ -3,7 +3,8 @@
 #include "../game/Level.hpp"
 #include "mge/core/Mesh.hpp"
 #include "mge/config.hpp"
-#include "mge/materials/LitMaterial.hpp"
+#include "mge/materials/ChangeColorMaterial.hpp"
+#include "mge/auxiliary/AudioManager.h"
 #include "PickUps/PickUp.hpp"
 #include "PickUps/Splash.hpp"
 #include "PickUps/Speed.hpp"
@@ -20,7 +21,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 	_movement = new MovementBehaviour(this, boardPos, 1.0f, pTime, pWait, controlled);
 	this->setBehaviour(_movement);
 	if (!controlled) {
-		_visualization = new VisualPickup();
+		//_visualization = new VisualPickup();
 	}
 	//this->scale(glm::vec3(0.3f, 0.3f, 0.8f));
 	this->setMesh(Mesh::load(config::MGE_MODEL_PATH + "elementcube.obj"));
@@ -30,7 +31,7 @@ Player::Player(Id playerId, glm::vec2 boardPos, float pTime, float pWait, bool c
 		playerId == Id::p2 ? 1 : playerId == Id::p4 ? 0.72f : 0,
 		playerId == p3 ? 1 : playerId == Id::p4 ? 0.53f : 0);
 
-	this->setMaterial(new LitMaterial(color));
+	this->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "player.png"), Texture::load(config::MGE_TEXTURE_PATH + "player_highlight.png"), color));
 };
 
 void Player::StorePickUp(PickUp* pickUp)
@@ -41,11 +42,15 @@ void Player::StorePickUp(PickUp* pickUp)
 		{
 		case Effect::splash:
 			_pickUp = new Splash(0);
+			if (IsControlled())
+				AudioManager::get()->PlaySoundW(SFX::grabPickup1);
 			_visualization->visualizeSplash();
 			break;
 		case Effect::speed:
 			_visualization->visualizeSpeed();
 			_pickUp = new Speed(0);
+			if (IsControlled())
+				AudioManager::get()->PlaySoundW(SFX::grabPickup1);
 			break;
 		}
 	}

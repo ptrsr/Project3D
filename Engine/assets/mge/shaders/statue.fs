@@ -3,12 +3,12 @@
 #define LIGHTBUFFERSIZE 5
 
 uniform mat4 modelMatrix;
-uniform vec3 modelColor;
 uniform vec3 cameraPos;
 uniform vec3 lightCount;
 uniform float shininess;
 
 uniform sampler2D dTexture;
+uniform sampler2D highlight;
 
 uniform float score;
 uniform float minHeight;
@@ -73,16 +73,9 @@ void main( void )
 {
 	vec3 wNormal = vec3 (modelMatrix * vec4(fNormal, 0));
 	vec3 viewDir = normalize(cameraPos -  fPos);
-	//vec3 tColor  = texture(dTexture, tCoord).xyz;
 	
-	vec3 tColor = vec3(1);
-	
-	if(fPos.y < minHeight + maxHeight * score)
-	{
-		tColor = modelColor;
-		bColor = vec4(modelColor, 1);
-	}
-	
+	vec3 tColor = texture(dTexture, tCoord).rgb;
+
 	vec3 color;
 	
 	for (int i = 0; i < lightCount.x; i++)
@@ -94,7 +87,16 @@ void main( void )
 	for (int i = 0; i < lightCount.z; i++)
 		color += CalcSpotLight(spotLight[i], wNormal, viewDir, tColor);
 	
-	fColor = vec4(color, 1);
+	vec4 hColor = vec4(0,0,0,1);
+
+	float cutoff = minHeight + maxHeight * score;
+	float multi = clamp((cutoff - fPos.y) * 4.0f , 0, 1);
+
+	if (fPos.y < minHeight + maxHeight * score)
+		hColor = texture(highlight, tCoord) * multi; 
+
+	fColor = vec4(color.rgb + hColor.rgb, 1);
+	bColor = hColor / 3;
 }
 
 
@@ -105,7 +107,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 tColor)
 	float spec = pow(max(dot(viewDir, ref), 0), shininess);
 	
 	vec3 ambient  = tColor * light.ambient;
-	vec3 diffuse  = tColor * light.diffuse * diff;
+	vec3 diffuse  = tColor * light.diffuse * diff * tColor;
 	vec3 specular = light.specular * spec;
 	
 	return (ambient + diffuse + specular);

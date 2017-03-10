@@ -170,7 +170,6 @@
     <ClInclude Include="..\game\Enums.hpp" />
     <ClInclude Include="..\game\Level.hpp" />
     <ClInclude Include="..\game\PickUps\PickUp.hpp" />
-    <ClInclude Include="..\game\PickUps\ScoreCube.hpp" />
     <ClInclude Include="..\game\PickUps\Speed.hpp" />
     <ClInclude Include="..\game\PickUps\Splash.hpp" />
     <ClInclude Include="..\game\PickUps\VisualPickup.hpp" />
@@ -185,6 +184,7 @@
     <ClInclude Include="..\network\packets\MoveData.hpp" />
     <ClInclude Include="..\network\packets\PickupData.hpp" />
     <ClInclude Include="..\network\packets\PlayerData.hpp" />
+    <ClInclude Include="..\network\packets\ReadyData.hpp" />
     <ClInclude Include="..\network\packets\ScoreData.hpp" />
     <ClInclude Include="..\network\packets\StartData.hpp" />
     <ClInclude Include="..\network\packets\StoreData.hpp" />
@@ -254,6 +254,7 @@
     <ClInclude Include="..\src\mge\core\Texture.hpp" />
     <ClInclude Include="..\src\mge\core\World.hpp" />
     <ClInclude Include="..\src\mge\materials\AbstractMaterial.hpp" />
+    <ClInclude Include="..\src\mge\materials\ChangeColorMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\ColorMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\LitMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp" />
@@ -279,7 +280,6 @@
     <ClCompile Include="..\game\Board.cpp" />
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\PickUps\PickUp.cpp" />
-    <ClCompile Include="..\game\PickUps\ScoreCube.cpp" />
     <ClCompile Include="..\game\PickUps\Speed.cpp" />
     <ClCompile Include="..\game\PickUps\Splash.cpp" />
     <ClCompile Include="..\game\PickUps\VisualPickup.cpp" />
@@ -353,6 +353,7 @@
     <ClCompile Include="..\src\mge\core\Texture.cpp" />
     <ClCompile Include="..\src\mge\core\World.cpp" />
     <ClCompile Include="..\src\mge\materials\AbstractMaterial.cpp" />
+    <ClCompile Include="..\src\mge\materials\ChangeColorMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\ColorMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\LitMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp" />
@@ -381,8 +382,12 @@
     <None Include="..\assets\mge\shaders\bloom\quad.vs" />
     <None Include="..\assets\mge\shaders\color.fs" />
     <None Include="..\assets\mge\shaders\color.vs" />
+    <None Include="..\assets\mge\shaders\litColorChange.fs" />
+    <None Include="..\assets\mge\shaders\litColorChange.vs" />
     <None Include="..\assets\mge\shaders\litFragment.fs" />
     <None Include="..\assets\mge\shaders\litFragment.vs" />
+    <None Include="..\assets\mge\shaders\litTexture.fs" />
+    <None Include="..\assets\mge\shaders\litTexture.vs" />
     <None Include="..\assets\mge\shaders\litVertex.fs" />
     <None Include="..\assets\mge\shaders\litVertex.vs" />
     <None Include="..\assets\mge\shaders\skybox.fs" />

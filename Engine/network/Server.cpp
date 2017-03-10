@@ -87,6 +87,7 @@ int Server::StartServer()
 int Server::StopServer()
 {
 	cout << "Stopping server.." << endl;
+	_running = false; //Stop all loops
 	closesocket(_sock); //Close our socket
 	WSACleanup(); //Clean up everything
 	cout << "Server stopped" << endl;
@@ -107,6 +108,21 @@ void Server::SendAll(DataType type, char* data)
 int Server::ConnectedCount()
 {
 	return _connectedClients;
+}
+
+//
+//Changes the ready count
+//
+void Server::AddReadyCount(bool value)
+{
+	if (value)
+		_readyCount++;
+	else
+		_readyCount--;
+
+	cout << _readyCount << " ready" << endl;
+
+	CountReady();
 }
 
 //
@@ -157,6 +173,8 @@ void Server::AcceptClients()
 
 	while (_running)
 	{
+		Sleep(2000); //Wait a bit
+
 		int clientInfoSize = sizeof(_iSockClient);
 		SOCKET client = accept(_sock, (sockaddr*)&_iSockClient, &clientInfoSize); //Accept clients, getting their socket info and socket info size
 
@@ -168,7 +186,7 @@ void Server::AcceptClients()
 
 		cout << "A client has joined the server(ID: " << client << " IP: " << inet_ntoa(*(struct in_addr*)&_iSock.sin_addr.s_addr) << ")" << endl;
 
-		if (_connectedClients < _maxClients)
+		if (_connectedClients < _maxClients && !Level::get()->GetStart())
 		{
 			//Notify the client the connection has been accepted
 			netCode = CONNECTION_ACCEPTED;
@@ -183,16 +201,6 @@ void Server::AcceptClients()
 
 				_connectedClients++; //Update connected clients
 				cout << "Connected clients : " << _connectedClients << endl;
-
-				if (_connectedClients == 3)
-				{
-					Sleep(7500);
-					StartData sd;
-					sd.start = true;
-					NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
-
-					Level::get()->Start(sd.start); //Start our game too
-				}
 			}
 			else
 			{
@@ -210,6 +218,8 @@ void Server::AcceptClients()
 			CloseConnection(client);
 		}
 	}
+
+	cout << "Thread accepting clients ended" << endl;
 }
 
 void Server::HandleClients(SOCKET client)
@@ -232,6 +242,8 @@ void Server::HandleClients(SOCKET client)
 		pair<DataType, char*> data = PacketHelper::Receive(buffer, client);
 		HandlePacket(data.first, data.second);
 	}
+
+	cout << "Thread " << client << " ended" << endl;
 }
 
 void Server::HandlePacket(DataType type, char* buf)
@@ -256,11 +268,20 @@ void Server::HandlePacket(DataType type, char* buf)
 		UseData useData = *reinterpret_cast<UseData*>(buf);
 		Level::getPlayer(useData.playerId)->_movement->activate = true;
 		break;
+	case DataType::READYDATA:
+		ReadyData readyData = *reinterpret_cast<ReadyData*>(buf);
+		Level::get()->GetLobbyState()->UpdateVisual(readyData.playerId, readyData.ready);
+		NotifyClients(DataType::READYDATA, (char*)&readyData);
+		AddReadyCount(readyData.ready);
+		break;
 	}
 }
 
 void Server::NotifyClients(DataType type, char* data)
 {
+	if (_sockClients.size() > 5)
+		return; //Array is NULL
+
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
 		if (_sockClients[i] == 0)
@@ -268,6 +289,20 @@ void Server::NotifyClients(DataType type, char* data)
 
 		//Send data to the client
 		PacketHelper::Send(type, data, _sockClients[i]);
+	}
+}
+
+void Server::CountReady()
+{
+	if (_readyCount == 2)
+	{
+		Level::get()->ResetStatues();
+
+		StartData sd;
+		sd.start = true;
+		NotifyClients(DataType::STARTDATA, (char*)&sd); //Give the start sign
+
+		Level::get()->Start(sd.start); //Start our game too
 	}
 }
 
@@ -320,6 +355,13 @@ void Server::CloseConnection(SOCKET client)
 void Server::CloseClientConnection(SOCKET client)
 {
 	closesocket(client); //Closes a client's connection
+
+	if (Level::get()->checkIfFinished())
+		return; //Game is done, no need to notify anymore
+
+	if (_sockClients.size() > 5)
+		return; //Array is NULL
+
 	for (int i = 0; i < _sockClients.size(); i++)
 	{
 		if (_sockClients[i] == client)
@@ -334,6 +376,6 @@ void Server::CloseClientConnection(SOCKET client)
 			break;
 		}
 	}
-	//_sockClients.erase(remove(_sockClients.begin(), _sockClients.end(), client), _sockClients.end()); //Removes the client from the list
+
 	_connectedClients--; //Update current connected clients
 }

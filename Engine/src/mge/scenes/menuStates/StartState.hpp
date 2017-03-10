@@ -24,7 +24,7 @@ class StartState : public AbstactState
 	private:
 		GameObject* _selectableObjs[4];
 		GameObject* _plane;
-		int _counter = 1;
+		int _counter = 0;
 		void _updateColor();
 		void _clearObjectColor();
 		string _path;
