@@ -254,6 +254,7 @@
     <ClInclude Include="..\src\mge\core\Texture.hpp" />
     <ClInclude Include="..\src\mge\core\World.hpp" />
     <ClInclude Include="..\src\mge\materials\AbstractMaterial.hpp" />
+    <ClInclude Include="..\src\mge\materials\ChangeColorMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\ColorMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\LitMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\SkyMaterial.hpp" />
@@ -352,6 +353,7 @@
     <ClCompile Include="..\src\mge\core\Texture.cpp" />
     <ClCompile Include="..\src\mge\core\World.cpp" />
     <ClCompile Include="..\src\mge\materials\AbstractMaterial.cpp" />
+    <ClCompile Include="..\src\mge\materials\ChangeColorMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\ColorMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\LitMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\SkyMaterial.cpp" />
@@ -380,8 +382,12 @@
     <None Include="..\assets\mge\shaders\bloom\quad.vs" />
     <None Include="..\assets\mge\shaders\color.fs" />
     <None Include="..\assets\mge\shaders\color.vs" />
+    <None Include="..\assets\mge\shaders\litColorChange.fs" />
+    <None Include="..\assets\mge\shaders\litColorChange.vs" />
     <None Include="..\assets\mge\shaders\litFragment.fs" />
     <None Include="..\assets\mge\shaders\litFragment.vs" />
+    <None Include="..\assets\mge\shaders\litTexture.fs" />
+    <None Include="..\assets\mge\shaders\litTexture.vs" />
     <None Include="..\assets\mge\shaders\litVertex.fs" />
     <None Include="..\assets\mge\shaders\litVertex.vs" />
     <None Include="..\assets\mge\shaders\skybox.fs" />

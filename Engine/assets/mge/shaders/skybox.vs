@@ -1,11 +1,12 @@
 #version 330
 
 in vec3 vertex;
+in vec2 normal;
 in vec2 uv;
 
-out vec2 tCoord;
-
 uniform mat4 MVmatrix;
+
+out vec2 tCoord;
 
 void main( void )
 {

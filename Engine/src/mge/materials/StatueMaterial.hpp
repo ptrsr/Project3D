@@ -9,11 +9,11 @@
 class StatueMaterial : public AbstractMaterial
 {
  public:
-        StatueMaterial (Texture* pTexture, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
+        StatueMaterial (Texture* pTexture, Texture* pHighLights, glm::vec3 pModelColor = glm::vec3(1), float pShininess = 10.0f, std::vector<AbstractLight*>* pLights = World::get()->GetLights());
 		virtual void render(Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
         void setTexture (Texture* pDiffuseTexture);
-		void setSpecular(Texture* pSpecularTexture);
+		void setHighLight(Texture* pSpecularTexture);
 
 		glm::vec3 getColor();
 		virtual void setColor(glm::vec3 pColor);
@@ -23,12 +23,12 @@ class StatueMaterial : public AbstractMaterial
 private:
 	static void _lazyInitializeShader();
 	void renderLights();
-	void renderTexture();
+	void renderTextures();
 
 	//score floats
-	float _relativeScore = 0.5f;
-	float _minHeight = -1.f;
-	float _maxHeight = 10.f;
+	float _relativeScore;
+	float _minHeight;
+	float _maxHeight;
 
 
 	static ShaderProgram* _shader;
@@ -43,7 +43,7 @@ private:
 	static GLint _uModelMatrix;
 
 	//fragment uniforms
-	static GLint _uModelColor;
+	static GLint _uHighlight;
 	static GLint _uTexture;
 	static GLint _uShininess;
 	static GLint _uCameraPos;
@@ -59,7 +59,7 @@ private:
 	//settings
 	glm::vec3 _modelColor;
 	Texture* _texture;
-	Texture* _specular;
+	Texture* _highLight;
 	float _shininess;
 };
 

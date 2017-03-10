@@ -14,9 +14,7 @@ using namespace std;
 
 #include "mge/materials/AbstractMaterial.hpp"
 
-#include "mge/materials/ColorMaterial.hpp"
 #include "mge/materials/TextureMaterial.hpp"
-#include "mge/materials/WobbleMaterial.hpp"
 #include "mge/materials//LitMaterial.hpp"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
@@ -34,7 +32,7 @@ using namespace std;
 
 #include "mge/config.hpp"
 #include "mge/scenes/menuStates/CreditsState.hpp"
-
+#include "mge/materials/ChangeColorMaterial.hpp"
 
 //construct the game class into _window, _renderer and hud (other parts are initialized by build)
 CreditsState::CreditsState()
@@ -55,6 +53,7 @@ void CreditsState::_initializeScene()
 	if (back != NULL)
 	{
 		_selectableObj = back;
+		back->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "back_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "back.png"), glm::vec3(1)));
 	}
 
 	

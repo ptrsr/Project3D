@@ -3,6 +3,7 @@
 #define LIGHTBUFFERSIZE 5
 
 uniform mat4 modelMatrix;
+uniform vec3 modelColor;
 uniform vec3 cameraPos;
 uniform vec3 lightCount;
 uniform float shininess;
@@ -10,16 +11,12 @@ uniform float shininess;
 uniform sampler2D dTexture;
 uniform sampler2D highlight;
 
-uniform float score;
-uniform float minHeight;
-uniform float maxHeight;
-
 in vec2 tCoord;
 in vec3 fNormal;
 in vec3 fPos;
 
-layout (location = 0) out vec4 fColor;
-layout (location = 1) out vec4 bColor;
+out vec4 fColor;
+out vec4 bColor;
 
 struct DirLight
 {
@@ -73,9 +70,8 @@ void main( void )
 {
 	vec3 wNormal = vec3 (modelMatrix * vec4(fNormal, 0));
 	vec3 viewDir = normalize(cameraPos -  fPos);
+	vec3 tColor  = texture(dTexture, tCoord).xyz;
 	
-	vec3 tColor = texture(dTexture, tCoord).rgb;
-
 	vec3 color;
 	
 	for (int i = 0; i < lightCount.x; i++)
@@ -87,16 +83,19 @@ void main( void )
 	for (int i = 0; i < lightCount.z; i++)
 		color += CalcSpotLight(spotLight[i], wNormal, viewDir, tColor);
 	
-	vec4 hColor = vec4(0,0,0,1);
 
-	float cutoff = minHeight + maxHeight * score;
-	float multi = clamp((cutoff - fPos.y) * 4.0f , 0, 1);
+	if (modelColor != vec3(0))
+	{
+		vec4 hColor = texture(highlight, tCoord);
 
-	if (fPos.y < minHeight + maxHeight * score)
-		hColor = texture(highlight, tCoord) * multi; 
-
-	fColor = vec4(color.rgb + hColor.rgb, 1);
-	bColor = hColor / 3;
+		if (hColor.a != 0)
+			color = mix(hColor.rgb * modelColor, color, 0.2f);
+	}
+	fColor = vec4(color, 1);
+	
+	//float brightness = dot(fColor.rgb, vec3(0.2126, 0.7152, 0.0722) * 0.6);
+    //if(brightness > 1.0)
+    //    bColor = vec4(fColor.rgb, 1.0);
 }
 
 
@@ -107,7 +106,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 tColor)
 	float spec = pow(max(dot(viewDir, ref), 0), shininess);
 	
 	vec3 ambient  = tColor * light.ambient;
-	vec3 diffuse  = tColor * light.diffuse * diff * tColor;
+	vec3 diffuse  = tColor * light.diffuse * diff;
 	vec3 specular = light.specular * spec;
 	
 	return (ambient + diffuse + specular);
@@ -127,9 +126,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 tColor)
     float attenuation = 1.0f / (light.constant + light.linear * distance + 
   			     light.quadratic * (distance * distance));
 				 
-    vec3 ambient  = light.ambient;
-    vec3 diffuse  = light.diffuse  * diff * attenuation;
-    vec3 specular = light.specular * spec * attenuation;
+    vec3 ambient  = light.ambient  * modelColor;
+    vec3 diffuse  = light.diffuse  * diff * modelColor * attenuation;
+    vec3 specular = light.specular * spec * modelColor * attenuation;
 
 	return (ambient + diffuse + specular);
 }
@@ -145,7 +144,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 tColor)
     float attenuation = 1.0f / (light.constant + light.linear * distance + 
   			     light.quadratic * (distance * distance));
 	
-	vec3 ambient  = light.ambient;
+	vec3 ambient  = light.ambient  * modelColor;
 	
 		if (angle < light.cutOff)
 			return ambient;
@@ -156,8 +155,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 tColor)
 	vec3 ref = reflect(lightDir, normal);
     float spec = pow(max(dot(viewDir, ref), 0), shininess);
 				 
-    vec3 diffuse  = light.diffuse  * diff * attenuation;
-    vec3 specular = light.specular * spec * attenuation;
+    vec3 diffuse  = light.diffuse  * diff * modelColor * attenuation;
+    vec3 specular = light.specular * spec * modelColor * attenuation;
 	
 	return ambient + (diffuse + specular) * factor;
 }

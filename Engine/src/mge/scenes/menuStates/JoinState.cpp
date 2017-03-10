@@ -55,10 +55,14 @@ void JoinState::_initializeScene()
 	GameObject * backText = ObjectCache::find("back_text1");
 	if (backText != NULL) {
 		_back = backText;
+		backText->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "back_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "back.png"), glm::vec3(1)));
+
 	}
 	GameObject * enterIp = ObjectCache::find("enterip_text");
 	if (enterIp != NULL) {
 		_enterIp = enterIp;
+		_enterIp->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "enterip_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "enterip.png"), glm::vec3(1)));
+
 	}
 
 	_text = new Text(TextType::IP);

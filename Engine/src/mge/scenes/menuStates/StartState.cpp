@@ -70,22 +70,24 @@ void StartState::_initializeScene()
 	if (create != NULL)
 	{
 		_selectableObjs[0] = create;
-
+		create->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "create_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "create.png"), glm::vec3(1)));
 	}
 
 	GameObject * join = ObjectCache::find("join_text");
 	if (join != NULL) {
 		_selectableObjs[1] = join;
+		join->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "join_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "join.png"), glm::vec3(0)));
 	}
 	GameObject * credits = ObjectCache::find("credits_text");
 	if (credits != NULL)
 	{
 		_selectableObjs[2] = credits;
-
+		credits->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "credits_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "credits.png"), glm::vec3(0)));
 	}
 	GameObject * quit = ObjectCache::find("quit");
 	if (quit != NULL) {
 		_selectableObjs[3] = quit;
+		credits->setMaterial(new ChangeColorMaterial(Texture::load(config::MGE_TEXTURE_PATH + "quit_diffuse.png"), Texture::load(config::MGE_TEXTURE_PATH + "quit.png"), glm::vec3(0)));
 	}
 
 	
@@ -135,7 +137,7 @@ void StartState::_updateColor() {
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->getMaterial()->setColor(glm::vec3(1));
 		//gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !_isKeyPress) {
@@ -147,7 +149,7 @@ void StartState::_updateColor() {
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->getMaterial()->setColor(glm::vec3(1));
 		//gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !_isKeyPress) {
@@ -159,7 +161,7 @@ void StartState::_updateColor() {
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->getMaterial()->setColor(glm::vec3(1));
 		//gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !_isKeyPress) {
@@ -170,7 +172,7 @@ void StartState::_updateColor() {
 		cout << "Selection: " << _counter << endl;
 		_clearObjectColor();
 		GameObject* gObj = _selectableObjs[_counter];
-		gObj->getMaterial()->setColor(glm::vec3(1, 0, 0));
+		gObj->getMaterial()->setColor(glm::vec3(1));
 		//gObj->scale(glm::vec3(1, 1.0f, 2.0f));
 	}
 	
@@ -189,7 +191,7 @@ void StartState::_clearObjectColor() {
 	for (int i = 0; i < 4; i++) {
 		if (i == _counter) continue;
 		GameObject* gObj = _selectableObjs[i];
-		gObj->getMaterial()->setColor(glm::vec3(1, 1, 1));
+		gObj->getMaterial()->setColor(glm::vec3(0));
 
 		//gObj->scale(glm::vec3(1, 1, 0.5f));
 	}

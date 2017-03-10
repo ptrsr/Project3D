@@ -9,6 +9,7 @@ using namespace std;
 
 #include "mge/util/InputHandler.h"
 #include "Bloom.hpp"
+#include "Skybox.hpp"
 
 AbstractGame::AbstractGame():_window(NULL),_renderer(NULL),_world(NULL), _fps(0)
 {
@@ -117,8 +118,9 @@ void AbstractGame::run()
 			}
 
 			//Bloom::renderToFBO();
+			Skybox::render();
             _render();
-			//Bloom::blur(2);
+			//Bloom::blur(4);
 			_window->display();
 
             float timeSinceLastRender = renderClock.restart().asSeconds();

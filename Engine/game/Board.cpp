@@ -27,7 +27,6 @@ void Board::ResetBoard()
 		{
 			Tile* tile = _boardArray[j][i];
 			tile->setOwner(Id::empty);
-			tile->getMaterial()->setColor(glm::vec3(1));
 		}
 	}
 }
@@ -195,38 +194,4 @@ Id Board::getPlayerWithHighestScore() {
 		}
 	}
 	return (Id)idToReturn;
-}
-
-void Board::fireAbility(glm::vec2 pBoardPos)
-{
-	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {
-			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
-
-			if (!outOfBounds(pos))
-			{
-				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
-
-				if (tile->getOwner() != none)
-					tile->setOwner(p1);
-			}
-		}
-	}
-}
-
-void Board::earthAbility(glm::vec2 pBoardPos)
-{
-	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {
-			glm::vec2 pos = pBoardPos + glm::vec2(i, j);
-
-			if (!outOfBounds(pos))
-			{
-				Tile* tile = _boardArray[(int)pos.x][(int)pos.y];
-
-				if (tile->getOwner() == none)
-					tile->setOwner(p3);
-			}
-		}
-	}
 }

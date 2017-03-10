@@ -136,7 +136,7 @@ void Bloom::blur(int amount)
 	for (GLuint i = 0; i < amount; i++)
 	{
 		glUniform1i(bloom->_uHorizontal, horizontal);
-		glUniform1f(bloom->_uMultiplier, 1.2f);
+		glUniform1f(bloom->_uMultiplier, 1.f);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, bloom->_pingpongFBO[horizontal]);
 		glBindTexture(GL_TEXTURE_2D, first_iteration ? bloom->_colorBuffers[1] : bloom->_pingpongBuffers[!horizontal]);
