@@ -149,7 +149,7 @@ void MenuScene::_render() {
 				_changeCameraState(_level);
 
 				Level::get()->Host();
-				//Level::get()->Join("192.168.0.150", 56789);
+				//Level::get()->Join("127.0.0.1", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {

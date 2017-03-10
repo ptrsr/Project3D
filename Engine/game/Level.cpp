@@ -45,7 +45,7 @@ Level::Level() :GameObject("level")
 	_fireStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_fire_diffuse.png"), Texture::load(path + "statue_fire_emission4.png")));
 	_waterStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_water_diffuse.png"), Texture::load(path + "statue_water_emission2.png")));
 	_earthStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_earth_diffuse.png"), Texture::load(path + "statue_earth_emission3.png")));
-	_windStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_wind_diffuse.png"), Texture::load(path + "WindScore.png")));
+	_windStatue->setMaterial(new StatueMaterial(Texture::load(path + "statue_wind_diffuse.png"), Texture::load(path + "statue_wind_emission3.png.png")));
 	World::add(this);
 
 	vector<GameObject*> temp;
