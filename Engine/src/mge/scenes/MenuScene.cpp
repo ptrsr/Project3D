@@ -252,13 +252,13 @@ void MenuScene::_changeCameraState(Level* level) {
 
 void MenuScene::_updateHud() {
 
-	string debugInfo = "";
-	debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
+	//string debugInfo = "";
+	//debugInfo += string("FPS:") + std::to_string((int)_fps) + "\n";
 	//debugInfo += string("                 Player1 score: " + std::to_string((int)Level::get()->getPlayers()[0]->getScore())+ "\n");
 	//debugInfo += string("                 Player2 score: " + std::to_string((int)Level::get()->getPlayers()[1]->getScore())+ "\n");
 
-	_hud->setDebugInfo(debugInfo);
-	_hud->draw();
+	//_hud->setDebugInfo(debugInfo);
+	//_hud->draw();
 }
 MenuScene::~MenuScene()
 {
