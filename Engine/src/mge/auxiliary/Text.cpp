@@ -121,6 +121,7 @@ void Text::_updateIP() {
 		}
 		port = stoi(text);
 		if (ip.size() == 0)return;
+		cout << "Ip:" << ip << ":" << port << endl;
 		Level::get()->Join(ip.c_str(), port);
 		cout << "Port(int):" << port << endl;
 	}
@@ -370,6 +371,7 @@ void Text::createObject(char obj) {
 void Text::deleteScene() {
 }
 void Text::deleteLastObject() {
+	if (objs.size() == 0) return;
 	GameObject* obj = objs.at(objs.size() - 1);
 	objs.pop_back();
 	obj->setMesh(NULL);

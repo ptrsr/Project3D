@@ -22,6 +22,8 @@ class JoinState : public AbstactState
 		virtual GameObject* getPlane();
 		virtual void deleteScene();
 
+		void ResetText();
+
 	private:
 		GameObject* _back;
 		GameObject* _plane;

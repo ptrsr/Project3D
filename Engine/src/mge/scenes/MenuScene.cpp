@@ -122,6 +122,8 @@ void MenuScene::_render() {
 			_startState->Update();
 			_currentState = _startState->CheckSelection();
 			if (!_cameraStateChanged) {
+
+				((JoinState*)(_joinState))->ResetText();
 				_changeCameraState(_startState);
 			}
 			if (_currentState != -1) _cameraStateChanged = false;
@@ -129,8 +131,10 @@ void MenuScene::_render() {
 		case 2:
 			AudioManager::get()->startMenuMusic();
 			_joinState->Update();
+			
 			_currentState = _joinState->CheckSelection();
 			if (!_cameraStateChanged) {
+				((JoinState*)(_joinState))->ResetText();
 				_changeCameraState(_joinState);
 					cout << "camera state changed" << endl;
 			}
@@ -149,7 +153,6 @@ void MenuScene::_render() {
 				_changeCameraState(_level);
 
 				Level::get()->Host();
-				//Level::get()->Join("127.0.0.1", 56789);
 
 			}
 			if (Level::get()->checkIfFinished()) {
@@ -207,7 +210,6 @@ void MenuScene::_render() {
 				AudioManager::get()->PlaySoundW(SFX::backButton1); 
 				Level::get()->LeaveClient();
 				Level::get()->reset();
-
 				_currentState = -1;
 			}
 			if (_currentState != 5)

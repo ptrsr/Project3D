@@ -69,6 +69,12 @@ void JoinState::_initializeScene()
 	_text->_initializeScene();
 
 }
+
+
+void JoinState::ResetText() {
+	_text->reset();
+}
+
 //Update called outside of the class
 void JoinState::Update() {
 	_updateColor();
@@ -104,7 +110,6 @@ int JoinState::CheckSelection() {
 	}	
 	else if (_text->CheckState() == 5)
 	{
-		_text->reset();
 		return 5;
 	}
 	else

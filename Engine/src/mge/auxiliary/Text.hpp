@@ -41,7 +41,7 @@ class Text
 		string _textToDislplay;
 		TextType _textType;
 		string text = "";
-		string ip;
+		string ip = "";
 		string copyForCompare;
 		std::vector<GameObject*> objs;
 		GameObject* posOfObjs[23];
